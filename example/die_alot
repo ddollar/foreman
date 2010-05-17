@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+sleep 2
+exit 0

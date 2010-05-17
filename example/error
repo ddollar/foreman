@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+sleep 10
+raise "Dying"

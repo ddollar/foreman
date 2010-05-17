@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+while true
+  sleep 5
+end
