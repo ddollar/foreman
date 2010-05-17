@@ -47,7 +47,8 @@ private ######################################################################
       proctitle "ruby: foreman #{process.name}"
 
       Dir.chdir directory do
-        system process.command
+        FileUtils.mkdir_p "log"
+        system "#{process.command} >>log/#{process.name}.log 2>&1"
         exit $?.exitstatus || 255
       end
     end

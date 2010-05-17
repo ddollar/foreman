@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
 while true
+  puts "tick"
+  $stdout.flush
   sleep 5
 end

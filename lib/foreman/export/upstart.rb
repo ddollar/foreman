@@ -47,7 +47,7 @@ stop on stopping #{name}
 respawn
 
 chdir #{engine.directory}
-exec #{process.command} 2>&1 > /var/log/#{name}/#{process.name}.log
+exec #{process.command} >>/var/log/#{name}/#{process.name}.log 2>&1
       UPSTART_CHILD
     end
   end
