@@ -1,0 +1,77 @@
+= Foreman
+
+=== Procfile
+
+    alpha ./bin/alpha
+    bravo ./bin/bravo some args
+    charlie ./bin/charlie -n 5
+
+== Development mode
+
+=== Running
+
+    $ foreman start
+    [foreman] [Tue May 18 01:27:08 UTC 2010] [alpha] started with pid 4393
+    [foreman] [Tue May 18 01:27:08 UTC 2010] [bravo] started with pid 4394
+    [foreman] [Tue May 18 01:27:08 UTC 2010] [charlie] started with pid 4395
+
+=== Standardized Logging
+
+    log/alpha.log
+    log/bravo.log
+    log/charlie.log
+
+== Upstart
+
+=== Export to upstart scripts
+
+    $ foreman export sampleapp
+
+    $ initctl list | grep sampleapp
+    sampleapp start/running
+    sampleapp-alpha (1) start/running, process 4204
+    sampleapp-bravo (1) start/running, process 4589
+    sampleapp-charlie (1) start/running, process 4597
+
+=== Change process concurrency levels
+
+    $ foreman scale sampleapp alpha 4
+    sampleapp-alpha (2) start/running, process 4164
+    sampleapp-alpha (3) start/running, process 4166
+    sampleapp-alpha (4) start/running, process 4168
+
+    $ initctl list | grep sampleapp
+    sampleapp start/running
+    sampleapp-alpha (4) start/running, process 4168
+    sampleapp-alpha (3) start/running, process 4166
+    sampleapp-alpha (2) start/running, process 4164
+    sampleapp-alpha (1) start/running, process 4204
+    sampleapp-bravo (1) start/running, process 4589
+    sampleapp-charlie (1) start/running, process 4597
+
+    $ foreman scale sampleapp alpha 1
+    sampleapp-alpha stop/waiting
+    sampleapp-alpha stop/waiting
+    sampleapp-alpha stop/waiting
+
+=== Good Upstart citizen
+
+All Upstart commands work as expected
+
+    $ start sampleapp
+    $ stop sampleapp
+    $ restart sampleapp
+
+=== Standardized Logging
+
+    /var/log/sampleapp/alpha.log
+    /var/log/sampleapp/bravo.log
+    /var/log/sampleapp/charlie.log
+
+== License
+
+MIT
+
+== Copyright
+
+(c) 2010 David Dollar
