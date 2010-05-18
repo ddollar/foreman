@@ -30,7 +30,6 @@ class Foreman::Engine
 
     trap("TERM") { kill_and_exit("TERM") }
     trap("INT")  { kill_and_exit("INT")  }
-    trap("INFO") { print_info }
 
     while true
       pid, status = Process.wait2
