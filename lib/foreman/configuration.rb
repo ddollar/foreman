@@ -12,7 +12,7 @@ class Foreman::Configuration
   end
 
   def scale(process, amount)
-    old_amount = processes[process]
+    old_amount = processes[process].to_i
     processes[process] = amount.to_i
     amount = amount.to_i
 
@@ -43,6 +43,8 @@ private ######################################################################
     config["#{app}_processes"].split(" ").each do |process|
       processes[process] = config["#{app}_#{process}"].to_i
     end
+  rescue Errno::ENOENT
+    raise Foreman::AppDoesNotExist
   end
 
   def run(command)

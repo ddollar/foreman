@@ -29,7 +29,11 @@ class Foreman::CLI < Thor
   desc "scale APP PROCESS AMOUNT", "Change the concurrency of a given process type"
 
   def scale(app, process, amount)
-    Foreman::Configuration.new(app).scale(process, amount)
+    config = Foreman::Configuration.new(app)
+    error "No such process: #{process}." unless config.processes[process]
+    config.scale(process, amount)
+  rescue Foreman::AppDoesNotExist
+    error "No such app: #{app}."
   end
 
 private ######################################################################

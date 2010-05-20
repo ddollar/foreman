@@ -61,15 +61,26 @@ describe "Foreman::CLI" do
 
   describe "scale" do
     describe "without an existing configuration" do
-      # TODO
+      it "displays an error" do
+        mock_error(subject, "No such app: testapp.") do
+          subject.scale("testapp", "alpha", "2")
+        end
+      end
     end
 
     describe "with an existing configuration" do
       before(:each) { write_foreman_config("testapp") }
 
-      it "scales the specified process" do
-        mock.instance_of(Foreman::Configuration).scale("testprocess", "2")
-        subject.scale("testapp", "testprocess", "2")
+      it "scales a process that exists" do
+        mock.instance_of(Foreman::Configuration).scale("alpha", "2")
+        subject.scale("testapp", "alpha", "2")
+      end
+
+      it "errors if a process that does not exist is specified" do
+        mock_error(subject, "No such process: invalidprocess.") do
+          dont_allow.instance_of(Foreman::Configuration).scale
+          subject.scale("testapp", "invalidprocess", "2")
+        end
       end
     end
   end
