@@ -15,11 +15,6 @@ class Foreman::Export::Upstart
 
     config = Foreman::Configuration.new(app)
 
-    engine.processes.each do |name, process|
-      config.scale(name, 1)
-    end
-    config.write
-
     write_file "/etc/init/#{app}.conf", <<-UPSTART_MASTER
 pre-start script
 
@@ -53,6 +48,11 @@ chdir #{engine.directory}
 exec #{process.command} >>/var/log/#{app}/#{process.name}.log 2>&1
       UPSTART_CHILD
     end
+
+    engine.processes.each do |name, process|
+      config.scale(name, 1)
+    end
+    config.write
   end
 
 private ######################################################################
