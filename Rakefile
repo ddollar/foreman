@@ -43,8 +43,8 @@ begin
     s.files = %w(Rakefile README.md) + Dir["{bin,lib,spec}/**/*"]
     s.require_path = "lib"
 
-    s.bindir             = "bin"
-    s.executables        = Dir["bin/*"]
+    # #s.bindir             = "bin"
+    # s.executables        = Dir["bin/*"]
     s.default_executable = "foreman"
 
     s.add_development_dependency 'fakefs', '~> 0.2.1'

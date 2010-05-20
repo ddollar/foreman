@@ -44,7 +44,6 @@ private ######################################################################
       processes[process] = config["#{app}_#{process}"].to_i
     end
   rescue Errno::ENOENT
-    raise Foreman::AppDoesNotExist
   end
 
   def run(command)
