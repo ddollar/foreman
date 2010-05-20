@@ -7,7 +7,7 @@ class Foreman::Engine
   attr_reader :directory
 
   def initialize(procfile)
-    @procfile  = File.read(procfile)
+    @procfile  = read_procfile(procfile)
     @directory = File.expand_path(File.dirname(procfile))
   end
 
@@ -74,6 +74,10 @@ private ######################################################################
     running_processes.each do |pid, process|
       info "pid #{pid}", process
     end
+  end
+
+  def read_procfile(procfile)
+    File.read(procfile)
   end
 
   def running_processes

@@ -12,7 +12,17 @@ class Foreman::Configuration
   end
 
   def scale(process, amount)
+    old_amount = processes[process]
     processes[process] = amount.to_i
+    amount = amount.to_i
+
+    if (old_amount < amount)
+      ((old_amount + 1) .. amount).each { |num| run "start #{app}-#{process} NUM=#{num}" }
+    elsif (amount < old_amount)
+      ((amount + 1) .. old_amount).each { |num| run "stop #{app}-#{process} NUM=#{num}" }
+    end
+
+    write
   end
 
   def write
@@ -31,8 +41,12 @@ private ######################################################################
       accum.update(key => value)
     end
     config["#{app}_processes"].split(" ").each do |process|
-      scale(process, config["#{app}_#{process}"])
+      processes[process] = config["#{app}_#{process}"].to_i
     end
+  end
+
+  def run(command)
+    system command
   end
 
   def write_file(filename, contents)

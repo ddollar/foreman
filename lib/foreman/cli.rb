@@ -9,18 +9,18 @@ class Foreman::CLI < Thor
   desc "start [PROCFILE]", "Run the app described in PROCFILE"
 
   def start(procfile="Procfile")
-    error "#{procfile} does not exist." unless File.exist?(procfile)
+    error "#{procfile} does not exist." unless procfile_exists?(procfile)
     Foreman::Engine.new(procfile).start
   end
 
   desc "export APP [PROCFILE] [FORMAT]", "Export the app described in PROCFILE as APP to another FORMAT"
 
   def export(app, procfile="Procfile", format="upstart")
-    error "#{procfile} does not exist." unless File.exist?(procfile)
+    error "#{procfile} does not exist." unless procfile_exists?(procfile)
 
     formatter = case format
       when "upstart" then Foreman::Export::Upstart
-      else error "Unknown export format: #{format}"
+      else error "Unknown export format: #{format}."
     end
 
     formatter.new(Foreman::Engine.new(procfile)).export(app)
@@ -29,20 +29,7 @@ class Foreman::CLI < Thor
   desc "scale APP PROCESS AMOUNT", "Change the concurrency of a given process type"
 
   def scale(app, process, amount)
-    config = Foreman::Configuration.new(app)
-
-    amount = amount.to_i
-    old_amount = config.processes[process]
-
-    config.scale(process, amount)
-
-    if (old_amount < amount)
-      ((old_amount+1)..amount).each { |num| system "start #{app}-#{process} NUM=#{num}" }
-    elsif (amount < old_amount)
-      ((amount+1)..old_amount).each { |num| system "stop #{app}-#{process} NUM=#{num}" }
-    end
-
-    config.write
+    Foreman::Configuration.new(app).scale(process, amount)
   end
 
 private ######################################################################
@@ -50,6 +37,10 @@ private ######################################################################
   def error(message)
     puts "ERROR: #{message}"
     exit 1
+  end
+
+  def procfile_exists?(procfile)
+    File.exist?(procfile)
   end
 
 end
