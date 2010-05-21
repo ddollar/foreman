@@ -62,7 +62,7 @@ describe "Foreman::CLI" do
   describe "scale" do
     describe "without an existing configuration" do
       it "displays an error" do
-        mock_error(subject, "No such app: testapp.") do
+        mock_error(subject, "No such process: alpha.") do
           subject.scale("testapp", "alpha", "2")
         end
       end

@@ -17,9 +17,9 @@ class Foreman::Configuration
     amount = amount.to_i
 
     if (old_amount < amount)
-      ((old_amount + 1) .. amount).each { |num| run "start #{app}-#{process} NUM=#{num}" }
+      ((old_amount + 1) .. amount).each { |num| system "start #{app}-#{process} NUM=#{num}" }
     elsif (amount < old_amount)
-      ((amount + 1) .. old_amount).each { |num| run "stop #{app}-#{process} NUM=#{num}" }
+      ((amount + 1) .. old_amount).each { |num| system "stop #{app}-#{process} NUM=#{num}" }
     end
 
     write
@@ -27,8 +27,8 @@ class Foreman::Configuration
 
   def write
     write_file "/etc/foreman/#{app}.conf", <<-UPSTART_CONFIG
-#{app}_processes="#{processes.keys.join(' ')}"
-#{processes.keys.map { |k| "#{app}_#{k}=\"#{processes[k]}\"" }.join("\n")}
+#{app}_processes="#{processes.keys.sort.join(' ')}"
+#{processes.keys.sort.map { |k| "#{app}_#{k}=\"#{processes[k]}\"" }.join("\n")}
     UPSTART_CONFIG
   end
 
@@ -44,10 +44,6 @@ private ######################################################################
       processes[process] = config["#{app}_#{process}"].to_i
     end
   rescue Errno::ENOENT
-  end
-
-  def run(command)
-    system command
   end
 
   def write_file(filename, contents)

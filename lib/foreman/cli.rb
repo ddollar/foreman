@@ -32,8 +32,6 @@ class Foreman::CLI < Thor
     config = Foreman::Configuration.new(app)
     error "No such process: #{process}." unless config.processes[process]
     config.scale(process, amount)
-  rescue Foreman::AppDoesNotExist
-    error "No such app: #{app}."
   end
 
 private ######################################################################

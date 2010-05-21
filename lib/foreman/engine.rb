@@ -31,12 +31,7 @@ class Foreman::Engine
     trap("TERM") { kill_and_exit("TERM") }
     trap("INT")  { kill_and_exit("INT")  }
 
-    while true
-      pid, status = Process.wait2
-      process = running_processes.delete(pid)
-      info "exited with code #{status}", process
-      fork process
-    end
+    run_loop
   end
 
 private ######################################################################
@@ -76,16 +71,25 @@ private ######################################################################
     end
   end
 
+  def proctitle(title)
+    $0 = title
+  end
+
   def read_procfile(procfile)
     File.read(procfile)
   end
 
-  def running_processes
-    @running_processes ||= {}
+  def run_loop
+    while true
+      pid, status = Process.wait2
+      process = running_processes.delete(pid)
+      info "exited with code #{status}", process
+      fork process
+    end
   end
 
-  def proctitle(title)
-    $0 = title
+  def running_processes
+    @running_processes ||= {}
   end
 
 end
