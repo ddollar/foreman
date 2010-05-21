@@ -50,7 +50,7 @@ exec #{process.command} >>/var/log/#{app}/#{process.name}.log 2>&1
     end
 
     engine.processes.each do |name, process|
-      config.scale(name, 1)
+      config.processes[name] ||= 1
     end
     config.write
   end
