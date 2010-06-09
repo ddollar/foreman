@@ -20,6 +20,13 @@ class Foreman::CLI < Thor
     Foreman::Engine.new(procfile).execute(process)
   end
 
+  desc "screen [PROCFILE]", "Run the app described in PROCFILE as screen windows"
+
+  def screen(procfile="Procfile")
+    error "#{procfile} does not exist." unless procfile_exists?(procfile)
+    Foreman::Engine.new(procfile).screen
+  end
+
   desc "export APP [PROCFILE] [FORMAT]", "Export the app described in PROCFILE as APP to another FORMAT"
 
   def export(app, procfile="Procfile", format="upstart")

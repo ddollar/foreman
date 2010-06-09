@@ -1,5 +1,6 @@
 require "foreman"
 require "foreman/process"
+require "tempfile"
 
 class Foreman::Engine
 
@@ -32,6 +33,19 @@ class Foreman::Engine
     trap("INT")  { kill_and_exit("INT")  }
 
     run_loop
+  end
+
+  def screen
+    tempfile = Tempfile.new("foreman")
+    tempfile.puts "sessionname foreman"
+    processes.each do |name, process|
+      tempfile.puts "screen -t #{name} #{process.command}"
+    end
+    tempfile.close
+
+    system "screen -c #{tempfile.path}"
+
+    tempfile.delete
   end
 
   def execute(name)
