@@ -13,6 +13,13 @@ class Foreman::CLI < Thor
     Foreman::Engine.new(procfile).start
   end
 
+  desc "execute PROCESS [PROCFILE]", "Run an instance of the specified process from PROCFILE"
+
+  def execute(process, procfile="Procfile")
+    error "#{procfile} does not exist." unless procfile_exists?(procfile)
+    Foreman::Engine.new(procfile).execute(process)
+  end
+
   desc "export APP [PROCFILE] [FORMAT]", "Export the app described in PROCFILE as APP to another FORMAT"
 
   def export(app, procfile="Procfile", format="upstart")

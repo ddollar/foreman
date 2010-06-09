@@ -25,6 +25,27 @@ describe "Foreman::CLI" do
     end
   end
 
+  describe "execute" do
+    describe "with a non-existent Procfile" do
+      it "prints an error" do
+        mock_error(subject, "Procfile does not exist.") do
+          dont_allow.instance_of(Foreman::Engine).start
+          subject.execute("alpha")
+        end
+      end
+    end
+
+    describe "with a Procfile" do
+      before(:each) { write_procfile }
+
+      it "runs successfully" do
+        dont_allow(subject).error
+        mock.instance_of(Foreman::Engine).execute("alpha")
+        subject.execute("alpha")
+      end
+    end
+  end
+
   describe "export" do
     describe "with a non-existent Procfile" do
       it "prints an error" do
