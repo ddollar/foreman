@@ -5,9 +5,7 @@ describe "Foreman::CLI" do
   subject { Foreman::CLI.new }
 
   describe "start" do
-    #let(:engine) { stub_engine }
-
-    describe "with a non-existent Procifile" do
+    describe "with a non-existent Procfile" do
       it "prints an error" do
         mock_error(subject, "Procfile does not exist.") do
           dont_allow.instance_of(Foreman::Engine).start
@@ -28,7 +26,7 @@ describe "Foreman::CLI" do
   end
 
   describe "export" do
-    describe "with a non-existent Procifile" do
+    describe "with a non-existent Procfile" do
       it "prints an error" do
         mock_error(subject, "Procfile does not exist.") do
           dont_allow.instance_of(Foreman::Engine).export

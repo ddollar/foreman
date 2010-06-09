@@ -1,5 +1,5 @@
-require "rubygems"
 require "rake"
+require "rspec"
 require "rspec/core/rake_task"
 
 $:.unshift File.expand_path("../lib", __FILE__)

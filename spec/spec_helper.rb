@@ -1,5 +1,7 @@
-require "fakefs/spec_helpers"
+require "rubygems"
 require "rspec"
+require "fakefs/safe"
+require "fakefs/spec_helpers"
 
 $:.unshift "lib"
 
