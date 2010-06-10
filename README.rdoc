@@ -27,7 +27,7 @@ Launch the processes in a screen session in indivudal windows
     log/bravo.log
     log/charlie.log
 
-== Process Execution
+== Single Process Execution
 
     $ foreman execute alpha
 
