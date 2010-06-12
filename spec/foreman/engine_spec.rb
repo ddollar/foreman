@@ -29,4 +29,12 @@ describe "Foreman::Engine" do
       subject.start
     end
   end
+
+  describe "execute" do
+    it "runs the processes" do
+      write_procfile
+      mock(subject).run(subject.processes["alpha"], false)
+      subject.execute("alpha")
+    end
+  end
 end

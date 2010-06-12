@@ -1,5 +1,6 @@
 require "foreman"
 require "foreman/process"
+require "tempfile"
 
 class Foreman::Engine
 
@@ -34,21 +35,44 @@ class Foreman::Engine
     run_loop
   end
 
+  def screen
+    tempfile = Tempfile.new("foreman")
+    tempfile.puts "sessionname foreman"
+    processes.each do |name, process|
+      tempfile.puts "screen -t #{name} #{process.command}"
+    end
+    tempfile.close
+
+    system "screen -c #{tempfile.path}"
+
+    tempfile.delete
+  end
+
+  def execute(name)
+    run(processes[name], false)
+  end
+
 private ######################################################################
 
   def fork(process)
     pid = Process.fork do
-      proctitle "ruby: foreman #{process.name}"
-
-      Dir.chdir directory do
-        FileUtils.mkdir_p "log"
-        system "#{process.command} >>log/#{process.name}.log 2>&1"
-        exit $?.exitstatus || 255
-      end
+      run(process)
     end
 
     info "started with pid #{pid}", process
     running_processes[pid] = process
+  end
+
+  def run(process, log_to_file=true)
+    proctitle "ruby: foreman #{process.name}"
+
+    Dir.chdir directory do
+      FileUtils.mkdir_p "log"
+      command = process.command
+      command << " >>log/#{process.name}.log 2>&1" if log_to_file
+      system command
+      exit $?.exitstatus || 255
+    end
   end
 
   def kill_and_exit(signal="TERM")

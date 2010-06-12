@@ -15,11 +15,21 @@
     [foreman] [Tue May 18 01:27:08 UTC 2010] [bravo] started with pid 4394
     [foreman] [Tue May 18 01:27:08 UTC 2010] [charlie] started with pid 4395
 
+=== Using Screen
+
+Launch the processes in a screen session in indivudal windows
+
+    $ foreman screen
+
 === Standardized Logging
 
     log/alpha.log
     log/bravo.log
     log/charlie.log
+
+== Single Process Execution
+
+    $ foreman execute alpha
 
 == Upstart
 
