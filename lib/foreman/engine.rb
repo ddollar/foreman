@@ -1,5 +1,6 @@
 require "foreman"
 require "foreman/process"
+require "pty"
 require "tempfile"
 
 class Foreman::Engine
@@ -32,7 +33,7 @@ class Foreman::Engine
     trap("TERM") { kill_and_exit("TERM") }
     trap("INT")  { kill_and_exit("INT")  }
 
-    run_loop
+    watch_for_termination
   end
 
   def screen
@@ -69,9 +70,12 @@ private ######################################################################
     Dir.chdir directory do
       FileUtils.mkdir_p "log"
       command = process.command
-      command << " >>log/#{process.name}.log 2>&1" if log_to_file
-      system command
-      exit $?.exitstatus || 255
+
+      PTY.spawn("#{process.command} 2>&1") do |stdin, stdout, pid|
+        until stdin.eof?
+          info stdin.gets, process
+        end
+      end
     end
   end
 
@@ -85,7 +89,7 @@ private ######################################################################
   end
 
   def info(message, process=nil)
-    puts "[foreman] [#{Time.now.utc}] [#{process ? process.name : "system"}] #{message}"
+    puts "[#{Time.now.strftime("%H:%M:%S")}] [#{process ? process.name : "system"}] #{message}"
   end
 
   def print_info
@@ -103,13 +107,11 @@ private ######################################################################
     File.read(procfile)
   end
 
-  def run_loop
-    while true
-      pid, status = Process.wait2
-      process = running_processes.delete(pid)
-      info "exited with code #{status}", process
-      fork process
-    end
+  def watch_for_termination
+    pid, status = Process.wait2
+    process = running_processes.delete(pid)
+    info "process terminated", process
+    kill_and_exit
   end
 
   def running_processes
