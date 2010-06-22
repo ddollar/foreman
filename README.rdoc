@@ -1,6 +1,6 @@
 = Foreman
 
-=== Procfile
+== Procfile
 
     alpha ./bin/alpha
     bravo ./bin/bravo some args
@@ -10,10 +10,14 @@
 
 === Running
 
+Log files will be output to standard out, colorized to aid in visual separation.
+
     $ foreman start
-    [foreman] [Tue May 18 01:27:08 UTC 2010] [alpha] started with pid 4393
-    [foreman] [Tue May 18 01:27:08 UTC 2010] [bravo] started with pid 4394
-    [foreman] [Tue May 18 01:27:08 UTC 2010] [charlie] started with pid 4395
+    [01:27:08] [alpha] started with pid 4393
+    [01:27:08] [bravo] started with pid 4394
+    [01:27:08] [charlie] started with pid 4395
+    [01:27:08] [bravo] initializing...
+    [01:27:08] [bravo] complete
 
 === Using Screen
 
@@ -21,17 +25,11 @@ Launch the processes in a screen session in indivudal windows
 
     $ foreman screen
 
-=== Standardized Logging
-
-    log/alpha.log
-    log/bravo.log
-    log/charlie.log
-
 == Single Process Execution
 
     $ foreman execute alpha
 
-== Upstart
+== Exporting to Upstart
 
 === Export to upstart scripts
 
