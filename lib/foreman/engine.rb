@@ -86,7 +86,7 @@ private ######################################################################
   end
 
   def kill_and_exit(signal="TERM")
-    info "termination requested"
+    info "terminating"
     running_processes.each do |pid, process|
       info "killing #{process.name} in pid #{pid}"
       Process.kill(signal, pid)
