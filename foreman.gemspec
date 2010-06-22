@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{foreman}
-  s.version = "0.2.0"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David Dollar"]
-  s.date = %q{2010-06-09}
+  s.date = %q{2010-06-22}
   s.default_executable = %q{foreman}
   s.description = %q{Process manager for applications with multiple components}
   s.email = %q{ddollar@gmail.com}
@@ -36,6 +36,7 @@ Gem::Specification.new do |s|
      "spec/foreman_spec.rb",
      "spec/spec_helper.rb"
   ]
+  s.has_rdoc = false
   s.homepage = %q{http://github.com/ddollar/foreman}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
@@ -62,6 +63,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<rcov>, ["~> 0.9.8"])
       s.add_development_dependency(%q<rr>, ["~> 0.10.11"])
       s.add_development_dependency(%q<rspec>, ["~> 2.0.0"])
+      s.add_runtime_dependency(%q<term-ansicolor>, ["~> 1.0.5"])
       s.add_runtime_dependency(%q<thor>, ["~> 0.13.6"])
     else
       s.add_dependency(%q<fakefs>, ["~> 0.2.1"])
@@ -69,6 +71,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rcov>, ["~> 0.9.8"])
       s.add_dependency(%q<rr>, ["~> 0.10.11"])
       s.add_dependency(%q<rspec>, ["~> 2.0.0"])
+      s.add_dependency(%q<term-ansicolor>, ["~> 1.0.5"])
       s.add_dependency(%q<thor>, ["~> 0.13.6"])
     end
   else
@@ -77,6 +80,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<rcov>, ["~> 0.9.8"])
     s.add_dependency(%q<rr>, ["~> 0.10.11"])
     s.add_dependency(%q<rspec>, ["~> 2.0.0"])
+    s.add_dependency(%q<term-ansicolor>, ["~> 1.0.5"])
     s.add_dependency(%q<thor>, ["~> 0.13.6"])
   end
 end
