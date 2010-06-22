@@ -2,11 +2,16 @@ require "foreman"
 require "foreman/process"
 require "pty"
 require "tempfile"
+require "term/ansicolor"
 
 class Foreman::Engine
 
   attr_reader :procfile
   attr_reader :directory
+
+  extend Term::ANSIColor
+
+  COLORS = [ cyan, yellow, green, magenta, on_blue ]
 
   def initialize(procfile)
     @procfile  = read_procfile(procfile)
@@ -18,6 +23,7 @@ class Foreman::Engine
       procfile.split("\n").inject({}) do |hash, line|
         next if line.strip == ""
         process = Foreman::Process.new(*line.split(" ", 2))
+        process.color = next_color
         hash.update(process.name => process)
       end
     end
@@ -82,14 +88,17 @@ private ######################################################################
   def kill_and_exit(signal="TERM")
     info "termination requested"
     running_processes.each do |pid, process|
-      info "killing pid #{pid}", process
+      info "killing #{process.name} in pid #{pid}"
       Process.kill(signal, pid)
     end
     exit 0
   end
 
   def info(message, process=nil)
-    puts "[#{Time.now.strftime("%H:%M:%S")}] [#{process ? process.name : "system"}] #{message}"
+    print process.color if process
+    print "[#{Time.now.strftime("%H:%M:%S")}] [#{process ? process.name : "system"}] #{message.chomp}"
+    print Term::ANSIColor.reset
+    puts
   end
 
   def print_info
@@ -116,6 +125,12 @@ private ######################################################################
 
   def running_processes
     @running_processes ||= {}
+  end
+
+  def next_color
+    @current_color ||= -1
+    @current_color  +=  1
+    @current_color >= COLORS.length ? "" : COLORS[@current_color]
   end
 
 end

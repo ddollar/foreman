@@ -53,6 +53,7 @@ begin
     s.add_development_dependency 'rr',     '~> 0.10.11'
     s.add_development_dependency 'rspec',  '~> 2.0.0'
 
+    s.add_dependency 'term-ansicolor', '~> 1.0.5'
     s.add_dependency 'thor', '~> 0.13.6'
   end
   Jeweler::GemcutterTasks.new
