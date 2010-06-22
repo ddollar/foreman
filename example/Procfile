@@ -1,3 +1,2 @@
-neverdie ./never_die
-diealot  ./die_alot
-error    ./error
+ticker ./ticker
+error  ./error

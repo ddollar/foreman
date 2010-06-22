@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
 puts "will error in 10s"
-sleep 10
+sleep 5
 raise "Dying"

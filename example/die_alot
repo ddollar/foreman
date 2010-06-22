@@ -1,5 +1,0 @@
-#!/usr/bin/env ruby
-
-puts "sleeping for 2s then dying"
-sleep 2
-exit 0
