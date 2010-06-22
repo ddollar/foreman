@@ -77,10 +77,14 @@ private ######################################################################
       FileUtils.mkdir_p "log"
       command = process.command
 
-      PTY.spawn("#{process.command} 2>&1") do |stdin, stdout, pid|
-        until stdin.eof?
-          info stdin.gets, process
+      begin
+        PTY.spawn("#{process.command} 2>&1") do |stdin, stdout, pid|
+          until stdin.eof?
+            info stdin.gets, process
+          end
         end
+      rescue PTY::ChildExited
+        # exited
       end
     end
   end
