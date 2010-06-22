@@ -100,9 +100,23 @@ private ######################################################################
 
   def info(message, process=nil)
     print process.color if process
-    print "[#{Time.now.strftime("%H:%M:%S")}] [#{process ? process.name : "system"}] #{message.chomp}"
+    print "#{Time.now.strftime("%H:%M:%S")} #{pad_process_name(process)} | "
     print Term::ANSIColor.reset
+    print message.chomp
     puts
+  end
+
+  def longest_process_name
+    @longest_process_name ||= begin
+      longest = processes.keys.map { |name| name.length }.sort.last
+      longest = 6 if longest < 6 # system
+      longest
+    end
+  end
+
+  def pad_process_name(process)
+    name = process ? process.name : "system"
+    name.ljust(longest_process_name)
   end
 
   def print_info
