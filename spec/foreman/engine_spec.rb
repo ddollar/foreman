@@ -25,7 +25,7 @@ describe "Foreman::Engine" do
       write_procfile
       mock(subject).fork(subject.processes["alpha"])
       mock(subject).fork(subject.processes["bravo"])
-      mock(subject).run_loop
+      mock(subject).watch_for_termination
       subject.start
     end
   end
