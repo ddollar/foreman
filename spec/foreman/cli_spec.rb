@@ -25,27 +25,6 @@ describe "Foreman::CLI" do
     end
   end
 
-  describe "execute" do
-    describe "with a non-existent Procfile" do
-      it "prints an error" do
-        mock_error(subject, "Procfile does not exist.") do
-          dont_allow.instance_of(Foreman::Engine).start
-          subject.execute("alpha")
-        end
-      end
-    end
-
-    describe "with a Procfile" do
-      before(:each) { write_procfile }
-
-      it "runs successfully" do
-        dont_allow(subject).error
-        mock.instance_of(Foreman::Engine).execute("alpha")
-        subject.execute("alpha")
-      end
-    end
-  end
-
   describe "export" do
     describe "with a non-existent Procfile" do
       it "prints an error" do
@@ -62,7 +41,7 @@ describe "Foreman::CLI" do
       describe "with an invalid formatter" do
         it "prints an error" do
           mock_error(subject, "Unknown export format: invalidformatter.") do
-            subject.export("testapp", "Procfile", "invalidformatter")
+            subject.export("invalidformatter")
           end
         end
       end
@@ -72,33 +51,11 @@ describe "Foreman::CLI" do
 
         it "runs successfully" do
           dont_allow(subject).error
-          subject.export("testapp")
-        end
-      end
-    end
-  end
-
-  describe "scale" do
-    describe "without an existing configuration" do
-      it "displays an error" do
-        mock_error(subject, "No such process: alpha.") do
-          subject.scale("testapp", "alpha", "2")
-        end
-      end
-    end
-
-    describe "with an existing configuration" do
-      before(:each) { write_foreman_config("testapp") }
-
-      it "scales a process that exists" do
-        mock.instance_of(Foreman::Configuration).scale("alpha", "2")
-        subject.scale("testapp", "alpha", "2")
-      end
-
-      it "errors if a process that does not exist is specified" do
-        mock_error(subject, "No such process: invalidprocess.") do
-          dont_allow.instance_of(Foreman::Configuration).scale
-          subject.scale("testapp", "invalidprocess", "2")
+          mock.instance_of(Foreman::Export::Upstart).export("/tmp/foo", {
+            :concurrency => nil,
+            :name => nil
+          })
+          subject.export("upstart", "/tmp/foo")
         end
       end
     end

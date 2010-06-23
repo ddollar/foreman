@@ -83,8 +83,8 @@ private ######################################################################
             info stdin.gets, process
           end
         end
-      rescue PTY::ChildExited
-        # exited
+      rescue PTY::ChildExited, Interrupt
+        info "process exiting", process
       end
     end
   end

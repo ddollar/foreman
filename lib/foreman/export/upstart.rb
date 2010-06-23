@@ -1,51 +1,42 @@
+require "erb"
 require "foreman/configuration"
-require "foreman/export"
+require "foreman/export/base"
 
-class Foreman::Export::Upstart
+class Foreman::Export::Upstart < Foreman::Export::Base
 
-  attr_reader :engine
+  def export(location, options={})
+    error("Must specify a location") unless location
 
-  def initialize(engine)
-    @engine = engine
-  end
+    FileUtils.mkdir_p location
 
-  def export(app)
-    FileUtils.mkdir_p "/etc/foreman"
-    FileUtils.mkdir_p "/etc/init"
+    app = options[:app] || File.basename(engine.directory)
 
-    config = Foreman::Configuration.new(app)
+    Dir["#{location}/#{app}*.conf"].each do |file|
+      say "cleaning up: #{file}"
+      FileUtils.rm(file)
+    end
 
-    write_file "/etc/init/#{app}.conf", <<-UPSTART_MASTER
-pre-start script
+    concurrency = parse_concurrency(options[:concurrency])
 
-bash << "EOF"
-  mkdir -p /var/log/#{app}
+    master_template = export_template("upstart/master.conf.erb")
+    master_config   = ERB.new(master_template).result(binding)
+    write_file "#{location}/#{app}.conf", master_config
 
-  if [ -f /etc/foreman/#{app}.conf ]; then
-    source /etc/foreman/#{app}.conf
-  fi
+    process_template = export_template("upstart/process.conf.erb")
+    
+    engine.processes.values.each do |process|
+      1.upto(concurrency[process.name]) do |num|
+        process_config = ERB.new(process_template).result(binding)
+        write_file "#{location}/#{app}-#{process.name}-#{num}.conf", process_config
+      end
+    end
 
-  for process in $( echo "$#{app}_processes" ); do
-    process_count_config="#{app}_$process"
-    process_count=${!process_count_config}
-
-    for ((i=1; i<=${process_count:=1}; i+=1)); do
-      start #{app}-$process NUM=$i
-    done
-  done
-EOF
-
-end script
+    return
+    write_file "#{location}/#{app}.conf", <<-UPSTART_MASTER
     UPSTART_MASTER
 
-    engine.processes.values.each do |process|
-      write_file "/etc/init/#{app}-#{process.name}.conf", <<-UPSTART_CHILD
-instance $NUM
-stop on stopping #{app}
-respawn
-
-chdir #{engine.directory}
-exec #{process.command} >>/var/log/#{app}/#{process.name}.log 2>&1
+    engine.processes.each do |process|
+      write_file process_conf, <<-UPSTART_CHILD
       UPSTART_CHILD
     end
 
@@ -53,14 +44,6 @@ exec #{process.command} >>/var/log/#{app}/#{process.name}.log 2>&1
       config.processes[name] ||= 1
     end
     config.write
-  end
-
-private ######################################################################
-
-  def write_file(filename, contents)
-    File.open(filename, "w") do |file|
-      file.puts contents
-    end
   end
 
 end

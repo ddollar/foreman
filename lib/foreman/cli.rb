@@ -6,46 +6,58 @@ require "thor"
 
 class Foreman::CLI < Thor
 
-  desc "start [PROCFILE]", "Run the app described in PROCFILE"
+  class_option :procfile, :type => :string, :aliases => "-p", :desc => "Default: ./Procfile"
 
-  def start(procfile="Procfile")
-    error "#{procfile} does not exist." unless procfile_exists?(procfile)
-    Foreman::Engine.new(procfile).start
+  desc "start [PROCESS]", "Start the application, or a specific process"
+
+  method_option :screen,   :type => :boolean, :aliases => "-s"
+
+  def start(process=nil)
+    check_procfile!
+    
+    if process
+      engine.execute(process)
+    elsif options[:screen]
+      engine.screen
+    else
+      engine.start
+    end
   end
 
-  desc "execute PROCESS [PROCFILE]", "Run an instance of the specified process from PROCFILE"
+  desc "export FORMAT LOCATION", "Export the application to another process management format"
 
-  def execute(process, procfile="Procfile")
-    error "#{procfile} does not exist." unless procfile_exists?(procfile)
-    Foreman::Engine.new(procfile).execute(process)
-  end
+  method_option :app,         :type => :string, :aliases => "-a"
+  method_option :concurrency, :type => :string, :aliases => "-c",
+    :banner => '"alpha=5,bar=3"'
 
-  desc "screen [PROCFILE]", "Run the app described in PROCFILE as screen windows"
-
-  def screen(procfile="Procfile")
-    error "#{procfile} does not exist." unless procfile_exists?(procfile)
-    Foreman::Engine.new(procfile).screen
-  end
-
-  desc "export APP [PROCFILE] [FORMAT]", "Export the app described in PROCFILE as APP to another FORMAT"
-
-  def export(app, procfile="Procfile", format="upstart")
-    error "#{procfile} does not exist." unless procfile_exists?(procfile)
+  def export(format, location=nil)
+    check_procfile!
 
     formatter = case format
       when "upstart" then Foreman::Export::Upstart
       else error "Unknown export format: #{format}."
     end
 
-    formatter.new(Foreman::Engine.new(procfile)).export(app)
+    formatter.new(engine).export(location,
+      :name        => options[:app],
+      :concurrency => options[:concurrency]
+    )
+  rescue Foreman::Export::Exception => ex
+    error ex.message
   end
 
-  desc "scale APP PROCESS AMOUNT", "Change the concurrency of a given process type"
+private ######################################################################
 
-  def scale(app, process, amount)
-    config = Foreman::Configuration.new(app)
-    error "No such process: #{process}." unless config.processes[process]
-    config.scale(process, amount)
+  def check_procfile!
+    error("Procfile does not exist.") unless File.exist?(procfile)
+  end
+
+  def engine
+    @engine ||= Foreman::Engine.new(procfile)
+  end
+
+  def procfile
+    options[:procfile] || "./Procfile"
   end
 
 private ######################################################################

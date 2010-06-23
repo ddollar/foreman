@@ -1,0 +1,5 @@
+stop on stopping <%= app %>
+respawn
+
+chdir <%= engine.directory %>
+exec <%= process.command %> >> /var/log/<%=app%>/<%=process.name%>-<%=num%>.log 2>&1
