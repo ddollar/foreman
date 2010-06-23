@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{foreman}
-  s.version = "0.4.3"
+  s.version = "0.4.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David Dollar"]
@@ -20,6 +20,8 @@ Gem::Specification.new do |s|
   s.files = [
     "Rakefile",
      "bin/foreman",
+     "export/upstart/master.conf.erb",
+     "export/upstart/process.conf.erb",
      "lib/foreman.rb",
      "lib/foreman/cli.rb",
      "lib/foreman/configuration.rb",
