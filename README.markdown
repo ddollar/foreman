@@ -1,11 +1,11 @@
-= Foreman
+# Foreman
 
   See the [man page](http://ddollar.github.com/foreman) for details.
 
-== License
+## License
 
 MIT
 
-== Copyright
+## Copyright
 
 (c) 2010 David Dollar
