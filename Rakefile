@@ -26,12 +26,21 @@ end
 
 desc 'Build the manual'
 task :man do
-  require 'ronn'
   ENV['RONN_MANUAL']  = "Foreman Manual"
   ENV['RONN_ORGANIZATION'] = "Foreman #{Foreman::VERSION}"
   sh "ronn -w -s toc -r5 --markdown man/*.ronn"
-  sh "git add man/*.?"
-  sh "git commit -m \"updating man pages\""
+end
+
+task :pages => :man do
+  sh %{
+    cp man/foreman.1.html /tmp/foreman.1.html
+    git checkout gh-pages
+    rm ./index.html
+    cp /tmp/foreman.1.html ./index.html
+    git add -u index.html
+    git commit -m "rebuilding man page"
+    git push origin -f gh-pages
+  }
 end
 
 ######################################################
