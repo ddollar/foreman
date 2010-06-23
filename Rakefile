@@ -6,6 +6,7 @@ $:.unshift File.expand_path("../lib", __FILE__)
 require "foreman"
 
 task :default => :spec
+task :release => :man
 
 desc "Run all specs"
 Rspec::Core::RakeTask.new(:spec) do |t|
@@ -29,6 +30,8 @@ task :man do
   ENV['RONN_MANUAL']  = "Foreman Manual"
   ENV['RONN_ORGANIZATION'] = "Foreman #{Foreman::VERSION}"
   sh "ronn -w -s toc -r5 --markdown man/*.ronn"
+  sh "git add man/*.?"
+  sh "git commit -m \"updating man pages\""
 end
 
 ######################################################
