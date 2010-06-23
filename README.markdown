@@ -45,7 +45,7 @@ The following options control how the application is run:
 
   * `-c`, `--concurrency`:
     Specify the number of each process type to run. The value passed in
-    should be in the format `process=num,process=num`.
+    should be in the format `process=num,process=num`
 
 ## OPTIONS
 
