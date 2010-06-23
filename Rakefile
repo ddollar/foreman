@@ -40,6 +40,7 @@ task :pages => :man do
     git add -u index.html
     git commit -m "rebuilding man page"
     git push origin -f gh-pages
+    git checkout master
   }
 end
 
