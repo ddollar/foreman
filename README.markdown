@@ -60,15 +60,15 @@ These options control all modes of foreman's operation.
 
 Start one instance of each process type, interleave the output on stdout:
 
-    $ foreman start
+    $ `foreman start`
 
 Export the application in upstart format:
 
-    $ foreman export upstart /etc/init
+    $ `foreman export upstart /etc/init`
     
 Run one process type from the application defined in a specific Procfile:
 
-    $ foreman start alpha -p ~/app/Procfile
+    $ `foreman start alpha -p ~/app/Procfile`
 
 ## COPYRIGHT
 
