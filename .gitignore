@@ -1,3 +1,5 @@
 coverage
 example/log/*
+man/*.html
+man/*.markdown
 pkg

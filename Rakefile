@@ -23,6 +23,14 @@ Rspec::Core::RakeTask.new("rcov:build") do |t|
   t.rcov_opts = [ "--exclude", Gem.default_dir , "--exclude", "spec" ]
 end
 
+desc 'Build the manual'
+task :man do
+  require 'ronn'
+  ENV['RONN_MANUAL']  = "Foreman Manual"
+  ENV['RONN_ORGANIZATION'] = "Foreman #{Foreman::VERSION}"
+  sh "ronn -w -s toc -r5 --markdown man/*.ronn"
+end
+
 ######################################################
 
 begin
