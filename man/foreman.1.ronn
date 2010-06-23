@@ -3,8 +3,8 @@ foreman(1) -- manage Procfile-based applications
 
 ## SYNOPSIS
 
-`foreman` start [process]<br>
-`foreman` export <format> [location]
+`foreman start [process]`<br>
+`foreman export <format> [location]`
 
 ## DESCRIPTION
 
