@@ -29,6 +29,9 @@ task :man do
   ENV['RONN_MANUAL']  = "Foreman Manual"
   ENV['RONN_ORGANIZATION'] = "Foreman #{Foreman::VERSION}"
   sh "ronn -w -s toc -r5 --markdown man/*.ronn"
+  sh "cp man/foreman.1.markdown README.markdown"
+  sh "git add README.markdown"
+  sh "git commit -m 'update readme'"
 end
 
 task :pages => :man do
