@@ -64,7 +64,7 @@ begin
     s.platform = Gem::Platform::RUBY
     s.has_rdoc = false
 
-    s.files = %w(Rakefile README.md) + Dir["{bin,lib,spec}/**/*"]
+    s.files = %w(Rakefile README.md) + Dir["{bin,export,lib,spec}/**/*"]
     s.require_path = "lib"
 
     # #s.bindir             = "bin"
