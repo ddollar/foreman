@@ -144,17 +144,17 @@ application.</li>
 
 <p>Start one instance of each process type, interleave the output on stdout:</p>
 
-<pre><code>$ foreman start
+<pre><code>$ `foreman start`
 </code></pre>
 
 <p>Export the application in upstart format:</p>
 
-<pre><code>$ foreman export upstart /etc/init
+<pre><code>$ `foreman export upstart /etc/init`
 </code></pre>
 
 <p>Run one process type from the application defined in a specific Procfile:</p>
 
-<pre><code>$ foreman start alpha -p ~/app/Procfile
+<pre><code>$ `foreman start alpha -p ~/app/Procfile`
 </code></pre>
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
