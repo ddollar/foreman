@@ -15,7 +15,7 @@ format.
 
 ## RUNNING
 
-`foreman start` is used to run your application directly from the command line. 
+`foreman start` is used to run your application directly from the command line.
 
 If no additional parameters are passed, foreman will run one instance of each
 type of process defined in your Procfile.
@@ -42,7 +42,7 @@ The following options control how the application is run:
   * `-a`, `--app`:
     Use this name rather than the application's root directory name as the
     name of the application when exporting.
-    
+
   * `-c`, `--concurrency`:
     Specify the number of each process type to run. The value passed in
     should be in the format `process=num,process=num`.
@@ -60,15 +60,15 @@ These options control all modes of foreman's operation.
 
 Start one instance of each process type, interleave the output on stdout:
 
-    `$ foreman start`
+    $ foreman start
 
 Export the application in upstart format:
 
-    `$ foreman export upstart /etc/init`
-    
+    $ foreman export upstart /etc/init
+
 Run one process type from the application defined in a specific Procfile:
 
-    `$ foreman start alpha -p ~/app/Procfile`
+    $ foreman start alpha -p ~/app/Procfile
 
 ## COPYRIGHT
 
