@@ -31,7 +31,7 @@ task :man do
   sh "ronn -w -s toc -r5 --markdown man/*.ronn"
   sh "cp man/foreman.1.markdown README.markdown"
   sh "git add README.markdown"
-  sh "git commit -m 'update readme'"
+  sh "git commit -m 'update readme' || echo 'nothing to commit'"
 end
 
 task :pages => :man do
