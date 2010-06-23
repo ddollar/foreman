@@ -65,6 +65,7 @@
     <a href="#RUNNING">RUNNING</a>
     <a href="#EXPORTING">EXPORTING</a>
     <a href="#OPTIONS">OPTIONS</a>
+    <a href="#PROCFILE">PROCFILE</a>
     <a href="#EXAMPLES">EXAMPLES</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
     </div>
@@ -139,6 +140,15 @@ containing directory will be assumed to be the root directory of the
 application.</li>
 </ul>
 
+
+<h2 id="PROCFILE">PROCFILE</h2>
+
+<p>A Procfile should contain both a name for the process and the command used
+to run it.</p>
+
+<pre><code>web  bundle exec thin start
+job  bundle exec rake jobs:work
+</code></pre>
 
 <h2 id="EXAMPLES">EXAMPLES</h2>
 
