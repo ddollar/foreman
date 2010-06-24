@@ -1,4 +1,3 @@
-require "foreman/configuration"
 require "foreman/export"
 
 class Foreman::Export::Base

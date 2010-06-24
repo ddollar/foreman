@@ -1,5 +1,4 @@
 require "foreman"
-require "foreman/configuration"
 require "foreman/engine"
 require "foreman/export"
 require "thor"
