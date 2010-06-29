@@ -1,5 +1,6 @@
-stop on stopping <%= app %>
+start on starting <%= app %>-<%= process.name %>
+stop on stopping <%= app %>-<%= process.name %>
 respawn
 
 chdir <%= engine.directory %>
-exec <%= process.command %> >> /var/log/<%=app%>/<%=process.name%>-<%=num%>.log 2>&1
+exec sudo -u <%= user %> <%= process.command %> >> /var/log/<%=app%>/<%=process.name%>-<%=num%>.log 2>&1

@@ -26,9 +26,9 @@ class Foreman::CLI < Thor
   desc "export FORMAT LOCATION", "Export the application to another process management format"
 
   method_option :app,         :type => :string, :aliases => "-a"
+  method_option :user,        :type => :string, :aliases => "-u"
   method_option :concurrency, :type => :string, :aliases => "-c",
     :banner => '"alpha=5,bar=3"'
-
   def export(format, location=nil)
     check_procfile!
 
@@ -39,6 +39,7 @@ class Foreman::CLI < Thor
 
     formatter.new(engine).export(location,
       :name        => options[:app],
+      :user        => options[:user],
       :concurrency => options[:concurrency]
     )
   rescue Foreman::Export::Exception => ex

@@ -2,12 +2,6 @@ pre-start script
 
 bash << "EOF"
   mkdir -p /var/log/<%= app %>
-
-  <% engine.processes.keys.sort.each do |process| %>
-    <% 1.upto(concurrency[process]).each do |num| %>
-      start <%=app%>-<%=process%>-<%=num%>
-    <% end %>
-  <% end %>
 EOF
 
 end script
