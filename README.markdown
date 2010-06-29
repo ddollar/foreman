@@ -47,6 +47,10 @@ The following options control how the application is run:
     Specify the number of each process type to run. The value passed in
     should be in the format `process=num,process=num`
 
+  * `-u`, `--user`:
+    Specify the user the application should be run as. Defaults to the
+    app name
+
 ## OPTIONS
 
 These options control all modes of foreman's operation.
