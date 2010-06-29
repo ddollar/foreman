@@ -34,6 +34,7 @@ class Foreman::CLI < Thor
 
     formatter = case format
       when "upstart" then Foreman::Export::Upstart
+      when "inittab" then Foreman::Export::Inittab
       else error "Unknown export format: #{format}."
     end
 

@@ -5,3 +5,4 @@ module Foreman::Export
 end
 
 require "foreman/export/upstart"
+require "foreman/export/inittab"
