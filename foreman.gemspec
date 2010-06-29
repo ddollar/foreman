@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David Dollar"]
-  s.date = %q{2010-06-23}
+  s.date = %q{2010-06-28}
   s.default_executable = %q{foreman}
   s.description = %q{Process manager for applications with multiple components}
   s.email = %q{ddollar@gmail.com}
@@ -22,16 +22,15 @@ Gem::Specification.new do |s|
      "bin/foreman",
      "export/upstart/master.conf.erb",
      "export/upstart/process.conf.erb",
+     "export/upstart/process_master.conf.erb",
      "lib/foreman.rb",
      "lib/foreman/cli.rb",
-     "lib/foreman/configuration.rb",
      "lib/foreman/engine.rb",
      "lib/foreman/export.rb",
      "lib/foreman/export/base.rb",
      "lib/foreman/export/upstart.rb",
      "lib/foreman/process.rb",
      "spec/foreman/cli_spec.rb",
-     "spec/foreman/configuration_spec.rb",
      "spec/foreman/engine_spec.rb",
      "spec/foreman/export/upstart_spec.rb",
      "spec/foreman/export_spec.rb",
@@ -47,7 +46,6 @@ Gem::Specification.new do |s|
   s.summary = %q{Process manager for applications with multiple components}
   s.test_files = [
     "spec/foreman/cli_spec.rb",
-     "spec/foreman/configuration_spec.rb",
      "spec/foreman/engine_spec.rb",
      "spec/foreman/export/upstart_spec.rb",
      "spec/foreman/export_spec.rb",
