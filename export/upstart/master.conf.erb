@@ -1,8 +1,8 @@
 pre-start script
 
 bash << "EOF"
-  mkdir -p <%= log_root %>/<%= app %>
-  chown -R <%= user %> <%= log_root %>/<%= app %>
+  mkdir -p <%= log_root %>
+  chown -R <%= user %> <%= log_root %>
 EOF
 
 end script
