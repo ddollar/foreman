@@ -43,6 +43,9 @@ The following options control how the application is run:
     Use this name rather than the application's root directory name as the
     name of the application when exporting.
 
+  * `-l`, `--log`:
+    Specify the directory to place process logs in.
+
   * `-c`, `--concurrency`:
     Specify the number of each process type to run. The value passed in
     should be in the format `process=num,process=num`
