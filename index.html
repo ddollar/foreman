@@ -126,6 +126,8 @@ either required or optional depending on the export format.</p>
 name of the application when exporting.</p></dd>
 <dt><code>-c</code>, <code>--concurrency</code></dt><dd><p>Specify the number of each process type to run. The value passed in
 should be in the format <code>process=num,process=num</code></p></dd>
+<dt><code>-u</code>, <code>--user</code></dt><dd><p>Specify the user the application should be run as. Defaults to the
+app name</p></dd>
 </dl>
 
 
@@ -173,7 +175,7 @@ job  bundle exec rake jobs:work
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>Foreman 0.4.3</li>
+    <li class='tl'>Foreman 0.4.5</li>
     <li class='tc'>June 2010</li>
     <li class='tr'>foreman(1)</li>
   </ol>
