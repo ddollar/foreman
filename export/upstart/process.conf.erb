@@ -3,4 +3,4 @@ stop on stopping <%= app %>-<%= process.name %>
 respawn
 
 chdir <%= engine.directory %>
-exec sudo -u <%= user %> <%= process.command %> >> /var/log/<%=app%>/<%=process.name%>-<%=num%>.log 2>&1
+exec su <%= user %> -c "<%= process.command %> >> /var/log/<%=app%>/<%=process.name%>-<%=num%>.log 2>&1"
