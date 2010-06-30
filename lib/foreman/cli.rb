@@ -30,6 +30,7 @@ class Foreman::CLI < Thor
   method_option :user,        :type => :string, :aliases => "-u"
   method_option :concurrency, :type => :string, :aliases => "-c",
     :banner => '"alpha=5,bar=3"'
+
   def export(format, location=nil)
     check_procfile!
 
