@@ -70,7 +70,9 @@ These options control all modes of foreman's operation.
 ## EXPORT FORMATS
 
 foreman currently supports the following output formats:
+
   * inittab
+
   * upstart
 
 ## PROCFILE
