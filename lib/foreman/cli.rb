@@ -25,10 +25,11 @@ class Foreman::CLI < Thor
 
   desc "export FORMAT LOCATION", "Export the application to another process management format"
 
-  method_option :app,         :type => :string, :aliases => "-a"
-  method_option :log,         :type => :string, :aliases => "-l"
-  method_option :user,        :type => :string, :aliases => "-u"
-  method_option :concurrency, :type => :string, :aliases => "-c",
+  method_option :app,         :type => :string,  :aliases => "-a"
+  method_option :log,         :type => :string,  :aliases => "-l"
+  method_option :port,        :type => :numeric, :aliases => "-p"
+  method_option :user,        :type => :string,  :aliases => "-u"
+  method_option :concurrency, :type => :string,  :aliases => "-c",
     :banner => '"alpha=5,bar=3"'
 
   def export(format, location=nil)
@@ -40,12 +41,8 @@ class Foreman::CLI < Thor
       else error "Unknown export format: #{format}."
     end
 
-    formatter.new(engine).export(location,
-      :name        => options[:app],
-      :user        => options[:user],
-      :log         => options[:log],
-      :concurrency => options[:concurrency]
-    )
+    formatter.new(engine).export(location, options)
+
   rescue Foreman::Export::Exception => ex
     error ex.message
   end

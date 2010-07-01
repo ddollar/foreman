@@ -11,10 +11,17 @@ class Foreman::Export::Inittab < Foreman::Export::Base
 
     inittab = []
     inittab << "# ----- foreman #{app} processes -----"
-    engine.processes.values.each_with_index do |process, num|
-      id = app.slice(0, 2).upcase + sprintf("%02d", num+1)
-      inittab << "#{id}:4:respawn:/bin/su - #{user} -c '#{process.command} >> #{log_root}/#{process.name}-#{num+1}.log 2>&1'"
+
+    engine.processes.values.inject(1) do |index, process|
+      1.upto(concurrency[process.name]) do |num|
+        id = app.slice(0, 2).upcase + sprintf("%02d", index)
+        port = port_for(options[:port], process.name, num)
+        inittab << "#{id}:4:respawn:/bin/su - #{user} -c 'PORT=#{port} #{process.command} >> #{log_root}/#{process.name}-#{num}.log 2>&1'"
+        index += 1
+      end
+      index
     end
+
     inittab << "# ----- end foreman #{app} processes -----"
 
     inittab = inittab.join("\n") + "\n"

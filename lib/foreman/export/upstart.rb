@@ -31,6 +31,7 @@ class Foreman::Export::Upstart < Foreman::Export::Base
       write_file "#{location}/#{app}-#{process.name}.conf", process_master_config
 
       1.upto(concurrency[process.name]) do |num|
+        port = port_for(options[:port], process.name, num)
         process_config = ERB.new(process_template).result(binding)
         write_file "#{location}/#{app}-#{process.name}-#{num}.conf", process_config
       end
