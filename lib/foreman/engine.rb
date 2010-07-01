@@ -3,6 +3,7 @@ require "foreman/process"
 require "pty"
 require "tempfile"
 require "term/ansicolor"
+require "fileutils"
 
 class Foreman::Engine
 
