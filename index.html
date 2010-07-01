@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv='content-type' value='text/html;charset=utf8'>
-  <meta name='generator' value='Ronn/v0.7.0 (http://github.com/rtomayko/ronn/tree/0.7.0)'>
+  <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
   <title>foreman(1) - manage Procfile-based applications</title>
   <style type='text/css' media='all'>
   /* style: man */
@@ -124,9 +124,11 @@ either required or optional depending on the export format.</p>
 <dl>
 <dt><code>-a</code>, <code>--app</code></dt><dd><p>Use this name rather than the application's root directory name as the
 name of the application when exporting.</p></dd>
-<dt><code>-l</code>, <code>--log</code></dt><dd><p>Specify the directory to place process logs in.</p></dd>
 <dt><code>-c</code>, <code>--concurrency</code></dt><dd><p>Specify the number of each process type to run. The value passed in
 should be in the format <code>process=num,process=num</code></p></dd>
+<dt><code>-l</code>, <code>--log</code></dt><dd><p>Specify the directory to place process logs in.</p></dd>
+<dt><code>-p</code>, <code>--port</code></dt><dd><p>Specify which port to use as the base for this application. Should be
+a multiple of 1000.</p></dd>
 <dt><code>-u</code>, <code>--user</code></dt><dd><p>Specify the user the application should be run as. Defaults to the
 app name</p></dd>
 </dl>
@@ -137,7 +139,7 @@ app name</p></dd>
 <p>These options control all modes of foreman's operation.</p>
 
 <ul>
-<li><code>-p</code>, <code>--procfile</code>
+<li><code>-f</code>, <code>--procfile</code>
 Specify an alternate location for the application's Procfile. This file's
 containing directory will be assumed to be the root directory of the
 application.</li>
@@ -176,7 +178,7 @@ job  bundle exec rake jobs:work
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>Foreman 0.4.6</li>
+    <li class='tl'>Foreman 0.5.0</li>
     <li class='tc'>June 2010</li>
     <li class='tr'>foreman(1)</li>
   </ol>
