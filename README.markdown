@@ -43,12 +43,16 @@ The following options control how the application is run:
     Use this name rather than the application's root directory name as the
     name of the application when exporting.
 
-  * `-l`, `--log`:
-    Specify the directory to place process logs in.
-
   * `-c`, `--concurrency`:
     Specify the number of each process type to run. The value passed in
     should be in the format `process=num,process=num`
+
+  * `-l`, `--log`:
+    Specify the directory to place process logs in.
+
+  * `-p`, `--port`:
+    Specify which port to use as the base for this application. Should be
+    a multiple of 1000.
 
   * `-u`, `--user`:
     Specify the user the application should be run as. Defaults to the
@@ -58,7 +62,7 @@ The following options control how the application is run:
 
 These options control all modes of foreman's operation.
 
-  * `-p`, `--procfile`
+  * `-f`, `--procfile`
     Specify an alternate location for the application's Procfile. This file's
     containing directory will be assumed to be the root directory of the
     application.
