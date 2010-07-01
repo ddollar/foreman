@@ -65,6 +65,9 @@
     <a href="#RUNNING">RUNNING</a>
     <a href="#EXPORTING">EXPORTING</a>
     <a href="#OPTIONS">OPTIONS</a>
+    <a href="#EXPORT-FORMATS">EXPORT FORMATS</a>
+    <a href="#INITTAB-EXPORT">INITTAB EXPORT</a>
+    <a href="#UPSTART-EXPORT">UPSTART EXPORT</a>
     <a href="#PROCFILE">PROCFILE</a>
     <a href="#EXAMPLES">EXAMPLES</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
@@ -138,13 +141,43 @@ app name</p></dd>
 
 <p>These options control all modes of foreman's operation.</p>
 
-<ul>
-<li><code>-f</code>, <code>--procfile</code>
-Specify an alternate location for the application's Procfile. This file's
+<dl>
+<dt><code>-f</code>, <code>--procfile</code></dt><dd>Specify an alternate location for the application's Procfile. This file's
 containing directory will be assumed to be the root directory of the
-application.</li>
+application.</dd>
+</dl>
+
+
+<h2 id="EXPORT-FORMATS">EXPORT FORMATS</h2>
+
+<p>foreman currently supports the following output formats:</p>
+
+<ul>
+<li><p>inittab</p></li>
+<li><p>upstart</p></li>
 </ul>
 
+
+<h2 id="INITTAB-EXPORT">INITTAB EXPORT</h2>
+
+<p>Will export a chunk of inittab-compatible configuration:</p>
+
+<pre><code># ----- foreman example processes -----
+EX01:4:respawn:/bin/su - example -c 'PORT=5000 bundle exec thin start &gt;&gt; /var/log/web-1.log 2&gt;&amp;1'
+EX02:4:respawn:/bin/su - example -c 'PORT=5100 bundle exec rake jobs:work &gt;&gt; /var/log/job-1.log 2&gt;&amp;1'
+# ----- end foreman example processes -----
+</code></pre>
+
+<h2 id="UPSTART-EXPORT">UPSTART EXPORT</h2>
+
+<p>Will create a series of upstart scripts in the location you specify. Scripts
+will be structured to make the following commands valid:</p>
+
+<p>  <code>start appname</code></p>
+
+<p>  <code>stop appname-processname</code></p>
+
+<p>  <code>restart appname-processname-3</code></p>
 
 <h2 id="PROCFILE">PROCFILE</h2>
 
