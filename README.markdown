@@ -71,9 +71,6 @@ These options control all modes of foreman's operation.
 
 foreman currently supports the following output formats:
 
-  * inittab
-  * upstart
-
 ## PROCFILE
 
 A Procfile should contain both a name for the process and the command used
