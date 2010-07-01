@@ -5,7 +5,7 @@ require "thor"
 
 class Foreman::CLI < Thor
 
-  class_option :procfile, :type => :string, :aliases => "-p", :desc => "Default: ./Procfile"
+  class_option :procfile, :type => :string, :aliases => "-f", :desc => "Default: ./Procfile"
 
   desc "start [PROCESS]", "Start the application, or a specific process"
 
@@ -13,7 +13,7 @@ class Foreman::CLI < Thor
 
   def start(process=nil)
     check_procfile!
-    
+
     if process
       engine.execute(process)
     elsif options[:screen]
