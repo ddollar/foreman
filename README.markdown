@@ -67,6 +67,13 @@ These options control all modes of foreman's operation.
     containing directory will be assumed to be the root directory of the
     application.
 
+## EXPORT FORMATS
+
+foreman currently supports the following output formats:
+
+  * inittab
+  * upstart
+
 ## PROCFILE
 
 A Procfile should contain both a name for the process and the command used
@@ -99,6 +106,7 @@ Foreman is Copyright (C) 2010 David Dollar <http://daviddollar.org>
 [RUNNING]: #RUNNING "RUNNING"
 [EXPORTING]: #EXPORTING "EXPORTING"
 [OPTIONS]: #OPTIONS "OPTIONS"
+[EXPORT FORMATS]: #EXPORT-FORMATS "EXPORT FORMATS"
 [PROCFILE]: #PROCFILE "PROCFILE"
 [EXAMPLES]: #EXAMPLES "EXAMPLES"
 [COPYRIGHT]: #COPYRIGHT "COPYRIGHT"
