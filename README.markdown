@@ -86,7 +86,7 @@ Will export a chunk of inittab-compatible configuration:
 
 ## UPSTART EXPORT
 
-Will create a series of upstart scripts in the directory you specify. Scripts
+Will create a series of upstart scripts in the location you specify. Scripts
 will be structured to make the following commands valid:
 
   `start appname`
