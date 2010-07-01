@@ -80,7 +80,7 @@ foreman currently supports the following output formats:
 ## UPSTART EXPORT
 
 Will create a series of upstart scripts in the directory you specify. Scripts
-will be structured so as to make the following commands valid:
+will be structured to make the following commands valid:
 
   `start appname`
 
