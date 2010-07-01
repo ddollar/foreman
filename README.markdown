@@ -77,6 +77,13 @@ foreman currently supports the following output formats:
 
 ## INITTAB EXPORT
 
+Will export a chunk of inittab-compatible configuration:
+
+  # ----- foreman example processes -----
+  EX01:4:respawn:/bin/su - example -c 'PORT=5000 ./error >> /var/log/error-1.log 2>&1'
+  EX02:4:respawn:/bin/su - example -c 'PORT=5100 ./ticker >> /var/log/ticker-1.log 2>&1'
+  # ----- end foreman example processes -----
+
 ## UPSTART EXPORT
 
 Will create a series of upstart scripts in the directory you specify. Scripts
