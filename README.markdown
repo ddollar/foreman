@@ -62,7 +62,7 @@ The following options control how the application is run:
 
 These options control all modes of foreman's operation.
 
-  * `-f`, `--procfile`
+  * `-f`, `--procfile`:
     Specify an alternate location for the application's Procfile. This file's
     containing directory will be assumed to be the root directory of the
     application.
