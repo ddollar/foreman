@@ -83,7 +83,9 @@ Will create a series of upstart scripts in the directory you specify. Scripts
 will be structured so as to make the following commands valid:
 
   `start appname`
+
   `stop appname-processname`
+
   `restart appname-processname-3`
 
 ## PROCFILE
