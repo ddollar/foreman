@@ -75,6 +75,17 @@ foreman currently supports the following output formats:
 
   * upstart
 
+## INITTAB EXPORT
+
+## UPSTART EXPORT
+
+Will create a series of upstart scripts in the directory you specify. Scripts
+will be structured so as to make the following commands valid:
+
+  `start appname`
+  `stop appname-processname`
+  `restart appname-processname-3`
+
 ## PROCFILE
 
 A Procfile should contain both a name for the process and the command used
@@ -108,6 +119,8 @@ Foreman is Copyright (C) 2010 David Dollar <http://daviddollar.org>
 [EXPORTING]: #EXPORTING "EXPORTING"
 [OPTIONS]: #OPTIONS "OPTIONS"
 [EXPORT FORMATS]: #EXPORT-FORMATS "EXPORT FORMATS"
+[INITTAB EXPORT]: #INITTAB-EXPORT "INITTAB EXPORT"
+[UPSTART EXPORT]: #UPSTART-EXPORT "UPSTART EXPORT"
 [PROCFILE]: #PROCFILE "PROCFILE"
 [EXAMPLES]: #EXAMPLES "EXAMPLES"
 [COPYRIGHT]: #COPYRIGHT "COPYRIGHT"
