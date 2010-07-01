@@ -72,8 +72,7 @@ These options control all modes of foreman's operation.
 foreman currently supports the following output formats:
 
   * `inittab`:
-  
-    Will export a chunk of inittab like the following example:
+    Will export a chunk of inittab like the following example
 
   * upstart
 
