@@ -5,7 +5,7 @@ class Foreman::Export::Inittab < Foreman::Export::Base
   def export(fname=nil, options={})
     app = options[:app] || File.basename(engine.directory)
     user = options[:user] || app
-    log_root = options[:log] || "/var/log"
+    log_root = options[:log] || "/var/log/#{app}"
 
     concurrency = parse_concurrency(options[:concurrency])
 
