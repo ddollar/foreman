@@ -51,10 +51,7 @@ describe "Foreman::CLI" do
 
         it "runs successfully" do
           dont_allow(subject).error
-          mock.instance_of(Foreman::Export::Upstart).export("/tmp/foo", {
-            :concurrency => nil,
-            :name => nil
-          })
+          mock.instance_of(Foreman::Export::Upstart).export("/tmp/foo", {})
           subject.export("upstart", "/tmp/foo")
         end
       end
