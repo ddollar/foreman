@@ -10,7 +10,7 @@ describe "Foreman::Engine" do
         lambda { subject }.should raise_error
       end
     end
-    
+
     describe "with a Procfile" do
       it "reads the processes" do
         write_procfile
@@ -19,7 +19,7 @@ describe "Foreman::Engine" do
       end
     end
   end
-  
+
   describe "start" do
     it "forks the processes" do
       write_procfile
