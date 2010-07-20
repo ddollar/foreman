@@ -33,7 +33,8 @@ describe "Foreman::Engine" do
   describe "execute" do
     it "runs the processes" do
       write_procfile
-      mock(subject).run(subject.processes["alpha"], false)
+      mock(subject).fork(subject.processes["alpha"])
+      mock(subject).watch_for_termination
       subject.execute("alpha")
     end
   end

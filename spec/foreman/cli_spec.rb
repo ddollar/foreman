@@ -19,7 +19,7 @@ describe "Foreman::CLI" do
 
       it "runs successfully" do
         dont_allow(subject).error
-        mock.instance_of(Foreman::Engine).start
+        mock.instance_of(Foreman::Engine).start({})
         subject.start
       end
     end

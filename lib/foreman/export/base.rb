@@ -1,4 +1,5 @@
 require "foreman/export"
+require "foreman/utils"
 
 class Foreman::Export::Base
 
@@ -24,16 +25,6 @@ private ######################################################################
 
   def export_template(name)
     File.read(File.expand_path("../../../../export/#{name}", __FILE__))
-  end
-
-  def parse_concurrency(concurrency)
-    @concurrency ||= begin
-      pairs = concurrency.to_s.gsub(/\s/, "").split(",")
-      pairs.inject(Hash.new(1)) do |hash, pair|
-        process, amount = pair.split("=")
-        hash.update(process => amount.to_i)        
-      end
-    end
   end
 
   def port_for(base_port, app, num)

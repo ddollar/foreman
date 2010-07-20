@@ -1,5 +1,6 @@
 require "foreman"
 require "foreman/process"
+require "foreman/utils"
 require "pty"
 require "tempfile"
 require "term/ansicolor"
@@ -12,28 +13,42 @@ class Foreman::Engine
 
   extend Term::ANSIColor
 
-  COLORS = [ cyan, yellow, green, magenta, on_blue ]
+  COLORS = [ cyan, yellow, green, magenta, red ]
 
   def initialize(procfile)
     @procfile  = read_procfile(procfile)
     @directory = File.expand_path(File.dirname(procfile))
   end
 
-  def processes
+  def processes(concurrency=nil)
     @processes ||= begin
+      concurrency = Foreman::Utils.parse_concurrency(concurrency)
+
       procfile.split("\n").inject({}) do |hash, line|
         next if line.strip == ""
-        process = Foreman::Process.new(*line.split(" ", 2))
-        process.color = next_color
-        hash.update(process.name => process)
+        name, command = line.split(" ", 2)
+
+        if concurrency[name] > 1 then
+          1.upto(concurrency[name]) do |num|
+            process = Foreman::Process.new("#{name}.#{num}", command)
+            process.color = next_color
+            hash[process.name] = process
+          end
+        else
+          process = Foreman::Process.new(name, command)
+          process.color = next_color
+          hash[process.name] = process
+        end
+
+        hash
       end
     end
   end
 
-  def start
+  def start(options={})
     proctitle "ruby: foreman master"
 
-    processes.each do |name, process|
+    processes(options[:concurrency]).each do |name, process|
       fork process
     end
 
@@ -56,8 +71,17 @@ class Foreman::Engine
     tempfile.delete
   end
 
-  def execute(name)
-    run(processes[name], false)
+  def execute(name, options={})
+    processes(options[:concurrency]).values.select do |process|
+      process.name =~ /\A#{name}\.?\d*\Z/
+    end.each do |process|
+      fork process
+    end
+
+    trap("TERM") { kill_and_exit("TERM") }
+    trap("INT")  { kill_and_exit("INT")  }
+
+    watch_for_termination
   end
 
 private ######################################################################
