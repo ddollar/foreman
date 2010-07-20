@@ -23,17 +23,26 @@ describe "Foreman::Engine" do
   describe "start" do
     it "forks the processes" do
       write_procfile
-      mock(subject).fork(subject.processes["alpha"])
-      mock(subject).fork(subject.processes["bravo"])
+      mock(subject).fork(subject.processes["alpha"], {})
+      mock(subject).fork(subject.processes["bravo"], {})
       mock(subject).watch_for_termination
       subject.start
+    end
+
+    it "handles concurrency" do
+      write_procfile
+      mock(subject).fork_individual(subject.processes["alpha"], 5000)
+      mock(subject).fork_individual(subject.processes["alpha"], 5001)
+      mock(subject).fork_individual(subject.processes["bravo"], 5100)
+      mock(subject).watch_for_termination
+      subject.start(:concurrency => "alpha=2")
     end
   end
 
   describe "execute" do
     it "runs the processes" do
       write_procfile
-      mock(subject).fork(subject.processes["alpha"])
+      mock(subject).fork(subject.processes["alpha"], {})
       mock(subject).watch_for_termination
       subject.execute("alpha")
     end

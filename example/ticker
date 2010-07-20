@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
 while true
-  puts "tick"
+  puts "tick: #{ARGV.inspect}"
   sleep 1
 end

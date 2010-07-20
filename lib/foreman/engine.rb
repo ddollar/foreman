@@ -20,27 +20,14 @@ class Foreman::Engine
     @directory = File.expand_path(File.dirname(procfile))
   end
 
-  def processes(concurrency=nil)
+  def processes
     @processes ||= begin
-      concurrency = Foreman::Utils.parse_concurrency(concurrency)
-
       procfile.split("\n").inject({}) do |hash, line|
         next if line.strip == ""
         name, command = line.split(" ", 2)
-
-        if concurrency[name] > 1 then
-          1.upto(concurrency[name]) do |num|
-            process = Foreman::Process.new("#{name}.#{num}", command)
-            process.color = next_color
-            hash[process.name] = process
-          end
-        else
-          process = Foreman::Process.new(name, command)
-          process.color = next_color
-          hash[process.name] = process
-        end
-
-        hash
+        process = Foreman::Process.new(name, command)
+        process.color = next_color
+        hash.update(process.name => process)
       end
     end
   end
@@ -48,8 +35,8 @@ class Foreman::Engine
   def start(options={})
     proctitle "ruby: foreman master"
 
-    processes(options[:concurrency]).each do |name, process|
-      fork process
+    processes.each do |name, process|
+      fork process, options
     end
 
     trap("TERM") { kill_and_exit("TERM") }
@@ -59,11 +46,7 @@ class Foreman::Engine
   end
 
   def execute(name, options={})
-    processes(options[:concurrency]).values.select do |process|
-      process.name =~ /\A#{name}\.?\d*\Z/
-    end.each do |process|
-      fork process
-    end
+    fork processes[name], options
 
     trap("TERM") { kill_and_exit("TERM") }
     trap("INT")  { kill_and_exit("INT")  }
@@ -79,7 +62,17 @@ class Foreman::Engine
 
 private ######################################################################
 
-  def fork(process)
+  def fork(process, options={})
+    concurrency = Foreman::Utils.parse_concurrency(options[:concurrency])
+
+    1.upto(concurrency[process.name]) do |num|
+      fork_individual(process, port_for(process, num, options[:port]))
+    end
+  end
+
+  def fork_individual(process, port)
+    ENV["PORT"] = port.to_s
+
     pid = Process.fork do
       run(process)
     end
@@ -133,8 +126,8 @@ private ######################################################################
   end
 
   def pad_process_name(process)
-    name = process ? process.name : "system"
-    name.ljust(longest_process_name)
+    name = process ? "#{process.name}:#{ENV["PORT"]}" : "system"
+    name.ljust(longest_process_name + 6) # add 6 for port padding
   end
 
   def print_info

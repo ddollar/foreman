@@ -9,6 +9,7 @@ class Foreman::CLI < Thor
 
   desc "start [PROCESS]", "Start the application, or a specific process"
 
+  method_option :port,        :type => :numeric, :aliases => "-p"
   method_option :concurrency, :type => :string,  :aliases => "-c",
     :banner => '"alpha=5,bar=3"'
 
