@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{foreman}
-  s.version = "0.6.0"
+  s.version = "0.7.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David Dollar"]
-  s.date = %q{2010-07-06}
+  s.date = %q{2010-07-19}
   s.default_executable = %q{foreman}
   s.description = %q{Process manager for applications with multiple components}
   s.email = %q{ddollar@gmail.com}
@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
      "lib/foreman/export/inittab.rb",
      "lib/foreman/export/upstart.rb",
      "lib/foreman/process.rb",
+     "lib/foreman/utils.rb",
      "spec/foreman/cli_spec.rb",
      "spec/foreman/engine_spec.rb",
      "spec/foreman/export/upstart_spec.rb",
@@ -39,7 +40,6 @@ Gem::Specification.new do |s|
      "spec/foreman_spec.rb",
      "spec/spec_helper.rb"
   ]
-  s.has_rdoc = false
   s.homepage = %q{http://github.com/ddollar/foreman}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
