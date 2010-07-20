@@ -58,19 +58,6 @@ class Foreman::Engine
     watch_for_termination
   end
 
-  def screen
-    tempfile = Tempfile.new("foreman")
-    tempfile.puts "sessionname foreman"
-    processes.each do |name, process|
-      tempfile.puts "screen -t #{name} #{process.command}"
-    end
-    tempfile.close
-
-    system "screen -c #{tempfile.path}"
-
-    tempfile.delete
-  end
-
   def execute(name, options={})
     processes(options[:concurrency]).values.select do |process|
       process.name =~ /\A#{name}\.?\d*\Z/

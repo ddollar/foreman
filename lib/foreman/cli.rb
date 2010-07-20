@@ -9,7 +9,6 @@ class Foreman::CLI < Thor
 
   desc "start [PROCESS]", "Start the application, or a specific process"
 
-  method_option :screen,      :type => :boolean, :aliases => "-s"
   method_option :concurrency, :type => :string,  :aliases => "-c",
     :banner => '"alpha=5,bar=3"'
 
@@ -18,8 +17,6 @@ class Foreman::CLI < Thor
 
     if process
       engine.execute(process, options)
-    elsif options[:screen]
-      engine.screen
     else
       engine.start(options)
     end
