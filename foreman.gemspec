@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{foreman}
-  s.version = "0.7.0"
+  s.version = "0.7.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["David Dollar"]
-  s.date = %q{2010-07-19}
+  s.date = %q{2010-07-20}
   s.default_executable = %q{foreman}
   s.description = %q{Process manager for applications with multiple components}
   s.email = %q{ddollar@gmail.com}
