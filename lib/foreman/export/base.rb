@@ -27,12 +27,6 @@ private ######################################################################
     File.read(File.expand_path("../../../../export/#{name}", __FILE__))
   end
 
-  def port_for(base_port, app, num)
-    base_port ||= 5000
-    offset = engine.processes.keys.sort.index(app) * 100
-    base_port.to_i + offset + num - 1
-  end
-
   def write_file(filename, contents)
     say "writing: #{filename}"
 

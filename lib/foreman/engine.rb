@@ -71,6 +71,12 @@ class Foreman::Engine
     watch_for_termination
   end
 
+  def port_for(process, num, base_port=nil)
+    base_port ||= 5000
+    offset = processes.keys.sort.index(process.name) * 100
+    base_port.to_i + offset + num - 1
+  end
+
 private ######################################################################
 
   def fork(process)

@@ -17,7 +17,7 @@ class Foreman::Export::Upstart < Foreman::Export::Base
       FileUtils.rm(file)
     end
 
-    concurrency = parse_concurrency(options[:concurrency])
+    concurrency = Foreman::Utils.parse_concurrency(options[:concurrency])
 
     master_template = export_template("upstart/master.conf.erb")
     master_config   = ERB.new(master_template).result(binding)
@@ -31,7 +31,7 @@ class Foreman::Export::Upstart < Foreman::Export::Base
       write_file "#{location}/#{app}-#{process.name}.conf", process_master_config
 
       1.upto(concurrency[process.name]) do |num|
-        port = port_for(options[:port], process.name, num)
+        port = engine.port_for(process, num, options[:port])
         process_config = ERB.new(process_template).result(binding)
         write_file "#{location}/#{app}-#{process.name}-#{num}.conf", process_config
       end
