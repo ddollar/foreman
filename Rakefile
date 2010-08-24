@@ -1,3 +1,7 @@
+require "rubygems"
+require "bundler"
+Bundler.setup
+
 require "rake"
 require "rspec"
 require "rspec/core/rake_task"
@@ -44,42 +48,4 @@ task :pages => :man do
     git push origin -f gh-pages
     git checkout master
   }
-end
-
-######################################################
-
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |s|
-    s.name    = "foreman"
-    s.version = Foreman::VERSION
-
-    s.summary     = "Process manager for applications with multiple components"
-    s.description = s.summary
-    s.author      = "David Dollar"
-    s.email       = "ddollar@gmail.com"
-    s.homepage    = "http://github.com/ddollar/foreman"
-
-    s.platform = Gem::Platform::RUBY
-    s.has_rdoc = false
-
-    s.files = %w(Rakefile README.md) + Dir["{bin,export,lib,spec}/**/*"]
-    s.require_path = "lib"
-
-    # #s.bindir             = "bin"
-    # s.executables        = Dir["bin/*"]
-    s.default_executable = "foreman"
-
-    s.add_development_dependency 'fakefs', '~> 0.2.1'
-    s.add_development_dependency 'rake',   '~> 0.8.7'
-    s.add_development_dependency 'rcov',   '~> 0.9.8'
-    s.add_development_dependency 'rr',     '~> 0.10.11'
-    s.add_development_dependency 'rspec',  '~> 2.0.0'
-
-    s.add_dependency 'term-ansicolor', '~> 1.0.5'
-    s.add_dependency 'thor', '~> 0.13.6'
-  end
-  Jeweler::GemcutterTasks.new
-rescue LoadError
-  puts "Jeweler not available. Install it with: sudo gem install jeweler"
 end

@@ -1,0 +1,37 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    diff-lcs (1.1.2)
+    fakefs (0.2.1)
+    mime-types (1.16)
+    parka (0.3.1)
+      rest-client
+      thor
+    rake (0.8.7)
+    rcov (0.9.8)
+    rest-client (1.6.0)
+      mime-types (>= 1.16)
+    rr (0.10.11)
+    rspec (2.0.0.beta.19)
+      rspec-core (= 2.0.0.beta.19)
+      rspec-expectations (= 2.0.0.beta.19)
+      rspec-mocks (= 2.0.0.beta.19)
+    rspec-core (2.0.0.beta.19)
+    rspec-expectations (2.0.0.beta.19)
+      diff-lcs (>= 1.1.2)
+    rspec-mocks (2.0.0.beta.19)
+    term-ansicolor (1.0.5)
+    thor (0.13.8)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  fakefs (~> 0.2.1)
+  parka
+  rake
+  rcov (~> 0.9.8)
+  rr (~> 0.10.11)
+  rspec (~> 2.0.0.beta.19)
+  term-ansicolor (~> 1.0.5)
+  thor (~> 0.13.6)
