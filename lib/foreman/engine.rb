@@ -97,6 +97,7 @@ private ######################################################################
       rescue PTY::ChildExited, Interrupt
         info "process exiting", process
       end
+      Process.waitall
     end
   end
 
@@ -106,6 +107,7 @@ private ######################################################################
       info "killing #{process.name} in pid #{pid}"
       Process.kill(signal, pid)
     end
+    Process.waitall
     exit 0
   end
 
