@@ -9,4 +9,5 @@ Parka::Specification.new do |gem|
 
   gem.executables  = "foreman"
   gem.files       << "man/foreman.1"
+  gem.files       << Dir["export/**/*"]
 end
