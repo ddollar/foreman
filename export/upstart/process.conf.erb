@@ -3,4 +3,4 @@ stop on stopping <%= app %>-<%= process.name %>
 respawn
 
 chdir <%= engine.directory %>
-exec su <%= user %> -c "PORT=<%= port %> <%= process.command %> >> <%= log_root %>/<%=process.name%>-<%=num%>.log 2>&1"
+exec su - <%= user %> -c 'export PORT=<%= port %>; <%= process.command %> >> <%= log_root %>/<%=process.name%>-<%=num%>.log 2>&1'
