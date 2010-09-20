@@ -39,8 +39,8 @@ class Foreman::Engine
       fork process, options
     end
 
-    trap("TERM") { kill_all("TERM") }
-    trap("INT")  { kill_all("INT")  }
+    trap("TERM") { puts "SIGTERM received"; kill_all("TERM") }
+    trap("INT")  { puts "SIGINT received";  kill_all("INT")  }
 
     watch_for_termination
   end
@@ -48,8 +48,8 @@ class Foreman::Engine
   def execute(name, options={})
     fork processes[name], options
 
-    trap("TERM") { kill_all("TERM") }
-    trap("INT")  { kill_all("INT")  }
+    trap("TERM") { puts "SIGTERM received"; kill_all("TERM") }
+    trap("INT")  { puts "SIGINT received";  kill_all("INT")  }
 
     watch_for_termination
   end
