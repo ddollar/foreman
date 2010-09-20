@@ -39,8 +39,8 @@ class Foreman::Engine
       fork process, options
     end
 
-    trap("TERM") { kill_and_exit("TERM") }
-    trap("INT")  { kill_and_exit("INT")  }
+    trap("TERM") { kill_all("TERM") }
+    trap("INT")  { kill_all("INT")  }
 
     watch_for_termination
   end
@@ -48,8 +48,8 @@ class Foreman::Engine
   def execute(name, options={})
     fork processes[name], options
 
-    trap("TERM") { kill_and_exit("TERM") }
-    trap("INT")  { kill_and_exit("INT")  }
+    trap("TERM") { kill_all("TERM") }
+    trap("INT")  { kill_all("INT")  }
 
     watch_for_termination
   end
@@ -97,18 +97,15 @@ private ######################################################################
       rescue PTY::ChildExited, Interrupt
         info "process exiting", process
       end
-      Process.waitall
     end
   end
 
-  def kill_and_exit(signal="TERM")
+  def kill_all(signal="TERM")
     info "terminating"
     running_processes.each do |pid, process|
       info "killing #{process.name} in pid #{pid}"
       Process.kill(signal, pid)
     end
-    Process.waitall
-    exit 0
   end
 
   def info(message, process=nil)
@@ -151,7 +148,8 @@ private ######################################################################
     pid, status = Process.wait2
     process = running_processes.delete(pid)
     info "process terminated", process
-    kill_and_exit
+    kill_all
+    Process.waitall
   end
 
   def running_processes
