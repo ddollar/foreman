@@ -84,18 +84,21 @@ private ######################################################################
   def run(process, log_to_file=true)
     proctitle "ruby: foreman #{process.name}"
 
-    Dir.chdir directory do
-      FileUtils.mkdir_p "log"
-      command = process.command
+    begin
+      Dir.chdir directory do
+        FileUtils.mkdir_p "log"
+        command = process.command
 
-      begin
         PTY.spawn("#{process.command} 2>&1") do |stdin, stdout, pid|
           until stdin.eof?
             info stdin.gets, process
           end
         end
-      rescue PTY::ChildExited, Interrupt
-        info "process exiting", process rescue nil
+      end
+    rescue PTY::ChildExited, Interrupt
+      begin
+        info "process exiting", process
+      rescue Interrupt
       end
     end
   end
