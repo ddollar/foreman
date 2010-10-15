@@ -66,18 +66,19 @@ private ######################################################################
     concurrency = Foreman::Utils.parse_concurrency(options[:concurrency])
 
     1.upto(concurrency[process.name]) do |num|
-      fork_individual(process, port_for(process, num, options[:port]))
+      fork_individual(process, num, port_for(process, num, options[:port]))
     end
   end
 
-  def fork_individual(process, port)
+  def fork_individual(process, num, port)
     ENV["PORT"] = port.to_s
+    ENV["PS"]   = "#{process.name}.#{num}"
 
     pid = Process.fork do
       run(process)
     end
 
-    info "started with pid #{pid}", process
+    info "started with pid #{pid}, PORT=#{port}", process
     running_processes[pid] = process
   end
 
@@ -128,8 +129,8 @@ private ######################################################################
   end
 
   def pad_process_name(process)
-    name = process ? "#{process.name}:#{ENV["PORT"]}" : "system"
-    name.ljust(longest_process_name + 6) # add 6 for port padding
+    name = process ? "#{ENV["PS"]}" : "system"
+    name.ljust(longest_process_name + 3) # add 3 for process number padding
   end
 
   def print_info
