@@ -95,7 +95,7 @@ private ######################################################################
           end
         end
       rescue PTY::ChildExited, Interrupt
-        info "process exiting", process
+        info "process exiting", process rescue nil
       end
     end
   end
