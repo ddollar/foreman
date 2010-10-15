@@ -78,7 +78,7 @@ private ######################################################################
       run(process)
     end
 
-    info "started with pid #{pid}, PORT=#{port}", process
+    info "started with pid #{pid}", process
     running_processes[pid] = process
   end
 
