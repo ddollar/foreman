@@ -5,17 +5,17 @@ describe "Foreman::CLI" do
   subject { Foreman::CLI.new }
 
   describe "start" do
-    describe "with a non-existent Procfile" do
+    describe "with a non-existent Pstypes" do
       it "prints an error" do
-        mock_error(subject, "Procfile does not exist.") do
+        mock_error(subject, "Pstypes does not exist.") do
           dont_allow.instance_of(Foreman::Engine).start
           subject.start
         end
       end
     end
 
-    describe "with a Procfile" do
-      before(:each) { write_procfile }
+    describe "with a Pstypes" do
+      before(:each) { write_pstypes }
 
       it "runs successfully" do
         dont_allow(subject).error
@@ -26,17 +26,17 @@ describe "Foreman::CLI" do
   end
 
   describe "export" do
-    describe "with a non-existent Procfile" do
+    describe "with a non-existent Pstypes" do
       it "prints an error" do
-        mock_error(subject, "Procfile does not exist.") do
+        mock_error(subject, "Pstypes does not exist.") do
           dont_allow.instance_of(Foreman::Engine).export
           subject.export("testapp")
         end
       end
     end
 
-    describe "with a Procfile" do
-      before(:each) { write_procfile }
+    describe "with a Pstypes" do
+      before(:each) { write_pstypes }
 
       describe "with an invalid formatter" do
         it "prints an error" do

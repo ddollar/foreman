@@ -24,8 +24,8 @@ def write_foreman_config(app)
   end
 end
 
-def write_procfile(procfile="Procfile")
-  File.open(procfile, "w") do |file|
+def write_pstypes(pstypes="Pstypes")
+  File.open(pstypes, "w") do |file|
     file.puts "alpha ./alpha"
     file.puts "bravo ./bravo"
   end

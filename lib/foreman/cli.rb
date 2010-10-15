@@ -5,7 +5,7 @@ require "thor"
 
 class Foreman::CLI < Thor
 
-  class_option :procfile, :type => :string, :aliases => "-f", :desc => "Default: ./Procfile"
+  class_option :pstypes, :type => :string, :aliases => "-f", :desc => "Default: Pstypes"
 
   desc "start [PROCESS]", "Start the application, or a specific process"
 
@@ -14,7 +14,7 @@ class Foreman::CLI < Thor
     :banner => '"alpha=5,bar=3"'
 
   def start(process=nil)
-    check_procfile!
+    check_pstypes!
 
     if process
       engine.execute(process, options)
@@ -33,7 +33,7 @@ class Foreman::CLI < Thor
     :banner => '"alpha=5,bar=3"'
 
   def export(format, location=nil)
-    check_procfile!
+    check_pstypes!
 
     formatter = case format
       when "upstart" then Foreman::Export::Upstart
@@ -49,16 +49,16 @@ class Foreman::CLI < Thor
 
 private ######################################################################
 
-  def check_procfile!
-    error("Procfile does not exist.") unless File.exist?(procfile)
+  def check_pstypes!
+    error("#{pstypes} does not exist.") unless File.exist?(pstypes)
   end
 
   def engine
-    @engine ||= Foreman::Engine.new(procfile)
+    @engine ||= Foreman::Engine.new(pstypes)
   end
 
-  def procfile
-    options[:procfile] || "./Procfile"
+  def pstypes
+    options[:pstypes] || "Pstypes"
   end
 
 private ######################################################################
@@ -68,8 +68,8 @@ private ######################################################################
     exit 1
   end
 
-  def procfile_exists?(procfile)
-    File.exist?(procfile)
+  def pstypes_exists?(pstypes)
+    File.exist?(pstypes)
   end
 
 end
