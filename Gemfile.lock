@@ -3,14 +3,21 @@ GEM
   specs:
     diff-lcs (1.1.2)
     fakefs (0.2.1)
+    hpricot (0.8.2)
     mime-types (1.16)
+    mustache (0.11.2)
     parka (0.3.1)
       rest-client
       thor
     rake (0.8.7)
     rcov (0.9.8)
+    rdiscount (1.6.5)
     rest-client (1.6.0)
       mime-types (>= 1.16)
+    ronn (0.7.3)
+      hpricot (>= 0.8.2)
+      mustache (>= 0.7.0)
+      rdiscount (>= 1.5.8)
     rr (0.10.11)
     rspec (2.0.0.beta.19)
       rspec-core (= 2.0.0.beta.19)
@@ -31,6 +38,7 @@ DEPENDENCIES
   parka
   rake
   rcov (~> 0.9.8)
+  ronn
   rr (~> 0.10.11)
   rspec (~> 2.0.0.beta.19)
   term-ansicolor (~> 1.0.5)

@@ -3,6 +3,7 @@ source "http://rubygems.org"
 group :development do
   gem 'parka'
   gem 'rake'
+  gem 'ronn'
 end
 
 group :test do
