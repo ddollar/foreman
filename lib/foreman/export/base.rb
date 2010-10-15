@@ -24,7 +24,7 @@ private ######################################################################
   end
 
   def export_template(name)
-    File.read(File.expand_path("../../../../export/#{name}", __FILE__))
+    File.read(File.expand_path("../../../../data/export/#{name}", __FILE__))
   end
 
   def write_file(filename, contents)
