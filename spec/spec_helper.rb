@@ -24,8 +24,8 @@ def write_foreman_config(app)
   end
 end
 
-def write_pstypes(pstypes="Pstypes")
-  File.open(pstypes, "w") do |file|
+def write_psfile(psfile="Psfile")
+  File.open(psfile, "w") do |file|
     file.puts "alpha ./alpha"
     file.puts "bravo ./bravo"
   end

@@ -8,21 +8,21 @@ require "fileutils"
 
 class Foreman::Engine
 
-  attr_reader :pstypes
+  attr_reader :psfile
   attr_reader :directory
 
   extend Term::ANSIColor
 
   COLORS = [ cyan, yellow, green, magenta, red ]
 
-  def initialize(pstypes)
-    @pstypes   = read_pstypes(pstypes)
-    @directory = File.expand_path(File.dirname(pstypes))
+  def initialize(psfile)
+    @psfile   = read_psfile(psfile)
+    @directory = File.expand_path(File.dirname(psfile))
   end
 
   def processes
     @processes ||= begin
-      pstypes.split("\n").inject({}) do |hash, line|
+      psfile.split("\n").inject({}) do |hash, line|
         next if line.strip == ""
         name, command = line.split(" ", 2)
         process = Foreman::Process.new(name, command)
@@ -144,8 +144,8 @@ private ######################################################################
     $0 = title
   end
 
-  def read_pstypes(pstypes)
-    File.read(pstypes)
+  def read_psfile(psfile)
+    File.read(psfile)
   end
 
   def watch_for_termination

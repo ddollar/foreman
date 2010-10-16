@@ -2,18 +2,18 @@ require "spec_helper"
 require "foreman/engine"
 
 describe "Foreman::Engine" do
-  subject { Foreman::Engine.new("Pstypes") }
+  subject { Foreman::Engine.new("Psfile") }
 
   describe "initialize" do
-    describe "without an existing Pstypes" do
+    describe "without an existing Psfile" do
       it "raises an error" do
         lambda { subject }.should raise_error
       end
     end
 
-    describe "with a Pstypes" do
+    describe "with a Psfile" do
       it "reads the processes" do
-        write_pstypes
+        write_psfile
         subject.processes["alpha"].command.should == "./alpha"
         subject.processes["bravo"].command.should == "./bravo"
       end
@@ -22,7 +22,7 @@ describe "Foreman::Engine" do
 
   describe "start" do
     it "forks the processes" do
-      write_pstypes
+      write_psfile
       mock(subject).fork(subject.processes["alpha"], {})
       mock(subject).fork(subject.processes["bravo"], {})
       mock(subject).watch_for_termination
@@ -30,7 +30,7 @@ describe "Foreman::Engine" do
     end
 
     it "handles concurrency" do
-      write_pstypes
+      write_psfile
       mock(subject).fork_individual(subject.processes["alpha"], 5000)
       mock(subject).fork_individual(subject.processes["alpha"], 5001)
       mock(subject).fork_individual(subject.processes["bravo"], 5100)
@@ -41,7 +41,7 @@ describe "Foreman::Engine" do
 
   describe "execute" do
     it "runs the processes" do
-      write_pstypes
+      write_psfile
       mock(subject).fork(subject.processes["alpha"], {})
       mock(subject).watch_for_termination
       subject.execute("alpha")

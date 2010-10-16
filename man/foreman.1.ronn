@@ -1,4 +1,4 @@
-foreman(1) -- manage Pstypes-based applications
+foreman(1) -- manage Psfile-based applications
 ================================================
 
 ## SYNOPSIS
@@ -8,8 +8,8 @@ foreman(1) -- manage Pstypes-based applications
 
 ## DESCRIPTION
 
-**Foreman** is a manager for Pstypes-based applications. Its aim is to
-abstract away the details of the Pstypes format, and allow you to either run
+**Foreman** is a manager for Psfile-based applications. Its aim is to
+abstract away the details of the Psfile format, and allow you to either run
 your application directly or export it to some other process management
 format.
 
@@ -18,7 +18,7 @@ format.
 `foreman start` is used to run your application directly from the command line.
 
 If no additional parameters are passed, foreman will run one instance of each
-type of process defined in your Pstypes.
+type of process defined in your Psfile.
 
 If a parameter is passed, foreman will run one instance of the specified
 application type.
@@ -66,8 +66,8 @@ The following options control how the application is run:
 
 These options control all modes of foreman's operation.
 
-  * `-f`, `--pstypes`:
-    Specify an alternate location for the application's Pstypes. This file's
+  * `-f`, `--psfile`:
+    Specify an alternate location for the application's Psfile. This file's
     containing directory will be assumed to be the root directory of the
     application.
 
@@ -99,9 +99,9 @@ will be structured to make the following commands valid:
 
   `restart appname-processname-3`
 
-## PSTYPES
+## PSFILE
 
-A Pstyes file should contain both a name for the process and the command used
+A Psfile should contain both a name for the process and the command used
 to run it.
 
     web  bundle exec thin start
@@ -117,9 +117,9 @@ Export the application in upstart format:
 
     $ foreman export upstart /etc/init
 
-Run one process type from the application defined in a specific Pstypes:
+Run one process type from the application defined in a specific Psfile:
 
-    $ foreman start alpha -p ~/app/Pstypes
+    $ foreman start alpha -p ~/myapp/Psfile
 
 ## COPYRIGHT
 
