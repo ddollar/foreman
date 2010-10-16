@@ -31,9 +31,9 @@ describe "Foreman::Engine" do
 
     it "handles concurrency" do
       write_psfile
-      mock(subject).fork_individual(subject.processes["alpha"], 5000)
-      mock(subject).fork_individual(subject.processes["alpha"], 5001)
-      mock(subject).fork_individual(subject.processes["bravo"], 5100)
+      mock(subject).fork_individual(subject.processes["alpha"], 1, 5000)
+      mock(subject).fork_individual(subject.processes["alpha"], 2, 5001)
+      mock(subject).fork_individual(subject.processes["bravo"], 1, 5100)
       mock(subject).watch_for_termination
       subject.start(:concurrency => "alpha=2")
     end
