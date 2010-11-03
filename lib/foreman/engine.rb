@@ -36,7 +36,7 @@ class Foreman::Engine
 
   def process_order
     processes
-    @order
+    @order.uniq
   end
 
   def processes_in_order
