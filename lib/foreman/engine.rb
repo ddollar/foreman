@@ -16,26 +16,39 @@ class Foreman::Engine
   COLORS = [ cyan, yellow, green, magenta, red ]
 
   def initialize(procfile)
-    @procfile   = read_procfile(procfile)
+    @procfile  = read_procfile(procfile)
     @directory = File.expand_path(File.dirname(procfile))
   end
 
   def processes
     @processes ||= begin
+      @order = []
       procfile.split("\n").inject({}) do |hash, line|
         next if line.strip == ""
         name, command = line.split(" ", 2)
         process = Foreman::Process.new(name, command)
         process.color = next_color
+        @order << process.name
         hash.update(process.name => process)
       end
+    end
+  end
+
+  def process_order
+    processes
+    @order
+  end
+
+  def processes_in_order
+    process_order.map do |name|
+      [name, processes[name]]
     end
   end
 
   def start(options={})
     proctitle "ruby: foreman master"
 
-    processes.each do |name, process|
+    processes_in_order.each do |name, process|
       fork process, options
     end
 
