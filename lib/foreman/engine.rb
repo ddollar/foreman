@@ -69,7 +69,7 @@ class Foreman::Engine
 
   def port_for(process, num, base_port=nil)
     base_port ||= 5000
-    offset = processes_in_order.map(&:first).index(process.name) * 100
+    offset = processes_in_order.map { |p| p.first }.index(process.name) * 100
     base_port.to_i + offset + num - 1
   end
 
