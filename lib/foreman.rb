@@ -1,6 +1,6 @@
 module Foreman
 
-  VERSION = "0.9.2"
+  VERSION = "0.10.0"
 
   class AppDoesNotExist < Exception; end
 
