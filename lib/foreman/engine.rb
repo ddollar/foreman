@@ -25,7 +25,7 @@ class Foreman::Engine
       @order = []
       procfile.split("\n").inject({}) do |hash, line|
         next if line.strip == ""
-        name, command = line.split(" ", 2)
+        name, command = line.split(/:? +/, 2)
         process = Foreman::Process.new(name, command)
         process.color = next_color
         @order << process.name
