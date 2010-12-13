@@ -37,6 +37,7 @@ task :man do
   sh "git commit -m 'update readme' || echo 'nothing to commit'"
 end
 
+desc "Generate the Github docs"
 task :pages => :man do
   sh %{
     cp man/foreman.1.html /tmp/foreman.1.html
