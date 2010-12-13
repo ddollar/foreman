@@ -104,8 +104,8 @@ will be structured to make the following commands valid:
 A Procfile should contain both a name for the process and the command used
 to run it.
 
-    web:  bundle exec thin start
-    job:  bundle exec rake jobs:work
+    web: bundle exec thin start
+    job: bundle exec rake jobs:work
 
 ## EXAMPLES
 
