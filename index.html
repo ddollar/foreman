@@ -109,8 +109,10 @@ application type.</p>
 <p>The following options control how the application is run:</p>
 
 <dl>
-<dt><code>-s</code>, <code>--screen</code></dt><dd>Run the application as a series of screen windows rather than interleaved
-in stdout.</dd>
+<dt><code>-c</code>, <code>--concurrency</code></dt><dd><p>Specify the number of each process type to run. The value passed in
+should be in the format <code>process=num,process=num</code></p></dd>
+<dt><code>-p</code>, <code>--port</code></dt><dd><p>Specify which port to use as the base for this application. Should be
+a multiple of 1000.</p></dd>
 </dl>
 
 
@@ -184,8 +186,8 @@ will be structured to make the following commands valid:</p>
 <p>A Procfile should contain both a name for the process and the command used
 to run it.</p>
 
-<pre><code>web  bundle exec thin start
-job  bundle exec rake jobs:work
+<pre><code>web:  bundle exec thin start
+job:  bundle exec rake jobs:work
 </code></pre>
 
 <h2 id="EXAMPLES">EXAMPLES</h2>
@@ -202,7 +204,7 @@ job  bundle exec rake jobs:work
 
 <p>Run one process type from the application defined in a specific Procfile:</p>
 
-<pre><code>$ foreman start alpha -p ~/app/Procfile
+<pre><code>$ foreman start alpha -p ~/myapp/Procfile
 </code></pre>
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
@@ -211,8 +213,8 @@ job  bundle exec rake jobs:work
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>Foreman 0.5.1</li>
-    <li class='tc'>June 2010</li>
+    <li class='tl'>Foreman 0.10.0</li>
+    <li class='tc'>December 2010</li>
     <li class='tr'>foreman(1)</li>
   </ol>
 
