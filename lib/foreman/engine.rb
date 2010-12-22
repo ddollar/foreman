@@ -95,12 +95,11 @@ private ######################################################################
     running_processes[pid] = process
   end
 
-  def run(process, log_to_file=true)
+  def run(process)
     proctitle "ruby: foreman #{process.name}"
 
     begin
       Dir.chdir directory do
-        FileUtils.mkdir_p "log"
         command = process.command
 
         PTY.spawn("#{process.command} 2>&1") do |stdin, stdout, pid|
