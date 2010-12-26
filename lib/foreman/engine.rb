@@ -28,6 +28,7 @@ class Foreman::Engine
 
   def start
     proctitle "ruby: foreman master"
+    termtitle "#{File.basename(@directory)} - foreman (#{processes.size} processes)"
 
     processes.each do |process|
       process.color = next_color
@@ -157,6 +158,10 @@ private ######################################################################
 
   def proctitle(title)
     $0 = title
+  end
+
+  def termtitle(title)
+    printf("\033]0;#{title}\007")
   end
 
   def running_processes
