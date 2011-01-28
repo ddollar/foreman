@@ -4,5 +4,6 @@ module Foreman::Export
   class Exception < ::Exception; end
 end
 
-require "foreman/export/upstart"
+require "foreman/export/json"
 require "foreman/export/inittab"
+require "foreman/export/upstart"
