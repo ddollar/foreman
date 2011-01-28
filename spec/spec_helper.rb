@@ -26,7 +26,7 @@ end
 
 def write_procfile(procfile="Procfile")
   File.open(procfile, "w") do |file|
-    file.puts "alpha ./alpha"
+    file.puts "alpha: ./alpha"
     file.puts "bravo: ./bravo"
   end
 end

@@ -1,2 +1,2 @@
-ticker ./ticker $PORT
-error  ./error
+ticker: ./ticker $PORT
+error : ./error

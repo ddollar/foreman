@@ -25,7 +25,11 @@ class Foreman::Engine
       @order = []
       procfile.split("\n").inject({}) do |hash, line|
         next if line.strip == ""
-        name, command = line.split(/:? +/, 2)
+        name, command = line.split(/ *: +/, 2)
+        unless command
+          warn_deprecated_procfile!
+          name, command = line.split(/ +/, 2)
+        end
         process = Foreman::Process.new(name, command)
         process.color = next_color
         @order << process.name
@@ -176,6 +180,14 @@ private ######################################################################
     @current_color ||= -1
     @current_color  +=  1
     @current_color >= COLORS.length ? "" : COLORS[@current_color]
+  end
+
+  def warn_deprecated_procfile!
+    return if @already_warned_deprecated
+    @already_warned_deprecated = true
+    puts "!!! This format of Procfile is deprecated, and will not work starting in v0.12"
+    puts "!!! Use a colon to separate the process name from the command"
+    puts "!!! e.g.   web: thin start"
   end
 
 end

@@ -115,6 +115,10 @@ to run it.
     web: bundle exec thin start
     job: bundle exec rake jobs:work
 
+You can validate your Procfile format using the `check` command
+
+    $ foreman check
+
 ## EXAMPLES
 
 Start one instance of each process type, interleave the output on stdout:

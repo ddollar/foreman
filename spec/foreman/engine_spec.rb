@@ -12,10 +12,24 @@ describe "Foreman::Engine" do
     end
 
     describe "with a Procfile" do
+      before { write_procfile }
+
       it "reads the processes" do
-        write_procfile
         subject.processes["alpha"].command.should == "./alpha"
         subject.processes["bravo"].command.should == "./bravo"
+      end
+    end
+
+    describe "with a deprecated Procfile" do
+      before do
+        File.open("Procfile", "w") do |file|
+          file.puts "name command"
+        end
+      end
+
+      it "should print a deprecation warning" do
+        mock(subject).warn_deprecated_procfile!
+        subject.processes.length.should == 1
       end
     end
   end

@@ -58,4 +58,27 @@ describe "Foreman::CLI" do
     end
   end
 
+  describe "check" do
+    describe "with a valid Procfile" do
+      before { write_procfile }
+
+      it "displays the jobs" do
+        mock(subject).display("valid procfile detected (alpha, bravo)")
+        subject.check
+      end
+    end
+
+    describe "with a blank Procfile" do
+      before do
+        FileUtils.touch("Procfile")
+      end
+
+      it "displays an error" do
+        mock_error(subject, "no processes defined") do
+          subject.check
+        end
+      end
+    end
+  end
+
 end

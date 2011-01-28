@@ -48,6 +48,14 @@ class Foreman::CLI < Thor
     error ex.message
   end
 
+  desc "check", "Validate your application's Procfile"
+
+  def check
+    processes = engine.processes_in_order.map { |p| p.first }
+    error "no processes defined" unless processes.length > 0
+    display "valid procfile detected (#{processes.join(', ')})"
+  end
+
 private ######################################################################
 
   def check_procfile!
@@ -63,6 +71,10 @@ private ######################################################################
   end
 
 private ######################################################################
+
+  def display(message)
+    puts message
+  end
 
   def error(message)
     puts "ERROR: #{message}"

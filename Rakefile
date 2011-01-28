@@ -25,7 +25,7 @@ end
 Rspec::Core::RakeTask.new("rcov:build") do |t|
   t.pattern = 'spec/**/*_spec.rb'
   t.rcov = true
-  t.rcov_opts = [ "--exclude", Gem.default_dir , "--exclude", "spec" ]
+  t.rcov_opts = [ "--exclude", ".bundle", "--exclude", "spec" ]
 end
 
 desc 'Build the manual'
