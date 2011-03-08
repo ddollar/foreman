@@ -119,6 +119,15 @@ You can validate your Procfile format using the `check` command
 
     $ foreman check
 
+## DEFAULT OPTIONS
+
+If a `.foreman` file exists in the current directory, default options will
+be read from it. This file should be in YAML format with the long option
+name as keys. Example:
+
+    concurrency: alpha=0
+    port: 15000
+
 ## EXAMPLES
 
 Start one instance of each process type, interleave the output on stdout:
