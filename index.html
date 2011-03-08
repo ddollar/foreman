@@ -66,9 +66,11 @@
     <a href="#EXPORTING">EXPORTING</a>
     <a href="#OPTIONS">OPTIONS</a>
     <a href="#EXPORT-FORMATS">EXPORT FORMATS</a>
+    <a href="#JSON-EXPORT">JSON EXPORT</a>
     <a href="#INITTAB-EXPORT">INITTAB EXPORT</a>
     <a href="#UPSTART-EXPORT">UPSTART EXPORT</a>
     <a href="#PROCFILE">PROCFILE</a>
+    <a href="#DEFAULT-OPTIONS">DEFAULT OPTIONS</a>
     <a href="#EXAMPLES">EXAMPLES</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
     </div>
@@ -155,10 +157,18 @@ application.</dd>
 <p>foreman currently supports the following output formats:</p>
 
 <ul>
+<li><p>json</p></li>
 <li><p>inittab</p></li>
 <li><p>upstart</p></li>
 </ul>
 
+
+<h2 id="JSON-EXPORT">JSON EXPORT</h2>
+
+<p>Will export your processes as JSON:</p>
+
+<pre><code>{ "web": { "command": "bundle exec thin start" } }
+</code></pre>
 
 <h2 id="INITTAB-EXPORT">INITTAB EXPORT</h2>
 
@@ -186,8 +196,23 @@ will be structured to make the following commands valid:</p>
 <p>A Procfile should contain both a name for the process and the command used
 to run it.</p>
 
-<pre><code>web:  bundle exec thin start
-job:  bundle exec rake jobs:work
+<pre><code>web: bundle exec thin start
+job: bundle exec rake jobs:work
+</code></pre>
+
+<p>You can validate your Procfile format using the <code>check</code> command</p>
+
+<pre><code>$ foreman check
+</code></pre>
+
+<h2 id="DEFAULT-OPTIONS">DEFAULT OPTIONS</h2>
+
+<p>If a <code>.foreman</code> file exists in the current directory, default options will
+be read from it. This file should be in YAML format with the long option
+name as keys. Example:</p>
+
+<pre><code>concurrency: alpha=0
+port: 15000
 </code></pre>
 
 <h2 id="EXAMPLES">EXAMPLES</h2>
@@ -213,8 +238,8 @@ job:  bundle exec rake jobs:work
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>Foreman 0.10.0</li>
-    <li class='tc'>December 2010</li>
+    <li class='tl'>Foreman 0.11.1</li>
+    <li class='tc'>March 2011</li>
     <li class='tr'>foreman(1)</li>
   </ol>
 
