@@ -70,8 +70,6 @@ private ######################################################################
     options[:procfile] || "Procfile"
   end
 
-private ######################################################################
-
   def display(message)
     puts message
   end
@@ -83,6 +81,13 @@ private ######################################################################
 
   def procfile_exists?(procfile)
     File.exist?(procfile)
+  end
+
+  def options
+    original_options = super
+    return original_options unless File.exists?(".foreman")
+    defaults = YAML::load_file(".foreman")
+    Thor::CoreExt::HashWithIndifferentAccess.new(defaults.merge(original_options))
   end
 
 end
