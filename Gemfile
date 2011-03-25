@@ -15,4 +15,4 @@ end
 
 gem 'json',           '~> 1.5.1'
 gem 'term-ansicolor', '~> 1.0.5'
-gem 'thor',           '~> 0.13.6'
+gem 'thor',           '>= 0.13.6'

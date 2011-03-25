@@ -31,7 +31,7 @@ GEM
       rspec-core (~> 2.0.1)
       rspec-expectations (~> 2.0.1)
     term-ansicolor (1.0.5)
-    thor (0.13.8)
+    thor (0.14.6)
 
 PLATFORMS
   ruby
@@ -46,4 +46,4 @@ DEPENDENCIES
   rr (~> 1.0.2)
   rspec (~> 2.0.0)
   term-ansicolor (~> 1.0.5)
-  thor (~> 0.13.6)
+  thor (>= 0.13.6)
