@@ -12,7 +12,6 @@ GEM
     diff-lcs (1.1.2)
     fakefs (0.2.1)
     hpricot (0.8.2)
-    json (1.5.1)
     mime-types (1.16)
     mustache (0.11.2)
     parka (0.6.2)
@@ -47,7 +46,6 @@ PLATFORMS
 
 DEPENDENCIES
   fakefs (~> 0.2.1)
-  json (~> 1.5.1)
   foreman!
   parka
   rake

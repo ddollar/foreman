@@ -75,17 +75,9 @@ These options control all modes of foreman's operation.
 
 foreman currently supports the following output formats:
 
-  * json
-
   * inittab
 
   * upstart
-
-## JSON EXPORT
-
-Will export your processes as JSON:
-
-    { "web": { "command": "bundle exec thin start" } }
 
 ## INITTAB EXPORT
 

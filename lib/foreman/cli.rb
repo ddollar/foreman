@@ -36,7 +36,6 @@ class Foreman::CLI < Thor
     check_procfile!
 
     formatter = case format
-      when "json"    then Foreman::Export::JSON
       when "inittab" then Foreman::Export::Inittab
       when "upstart" then Foreman::Export::Upstart
       else error "Unknown export format: #{format}."
