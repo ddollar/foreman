@@ -33,19 +33,23 @@ task :man do
   ENV['RONN_MANUAL']  = "Foreman Manual"
   ENV['RONN_ORGANIZATION'] = "Foreman #{Foreman::VERSION}"
   sh "ronn -w -s toc -r5 --markdown man/*.ronn"
+end
+
+desc "Commit the manual to git"
+task "man:commit" => :man do
   sh "git add README.markdown"
   sh "git commit -m 'update readme' || echo 'nothing to commit'"
 end
 
 desc "Generate the Github docs"
-task :pages => :man do
+task :pages => "man:commit" do
   sh %{
     cp man/foreman.1.html /tmp/foreman.1.html
     git checkout gh-pages
     rm ./index.html
     cp /tmp/foreman.1.html ./index.html
     git add -u index.html
-    git commit -m "rebuilding man page"
+    git commit -m "saving man page to github docs"
     git push origin -f gh-pages
     git checkout master
   }
