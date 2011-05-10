@@ -2,6 +2,7 @@ require "foreman"
 require "foreman/engine"
 require "foreman/export"
 require "thor"
+require "yaml"
 
 class Foreman::CLI < Thor
 
