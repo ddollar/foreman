@@ -2,4 +2,5 @@ start on starting <%= app %>-<%= process.name %>
 stop on stopping <%= app %>-<%= process.name %>
 respawn
 
-exec su - <%= user %> -c 'chdir <%= engine.directory %>; export PORT=<%= port %>; <%= process.command %> >> <%= log_root %>/<%=process.name%>-<%=num%>.log 2>&1'
+chdir <%= engine.directory %>
+exec su <%= user %> -c 'export PORT=<%= port %>; <%= process.command %> >> <%= log_root %>/<%=process.name%>-<%=num%>.log 2>&1'
