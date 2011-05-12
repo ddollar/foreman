@@ -57,7 +57,7 @@ class Foreman::Engine
     end
 
     trap("TERM") { puts "SIGTERM received"; kill_all("TERM") }
-    trap("INT")  { puts "SIGINT received";  kill_all("INT")  }
+    trap("INT")  { puts "SIGINT received";  kill_all("TERM")  }
 
     watch_for_termination
   end
@@ -66,7 +66,7 @@ class Foreman::Engine
     fork processes[name], options
 
     trap("TERM") { puts "SIGTERM received"; kill_all("TERM") }
-    trap("INT")  { puts "SIGINT received";  kill_all("INT")  }
+    trap("INT")  { puts "SIGINT received";  kill_all("TERM")  }
 
     watch_for_termination
   end
