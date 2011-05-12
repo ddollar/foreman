@@ -30,6 +30,7 @@ class Foreman::CLI < Thor
   method_option :log,         :type => :string,  :aliases => "-l"
   method_option :port,        :type => :numeric, :aliases => "-p"
   method_option :user,        :type => :string,  :aliases => "-u"
+  method_option :rails_env,   :type => :string,  :aliases => "-e"
   method_option :concurrency, :type => :string,  :aliases => "-c",
     :banner => '"alpha=5,bar=3"'
 
