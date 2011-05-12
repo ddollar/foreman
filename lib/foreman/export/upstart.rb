@@ -11,6 +11,7 @@ class Foreman::Export::Upstart < Foreman::Export::Base
     app = options[:app] || File.basename(engine.directory)
     user = options[:user] || app
     log_root = options[:log] || "/var/log/#{app}"
+    rails_env = options[:rails_env] || "production"
 
     Dir["#{location}/#{app}*.conf"].each do |file|
       say "cleaning up: #{file}"
