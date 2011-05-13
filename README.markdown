@@ -12,17 +12,17 @@ http://blog.daviddollar.org/2011/05/06/introducing-foreman.html
 
 See the [man page](http://ddollar.github.com/foreman) for usage.
 
-## Author
+## Authorship
 
-David Dollar
+Created by David Dollar
 
-## Contributors
+Patches contributed by:
 
-Adam Wiggins
-clifff
-Dan Peterson
-Keith Rarick
-Ricardo Chimal, Jr
+* Adam Wiggins
+* clifff
+* Dan Peterson
+* Keith Rarick
+* Ricardo Chimal, Jr
 
 ## License
 
