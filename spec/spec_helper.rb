@@ -3,7 +3,7 @@ require "rspec"
 require "fakefs/safe"
 require "fakefs/spec_helpers"
 
-$:.unshift "lib"
+$:.unshift File.expand_path("../../lib", __FILE__)
 
 def mock_error(subject, message)
   mock_exit do

@@ -1,5 +1,5 @@
 require "erb"
-require "foreman/export/base"
+require "foreman/export"
 
 class Foreman::Export::Upstart < Foreman::Export::Base
 
