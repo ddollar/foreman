@@ -1,4 +1,5 @@
 require "spec_helper"
+require "foreman/engine"
 require "foreman/export/upstart"
 
 describe Foreman::Export::Upstart do
