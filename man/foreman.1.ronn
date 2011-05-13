@@ -66,6 +66,11 @@ The following options control how the application is run:
 
 These options control all modes of foreman's operation.
 
+  * `-e`, `--env`:
+    Specify a file containing the environment that should be set up for each
+    child process. The file should be key/value pairs separated by `=`, with
+    one key/value pair per line.
+
   * `-f`, `--procfile`:
     Specify an alternate location for the application's Procfile. This file's
     containing directory will be assumed to be the root directory of the

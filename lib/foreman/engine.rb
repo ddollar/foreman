@@ -50,10 +50,12 @@ class Foreman::Engine
   end
 
   def start(options={})
+    environment = read_environment(options[:env])
+
     proctitle "ruby: foreman master"
 
     processes_in_order.each do |name, process|
-      fork process, options
+      fork process, options, environment
     end
 
     trap("TERM") { puts "SIGTERM received"; kill_all("TERM") }
@@ -63,7 +65,9 @@ class Foreman::Engine
   end
 
   def execute(name, options={})
-    fork processes[name], options
+    environment = read_environment(options[:env])
+
+    fork processes[name], options, environment
 
     trap("TERM") { puts "SIGTERM received"; kill_all("TERM") }
     trap("INT")  { puts "SIGINT received";  kill_all("TERM")  }
@@ -79,15 +83,17 @@ class Foreman::Engine
 
 private ######################################################################
 
-  def fork(process, options={})
+  def fork(process, options={}, environment={})
     concurrency = Foreman::Utils.parse_concurrency(options[:concurrency])
 
     1.upto(concurrency[process.name]) do |num|
-      fork_individual(process, num, port_for(process, num, options[:port]))
+      fork_individual(process, num, port_for(process, num, options[:port]), environment)
     end
   end
 
-  def fork_individual(process, num, port)
+  def fork_individual(process, num, port, environment)
+    environment.each { |k,v| ENV[k] = v }
+
     ENV["PORT"] = port.to_s
     ENV["PS"]   = "#{process.name}.#{num}"
 
@@ -134,6 +140,11 @@ private ######################################################################
     print Term::ANSIColor.reset
     print message.chomp
     puts
+  end
+
+  def error(message)
+    puts "ERROR: #{message}"
+    exit 1
   end
 
   def longest_process_name
@@ -188,6 +199,22 @@ private ######################################################################
     puts "!!! This format of Procfile is deprecated, and will not work starting in v0.12"
     puts "!!! Use a colon to separate the process name from the command"
     puts "!!! e.g.   web: thin start"
+  end
+
+  def read_environment(filename)
+    error "No such file: #{filename}" if filename && !File.exists?(filename)
+    filename ||= ".env"
+    environment = {}
+
+    if File.exists?(filename)
+      File.read(filename).split("\n").each do |line|
+        if line =~ /\A([A-Za-z_]+)=(.*)\z/
+          environment[$1] = $2
+        end
+      end
+    end
+
+    environment
   end
 
 end
