@@ -6,14 +6,13 @@ require "yaml"
 
 class Foreman::CLI < Thor
 
-  class_option :env, :type => :string, :aliases => "-e"
   class_option :procfile, :type => :string, :aliases => "-f", :desc => "Default: Procfile"
 
   desc "start [PROCESS]", "Start the application, or a specific process"
 
+  method_option :env,         :type => :string,  :aliases => "-e", :desc => "Specify an environment file to load, defaults to .env"
   method_option :port,        :type => :numeric, :aliases => "-p"
-  method_option :concurrency, :type => :string,  :aliases => "-c",
-    :banner => '"alpha=5,bar=3"'
+  method_option :concurrency, :type => :string,  :aliases => "-c", :banner => '"alpha=5,bar=3"'
 
   def start(process=nil)
     check_procfile!
