@@ -1,4 +1,4 @@
-require "foreman/export/base"
+require "foreman/export"
 
 class Foreman::Export::Inittab < Foreman::Export::Base
 
