@@ -48,6 +48,7 @@ end
 def example_export_file(filename)
   FakeFS.deactivate!
   data = File.read(File.expand_path("../resources/export/#{filename}", __FILE__))
+  data.gsub! "{{PWD}}", Dir.pwd
   FakeFS.activate!
   data
 end
