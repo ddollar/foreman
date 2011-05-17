@@ -63,7 +63,7 @@ describe "Foreman::CLI" do
       before { write_procfile }
 
       it "displays the jobs" do
-        mock(subject).display("valid procfile detected (alpha, bravo)")
+        mock(subject).display("valid procfile detected (alpha, bravo, charlie)")
         subject.check
       end
     end

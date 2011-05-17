@@ -29,7 +29,7 @@ class Foreman::Engine
         next if line[0] == '#'
         next if line.strip == ""
 
-        name, command = line.split(/ *: +/, 2)
+        name, command = line.split(/ *:\s+/, 2)
         unless command
           warn_deprecated_procfile!
           name, command = line.split(/ +/, 2)

@@ -30,6 +30,7 @@ def write_procfile(procfile="Procfile")
     file.puts ""
     file.puts "alpha: ./alpha"
     file.puts "bravo: ./bravo"
+    file.puts "charlie:  ./charlie"
   end
   File.expand_path(procfile)
 end

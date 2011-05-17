@@ -19,6 +19,10 @@ describe "Foreman::Engine" do
         subject.processes["bravo"].command.should == "./bravo"
       end
 
+      it "supports any amount of whitespace b/w the colon and command" do
+        subject.processes["charlie"].command.should == "./charlie"
+      end
+
       it "supports blank lines and comments" do
         subject.processes.length.should == 3
       end
@@ -43,6 +47,7 @@ describe "Foreman::Engine" do
       write_procfile
       mock(subject).fork(subject.processes["alpha"], {}, {})
       mock(subject).fork(subject.processes["bravo"], {}, {})
+      mock(subject).fork(subject.processes["charlie"], {}, {})
       mock(subject).watch_for_termination
       subject.start
     end
@@ -52,6 +57,7 @@ describe "Foreman::Engine" do
       mock(subject).fork_individual(subject.processes["alpha"], 1, 5000, {})
       mock(subject).fork_individual(subject.processes["alpha"], 2, 5001, {})
       mock(subject).fork_individual(subject.processes["bravo"], 1, 5100, {})
+      mock(subject).fork_individual(subject.processes["charlie"], 1, 5200, {})
       mock(subject).watch_for_termination
       subject.start(:concurrency => "alpha=2")
     end
