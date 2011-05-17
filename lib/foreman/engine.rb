@@ -26,6 +26,7 @@ class Foreman::Engine
       hash   = {}
 
       procfile.split("\n").each do |line|
+        next if line[0] == '#'
         next if line.strip == ""
 
         name, command = line.split(/ *: +/, 2)

@@ -18,6 +18,10 @@ describe "Foreman::Engine" do
         subject.processes["alpha"].command.should == "./alpha"
         subject.processes["bravo"].command.should == "./bravo"
       end
+
+      it "supports blank lines and comments" do
+        subject.processes.length.should == 3
+      end
     end
 
     describe "with a deprecated Procfile" do
