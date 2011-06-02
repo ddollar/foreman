@@ -21,6 +21,7 @@ Patches contributed by:
 * Adam Wiggins
 * clifff
 * Dan Peterson
+* Jay Zeschin
 * Keith Rarick
 * Ricardo Chimal, Jr
 
