@@ -26,8 +26,11 @@ end
 
 def write_procfile(procfile="Procfile")
   File.open(procfile, "w") do |file|
+    file.puts "# comment"
+    file.puts ""
     file.puts "alpha: ./alpha"
     file.puts "bravo: ./bravo"
+    file.puts "charlie:  ./charlie"
   end
   File.expand_path(procfile)
 end

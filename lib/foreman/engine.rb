@@ -23,9 +23,13 @@ class Foreman::Engine
   def processes
     @processes ||= begin
       @order = []
-      procfile.split("\n").inject({}) do |hash, line|
+      hash   = {}
+
+      procfile.split("\n").each do |line|
+        next if line[0] == '#'
         next if line.strip == ""
-        name, command = line.split(/ *: +/, 2)
+
+        name, command = line.split(/ *:\s+/, 2)
         unless command
           warn_deprecated_procfile!
           name, command = line.split(/ +/, 2)
@@ -35,6 +39,8 @@ class Foreman::Engine
         @order << process.name
         hash.update(process.name => process)
       end
+
+      hash
     end
   end
 
