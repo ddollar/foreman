@@ -13,7 +13,6 @@ describe Foreman::Export::Upstart do
 
   it "exports to the filesystem" do
     upstart.export("/tmp/init")
-    p [:d, Dir["/tmp/init/**"]]
 
     File.read("/tmp/init/app.conf").should         == example_export_file("upstart/app.conf")
     File.read("/tmp/init/app-alpha.conf").should   == example_export_file("upstart/app-alpha.conf")
