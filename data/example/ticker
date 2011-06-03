@@ -1,5 +1,11 @@
 #!/usr/bin/env ruby
 
+%w( SIGINT SIGTERM SIGHUP ).each do |signal|
+  trap(signal) do
+    puts "received #{signal} but i'm ignoring it!"
+  end
+end
+
 while true
   puts "tick: #{ARGV.inspect} -- FOO:#{ENV["FOO"]}"
   sleep 1

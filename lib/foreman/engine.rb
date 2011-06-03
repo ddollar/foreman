@@ -3,6 +3,7 @@ require "foreman/process"
 require "foreman/utils"
 require "pty"
 require "tempfile"
+require "timeout"
 require "term/ansicolor"
 require "fileutils"
 
@@ -58,8 +59,8 @@ class Foreman::Engine
       fork process, options, environment
     end
 
-    trap("TERM") { puts "SIGTERM received"; kill_all("TERM") }
-    trap("INT")  { puts "SIGINT received";  kill_all("TERM")  }
+    trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
+    trap("INT")  { puts "SIGINT received";  terminate_gracefully }
 
     watch_for_termination
   end
@@ -69,8 +70,8 @@ class Foreman::Engine
 
     fork processes[name], options, environment
 
-    trap("TERM") { puts "SIGTERM received"; kill_all("TERM") }
-    trap("INT")  { puts "SIGINT received";  kill_all("TERM")  }
+    trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
+    trap("INT")  { puts "SIGINT received";  terminate_gracefully }
 
     watch_for_termination
   end
@@ -107,12 +108,12 @@ private ######################################################################
 
   def run(process)
     proctitle "ruby: foreman #{process.name}"
+    trap("SIGINT", "IGNORE")
 
     begin
       Dir.chdir directory do
-        command = process.command
-
-        PTY.spawn("#{process.command} 2>&1") do |stdin, stdout, pid|
+        PTY.spawn(runner, process.command) do |stdin, stdout, pid|
+          trap("SIGTERM") { Process.kill("SIGTERM", pid) }
           until stdin.eof?
             info stdin.gets, process
           end
@@ -126,11 +127,9 @@ private ######################################################################
     end
   end
 
-  def kill_all(signal="TERM")
-    info "terminating"
+  def kill_all(signal="SIGTERM")
     running_processes.each do |pid, process|
-      info "killing #{process.name} in pid #{pid}"
-      Process.kill(signal, pid)
+      Process.kill(signal, pid) rescue Errno::ESRCH
     end
   end
 
@@ -179,8 +178,9 @@ private ######################################################################
     pid, status = Process.wait2
     process = running_processes.delete(pid)
     info "process terminated", process
+    terminate_gracefully
     kill_all
-    Process.waitall
+  rescue Errno::ECHILD
   end
 
   def running_processes
@@ -215,6 +215,19 @@ private ######################################################################
     end
 
     environment
+  end
+
+  def runner
+    File.expand_path("../../../bin/foreman-runner", __FILE__)
+  end
+
+  def terminate_gracefully
+    info "sending SIGTERM to all processes"
+    kill_all "SIGTERM"
+    Timeout.timeout(3) { Process.waitall }
+  rescue Timeout::Error
+    info "sending SIGKILL to all processes"
+    kill_all "SIGKILL"
   end
 
 end
