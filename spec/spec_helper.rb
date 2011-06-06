@@ -26,8 +26,27 @@ end
 
 def write_procfile(procfile="Procfile")
   File.open(procfile, "w") do |file|
+    file.puts "" # Check that a blank line does not blow things up
     file.puts "alpha: ./alpha"
     file.puts "bravo: ./bravo"
+  end
+  File.expand_path(procfile)
+end
+
+def write_erb_procfile(procfile="Procfile")
+  File.open(procfile, 'w') do |file|
+    file.puts <<-ERB
+      <% if ENV['ERB_1'] == 'true' %>
+        alpha: ./erb1/alpha
+        bravo: ./erb1/bravo
+      <% elsif ENV['ERB_2'] == 'true' %>
+        alpha: ./erb2/alpha
+        bravo: ./erb2/bravo
+      <% else %>
+        alpha: ./alpha
+        bravo: ./bravo
+      <% end %>
+    ERB
   end
   File.expand_path(procfile)
 end

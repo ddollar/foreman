@@ -6,6 +6,7 @@ require "tempfile"
 require "timeout"
 require "term/ansicolor"
 require "fileutils"
+require "erb"
 
 class Foreman::Engine
 
@@ -25,16 +26,20 @@ class Foreman::Engine
     @processes ||= begin
       @order = []
       procfile.split("\n").inject({}) do |hash, line|
-        next if line.strip == ""
-        name, command = line.split(/ *: +/, 2)
-        unless command
-          warn_deprecated_procfile!
-          name, command = line.split(/ +/, 2)
+        line = line.strip
+        if line == ""
+          hash
+        else
+          name, command = line.split(/ *: +/, 2)
+          unless command
+            warn_deprecated_procfile!
+            name, command = line.split(/ +/, 2)
+          end
+          process = Foreman::Process.new(name, command)
+          process.color = next_color
+          @order << process.name
+          hash.update(process.name => process)
         end
-        process = Foreman::Process.new(name, command)
-        process.color = next_color
-        @order << process.name
-        hash.update(process.name => process)
       end
     end
   end
@@ -171,7 +176,7 @@ private ######################################################################
   end
 
   def read_procfile(procfile)
-    File.read(procfile)
+    ERB.new(File.read(procfile)).result
   end
 
   def watch_for_termination

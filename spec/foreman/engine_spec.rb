@@ -13,10 +13,34 @@ describe "Foreman::Engine" do
 
     describe "with a Procfile" do
       before { write_procfile }
+      after  {
+        ENV['ERB_1'] = 'false'
+        ENV['ERB_2'] = 'false'
+      }
 
       it "reads the processes" do
         subject.processes["alpha"].command.should == "./alpha"
         subject.processes["bravo"].command.should == "./bravo"
+      end
+
+      it "reads the process with an an erb processor" do
+        ENV['ERB_1'] = 'true'
+        write_erb_procfile
+        subject.processes["alpha"].command.should == './erb1/alpha'
+        subject.processes["bravo"].command.should == './erb1/bravo'
+      end
+
+      it 'reads the process and uses a secondary configuration' do
+        ENV['ERB_2'] = 'true'
+        write_erb_procfile
+        subject.processes["alpha"].command.should == './erb2/alpha'
+        subject.processes["bravo"].command.should == './erb2/bravo'
+      end
+
+      it 'reads the process and uses a fallback configuration' do
+        write_erb_procfile
+        subject.processes["alpha"].command.should == './alpha'
+        subject.processes["bravo"].command.should == './bravo'
       end
     end
 
