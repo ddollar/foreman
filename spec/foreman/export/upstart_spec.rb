@@ -11,14 +11,22 @@ describe Foreman::Export::Upstart do
   before(:each) { load_export_templates_into_fakefs("upstart") }
   before(:each) { stub(upstart).say }
 
-  it "exports to the filesystem" do
-    upstart.export("/tmp/init")
+  describe "exporting to the filesystem" do
+    it do
+      upstart.export("/tmp/init")
+  
+      File.read("/tmp/init/app.conf").should         == example_export_file("upstart/app-1.conf")
+      File.read("/tmp/init/app-alpha.conf").should   == example_export_file("upstart/app-alpha.conf")
+      File.read("/tmp/init/app-alpha-1.conf").should == example_export_file("upstart/app-alpha-1.conf")
+      File.read("/tmp/init/app-alpha-2.conf").should == example_export_file("upstart/app-alpha-2.conf")
+      File.read("/tmp/init/app-bravo.conf").should   == example_export_file("upstart/app-bravo.conf")
+      File.read("/tmp/init/app-bravo-1.conf").should == example_export_file("upstart/app-bravo-1.conf")
+    end
 
-    File.read("/tmp/init/app.conf").should         == example_export_file("upstart/app.conf")
-    File.read("/tmp/init/app-alpha.conf").should   == example_export_file("upstart/app-alpha.conf")
-    File.read("/tmp/init/app-alpha-1.conf").should == example_export_file("upstart/app-alpha-1.conf")
-    File.read("/tmp/init/app-alpha-2.conf").should == example_export_file("upstart/app-alpha-2.conf")
-    File.read("/tmp/init/app-bravo.conf").should   == example_export_file("upstart/app-bravo.conf")
-    File.read("/tmp/init/app-bravo-1.conf").should == example_export_file("upstart/app-bravo-1.conf")
+    it "with --start-on-boot" do
+      upstart.export("/tmp/init", :start_on_boot => true)
+
+      File.read("/tmp/init/app.conf").should == example_export_file("upstart/app-2.conf")
+    end
   end
 end
