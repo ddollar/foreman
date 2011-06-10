@@ -62,7 +62,7 @@ class Foreman::Engine
     trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
     trap("INT")  { puts "SIGINT received";  terminate_gracefully }
 
-    watch_for_termination
+    watch_for_termination(options, environment)
   end
 
   def execute(name, options={})
@@ -73,7 +73,7 @@ class Foreman::Engine
     trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
     trap("INT")  { puts "SIGINT received";  terminate_gracefully }
 
-    watch_for_termination
+    watch_for_termination(options, environment)
   end
 
   def port_for(process, num, base_port=nil)
@@ -114,6 +114,7 @@ private ######################################################################
       Dir.chdir directory do
         PTY.spawn(runner, process.command) do |stdin, stdout, pid|
           trap("SIGTERM") { Process.kill("SIGTERM", pid) }
+          trap("SIGHUP") { Process.kill("SIGTERM", pid); Process.wait rescue nil; exit!(2) }
           until stdin.eof?
             info stdin.gets, process
           end
@@ -174,12 +175,19 @@ private ######################################################################
     File.read(procfile)
   end
 
-  def watch_for_termination
+  def watch_for_termination( options, environment )
     pid, status = Process.wait2
     process = running_processes.delete(pid)
-    info "process terminated", process
-    terminate_gracefully
-    kill_all
+
+    if status.exitstatus == 2
+      info "process terminated with HUP, restarting", process
+      fork process, options, environment
+      watch_for_termination(options, environment)
+    else
+      info "process terminated", process
+      terminate_gracefully
+      kill_all
+    end
   rescue Errno::ECHILD
   end
 
