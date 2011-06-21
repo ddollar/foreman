@@ -25,5 +25,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'fakefs', '~> 0.2.1'
   gem.add_development_dependency 'rcov',   '~> 0.9.8'
   gem.add_development_dependency 'rr',     '~> 1.0.2'
-  gem.add_development_dependency 'rspec',  '~> 2.0.0'
+  gem.add_development_dependency 'rspec',  '~> 2.6.0'
 end
