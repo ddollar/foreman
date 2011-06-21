@@ -52,7 +52,7 @@ def example_export_file(filename)
   data
 end
 
-Rspec.configure do |config|
+RSpec.configure do |config|
   config.color_enabled = true
   config.include FakeFS::SpecHelpers
   config.mock_with :rr
