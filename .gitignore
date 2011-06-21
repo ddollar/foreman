@@ -5,4 +5,4 @@ man/*.html
 man/*.markdown
 pkg
 tags
-
+.rvmrc

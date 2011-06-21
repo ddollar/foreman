@@ -6,6 +6,8 @@ require "tempfile"
 require "timeout"
 require "term/ansicolor"
 require "fileutils"
+require 'pathname'
+require 'etc'
 
 class Foreman::Engine
 
@@ -19,6 +21,7 @@ class Foreman::Engine
   def initialize(procfile)
     @procfile  = read_procfile(procfile)
     @directory = File.expand_path(File.dirname(procfile))
+    @pidfilename = Pathname.new(Etc.systmpdir).join( "foreman_#{File.split(@directory)[-1]}.pid").to_s
   end
 
   def processes
@@ -62,7 +65,36 @@ class Foreman::Engine
     trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
     trap("INT")  { puts "SIGINT received";  terminate_gracefully }
 
+    write_pids
     watch_for_termination(options, environment)
+  end
+
+  def restart( service )
+    master, children = read_pids
+
+    children.each do |name, pid|
+      Process.kill("HUP", pid.to_i) if name == service && Process.getpgid(pid.to_i).to_s == master
+    end
+  end
+
+  def write_pids
+    File.open(@pidfilename, 'w') do |out| 
+      out.puts Process.pid
+
+      running_processes.each do |pid, process|
+        out.puts "#{process.name}:#{pid}"
+      end
+    end
+  end
+
+  def read_pids
+    File.open(@pidfilename, 'r') do |pidfile|
+      lines = pidfile.readlines.map {|line| line.strip }
+      master_pid = lines[0]
+      children = lines[1..-1].map {|line| line.split(':') }
+
+      [master_pid, children]
+    end
   end
 
   def execute(name, options={})
