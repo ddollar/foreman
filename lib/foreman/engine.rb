@@ -73,7 +73,10 @@ class Foreman::Engine
     master, children = read_pids
 
     children.each do |name, pid|
-      Process.kill("HUP", pid.to_i) if name == service && Process.getpgid(pid.to_i).to_s == master
+      if name == service && Process.getpgid(pid.to_i).to_s == master
+        info "Restarting process #{pid} for #{name}"
+        Process.kill("HUP", pid.to_i)
+      end
     end
   end
 
@@ -214,6 +217,7 @@ private ######################################################################
     if status.exitstatus == 2
       info "process terminated with HUP, restarting", process
       fork process, options, environment
+      write_pids
       watch_for_termination(options, environment)
     else
       info "process terminated", process
