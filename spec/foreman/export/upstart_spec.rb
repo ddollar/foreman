@@ -21,4 +21,19 @@ describe Foreman::Export::Upstart do
     File.read("/tmp/init/app-bravo.conf").should   == example_export_file("upstart/app-bravo.conf")
     File.read("/tmp/init/app-bravo-1.conf").should == example_export_file("upstart/app-bravo-1.conf")
   end
+
+  context "with alternate templates" do
+    let(:template_root) { "/tmp/alternate" }
+
+    before do
+      FileUtils.mkdir_p template_root
+      File.open("#{template_root}/master.conf.erb", "w") { |f| f.puts "alternate_template" }
+    end
+
+    it "can export with alternate template files" do
+      upstart.export("/tmp/init", :template => template_root)
+
+      File.read("/tmp/init/app.conf").should == "alternate_template\n"
+    end
+  end
 end
