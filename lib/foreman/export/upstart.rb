@@ -11,6 +11,7 @@ class Foreman::Export::Upstart < Foreman::Export::Base
     app = options[:app] || File.basename(engine.directory)
     user = options[:user] || app
     log_root = options[:log] || "/var/log/#{app}"
+    self.template = options[:template]
 
     Dir["#{location}/#{app}*.conf"].each do |file|
       say "cleaning up: #{file}"
@@ -19,14 +20,14 @@ class Foreman::Export::Upstart < Foreman::Export::Base
 
     concurrency = Foreman::Utils.parse_concurrency(options[:concurrency])
 
-    master_template = export_template("upstart/master.conf.erb")
+    master_template = export_template("upstart", "master.conf.erb")
     master_config   = ERB.new(master_template).result(binding)
     write_file "#{location}/#{app}.conf", master_config
 
-    process_template = export_template("upstart/process.conf.erb")
+    process_template = export_template("upstart", "process.conf.erb")
 
     engine.processes.values.each do |process|
-      process_master_template = export_template("upstart/process_master.conf.erb")
+      process_master_template = export_template("upstart", "process_master.conf.erb")
       process_master_config   = ERB.new(process_master_template).result(binding)
       write_file "#{location}/#{app}-#{process.name}.conf", process_master_config
 

@@ -4,6 +4,7 @@ require "foreman/utils"
 class Foreman::Export::Base
 
   attr_reader :engine
+  attr_accessor :template
 
   def initialize(engine)
     @engine = engine
@@ -23,8 +24,12 @@ private ######################################################################
     puts "[foreman export] %s" % message
   end
 
-  def export_template(name)
-    File.read(File.expand_path("../../../../data/export/#{name}", __FILE__))
+  def export_template(path, file)
+    if template and File.exist?(file_path = File.join(template, file))
+      File.read(file_path)
+    else
+      File.read(File.expand_path("../../../../data/export/#{path}/#{file}", __FILE__))
+    end
   end
 
   def write_file(filename, contents)
