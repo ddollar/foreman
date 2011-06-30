@@ -38,7 +38,7 @@ describe Foreman::Export::Upstart do
   end
 
   context "with alternate templates from home dir" do
-    let(:default_template_root) {File.expand_path("~/.foreman")}
+    let(:default_template_root) {File.expand_path("~/.foreman/templates")}
 
     before do
       FileUtils.mkdir_p default_template_root
