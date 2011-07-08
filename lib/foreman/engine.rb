@@ -95,8 +95,9 @@ private ######################################################################
   def fork_individual(process, num, port, environment)
     environment.each { |k,v| ENV[k] = v }
 
-    ENV["PORT"] = port.to_s
-    ENV["PS"]   = "#{process.name}.#{num}"
+    ENV["PORT"]    = port.to_s
+    ENV["APP_NUM"] = num.to_s
+    ENV["PS"]      = "#{process.name}.#{num}"
 
     pid = Process.fork do
       run(process)
