@@ -119,7 +119,7 @@ private ######################################################################
           end
         end
       end
-    rescue PTY::ChildExited, Interrupt
+    rescue PTY::ChildExited, Interrupt, Errno::EIO
       begin
         info "process exiting", process
       rescue Interrupt
