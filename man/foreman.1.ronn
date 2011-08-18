@@ -116,7 +116,7 @@ You can validate your Procfile format using the `check` command
 
 ## ENVIRONMENT
 
-If a `.env` file exists in the project directory, the default environment will
+If a `.env` file exists in the current directory, the default environment will
 be read from it. This file should contain key/value pairs, separated by `=`, with
 one key/value pair per line.
 
