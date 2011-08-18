@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "FOREMAN" "1" "May 2011" "Foreman 0.15.0" "Foreman Manual"
+.TH "FOREMAN" "1" "August 2011" "Foreman 0.19.0" "Foreman Manual"
 .
 .SH "NAME"
 \fBforeman\fR \- manage Procfile\-based applications
@@ -69,7 +69,7 @@ These options control all modes of foreman\'s operation\.
 .
 .TP
 \fB\-e\fR, \fB\-\-env\fR
-Specify a file containing the environment that should be set up for each child process\. The file should be key/value pairs separated by \fB=\fR, with one key/value pair per line\.
+Specify an alternate environment file\.
 .
 .TP
 \fB\-f\fR, \fB\-\-procfile\fR
@@ -136,6 +136,20 @@ You can validate your Procfile format using the \fBcheck\fR command
 .nf
 
 $ foreman check
+.
+.fi
+.
+.IP "" 0
+.
+.SH "ENVIRONMENT"
+If a \fB\.env\fR file exists in the project directory, the default environment will be read from it\. This file should contain key/value pairs, separated by \fB=\fR, with one key/value pair per line\.
+.
+.IP "" 4
+.
+.nf
+
+FOO=bar
+BAZ=qux
 .
 .fi
 .

@@ -67,9 +67,7 @@ The following options control how the application is run:
 These options control all modes of foreman's operation.
 
   * `-e`, `--env`:
-    Specify a file containing the environment that should be set up for each
-    child process. The file should be key/value pairs separated by `=`, with
-    one key/value pair per line.
+    Specify an alternate environment file.
 
   * `-f`, `--procfile`:
     Specify an alternate location for the application's Procfile. This file's
@@ -115,6 +113,15 @@ to run it.
 You can validate your Procfile format using the `check` command
 
     $ foreman check
+
+## ENVIRONMENT
+
+If a `.env` file exists in the project directory, the default environment will
+be read from it. This file should contain key/value pairs, separated by `=`, with
+one key/value pair per line.
+
+    FOO=bar
+    BAZ=qux
 
 ## DEFAULT OPTIONS
 
