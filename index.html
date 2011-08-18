@@ -69,6 +69,7 @@
     <a href="#INITTAB-EXPORT">INITTAB EXPORT</a>
     <a href="#UPSTART-EXPORT">UPSTART EXPORT</a>
     <a href="#PROCFILE">PROCFILE</a>
+    <a href="#ENVIRONMENT">ENVIRONMENT</a>
     <a href="#DEFAULT-OPTIONS">DEFAULT OPTIONS</a>
     <a href="#EXAMPLES">EXAMPLES</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
@@ -145,9 +146,10 @@ app name</p></dd>
 <p>These options control all modes of foreman's operation.</p>
 
 <dl>
-<dt><code>-f</code>, <code>--procfile</code></dt><dd>Specify an alternate location for the application's Procfile. This file's
+<dt><code>-e</code>, <code>--env</code></dt><dd><p>Specify an alternate environment file.</p></dd>
+<dt><code>-f</code>, <code>--procfile</code></dt><dd><p>Specify an alternate location for the application's Procfile. This file's
 containing directory will be assumed to be the root directory of the
-application.</dd>
+application.</p></dd>
 </dl>
 
 
@@ -196,6 +198,16 @@ job: bundle exec rake jobs:work
 <pre><code>$ foreman check
 </code></pre>
 
+<h2 id="ENVIRONMENT">ENVIRONMENT</h2>
+
+<p>If a <code>.env</code> file exists in the project directory, the default environment will
+be read from it. This file should contain key/value pairs, separated by <code>=</code>, with
+one key/value pair per line.</p>
+
+<pre><code>FOO=bar
+BAZ=qux
+</code></pre>
+
 <h2 id="DEFAULT-OPTIONS">DEFAULT OPTIONS</h2>
 
 <p>If a <code>.foreman</code> file exists in the current directory, default options will
@@ -229,8 +241,8 @@ port: 15000
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>Foreman 0.13.0</li>
-    <li class='tc'>May 2011</li>
+    <li class='tl'>Foreman 0.19.0</li>
+    <li class='tc'>August 2011</li>
     <li class='tr'>foreman(1)</li>
   </ol>
 
