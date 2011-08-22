@@ -24,6 +24,14 @@ class Foreman::CLI < Thor
     end
   end
 
+  desc "restart PROCESS", "Restart all instances of a specific process"
+
+  def restart( process )
+    check_procfile!
+
+    engine.restart( process )
+  end
+
   desc "export FORMAT LOCATION", "Export the application to another process management format"
 
   method_option :app,         :type => :string,  :aliases => "-a"

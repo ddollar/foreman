@@ -6,6 +6,8 @@ require "tempfile"
 require "timeout"
 require "term/ansicolor"
 require "fileutils"
+require 'pathname'
+require 'etc'
 
 class Foreman::Engine
 
@@ -19,6 +21,7 @@ class Foreman::Engine
   def initialize(procfile)
     @procfile  = read_procfile(procfile)
     @directory = File.expand_path(File.dirname(procfile))
+    @pidfilename = Pathname.new(Etc.systmpdir).join( "foreman_#{File.split(@directory)[-1]}.pid").to_s
   end
 
   def processes
@@ -62,7 +65,39 @@ class Foreman::Engine
     trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
     trap("INT")  { puts "SIGINT received";  terminate_gracefully }
 
-    watch_for_termination
+    write_pids
+    watch_for_termination(options, environment)
+  end
+
+  def restart( service )
+    master, children = read_pids
+
+    children.each do |name, pid|
+      if name == service && Process.getpgid(pid.to_i).to_s == master
+        info "Restarting process #{pid} for #{name}"
+        Process.kill("HUP", pid.to_i)
+      end
+    end
+  end
+
+  def write_pids
+    File.open(@pidfilename, 'w') do |out| 
+      out.puts Process.pid
+
+      running_processes.each do |pid, process|
+        out.puts "#{process.name}:#{pid}"
+      end
+    end
+  end
+
+  def read_pids
+    File.open(@pidfilename, 'r') do |pidfile|
+      lines = pidfile.readlines.map {|line| line.strip }
+      master_pid = lines[0]
+      children = lines[1..-1].map {|line| line.split(':') }
+
+      [master_pid, children]
+    end
   end
 
   def execute(name, options={})
@@ -73,7 +108,7 @@ class Foreman::Engine
     trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
     trap("INT")  { puts "SIGINT received";  terminate_gracefully }
 
-    watch_for_termination
+    watch_for_termination(options, environment)
   end
 
   def port_for(process, num, base_port=nil)
@@ -114,6 +149,7 @@ private ######################################################################
       Dir.chdir directory do
         PTY.spawn(runner, process.command) do |stdin, stdout, pid|
           trap("SIGTERM") { Process.kill("SIGTERM", pid) }
+          trap("SIGHUP") { Process.kill("SIGTERM", pid); Process.wait rescue nil; exit!(2) }
           until stdin.eof?
             info stdin.gets, process
           end
@@ -174,12 +210,20 @@ private ######################################################################
     File.read(procfile)
   end
 
-  def watch_for_termination
+  def watch_for_termination( options, environment )
     pid, status = Process.wait2
     process = running_processes.delete(pid)
-    info "process terminated", process
-    terminate_gracefully
-    kill_all
+
+    if status.exitstatus == 2
+      info "process terminated with HUP, restarting", process
+      fork process, options, environment
+      write_pids
+      watch_for_termination(options, environment)
+    else
+      info "process terminated", process
+      terminate_gracefully
+      kill_all
+    end
   rescue Errno::ECHILD
   end
 
