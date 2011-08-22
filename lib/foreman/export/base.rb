@@ -26,6 +26,8 @@ private ######################################################################
   def export_template(exporter, file, template_root)
     if template_root && File.exist?(file_path = File.join(template_root, file))
       File.read(file_path)
+    elsif File.exist?(file_path = File.join("~/.foreman/templates", file))
+      File.read(file_path)
     else
       File.read(File.expand_path("../../../../data/export/#{exporter}/#{file}", __FILE__))
     end

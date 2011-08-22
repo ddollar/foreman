@@ -36,4 +36,20 @@ describe Foreman::Export::Upstart do
       File.read("/tmp/init/app.conf").should == "alternate_template\n"
     end
   end
+
+  context "with alternate templates from home dir" do
+    let(:default_template_root) {File.expand_path("~/.foreman/templates")}
+
+    before do
+      FileUtils.mkdir_p default_template_root
+      File.open("#{default_template_root}/master.conf.erb", "w") { |f| f.puts "default_alternate_template" }
+    end
+
+    it "can export with alternate template files" do
+      upstart.export("/tmp/init")
+
+      File.read("/tmp/init/app.conf").should == "default_alternate_template\n"
+    end
+  end
+
 end
