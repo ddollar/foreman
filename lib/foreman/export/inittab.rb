@@ -16,7 +16,7 @@ class Foreman::Export::Inittab < Foreman::Export::Base
       1.upto(concurrency[process.name]) do |num|
         id = app.slice(0, 2).upcase + sprintf("%02d", index)
         port = engine.port_for(process, num, options[:port])
-        inittab << "#{id}:4:respawn:/bin/su - #{user} -c 'PORT=#{port} #{process.command} >> #{log_root}/#{process.name}-#{num}.log 2>&1'"
+        inittab << "#{id}:4:respawn:/bin/su - #{user} -c 'PORT=#{port} APP_NUM=#{num} #{process.command} >> #{log_root}/#{process.name}-#{num}.log 2>&1'"
         index += 1
       end
       index
