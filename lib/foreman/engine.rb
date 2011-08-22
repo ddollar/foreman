@@ -25,7 +25,7 @@ class Foreman::Engine
     @processes ||= begin
       @order = []
       procfile.split("\n").inject({}) do |hash, line|
-        next if line.strip == ""
+        next hash if line.strip == ""
         name, command = line.split(/ *: +/, 2)
         unless command
           warn_deprecated_procfile!
