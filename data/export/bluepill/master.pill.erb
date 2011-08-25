@@ -1,4 +1,4 @@
-Bluepill.application("<%= app %>", :foreground => false) do |app|
+Bluepill.application("<%= app %>", :foreground => false, :log_file => "/var/log/bluepill.log") do |app|
 
   app.uid = "<%= user %>"
   app.gid = "<%= user %>"
@@ -7,18 +7,20 @@ Bluepill.application("<%= app %>", :foreground => false) do |app|
 <% 1.upto(concurrency[process.name]) do |num| %>
 <% port = engine.port_for(process, num, options[:port]) %>
   app.process("<%= process.name %>-<%=num%>") do |process|
-    process.start_command = "<%= process.command %>"
+    process.start_command = "<%= process.command.gsub("$PORT", port.to_s) %>"
 
     process.working_dir = "<%= engine.directory %>"
-    process.pid_file = "/var/run/<%= app %>-<%= process.name %>-<%=num%>.pid"
     process.daemonize = true
     process.environment = {"PORT" => "<%= port %>"}
+    process.stop_signals = [:quit, 30.seconds, :term, 5.seconds, :kill]
 
     process.stdout = process.stderr = "<%= log_root %>/<%= app %>-<%= process.name %>-<%=num%>.log"
 
     process.monitor_children do |children|
       children.stop_command "kill -QUIT {{PID}}"
     end
+    
+    process.group = "<%= app %>-<%= process.name %>"
   end
 <% end %>
 <% end %>

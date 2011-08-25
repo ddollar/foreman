@@ -1,4 +1,4 @@
-Bluepill.application("app", :foreground => false) do |app|
+Bluepill.application("app", :foreground => false, :log_file => "/var/log/bluepill.log") do |app|
 
   app.uid = "app"
   app.gid = "app"
@@ -10,15 +10,17 @@ Bluepill.application("app", :foreground => false) do |app|
     process.start_command = "./alpha"
 
     process.working_dir = "/tmp/app"
-    process.pid_file = "/var/run/app-alpha-1.pid"
     process.daemonize = true
     process.environment = {"PORT" => "5000"}
+    process.stop_signals = [:quit, 30.seconds, :term, 5.seconds, :kill]
 
     process.stdout = process.stderr = "/var/log/app/app-alpha-1.log"
 
     process.monitor_children do |children|
       children.stop_command "kill -QUIT {{PID}}"
     end
+    
+    process.group = "app-alpha"
   end
 
 
@@ -26,15 +28,17 @@ Bluepill.application("app", :foreground => false) do |app|
     process.start_command = "./alpha"
 
     process.working_dir = "/tmp/app"
-    process.pid_file = "/var/run/app-alpha-2.pid"
     process.daemonize = true
     process.environment = {"PORT" => "5001"}
+    process.stop_signals = [:quit, 30.seconds, :term, 5.seconds, :kill]
 
     process.stdout = process.stderr = "/var/log/app/app-alpha-2.log"
 
     process.monitor_children do |children|
       children.stop_command "kill -QUIT {{PID}}"
     end
+    
+    process.group = "app-alpha"
   end
 
 
@@ -44,15 +48,17 @@ Bluepill.application("app", :foreground => false) do |app|
     process.start_command = "./bravo"
 
     process.working_dir = "/tmp/app"
-    process.pid_file = "/var/run/app-bravo-1.pid"
     process.daemonize = true
     process.environment = {"PORT" => "5100"}
+    process.stop_signals = [:quit, 30.seconds, :term, 5.seconds, :kill]
 
     process.stdout = process.stderr = "/var/log/app/app-bravo-1.log"
 
     process.monitor_children do |children|
       children.stop_command "kill -QUIT {{PID}}"
     end
+    
+    process.group = "app-bravo"
   end
 
 
