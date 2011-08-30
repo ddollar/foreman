@@ -80,10 +80,18 @@ describe "Foreman::Engine" do
       subject.execute("alpha", :env => "/tmp/env")
     end
 
-    it "should read .env if none specified" do
-      File.open(".env", "w") { |f| f.puts("FOO=qoo") }
-      mock(subject).fork_individual(anything, anything, anything, { "FOO" => "qoo" })
-      subject.execute("bravo")
+    describe "with no env file specified" do
+      it "should read from the home directory" do
+        File.open("#{ENV["HOME"]}/.foreman/env", "w") { |f| f.puts("FOO=qoo") }
+        mock(subject).fork_individual(anything, anything, anything, { "FOO" => "qoo" })
+        subject.execute("bravo")
+      end
+
+      it "should read .env in current directory" do
+        File.open(".env", "w") { |f| f.puts("FOO=qoo") }
+        mock(subject).fork_individual(anything, anything, anything, { "FOO" => "qoo" })
+        subject.execute("bravo")
+      end
     end
   end
 end
