@@ -178,6 +178,7 @@ private ######################################################################
     pid, status = Process.wait2
     process = running_processes.delete(pid)
     info "process terminated", process
+
     terminate_gracefully
     kill_all
   rescue Errno::ECHILD
@@ -203,9 +204,18 @@ private ######################################################################
 
   def read_environment(filename)
     error "No such file: #{filename}" if filename && !File.exists?(filename)
-    filename ||= ".env"
     environment = {}
+    if filename
+      environment = read_environment_file(filename,environment)
+    else
+      [File.join(ENV["HOME"],".foreman/env"), ".env"].each do |filename|
+        environment = read_environment_file(filename, environment)
+      end
+    end
+    environment
+  end
 
+  def read_environment_file(filename, environment)
     if File.exists?(filename)
       File.read(filename).split("\n").each do |line|
         if line =~ /\A([A-Za-z_]+)=(.*)\z/
@@ -213,7 +223,6 @@ private ######################################################################
         end
       end
     end
-
     environment
   end
 
