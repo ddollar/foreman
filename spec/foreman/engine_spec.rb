@@ -37,8 +37,8 @@ describe "Foreman::Engine" do
   describe "start" do
     it "forks the processes" do
       write_procfile
-      mock(subject).fork(subject.processes["alpha"], {}, {})
-      mock(subject).fork(subject.processes["bravo"], {}, {})
+      mock(subject).fork(subject.processes["alpha"])
+      mock(subject).fork(subject.processes["bravo"])
       mock(subject).watch_for_termination
       subject.start
     end
@@ -46,9 +46,9 @@ describe "Foreman::Engine" do
     it "handles concurrency" do
       write_procfile
       engine = Foreman::Engine.new("Procfile",:concurrency => "alpha=2")
-      mock(engine).fork_individual(engine.processes["alpha"], 1, 5000, {})
-      mock(engine).fork_individual(engine.processes["alpha"], 2, 5001, {})
-      mock(engine).fork_individual(engine.processes["bravo"], 1, 5100, {})
+      mock(engine).fork_individual(engine.processes["alpha"], 1, 5000)
+      mock(engine).fork_individual(engine.processes["alpha"], 2, 5001)
+      mock(engine).fork_individual(engine.processes["bravo"], 1, 5100)
       mock(engine).watch_for_termination
       engine.start
     end
@@ -57,7 +57,7 @@ describe "Foreman::Engine" do
   describe "execute" do
     it "runs the processes" do
       write_procfile
-      mock(subject).fork(subject.processes["alpha"], {}, {})
+      mock(subject).fork(subject.processes["alpha"])
       mock(subject).watch_for_termination
       subject.execute("alpha")
     end
@@ -81,9 +81,6 @@ describe "Foreman::Engine" do
     it "should fail if specified and doesnt exist" do
       mock.instance_of(Foreman::Engine).error("No such file: /tmp/env")
       engine = Foreman::Engine.new("Procfile", :env => "/tmp/env")
-      stub(engine).info
-      mock(engine).watch_for_termination
-      engine.execute("alpha")
     end
 
     it "should read .env if none specified" do
@@ -91,7 +88,7 @@ describe "Foreman::Engine" do
       engine = Foreman::Engine.new("Procfile")
       stub(engine).info
       mock(engine).watch_for_termination
-      mock(engine).fork_individual(anything, anything, anything, { "FOO" => "qoo" })
+      mock(engine).fork_individual(anything, anything, anything)
       engine.execute("bravo")
     end
   end

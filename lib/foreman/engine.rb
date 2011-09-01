@@ -11,6 +11,8 @@ class Foreman::Engine
 
   attr_reader :procfile
   attr_reader :directory
+  attr_reader :environment
+  attr_reader :options
 
   extend Term::ANSIColor
 
@@ -20,6 +22,7 @@ class Foreman::Engine
     @procfile  = read_procfile(procfile)
     @directory = File.expand_path(File.dirname(procfile))
     @options = options
+    @environment = read_environment(options[:env])
   end
 
   def processes
@@ -52,12 +55,10 @@ class Foreman::Engine
   end
 
   def start
-    environment = read_environment(@options[:env])
-
     proctitle "ruby: foreman master"
 
     processes_in_order.each do |name, process|
-      fork process, @options, environment
+      fork process
     end
 
     trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
@@ -67,9 +68,8 @@ class Foreman::Engine
   end
 
   def execute(name)
-    environment = read_environment(@options[:env])
 
-    fork processes[name], @options, environment
+    fork processes[name]
 
     trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
     trap("INT")  { puts "SIGINT received";  terminate_gracefully }
@@ -85,16 +85,16 @@ class Foreman::Engine
 
 private ######################################################################
 
-  def fork(process, options={}, environment={})
+  def fork(process)
     concurrency = Foreman::Utils.parse_concurrency(@options[:concurrency])
 
     1.upto(concurrency[process.name]) do |num|
-      fork_individual(process, num, port_for(process, num, @options[:port]), environment)
+      fork_individual(process, num, port_for(process, num, @options[:port]))
     end
   end
 
-  def fork_individual(process, num, port, environment)
-    environment.each { |k,v| ENV[k] = v }
+  def fork_individual(process, num, port)
+    @environment.each { |k,v| ENV[k] = v }
 
     ENV["PORT"] = port.to_s
     ENV["PS"]   = "#{process.name}.#{num}"
