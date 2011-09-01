@@ -16,9 +16,10 @@ class Foreman::Engine
 
   COLORS = [ cyan, yellow, green, magenta, red ]
 
-  def initialize(procfile)
+  def initialize(procfile, options={})
     @procfile  = read_procfile(procfile)
     @directory = File.expand_path(File.dirname(procfile))
+    @options = options
   end
 
   def processes
@@ -50,13 +51,13 @@ class Foreman::Engine
     end
   end
 
-  def start(options={})
-    environment = read_environment(options[:env])
+  def start
+    environment = read_environment(@options[:env])
 
     proctitle "ruby: foreman master"
 
     processes_in_order.each do |name, process|
-      fork process, options, environment
+      fork process, @options, environment
     end
 
     trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
@@ -65,10 +66,10 @@ class Foreman::Engine
     watch_for_termination
   end
 
-  def execute(name, options={})
-    environment = read_environment(options[:env])
+  def execute(name)
+    environment = read_environment(@options[:env])
 
-    fork processes[name], options, environment
+    fork processes[name], @options, environment
 
     trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
     trap("INT")  { puts "SIGINT received";  terminate_gracefully }
@@ -85,10 +86,10 @@ class Foreman::Engine
 private ######################################################################
 
   def fork(process, options={}, environment={})
-    concurrency = Foreman::Utils.parse_concurrency(options[:concurrency])
+    concurrency = Foreman::Utils.parse_concurrency(@options[:concurrency])
 
     1.upto(concurrency[process.name]) do |num|
-      fork_individual(process, num, port_for(process, num, options[:port]), environment)
+      fork_individual(process, num, port_for(process, num, @options[:port]), environment)
     end
   end
 

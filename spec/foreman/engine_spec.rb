@@ -2,7 +2,7 @@ require "spec_helper"
 require "foreman/engine"
 
 describe "Foreman::Engine" do
-  subject { Foreman::Engine.new("Procfile") }
+  subject { Foreman::Engine.new("Procfile", {}) }
 
   describe "initialize" do
     describe "without an existing Procfile" do
@@ -45,11 +45,12 @@ describe "Foreman::Engine" do
 
     it "handles concurrency" do
       write_procfile
-      mock(subject).fork_individual(subject.processes["alpha"], 1, 5000, {})
-      mock(subject).fork_individual(subject.processes["alpha"], 2, 5001, {})
-      mock(subject).fork_individual(subject.processes["bravo"], 1, 5100, {})
-      mock(subject).watch_for_termination
-      subject.start(:concurrency => "alpha=2")
+      engine = Foreman::Engine.new("Procfile",:concurrency => "alpha=2")
+      mock(engine).fork_individual(engine.processes["alpha"], 1, 5000, {})
+      mock(engine).fork_individual(engine.processes["alpha"], 2, 5001, {})
+      mock(engine).fork_individual(engine.processes["bravo"], 1, 5100, {})
+      mock(engine).watch_for_termination
+      engine.start
     end
   end
 
@@ -63,27 +64,35 @@ describe "Foreman::Engine" do
   end
 
   describe "environment" do
+
     before(:each) do
       write_procfile
       stub(Process).fork
-      stub(subject).info
-      mock(subject).watch_for_termination
     end
 
     it "should read if specified" do
       File.open("/tmp/env", "w") { |f| f.puts("FOO=baz") }
-      subject.execute("alpha", :env => "/tmp/env")
+      engine = Foreman::Engine.new("Procfile", :env => "/tmp/env")
+      stub(engine).info
+      mock(engine).watch_for_termination
+      engine.execute("alpha")
     end
 
     it "should fail if specified and doesnt exist" do
-      mock(subject).error("No such file: /tmp/env")
-      subject.execute("alpha", :env => "/tmp/env")
+      mock.instance_of(Foreman::Engine).error("No such file: /tmp/env")
+      engine = Foreman::Engine.new("Procfile", :env => "/tmp/env")
+      stub(engine).info
+      mock(engine).watch_for_termination
+      engine.execute("alpha")
     end
 
     it "should read .env if none specified" do
       File.open(".env", "w") { |f| f.puts("FOO=qoo") }
-      mock(subject).fork_individual(anything, anything, anything, { "FOO" => "qoo" })
-      subject.execute("bravo")
+      engine = Foreman::Engine.new("Procfile")
+      stub(engine).info
+      mock(engine).watch_for_termination
+      mock(engine).fork_individual(anything, anything, anything, { "FOO" => "qoo" })
+      engine.execute("bravo")
     end
   end
 end
