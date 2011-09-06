@@ -33,6 +33,10 @@ The following options control how the application is run:
     Specify which port to use as the base for this application. Should be
     a multiple of 1000.
 
+  * `-x`, `--exclude`:
+    Specify any processes you don't want to start. Takes a comma separated
+    list. eg. -x web,db
+
 ## EXPORTING
 
 `foreman export` is used to export your application to another process

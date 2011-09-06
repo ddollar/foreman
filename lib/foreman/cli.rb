@@ -13,6 +13,7 @@ class Foreman::CLI < Thor
   method_option :env,         :type => :string,  :aliases => "-e", :desc => "Specify an environment file to load, defaults to .env"
   method_option :port,        :type => :numeric, :aliases => "-p"
   method_option :concurrency, :type => :string,  :aliases => "-c", :banner => '"alpha=5,bar=3"'
+  method_option :exclude,     :type => :string,  :aliases => "-x", :desc => "Comma separated list of processes to not start"
 
   def start(process=nil)
     check_procfile!

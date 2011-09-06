@@ -55,8 +55,10 @@ class Foreman::Engine
 
     proctitle "ruby: foreman master"
 
+    exclude = options[:exclude] ? options[:exclude].split(',') : []
+
     processes_in_order.each do |name, process|
-      fork process, options, environment
+      fork process, options, environment unless exclude.include?(name)
     end
 
     trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
