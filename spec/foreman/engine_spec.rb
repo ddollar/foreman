@@ -75,6 +75,7 @@ describe "Foreman::Engine" do
       engine = Foreman::Engine.new("Procfile", :env => "/tmp/env")
       stub(engine).info
       mock(engine).watch_for_termination
+      engine.environment.should == {"FOO"=>"baz"}
       engine.execute("alpha")
     end
 
@@ -89,6 +90,7 @@ describe "Foreman::Engine" do
       stub(engine).info
       mock(engine).watch_for_termination
       mock(engine).fork_individual(anything, anything, anything)
+      engine.environment.should == {"FOO"=>"qoo"}
       engine.execute("bravo")
     end
   end
