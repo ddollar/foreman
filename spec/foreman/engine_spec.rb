@@ -51,6 +51,14 @@ describe "Foreman::Engine" do
       mock(subject).watch_for_termination
       subject.start(:concurrency => "alpha=2")
     end
+
+    it "allow us to exclude processes" do
+      write_procfile
+      dont_allow(subject).fork(subject.processes["alpha"], {}, {})
+      mock(subject).fork(subject.processes["bravo"], {:exclude=>"alpha"}, {})
+      subject.start(:exclude => "alpha")
+    end
+
   end
 
   describe "execute" do

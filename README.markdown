@@ -24,6 +24,7 @@ Patches contributed by:
 * Jay Zeschin
 * Keith Rarick
 * Ricardo Chimal, Jr
+* Gareth Rushgrove
 
 ## License
 
