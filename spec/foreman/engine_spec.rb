@@ -54,9 +54,16 @@ describe "Foreman::Engine" do
 
     it "allow us to exclude processes" do
       write_procfile
-      dont_allow(subject).fork(subject.processes["alpha"], {}, {})
+      dont_allow(subject).fork(subject.processes["alpha"], {:exclude=>"alpha"}, {})
       mock(subject).fork(subject.processes["bravo"], {:exclude=>"alpha"}, {})
       subject.start(:exclude => "alpha")
+    end
+
+    it "allows us to exclude multiple processes" do
+      write_procfile
+      dont_allow(subject).fork(subject.processes["alpha"], {:exclude=>"alpha,bravo"}, {})
+      dont_allow(subject).fork(subject.processes["bravo"], {:exclude=>"alpha,bravo"}, {})
+      subject.start(:exclude => "alpha,bravo")
     end
 
   end
