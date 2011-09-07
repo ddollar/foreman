@@ -128,8 +128,19 @@ private ######################################################################
   end
 
   def kill_all(signal="SIGTERM")
-    running_processes.each do |pid, process|
-      Process.kill(signal, pid) rescue Errno::ESRCH
+    pids_by_name = running_processes.inject({}) do |hash, (pid,process)|
+      hash[process.name] ||= []
+      hash[process.name]  |= [ pid ]
+      hash
+    end
+
+    process_order.reverse.each do |name|
+      pids = pids_by_name.delete(name) || []
+      pids.each do |pid|
+        info "About to send #{name} (#{pid}) #{signal}"
+        Process.kill(signal, pid) rescue Errno::ESRCH
+      end
+      sleep 1 if signal == "SIGTERM"
     end
   end
 
