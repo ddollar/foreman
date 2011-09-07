@@ -18,9 +18,9 @@ class Foreman::CLI < Thor
     check_procfile!
 
     if process
-      engine.execute(process, options)
+      engine.execute(process)
     else
-      engine.start(options)
+      engine.start
     end
   end
 
@@ -64,7 +64,7 @@ private ######################################################################
   end
 
   def engine
-    @engine ||= Foreman::Engine.new(procfile)
+    @engine ||= Foreman::Engine.new(procfile, options)
   end
 
   def procfile
