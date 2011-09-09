@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    foreman (0.20.0)
+    foreman (0.21.0)
       term-ansicolor (~> 1.0.5)
       thor (>= 0.13.6)
 
