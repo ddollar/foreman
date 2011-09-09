@@ -78,6 +78,8 @@ These options control all modes of foreman's operation.
 
 foreman currently supports the following output formats:
 
+  * bluepill
+
   * inittab
 
   * upstart
