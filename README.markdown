@@ -19,11 +19,19 @@ Created by David Dollar
 Patches contributed by:
 
 * Adam Wiggins
-* clifff
 * Dan Peterson
+* Hunter Nield
 * Jay Zeschin
 * Keith Rarick
+* Khaja Minhajuddin
+* Matt Haynes
+* Michael van Rooijen
+* Mike Javorski
+* Nathan L Smith
+* Nick Zadrozny
 * Ricardo Chimal, Jr
+* Thom May
+* clifff
 
 ## License
 
