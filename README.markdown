@@ -32,6 +32,7 @@ Patches contributed by:
 * Ricardo Chimal, Jr
 * Thom May
 * clifff
+* Greg Reinacker
 
 ## License
 
