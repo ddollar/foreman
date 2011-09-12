@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-%w( SIGINT SIGTERM SIGHUP ).each do |signal|
+$stdout.sync = true
+
+%w( SIGINT SIGTERM ).each do |signal|
   trap(signal) do
     puts "received #{signal} but i'm ignoring it!"
   end
