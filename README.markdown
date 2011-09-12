@@ -2,7 +2,17 @@
 
 ## Installation
 
+* Rubygems
+
     gem install foreman
+
+* OSX
+
+    http://assets.foreman.io/foreman/foreman.pkg
+
+* Standalone Tarball
+
+    http://assets.foreman.io/foreman/foreman.tgz
 
 ## Description
 

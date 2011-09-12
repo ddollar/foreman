@@ -8,6 +8,11 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
+    aws-s3 (0.6.2)
+      builder
+      mime-types
+      xml-simple
+    builder (3.0.0)
     crack (0.1.8)
     diff-lcs (1.1.2)
     fakefs (0.2.1)
@@ -39,11 +44,13 @@ GEM
     rubyzip (0.9.4)
     term-ansicolor (1.0.6)
     thor (0.14.6)
+    xml-simple (1.0.15)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  aws-s3
   fakefs (~> 0.2.1)
   foreman!
   parka
