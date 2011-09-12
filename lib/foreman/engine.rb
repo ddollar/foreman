@@ -30,7 +30,7 @@ class Foreman::Engine
       @order = []
       procfile.split("\n").inject({}) do |hash, line|
         next hash if line.strip == ""
-        name, command = line.split(/ *: +/, 2)
+        name, command = line.split(/\s*:\s+/, 2)
         unless command
           warn_deprecated_procfile!
           name, command = line.split(/ +/, 2)
