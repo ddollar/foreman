@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+bin_file = Pathname.new(__FILE__).realpath
+
+gem_dir = File.expand_path("../vendor/gems", bin_file)
+  Dir["#{gem_dir}/**/lib"].each do |libdir|
+  $:.unshift libdir
+end
+
+$:.unshift File.expand_path("../lib", bin_file)
+
+require "foreman/cli"
+
+Foreman::CLI.start

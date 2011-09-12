@@ -18,12 +18,4 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'term-ansicolor', '~> 1.0.5'
   gem.add_dependency 'thor',           '>= 0.13.6'
-
-  gem.add_development_dependency 'parka'
-  gem.add_development_dependency 'rake'
-  gem.add_development_dependency 'ronn'
-  gem.add_development_dependency 'fakefs', '~> 0.2.1'
-  gem.add_development_dependency 'rcov',   '~> 0.9.8'
-  gem.add_development_dependency 'rr',     '~> 1.0.2'
-  gem.add_development_dependency 'rspec',  '~> 2.6.0'
 end
