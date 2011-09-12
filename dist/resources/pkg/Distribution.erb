@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-script minSpecVersion="1.000000" authoringTool="org.ruby-lang.rake" authoringToolVersion="0.8.7">
+  <title>Foreman</title>
+  <options customize="never" allow-external-scripts="no"/>
+  <domains enable_localSystem="true"/>
+  <script><![CDATA[
+    function needs_git() {
+      return (system.compareVersion(system.version.ProductVersion, "10.7.0") < 0);
+    }
+  ]]></script>
+  <choices-outline>
+    <line choice="git"/>
+    <line choice="foreman-<%= version %>"/>
+  </choices-outline>
+  <choice id="git" title="git" start_selected="false" start_enabled="false" selected="needs_git()" enabled="needs_git()">
+    <pkg-ref id="git.pkg" />
+  </choice>
+  <choice id="foreman-<%= version %>" title="foreman">
+    <pkg-ref id="io.foreman.installer"/>
+  </choice>
+  <pkg-ref id="io.foreman.installer" installKBytes="<%= kbytes %>" version="<%= version %>" auth="Root">#foreman-<%= version %>.pkg</pkg-ref>
+</installer-script>
+

@@ -1,8 +1,8 @@
-.bundle
-coverage
-example/log/*
-man/*.html
-man/*.markdown
-pkg
-tags
+/.bundle
+/coverage
+/example/log/*
+/man/*.html
+/man/*.markdown
+/pkg
+/tags
 

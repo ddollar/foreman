@@ -1,0 +1,7 @@
+<pkg-info format-version="2" identifier="io.foreman.installer" version="<%= version %>" install-location="/usr/local/foreman" auth="root">
+  <payload installKBytes="<%= kbytes %>" numberOfFiles="<%= num_files %>"/>
+  <scripts>
+    <postinstall file="./postinstall"/>
+  </scripts>
+</pkg-info>
+
