@@ -88,6 +88,7 @@ private ######################################################################
   def fork(process)
     concurrency = Foreman::Utils.parse_concurrency(@options[:concurrency])
 
+    info "Launching #{concurrency[process.name]} #{process.name} process#{concurrency[process.name] > 1 ? "es" : ""}."
     1.upto(concurrency[process.name]) do |num|
       fork_individual(process, num, port_for(process, num, @options[:port]))
     end
@@ -103,7 +104,7 @@ private ######################################################################
       run(process)
     end
 
-    info "started with pid #{pid}", process
+    info "started with pid #{pid} and port #{port.to_s}", process
     running_processes[pid] = process
   end
 
@@ -140,6 +141,7 @@ private ######################################################################
     print Term::ANSIColor.reset
     print message.chomp
     puts
+    $stdout.flush
   end
 
   def error(message)
