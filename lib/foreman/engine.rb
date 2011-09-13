@@ -113,7 +113,7 @@ private ######################################################################
 
     begin
       Dir.chdir directory do
-        PTY.spawn(runner, process.command) do |stdin, stdout, pid|
+        PTY.spawn(process.command) do |stdin, stdout, pid|
           trap("SIGTERM") { Process.kill("SIGTERM", pid) }
           until stdin.eof?
             info stdin.gets, process
