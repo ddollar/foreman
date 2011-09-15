@@ -37,6 +37,7 @@ describe "Foreman::Engine" do
   describe "start" do
     it "forks the processes" do
       write_procfile
+      stub(subject).info
       mock(subject).fork(subject.processes["alpha"])
       mock(subject).fork(subject.processes["bravo"])
       mock(subject).watch_for_termination
@@ -58,11 +59,13 @@ describe "Foreman::Engine" do
 
       engine.start
     end
+
   end
 
   describe "execute" do
     it "runs the processes" do
       write_procfile
+      mock(subject).info("Launching 1 alpha process.")
       mock(subject).fork(subject.processes["alpha"])
       mock(subject).watch_for_termination
       subject.execute("alpha")

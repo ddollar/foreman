@@ -5,7 +5,7 @@ require "tmpdir"
 
 describe Foreman::Export::Upstart do
   let(:procfile) { FileUtils.mkdir_p("/tmp/app"); write_procfile("/tmp/app/Procfile") }
-  let(:engine) { Foreman::Engine.new(procfile) }
+  let(:engine) { Foreman::Engine.new(procfile, :concurrency => "alpha=2") }
   let(:upstart) { Foreman::Export::Upstart.new(engine) }
 
   before(:each) { load_export_templates_into_fakefs("upstart") }

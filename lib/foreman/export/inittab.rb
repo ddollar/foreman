@@ -7,13 +7,11 @@ class Foreman::Export::Inittab < Foreman::Export::Base
     user = options[:user] || app
     log_root = options[:log] || "/var/log/#{app}"
 
-    concurrency = Foreman::Utils.parse_concurrency(options[:concurrency])
-
     inittab = []
     inittab << "# ----- foreman #{app} processes -----"
 
     engine.processes.values.inject(1) do |index, process|
-      1.upto(concurrency[process.name]) do |num|
+      1.upto(process.concurrency) do |num|
         id = app.slice(0, 2).upcase + sprintf("%02d", index)
         port = engine.port_for(process, num, options[:port])
         inittab << "#{id}:4:respawn:/bin/su - #{user} -c 'PORT=#{port} #{process.command} >> #{log_root}/#{process.name}-#{num}.log 2>&1'"
