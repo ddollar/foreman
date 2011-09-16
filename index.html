@@ -146,7 +146,8 @@ app name</p></dd>
 <p>These options control all modes of foreman's operation.</p>
 
 <dl>
-<dt><code>-e</code>, <code>--env</code></dt><dd><p>Specify an alternate environment file.</p></dd>
+<dt><code>-e</code>, <code>--env</code></dt><dd><p>Specify an alternate environment file. You can specify more than one
+file by using: <code>--env file1,file2</code>.</p></dd>
 <dt><code>-f</code>, <code>--procfile</code></dt><dd><p>Specify an alternate location for the application's Procfile. This file's
 containing directory will be assumed to be the root directory of the
 application.</p></dd>
@@ -158,6 +159,7 @@ application.</p></dd>
 <p>foreman currently supports the following output formats:</p>
 
 <ul>
+<li><p>bluepill</p></li>
 <li><p>inittab</p></li>
 <li><p>upstart</p></li>
 </ul>
@@ -241,8 +243,8 @@ port: 15000
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>Foreman 0.19.0</li>
-    <li class='tc'>August 2011</li>
+    <li class='tl'>Foreman 0.23.0</li>
+    <li class='tc'>September 2011</li>
     <li class='tr'>foreman(1)</li>
   </ol>
 
