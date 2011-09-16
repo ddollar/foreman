@@ -79,6 +79,16 @@ describe "Foreman::Engine" do
       engine.execute("alpha")
     end
 
+    it "should read more than one if specified" do
+      File.open("/tmp/env1", "w") { |f| f.puts("FOO=bar") }
+      File.open("/tmp/env2", "w") { |f| f.puts("BAZ=qux") }
+      engine = Foreman::Engine.new("Procfile", :env => "/tmp/env1,/tmp/env2")
+      stub(engine).info
+      mock(engine).watch_for_termination
+      engine.environment.should == { "FOO"=>"bar", "BAZ"=>"qux" }
+      engine.execute("alpha")
+    end
+
     it "should fail if specified and doesnt exist" do
       mock.instance_of(Foreman::Engine).error("No such file: /tmp/env")
       engine = Foreman::Engine.new("Procfile", :env => "/tmp/env")

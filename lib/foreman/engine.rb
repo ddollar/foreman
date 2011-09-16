@@ -22,7 +22,7 @@ class Foreman::Engine
     @procfile  = read_procfile(procfile)
     @directory = File.expand_path(File.dirname(procfile))
     @options = options
-    @environment = read_environment(options[:env])
+    @environment = read_environment_files(options[:env])
   end
 
   def processes
@@ -202,20 +202,27 @@ private ######################################################################
     puts "!!! e.g.   web: thin start"
   end
 
-  def read_environment(filename)
-    error "No such file: #{filename}" if filename && !File.exists?(filename)
-    filename ||= ".env"
+  def read_environment_files(filenames)
     environment = {}
 
-    if File.exists?(filename)
-      File.read(filename).split("\n").each do |line|
-        if line =~ /\A([A-Za-z_]+)=(.*)\z/
-          environment[$1] = $2
-        end
-      end
+    (filenames || "").split(",").map(&:strip).each do |filename|
+      error "No such file: #{filename}" unless File.exists?(filename)
+      environment.merge!(read_environment(filename))
     end
 
+    environment.merge!(read_environment(".env")) unless filenames
     environment
+  end
+
+  def read_environment(filename)
+    return {} unless File.exists?(filename)
+
+    File.read(filename).split("\n").inject({}) do |hash, line|
+      if line =~ /\A([A-Za-z_]+)=(.*)\z/
+        hash[$1] = $2
+      end
+      hash
+    end
   end
 
   def runner
