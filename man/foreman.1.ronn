@@ -67,7 +67,8 @@ The following options control how the application is run:
 These options control all modes of foreman's operation.
 
   * `-e`, `--env`:
-    Specify an alternate environment file.
+    Specify an alternate environment file. You can specify more than one
+    file by using: `--env file1,file2`.
 
   * `-f`, `--procfile`:
     Specify an alternate location for the application's Procfile. This file's
