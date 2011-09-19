@@ -4,7 +4,7 @@ Bluepill.application("<%= app %>", :foreground => false, :log_file => "/var/log/
   app.gid = "<%= user %>"
 
 <% engine.processes.values.each do |process| %>
-<% 1.upto(concurrency[process.name]) do |num| %>
+<% 1.upto(process.concurrency) do |num| %>
 <% port = engine.port_for(process, num, options[:port]) %>
   app.process("<%= process.name %>-<%=num%>") do |process|
     process.start_command = "<%= process.command.gsub("$PORT", port.to_s) %>"

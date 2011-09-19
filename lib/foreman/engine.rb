@@ -28,6 +28,7 @@ class Foreman::Engine
   def processes
     @processes ||= begin
       @order = []
+      concurrency = Foreman::Utils.parse_concurrency(@options[:concurrency])
       procfile.split("\n").inject({}) do |hash, line|
         next hash if line.strip == ""
         name, command = line.split(/\s*:\s+/, 2)
@@ -35,7 +36,7 @@ class Foreman::Engine
           warn_deprecated_procfile!
           name, command = line.split(/ +/, 2)
         end
-        process = Foreman::Process.new(name, command)
+        process = Foreman::Process.new(name, command, concurrency[name])
         process.color = next_color
         @order << process.name
         hash.update(process.name => process)
@@ -58,6 +59,10 @@ class Foreman::Engine
     proctitle "ruby: foreman master"
 
     processes_in_order.each do |name, process|
+      info "Launching #{process.concurrency} #{process.name} process#{process.concurrency > 1 ? "es" : ""}."
+    end
+
+    processes_in_order.each do |name, process|
       fork process
     end
 
@@ -69,7 +74,9 @@ class Foreman::Engine
 
   def execute(name)
 
-    fork processes[name]
+    process = processes[name]
+    info "Launching #{process.concurrency} #{process.name} process#{process.concurrency > 1 ? "es" : ""}."
+    fork process
 
     trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
     trap("INT")  { puts "SIGINT received";  terminate_gracefully }
@@ -86,9 +93,7 @@ class Foreman::Engine
 private ######################################################################
 
   def fork(process)
-    concurrency = Foreman::Utils.parse_concurrency(@options[:concurrency])
-
-    1.upto(concurrency[process.name]) do |num|
+    1.upto(process.concurrency) do |num|
       fork_individual(process, num, port_for(process, num, @options[:port]))
     end
   end
@@ -103,7 +108,7 @@ private ######################################################################
       run(process)
     end
 
-    info "started with pid #{pid}", process
+    info "started with pid #{pid} and port #{port.to_s}", process
     running_processes[pid] = process
   end
 
@@ -140,6 +145,7 @@ private ######################################################################
     print Term::ANSIColor.reset
     print message.chomp
     puts
+    $stdout.flush
   end
 
   def error(message)
