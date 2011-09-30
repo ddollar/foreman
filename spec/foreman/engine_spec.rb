@@ -18,6 +18,10 @@ describe "Foreman::Engine" do
         subject.processes["alpha"].command.should == "./alpha"
         subject.processes["bravo"].command.should == "./bravo"
       end
+      
+      it "skips commented process" do
+        subject.processes["charlie"].should == nil
+      end
     end
 
     describe "with a deprecated Procfile" do

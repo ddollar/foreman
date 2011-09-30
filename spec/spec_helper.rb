@@ -29,6 +29,8 @@ def write_procfile(procfile="Procfile")
     file.puts "alpha: ./alpha"
     file.puts "\n"
     file.puts "bravo:\t./bravo"
+    file.puts "\n"
+    file.puts "# charlie:\t./charlie"
   end
   File.expand_path(procfile)
 end

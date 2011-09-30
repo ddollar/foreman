@@ -29,6 +29,7 @@ class Foreman::Engine
     @processes ||= begin
       @order = []
       procfile.split("\n").inject({}) do |hash, line|
+        next hash if line.match(/^#/)
         next hash if line.strip == ""
         name, command = line.split(/\s*:\s+/, 2)
         unless command
