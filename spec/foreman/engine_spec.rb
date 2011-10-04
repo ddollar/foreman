@@ -15,21 +15,8 @@ describe "Foreman::Engine" do
       before { write_procfile }
 
       it "reads the processes" do
-        subject.processes["alpha"].command.should == "./alpha"
-        subject.processes["bravo"].command.should == "./bravo"
-      end
-    end
-
-    describe "with a deprecated Procfile" do
-      before do
-        File.open("Procfile", "w") do |file|
-          file.puts "name command"
-        end
-      end
-
-      it "should print a deprecation warning" do
-        mock(subject).warn_deprecated_procfile!
-        subject.processes.length.should == 1
+        subject.procfile["alpha"].command.should == "./alpha"
+        subject.procfile["bravo"].command.should == "./bravo"
       end
     end
   end
@@ -37,8 +24,8 @@ describe "Foreman::Engine" do
   describe "start" do
     it "forks the processes" do
       write_procfile
-      mock(subject).fork(subject.processes["alpha"])
-      mock(subject).fork(subject.processes["bravo"])
+      mock(subject).fork(subject.procfile["alpha"])
+      mock(subject).fork(subject.procfile["bravo"])
       mock(subject).watch_for_termination
       subject.start
     end
@@ -46,9 +33,9 @@ describe "Foreman::Engine" do
     it "handles concurrency" do
       write_procfile
       engine = Foreman::Engine.new("Procfile",:concurrency => "alpha=2")
-      mock(engine).fork_individual(engine.processes["alpha"], 1, 5000)
-      mock(engine).fork_individual(engine.processes["alpha"], 2, 5001)
-      mock(engine).fork_individual(engine.processes["bravo"], 1, 5100)
+      mock(engine).fork_individual(engine.procfile["alpha"], 1, 5000)
+      mock(engine).fork_individual(engine.procfile["alpha"], 2, 5001)
+      mock(engine).fork_individual(engine.procfile["bravo"], 1, 5100)
       mock(engine).watch_for_termination
       engine.start
     end
@@ -57,14 +44,13 @@ describe "Foreman::Engine" do
   describe "execute" do
     it "runs the processes" do
       write_procfile
-      mock(subject).fork(subject.processes["alpha"])
+      mock(subject).fork(subject.procfile["alpha"])
       mock(subject).watch_for_termination
       subject.execute("alpha")
     end
   end
 
   describe "environment" do
-
     before(:each) do
       write_procfile
       stub(Process).fork

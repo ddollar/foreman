@@ -53,9 +53,8 @@ class Foreman::CLI < Thor
   desc "check", "Validate your application's Procfile"
 
   def check
-    processes = engine.processes_in_order.map { |p| p.first }
-    error "no processes defined" unless processes.length > 0
-    display "valid procfile detected (#{processes.join(', ')})"
+    error "no processes defined" unless engine.processes.length > 0
+    display "valid procfile detected (#{engine.processes.map(&:name).join(', ')})"
   end
 
 private ######################################################################

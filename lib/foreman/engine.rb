@@ -1,5 +1,6 @@
 require "foreman"
 require "foreman/process"
+require "foreman/procfile"
 require "foreman/utils"
 require "pty"
 require "tempfile"
@@ -19,45 +20,17 @@ class Foreman::Engine
   COLORS = [ cyan, yellow, green, magenta, red ]
 
   def initialize(procfile, options={})
-    @procfile  = read_procfile(procfile)
+    @procfile  = Foreman::Procfile.new(procfile)
     @directory = File.expand_path(File.dirname(procfile))
     @options = options
     @environment = read_environment_files(options[:env])
   end
 
-  def processes
-    @processes ||= begin
-      @order = []
-      procfile.split("\n").inject({}) do |hash, line|
-        next hash if line.strip == ""
-        name, command = line.split(/\s*:\s+/, 2)
-        unless command
-          warn_deprecated_procfile!
-          name, command = line.split(/ +/, 2)
-        end
-        process = Foreman::Process.new(name, command)
-        process.color = next_color
-        @order << process.name
-        hash.update(process.name => process)
-      end
-    end
-  end
-
-  def process_order
-    processes
-    @order.uniq
-  end
-
-  def processes_in_order
-    process_order.map do |name|
-      [name, processes[name]]
-    end
-  end
-
   def start
     proctitle "ruby: foreman master"
 
-    processes_in_order.each do |name, process|
+    processes.each do |process|
+      process.color = next_color
       fork process
     end
 
@@ -68,8 +41,7 @@ class Foreman::Engine
   end
 
   def execute(name)
-
-    fork processes[name]
+    fork procfile[name]
 
     trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
     trap("INT")  { puts "SIGINT received";  terminate_gracefully }
@@ -77,9 +49,13 @@ class Foreman::Engine
     watch_for_termination
   end
 
+  def processes
+    procfile.processes
+  end
+
   def port_for(process, num, base_port=nil)
     base_port ||= 5000
-    offset = processes_in_order.map { |p| p.first }.index(process.name) * 100
+    offset = procfile.process_names.index(process.name) * 100
     base_port.to_i + offset + num - 1
   end
 
@@ -134,6 +110,24 @@ private ######################################################################
     end
   end
 
+  def terminate_gracefully
+    info "sending SIGTERM to all processes"
+    kill_all "SIGTERM"
+    Timeout.timeout(3) { Process.waitall }
+  rescue Timeout::Error
+    info "sending SIGKILL to all processes"
+    kill_all "SIGKILL"
+  end
+
+  def watch_for_termination
+    pid, status = Process.wait2
+    process = running_processes.delete(pid)
+    info "process terminated", process
+    terminate_gracefully
+    kill_all
+  rescue Errno::ECHILD
+  end
+
   def info(message, process=nil)
     print process.color if process
     print "#{Time.now.strftime("%H:%M:%S")} #{pad_process_name(process)} | "
@@ -149,7 +143,7 @@ private ######################################################################
 
   def longest_process_name
     @longest_process_name ||= begin
-      longest = processes.keys.map { |name| name.length }.sort.last
+      longest = procfile.process_names.map { |name| name.length }.sort.last
       longest = 6 if longest < 6 # system
       longest
     end
@@ -160,28 +154,8 @@ private ######################################################################
     name.ljust(longest_process_name + 3) # add 3 for process number padding
   end
 
-  def print_info
-    info "currently running processes:"
-    running_processes.each do |pid, process|
-      info "pid #{pid}", process
-    end
-  end
-
   def proctitle(title)
     $0 = title
-  end
-
-  def read_procfile(procfile)
-    File.read(procfile)
-  end
-
-  def watch_for_termination
-    pid, status = Process.wait2
-    process = running_processes.delete(pid)
-    info "process terminated", process
-    terminate_gracefully
-    kill_all
-  rescue Errno::ECHILD
   end
 
   def running_processes
@@ -192,14 +166,6 @@ private ######################################################################
     @current_color ||= -1
     @current_color  +=  1
     @current_color >= COLORS.length ? "" : COLORS[@current_color]
-  end
-
-  def warn_deprecated_procfile!
-    return if @already_warned_deprecated
-    @already_warned_deprecated = true
-    puts "!!! This format of Procfile is deprecated, and will not work starting in v0.12"
-    puts "!!! Use a colon to separate the process name from the command"
-    puts "!!! e.g.   web: thin start"
   end
 
   def read_environment_files(filenames)
@@ -223,15 +189,6 @@ private ######################################################################
       end
       hash
     end
-  end
-
-  def terminate_gracefully
-    info "sending SIGTERM to all processes"
-    kill_all "SIGTERM"
-    Timeout.timeout(3) { Process.waitall }
-  rescue Timeout::Error
-    info "sending SIGKILL to all processes"
-    kill_all "SIGKILL"
   end
 
 end
