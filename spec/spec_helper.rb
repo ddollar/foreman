@@ -12,6 +12,10 @@ def mock_error(subject, message)
   end
 end
 
+def foreman(args)
+  Foreman::CLI.start(args.split(" "))
+end
+
 def mock_exit(&block)
   block.should raise_error(SystemExit)
 end
@@ -31,6 +35,12 @@ def write_procfile(procfile="Procfile")
     file.puts "bravo:\t./bravo"
   end
   File.expand_path(procfile)
+end
+
+def write_env(env=".env")
+  File.open(env, "w") do |file|
+    file.puts "FOO=bar"
+  end
 end
 
 def load_export_templates_into_fakefs(type)

@@ -26,6 +26,15 @@ describe "Foreman::CLI" do
   end
 
   describe "export" do
+    describe "options" do
+      it "respects --env" do
+        write_procfile
+        write_env("envfile")
+        mock.instance_of(Foreman::Export::Upstart).export("/upstart", { "env" => "envfile" })
+        foreman %{ export upstart /upstart --env envfile }
+      end
+    end
+
     describe "with a non-existent Procfile" do
       it "prints an error" do
         mock_error(subject, "Procfile does not exist.") do
