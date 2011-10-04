@@ -225,10 +225,6 @@ private ######################################################################
     end
   end
 
-  def runner
-    File.expand_path("../../../bin/foreman-runner", __FILE__)
-  end
-
   def terminate_gracefully
     info "sending SIGTERM to all processes"
     kill_all "SIGTERM"
