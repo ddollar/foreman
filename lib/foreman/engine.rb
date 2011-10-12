@@ -184,7 +184,7 @@ private ######################################################################
     return {} unless File.exists?(filename)
 
     File.read(filename).split("\n").inject({}) do |hash, line|
-      if line =~ /\A([A-Za-z_]+)=(.*)\z/
+      if line =~ /\A([A-Za-z_0-9]+)=(.*)\z/
         hash[$1] = $2
       end
       hash
