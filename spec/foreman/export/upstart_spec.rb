@@ -12,7 +12,7 @@ describe Foreman::Export::Upstart do
   before(:each) { stub(upstart).say }
 
   it "exports to the filesystem" do
-    upstart.export("/tmp/init")
+    upstart.export("/tmp/init", :concurrency => "alpha=2")
 
     File.read("/tmp/init/app.conf").should         == example_export_file("upstart/app.conf")
     File.read("/tmp/init/app-alpha.conf").should   == example_export_file("upstart/app-alpha.conf")
