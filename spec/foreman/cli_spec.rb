@@ -30,7 +30,8 @@ describe "Foreman::CLI" do
       it "respects --env" do
         write_procfile
         write_env("envfile")
-        mock.instance_of(Foreman::Export::Upstart).export("/upstart", { "env" => "envfile" })
+        exporter = mock(Foreman::Export::Upstart).export
+        mock(Foreman::Export::Upstart).new(is_a(Foreman::Engine), "/upstart", { "env" => "envfile" }) { exporter }
         foreman %{ export upstart /upstart --env envfile }
       end
     end
@@ -39,7 +40,7 @@ describe "Foreman::CLI" do
       it "prints an error" do
         mock_error(subject, "Procfile does not exist.") do
           dont_allow.instance_of(Foreman::Engine).export
-          subject.export("testapp")
+          subject.export("testapp", "/tmp/foo")
         end
       end
     end
@@ -50,7 +51,7 @@ describe "Foreman::CLI" do
       describe "with an invalid formatter" do
         it "prints an error" do
           mock_error(subject, "Unknown export format: invalidformatter.") do
-            subject.export("invalidformatter")
+            subject.export("invalidformatter", "/tmp/foo")
           end
         end
       end
@@ -60,11 +61,21 @@ describe "Foreman::CLI" do
 
         it "runs successfully" do
           dont_allow(subject).error
-          mock.instance_of(Foreman::Export::Upstart).export("/tmp/foo", {})
+          exporter = mock(Foreman::Export::Upstart).export
+          mock(Foreman::Export::Upstart).new(is_a(Foreman::Engine), "/tmp/foo", {}) { exporter }
           subject.export("upstart", "/tmp/foo")
         end
       end
-    end
+      
+      describe "for a specific process" do
+        it "runs successfully" do
+          dont_allow(subject).error
+          exporter = mock(Foreman::Export::Upstart).export("alpha")
+          mock(Foreman::Export::Upstart).new(is_a(Foreman::Engine), "/tmp/foo", {}) { exporter }
+          subject.export("upstart", "/tmp/foo", "alpha")
+        end
+      end
+    end    
   end
 
   describe "check" do

@@ -24,7 +24,7 @@ class Foreman::CLI < Thor
     end
   end
 
-  desc "export FORMAT LOCATION", "Export the application to another process management format"
+  desc "export FORMAT LOCATION [PROCESS]", "Export the application, or a specific process, to another process management format"
 
   method_option :app,         :type => :string,  :aliases => "-a"
   method_option :log,         :type => :string,  :aliases => "-l"
@@ -35,7 +35,7 @@ class Foreman::CLI < Thor
   method_option :concurrency, :type => :string,  :aliases => "-c",
     :banner => '"alpha=5,bar=3"'
 
-  def export(format, location=nil)
+  def export(format, location, process=nil)
     check_procfile!
 
     formatter = case format
@@ -44,8 +44,16 @@ class Foreman::CLI < Thor
       when "bluepill" then Foreman::Export::Bluepill
       else error "Unknown export format: #{format}."
     end
-
-    formatter.new(engine).export(location, options)
+    
+    error "Valid location needed." if location.respond_to?(:empty?) ? location.empty? : false
+    
+    formatter = formatter.new(engine, location, options)
+    
+    if process
+      formatter.export(process)
+    else
+      formatter.export
+    end
 
   rescue Foreman::Export::Exception => ex
     error ex.message

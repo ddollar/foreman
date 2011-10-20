@@ -3,10 +3,19 @@ require "foreman/utils"
 
 class Foreman::Export::Base
 
-  attr_reader :engine
+  attr_reader :engine, :location, :options, :app, :user, :log_root, :template_root, :concurrency
 
-  def initialize(engine)
-    @engine = engine
+  def initialize(engine, location, opts={})
+    @engine        = engine
+    @location      = location
+    @options       = opts
+    @app           = options[:app]  || File.basename(engine.directory)
+    @user          = options[:user] || app
+    @log_root      = options[:log]  || "/var/log/#{app}"
+    @template_root = options[:template]
+    @concurrency   = Foreman::Utils.parse_concurrency(options[:concurrency])
+
+    FileUtils.mkdir_p File.dirname(location)
   end
 
   def export
@@ -14,7 +23,6 @@ class Foreman::Export::Base
   end
 
 private ######################################################################
-
   def error(message)
     raise Foreman::Export::Exception.new(message)
   end
@@ -40,5 +48,4 @@ private ######################################################################
       file.puts contents
     end
   end
-
 end

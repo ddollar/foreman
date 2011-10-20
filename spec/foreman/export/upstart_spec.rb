@@ -5,14 +5,14 @@ require "tmpdir"
 
 describe Foreman::Export::Upstart do
   let(:procfile) { FileUtils.mkdir_p("/tmp/app"); write_procfile("/tmp/app/Procfile") }
-  let(:engine) { Foreman::Engine.new(procfile) }
-  let(:upstart) { Foreman::Export::Upstart.new(engine) }
+  let(:engine)   { Foreman::Engine.new(procfile) }
+  let(:upstart)  { Foreman::Export::Upstart.new(engine, "/tmp/init", :concurrency => "alpha=2") }
 
   before(:each) { load_export_templates_into_fakefs("upstart") }
   before(:each) { stub(upstart).say }
 
   it "exports to the filesystem" do
-    upstart.export("/tmp/init", :concurrency => "alpha=2")
+    upstart.export
 
     File.read("/tmp/init/app.conf").should         == example_export_file("upstart/app.conf")
     File.read("/tmp/init/app-alpha.conf").should   == example_export_file("upstart/app-alpha.conf")
@@ -24,6 +24,7 @@ describe Foreman::Export::Upstart do
 
   context "with alternate templates" do
     let(:template_root) { "/tmp/alternate" }
+    let(:upstart)       { Foreman::Export::Upstart.new(engine, "/tmp/init", :template => template_root) }
 
     before do
       FileUtils.mkdir_p template_root
@@ -31,25 +32,36 @@ describe Foreman::Export::Upstart do
     end
 
     it "can export with alternate template files" do
-      upstart.export("/tmp/init", :template => template_root)
+      upstart.export
 
       File.read("/tmp/init/app.conf").should == "alternate_template\n"
     end
   end
 
   context "with alternate templates from home dir" do
-    let(:default_template_root) {File.expand_path("~/.foreman/templates")}
-
+    let(:default_template_root) { File.expand_path("~/.foreman/templates") }
+    let(:upstart)               { Foreman::Export::Upstart.new(engine, "/tmp/init") }
+    
     before do
       FileUtils.mkdir_p default_template_root
       File.open("#{default_template_root}/master.conf.erb", "w") { |f| f.puts "default_alternate_template" }
     end
 
     it "can export with alternate template files" do
-      upstart.export("/tmp/init")
+      upstart.export
 
       File.read("/tmp/init/app.conf").should == "default_alternate_template\n"
     end
   end
+  
+  context "exporting a single process" do
+    it "exports to the file system" do
+      upstart.export("alpha")
 
+      File.read("/tmp/init/app.conf").should         == example_export_file("upstart/app.conf")
+      File.read("/tmp/init/app-alpha.conf").should   == example_export_file("upstart/app-alpha.conf")
+      File.read("/tmp/init/app-alpha-1.conf").should == example_export_file("upstart/app-alpha-1.conf")
+      File.read("/tmp/init/app-alpha-2.conf").should == example_export_file("upstart/app-alpha-2.conf")      
+    end
+  end
 end
