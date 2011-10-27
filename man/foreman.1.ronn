@@ -38,8 +38,13 @@ The following options control how the application is run:
 `foreman export` is used to export your application to another process
 management format.
 
-An location to export can be passed as an argument. This argument may be
-either required or optional depending on the export format.
+An location to export is passed as the first argument. 
+
+If no additional parameters are passed, foreman will export one instance of each
+type of process defined in your Procfile.
+
+If a parameter is passed, foreman will export one instance of the specified
+application type.
 
 The following options control how the application is run:
 
@@ -141,14 +146,18 @@ Start one instance of each process type, interleave the output on stdout:
 
     $ foreman start
 
+Run one process type from the application defined in a specific Procfile:
+
+    $ foreman start alpha -p ~/myapp/Procfile
+    
 Export the application in upstart format:
 
     $ foreman export upstart /etc/init
 
-Run one process type from the application defined in a specific Procfile:
+Export one process type in inittab format:
 
-    $ foreman start alpha -p ~/myapp/Procfile
-
+    $ foreman export inittab /etc/init alpha
+    
 ## COPYRIGHT
 
 Foreman is Copyright (C) 2010 David Dollar <http://daviddollar.org>
