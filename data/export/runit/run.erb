@@ -1,0 +1,3 @@
+#!/bin/sh
+cd <%= engine.directory %>
+exec chpst -u <%= user %> -e <%= process_env_directory %> <%= process.command %>
