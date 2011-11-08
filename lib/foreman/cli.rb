@@ -42,6 +42,7 @@ class Foreman::CLI < Thor
       when "inittab" then Foreman::Export::Inittab
       when "upstart" then Foreman::Export::Upstart
       when "bluepill" then Foreman::Export::Bluepill
+      when "runit"    then Foreman::Export::Runit
       else error "Unknown export format: #{format}."
     end
 

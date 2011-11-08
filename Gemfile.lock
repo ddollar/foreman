@@ -15,7 +15,7 @@ GEM
     builder (3.0.0)
     crack (0.1.8)
     diff-lcs (1.1.2)
-    fakefs (0.2.1)
+    fakefs (0.3.2)
     hpricot (0.8.2)
     mime-types (1.16)
     mustache (0.11.2)
@@ -51,7 +51,7 @@ PLATFORMS
 
 DEPENDENCIES
   aws-s3
-  fakefs (~> 0.2.1)
+  fakefs (~> 0.3.2)
   foreman!
   parka
   rake

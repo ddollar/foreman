@@ -1,0 +1,3 @@
+#!/bin/sh
+cd /tmp/app
+exec chpst -u app -e /tmp/init/app-bravo-1/env ./bravo
