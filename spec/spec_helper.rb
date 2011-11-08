@@ -28,9 +28,9 @@ def write_foreman_config(app)
   end
 end
 
-def write_procfile(procfile="Procfile")
+def write_procfile(procfile="Procfile", alpha_env="")
   File.open(procfile, "w") do |file|
-    file.puts "alpha: ./alpha"
+    file.puts "alpha: ./alpha" + " #{alpha_env}".rstrip
     file.puts "\n"
     file.puts "bravo:\t./bravo"
   end
