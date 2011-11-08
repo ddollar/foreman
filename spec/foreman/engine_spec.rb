@@ -48,6 +48,12 @@ describe "Foreman::Engine" do
       mock(subject).watch_for_termination
       subject.execute("alpha")
     end
+
+    it "shows an error running a process that doesnt exist" do
+      write_procfile
+      mock(subject).puts("ERROR: no such process: foo")
+      lambda { subject.execute("foo") }.should raise_error(SystemExit)
+    end
   end
 
   describe "environment" do

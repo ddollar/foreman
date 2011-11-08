@@ -41,6 +41,7 @@ class Foreman::Engine
   end
 
   def execute(name)
+    error "no such process: #{name}" unless procfile[name]
     fork procfile[name]
 
     trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
