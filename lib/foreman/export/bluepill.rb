@@ -23,7 +23,6 @@ class Foreman::Export::Bluepill < Foreman::Export::Base
     master_template = export_template("bluepill", "master.pill.erb", template_root)
     master_config   = ERB.new(master_template).result(binding)
     write_file "#{location}/#{app}.pill", master_config
-
   end
 
 end
