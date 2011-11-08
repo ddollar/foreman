@@ -83,6 +83,8 @@ foreman currently supports the following output formats:
 
   * inittab
 
+  * runit
+
   * upstart
 
 ## INITTAB EXPORT
