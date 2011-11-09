@@ -10,6 +10,7 @@ describe Foreman::Export::Runit do
   
   before(:each) { load_export_templates_into_fakefs("runit") }
   before(:each) { stub(runit).say }
+  before(:each) { stub(FakeFS::FileUtils).chmod }
   
   it "exports to the filesystem" do
     FileUtils.mkdir_p('/tmp/init')
