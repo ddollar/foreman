@@ -42,8 +42,9 @@ class Foreman::Engine
   end
 
   def execute(name)
-    error "no such process: #{name}" unless procfile[name]
-    fork procfile[name]
+    error "no such process: #{name}" unless process = procfile[name]
+    process.color = next_color
+    fork process
 
     trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
     trap("INT")  { puts "SIGINT received";  terminate_gracefully }
