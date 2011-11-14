@@ -6,6 +6,7 @@ rvm:
   - 1.9.3
 
 notifications:
+  email: false
   webhooks:
     on_success: always
     on_failure: always
