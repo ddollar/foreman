@@ -184,7 +184,8 @@ private ######################################################################
   def next_color
     @current_color ||= -1
     @current_color  +=  1
-    @current_color >= COLORS.length ? "" : COLORS[@current_color]
+    @current_color = 0 if COLORS.length < @current_color
+    COLORS[@current_color]
   end
 
   module Env
