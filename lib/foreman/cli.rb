@@ -7,6 +7,7 @@ require "yaml"
 class Foreman::CLI < Thor
 
   class_option :procfile, :type => :string, :aliases => "-f", :desc => "Default: Procfile"
+  class_option :app_root, :type => :string, :aliases => "-d", :desc => "Default: Procfile directory"
 
   desc "start [PROCESS]", "Start the application, or a specific process"
 

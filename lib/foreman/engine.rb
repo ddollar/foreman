@@ -21,7 +21,7 @@ class Foreman::Engine
 
   def initialize(procfile, options={})
     @procfile  = Foreman::Procfile.new(procfile)
-    @directory = File.expand_path(File.dirname(procfile))
+    @directory = options[:app_root] || File.expand_path(File.dirname(procfile))
     @options = options
     @environment = read_environment_files(options[:env])
   end
