@@ -12,7 +12,6 @@ class Foreman::Engine
 
   attr_reader :procfile
   attr_reader :directory
-  attr_reader :environment
   attr_reader :options
 
   extend Term::ANSIColor
@@ -24,6 +23,11 @@ class Foreman::Engine
     @directory = File.expand_path(File.dirname(procfile))
     @options = options
     @environment = read_environment_files(options[:env])
+  end
+
+  def self.load_env(env_file)
+    @environment = read_environment_files(env_file)
+    load_env!
   end
 
   def start
@@ -73,7 +77,7 @@ private ######################################################################
   end
 
   def fork_individual(process, num, port)
-    @environment.each { |k,v| ENV[k] = v }
+    load_env!
 
     ENV["PORT"] = port.to_s
     ENV["PS"]   = "#{process.name}.#{num}"
@@ -175,27 +179,37 @@ private ######################################################################
     @current_color >= COLORS.length ? "" : COLORS[@current_color]
   end
 
-  def read_environment_files(filenames)
-    environment = {}
+  module Env
+    attr_reader :environment
 
-    (filenames || "").split(",").map(&:strip).each do |filename|
-      error "No such file: #{filename}" unless File.exists?(filename)
-      environment.merge!(read_environment(filename))
-    end
+    def read_environment_files(filenames)
+      environment = {}
 
-    environment.merge!(read_environment(".env")) unless filenames
-    environment
-  end
-
-  def read_environment(filename)
-    return {} unless File.exists?(filename)
-
-    File.read(filename).split("\n").inject({}) do |hash, line|
-      if line =~ /\A([A-Za-z_0-9]+)=(.*)\z/
-        hash[$1] = $2
+      (filenames || "").split(",").map(&:strip).each do |filename|
+        error "No such file: #{filename}" unless File.exists?(filename)
+        environment.merge!(read_environment(filename))
       end
-      hash
+
+      environment.merge!(read_environment(".env")) unless filenames
+      environment
+    end
+
+    def read_environment(filename)
+      return {} unless File.exists?(filename)
+
+      File.read(filename).split("\n").inject({}) do |hash, line|
+        if line =~ /\A([A-Za-z_0-9]+)=(.*)\z/
+          hash[$1] = $2
+        end
+        hash
+      end
+    end
+
+    def load_env!
+      @environment.each { |k,v| ENV[k] = v }
     end
   end
 
+  include Env
+  extend  Env
 end
