@@ -166,3 +166,22 @@ end
 Dir[File.expand_path("../dist/**/*.rake", __FILE__)].each do |rake|
   import rake
 end
+
+task :changelog do
+  timestamp = Time.now.utc.strftime('%m/%d/%Y')
+  sha = `git log | head -1`.split(' ').last
+  changelog = ["#{version} #{timestamp} #{sha}"]
+  changelog << ('=' * changelog[0].length)
+  changelog << ''
+
+  last_sha = `cat Changelog | head -1`.split(' ').last
+  shortlog = `git log #{last_sha}..HEAD --pretty=format:'%s   [%an]'`
+  changelog << shortlog.split("\n")
+  changelog.concat ['', '', '']
+
+  old_changelog = File.read('Changelog')
+  File.open('Changelog', 'w') do |file|
+    file.write(changelog.join("\n"))
+    file.write(old_changelog)
+  end
+end
