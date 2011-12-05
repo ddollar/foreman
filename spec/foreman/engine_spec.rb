@@ -35,7 +35,6 @@ describe "Foreman::Engine" do
       engine = Foreman::Engine.new("Procfile",:concurrency => "alpha=2")
       mock(engine).fork_individual(engine.procfile["alpha"], 1, 5000)
       mock(engine).fork_individual(engine.procfile["alpha"], 2, 5001)
-      mock(engine).fork_individual(engine.procfile["bravo"], 1, 5100)
       mock(engine).watch_for_termination
       engine.start
     end

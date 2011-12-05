@@ -12,14 +12,23 @@ describe Foreman::Export::Upstart do
   before(:each) { stub(upstart).say }
 
   it "exports to the filesystem" do
+    upstart.export("/tmp/init")
+
+    File.read("/tmp/init/app.conf").should         == example_export_file("upstart/app.conf")
+    File.read("/tmp/init/app-alpha.conf").should   == example_export_file("upstart/app-alpha.conf")
+    File.read("/tmp/init/app-alpha-1.conf").should == example_export_file("upstart/app-alpha-1.conf")
+    File.read("/tmp/init/app-bravo.conf").should   == example_export_file("upstart/app-bravo.conf")
+    File.read("/tmp/init/app-bravo-1.conf").should == example_export_file("upstart/app-bravo-1.conf")
+  end
+
+  it "exports to the filesystem with concurrency" do
     upstart.export("/tmp/init", :concurrency => "alpha=2")
 
     File.read("/tmp/init/app.conf").should         == example_export_file("upstart/app.conf")
     File.read("/tmp/init/app-alpha.conf").should   == example_export_file("upstart/app-alpha.conf")
     File.read("/tmp/init/app-alpha-1.conf").should == example_export_file("upstart/app-alpha-1.conf")
     File.read("/tmp/init/app-alpha-2.conf").should == example_export_file("upstart/app-alpha-2.conf")
-    File.read("/tmp/init/app-bravo.conf").should   == example_export_file("upstart/app-bravo.conf")
-    File.read("/tmp/init/app-bravo-1.conf").should == example_export_file("upstart/app-bravo-1.conf")
+    File.exists?("/tmp/init/app-bravo-1.conf").should == false
   end
 
   context "with alternate templates" do
