@@ -25,9 +25,9 @@ class Foreman::Engine
     @environment = read_environment_files(options[:env])
   end
 
-  def self.load_env(env_file)
+  def self.load_env!(env_file)
     @environment = read_environment_files(env_file)
-    load_env!
+    apply_environment!
   end
 
   def start
@@ -77,7 +77,7 @@ private ######################################################################
   end
 
   def fork_individual(process, num, port)
-    load_env!
+    apply_environment!
 
     ENV["PORT"] = port.to_s
     ENV["PS"]   = "#{process.name}.#{num}"
@@ -205,7 +205,7 @@ private ######################################################################
       end
     end
 
-    def load_env!
+    def apply_environment!
       @environment.each { |k,v| ENV[k] = v }
     end
   end
