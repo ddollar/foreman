@@ -96,14 +96,23 @@ private ######################################################################
 
     begin
       Dir.chdir directory do
-        PTY.spawn(process.command) do |stdin, stdout, pid|
-          trap("SIGTERM") { Process.kill("SIGTERM", pid) }
-          until stdin.eof?
-            info stdin.gets, process
+        IO.popen(process.command, "w+") do |pipe|
+          trap("SIGTERM") do
+            Thread.new do
+              begin
+                Process.kill("SIGTERM", pipe.pid)
+                Timeout.timeout(3) { Process.waitall }
+              rescue Timeout::Error
+                Process.kill("SIGKILL", pipe.pid)
+              end
+            end
+          end
+          until pipe.eof?
+            info pipe.gets, process
           end
         end
       end
-    rescue PTY::ChildExited, Interrupt, Errno::EIO, Errno::ENOENT
+    rescue Interrupt, Errno::EIO, Errno::ENOENT
       begin
         info "process exiting", process
       rescue Interrupt
@@ -120,7 +129,7 @@ private ######################################################################
   def terminate_gracefully
     info "sending SIGTERM to all processes"
     kill_all "SIGTERM"
-    Timeout.timeout(3) { Process.waitall }
+    Timeout.timeout(5) { Process.waitall }
   rescue Timeout::Error
     info "sending SIGKILL to all processes"
     kill_all "SIGKILL"
