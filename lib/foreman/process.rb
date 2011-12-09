@@ -16,7 +16,7 @@ class Foreman::Process
   def run(pipe, basedir, environment)
     Dir.chdir(basedir) do
       with_environment(environment.merge("PORT" => port.to_s)) do
-        run_process entry.command
+        run_process entry.command, pipe
       end
     end
   end
@@ -27,7 +27,7 @@ class Foreman::Process
 
 private
 
-  def run_process(command)
+  def run_process(command, pipe)
     io = IO.popen([Foreman.runner, replace_command_env(command)], "w+")
     @pid = io.pid
     trap("SIGTERM") { "got sigterm for %d" % @pid }
