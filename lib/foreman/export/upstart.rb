@@ -26,7 +26,7 @@ class Foreman::Export::Upstart < Foreman::Export::Base
 
     process_template = export_template("upstart", "process.conf.erb", template_root)
 
-    engine.processes.each do |process|
+    engine.procfile.entries.each do |process|
       next if (conc = concurrency[process.name]) < 1
       process_master_template = export_template("upstart", "process_master.conf.erb", template_root)
       process_master_config   = ERB.new(process_master_template).result(binding)

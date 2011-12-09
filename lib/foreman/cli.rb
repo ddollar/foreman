@@ -8,20 +8,15 @@ class Foreman::CLI < Thor
 
   class_option :procfile, :type => :string, :aliases => "-f", :desc => "Default: Procfile"
 
-  desc "start [PROCESS]", "Start the application, or a specific process"
+  desc "start", "Start the application"
 
   method_option :env,         :type => :string,  :aliases => "-e", :desc => "Specify an environment file to load, defaults to .env"
   method_option :port,        :type => :numeric, :aliases => "-p"
   method_option :concurrency, :type => :string,  :aliases => "-c", :banner => '"alpha=5,bar=3"'
 
-  def start(process=nil)
+  def start
     check_procfile!
-
-    if process
-      engine.execute(process)
-    else
-      engine.start
-    end
+    engine.start
   end
 
   desc "export FORMAT LOCATION", "Export the application to another process management format"
@@ -55,8 +50,8 @@ class Foreman::CLI < Thor
   desc "check", "Validate your application's Procfile"
 
   def check
-    error "no processes defined" unless engine.processes.length > 0
-    display "valid procfile detected (#{engine.processes.map(&:name).join(', ')})"
+    error "no processes defined" unless engine.procfile.entries.length > 0
+    display "valid procfile detected (#{engine.procfile.process_names.join(', ')})"
   end
 
 private ######################################################################

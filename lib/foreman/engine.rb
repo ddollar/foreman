@@ -57,16 +57,19 @@ private ######################################################################
 
     procfile.entries.each do |entry|
       reader, writer = IO.pipe
-      entry.spawn(concurrency[entry.name], writer, @directory, @environment).each do |process|
+      entry.spawn(concurrency[entry.name], writer, @directory, @environment, base_port).each do |process|
         running_processes[process.pid] = process
         readers[process] = reader
       end
     end
   end
 
+  def base_port
+    options[:port] || 5000
+  end
+
   def kill_all(signal="SIGTERM")
     running_processes.each do |pid, process|
-      p [:killing, pid]
       Process.kill(signal, pid) rescue Errno::ESRCH
     end
   end

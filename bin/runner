@@ -1,5 +1,2 @@
 #!/bin/sh
-
-echo "command[$*][$1]"
-
 exec $1 2>&1

@@ -12,7 +12,7 @@ class Foreman::Export::Inittab < Foreman::Export::Base
     inittab = []
     inittab << "# ----- foreman #{app} processes -----"
 
-    engine.processes.inject(1) do |index, process|
+    engine.procfile.entries.inject(1) do |index, process|
       1.upto(concurrency[process.name]) do |num|
         id = app.slice(0, 2).upcase + sprintf("%02d", index)
         port = engine.port_for(process, num, options[:port])

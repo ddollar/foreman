@@ -3,7 +3,7 @@ Bluepill.application("<%= app %>", :foreground => false, :log_file => "/var/log/
   app.uid = "<%= user %>"
   app.gid = "<%= user %>"
 
-<% engine.processes.each do |process| %>
+<% engine.procfile.entries.each do |process| %>
 <% 1.upto(concurrency[process.name]) do |num| %>
 <% port = engine.port_for(process, num, options[:port]) %>
   app.process("<%= process.name %>-<%=num%>") do |process|
@@ -19,7 +19,7 @@ Bluepill.application("<%= app %>", :foreground => false, :log_file => "/var/log/
     process.monitor_children do |children|
       children.stop_command "kill -QUIT {{PID}}"
     end
-    
+
     process.group = "<%= app %>-<%= process.name %>"
   end
 <% end %>
