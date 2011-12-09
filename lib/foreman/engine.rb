@@ -23,6 +23,7 @@ class Foreman::Engine
     @directory = File.expand_path(File.dirname(procfile))
     @options = options
     @environment = read_environment_files(options[:env])
+    @output_mutex = Mutex.new
   end
 
   def self.load_env!(env_file)
@@ -32,32 +33,15 @@ class Foreman::Engine
 
   def start
     proctitle "ruby: foreman master"
-    termtitle "#{File.basename(@directory)} - foreman (#{processes.size} processes)"
-
-    processes.each do |process|
-      process.color = next_color
-      fork process
-    end
+    termtitle "#{File.basename(@directory)} - foreman"
 
     trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
     trap("INT")  { puts "SIGINT received";  terminate_gracefully }
 
+    assign_colors
+    spawn_processes
+    watch_for_output
     watch_for_termination
-  end
-
-  def execute(name)
-    error "no such process: #{name}" unless process = procfile[name]
-    process.color = next_color
-    fork process
-
-    trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
-    trap("INT")  { puts "SIGINT received";  terminate_gracefully }
-
-    watch_for_termination
-  end
-
-  def processes
-    procfile.processes
   end
 
   def port_for(process, num, base_port=nil)
@@ -68,60 +52,22 @@ class Foreman::Engine
 
 private ######################################################################
 
-  def fork(process)
+  def spawn_processes
     concurrency = Foreman::Utils.parse_concurrency(@options[:concurrency])
 
-    1.upto(concurrency[process.name]) do |num|
-      fork_individual(process, num, port_for(process, num, @options[:port]))
-    end
-  end
-
-  def fork_individual(process, num, port)
-    apply_environment!
-
-    ENV["PORT"] = port.to_s
-    ENV["PS"]   = "#{process.name}.#{num}"
-
-    pid = Process.fork do
-      run(process)
-    end
-
-    info "started with pid #{pid}", process
-    running_processes[pid] = process
-  end
-
-  def run(process)
-    proctitle "ruby: foreman #{process.name}"
-    trap("SIGINT", "IGNORE")
-
-    begin
-      Dir.chdir directory do
-        IO.popen(process.command, "w+") do |pipe|
-          trap("SIGTERM") do
-            Thread.new do
-              begin
-                Process.kill("SIGTERM", pipe.pid)
-                Timeout.timeout(3) { Process.waitall }
-              rescue Timeout::Error
-                Process.kill("SIGKILL", pipe.pid)
-              end
-            end
-          end
-          until pipe.eof?
-            info pipe.gets, process
-          end
-        end
-      end
-    rescue Interrupt, Errno::EIO, Errno::ENOENT
-      begin
-        info "process exiting", process
-      rescue Interrupt
+    procfile.entries.each do |entry|
+      reader, writer = IO.pipe
+      entry.spawn(concurrency[entry.name], writer, @directory, @environment).each do |process|
+        running_processes[process.pid] = process
+        readers[process] = reader
       end
     end
   end
 
   def kill_all(signal="SIGTERM")
+    p [:ff]
     running_processes.each do |pid, process|
+      p [:pid, pid]
       Process.kill(signal, pid) rescue Errno::ESRCH
     end
   end
@@ -135,21 +81,51 @@ private ######################################################################
     kill_all "SIGKILL"
   end
 
+  def watch_for_output
+    Thread.new do
+      begin
+        loop do
+          rs, ws = IO.select(readers.values, [], [], 1)
+          (rs || []).each do |r|
+            ps, message = r.gets.split(",", 2)
+            color = colors[ps.split(".").first]
+            info message, ps, color
+          end
+        end
+      rescue Exception => ex
+        puts ex.message
+        puts ex.backtrace
+      end
+    end
+  end
+
   def watch_for_termination
     pid, status = Process.wait2
     process = running_processes.delete(pid)
-    info "process terminated", process
+    info "process terminated", process.name
     terminate_gracefully
     kill_all
   rescue Errno::ECHILD
   end
 
-  def info(message, process=nil)
-    print process.color if process
-    print "#{Time.now.strftime("%H:%M:%S")} #{pad_process_name(process)} | "
+  def info(message, name="system", color=Term::ANSIColor.white)
+    print color
+    print "#{Time.now.strftime("%H:%M:%S")} #{pad_process_name(name)} | "
     print Term::ANSIColor.reset
     print message.chomp
     puts
+  end
+
+  def print(message=nil)
+    @output_mutex.synchronize do
+      $stdout.print message
+    end
+  end
+
+  def puts(message=nil)
+    @output_mutex.synchronize do
+      $stdout.puts message
+    end
   end
 
   def error(message)
@@ -165,9 +141,8 @@ private ######################################################################
     end
   end
 
-  def pad_process_name(process)
-    name = process ? "#{ENV["PS"]}" : "system"
-    name.ljust(longest_process_name + 3) # add 3 for process number padding
+  def pad_process_name(name="system")
+    name.to_s.ljust(longest_process_name + 3) # add 3 for process number padding
   end
 
   def proctitle(title)
@@ -180,6 +155,24 @@ private ######################################################################
 
   def running_processes
     @running_processes ||= {}
+  end
+
+  def readers
+    @readers ||= {}
+  end
+
+  def colors
+    @colors ||= {}
+  end
+
+  def assign_colors
+    procfile.entries.each do |entry|
+      colors[entry.name] = next_color
+    end
+  end
+
+  def process_by_reader(reader)
+    readers.invert[reader]
   end
 
   def next_color
