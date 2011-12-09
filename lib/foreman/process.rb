@@ -14,8 +14,9 @@ class Foreman::Process
   def run(pipe, basedir, environment)
     Dir.chdir(basedir) do
       with_environment(environment) do
-        io = IO.popen("#{entry.command} $FOO 2>&1", "w+")
+        io = IO.popen(["/Users/david/Code/foreman/bin/runner", "#{entry.command}"], "w+")
         @pid = io.pid
+        trap("SIGTERM") { "got sigterm for %d" % @pid }
         output pipe, "started with pid %d" % @pid
         Thread.new do
           until io.eof?
@@ -34,6 +35,9 @@ private
 
   def output(pipe, message)
     pipe.puts "%s,%s" % [ name, message ]
+  end
+
+  def replace_command
   end
 
   def with_environment(environment)
