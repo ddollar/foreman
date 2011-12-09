@@ -65,9 +65,8 @@ private ######################################################################
   end
 
   def kill_all(signal="SIGTERM")
-    p [:ff]
     running_processes.each do |pid, process|
-      p [:pid, pid]
+      p [:killing, pid]
       Process.kill(signal, pid) rescue Errno::ESRCH
     end
   end

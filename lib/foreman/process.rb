@@ -14,9 +14,9 @@ class Foreman::Process
   def run(pipe, basedir, environment)
     Dir.chdir(basedir) do
       with_environment(environment) do
-        io = IO.popen("#{entry.command} 2>&1", "w+")
+        io = IO.popen("#{entry.command} $FOO 2>&1", "w+")
         @pid = io.pid
-        output pipe, "started with pid %d"
+        output pipe, "started with pid %d" % @pid
         Thread.new do
           until io.eof?
             output pipe, io.gets
