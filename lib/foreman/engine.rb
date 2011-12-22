@@ -115,7 +115,7 @@ private ######################################################################
     print "#{Time.now.strftime("%H:%M:%S")} #{pad_process_name(name)} | "
     print Term::ANSIColor.reset
     print message.chomp
-    puts
+    puts ""
   end
 
   def print(message=nil)

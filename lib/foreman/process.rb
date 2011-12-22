@@ -27,9 +27,21 @@ class Foreman::Process
 
 private
 
+  def fork_with_io(command)
+    io = case RUBY_VERSION
+    when /^1\.9\./
+      IO.popen([Foreman.runner, replace_command_env(command)], "w+")
+    when /^1\.8\./
+      full_command = replace_command_env(command).gsub("'", "\\'")
+      IO.popen("#{Foreman.runner} '#{full_command}'", "w+")
+    else
+      raise "Unknown Ruby version: #{RUBY_VERSION}"
+    end
+    [ io, io.pid ]
+  end
+
   def run_process(command, pipe)
-    io = IO.popen([Foreman.runner, replace_command_env(command)], "w+")
-    @pid = io.pid
+    io, @pid = fork_with_io(command)
     trap("SIGTERM") { "got sigterm for %d" % @pid }
     output pipe, "started with pid %d" % @pid
     Thread.new do
