@@ -7,6 +7,7 @@ require "tempfile"
 require "timeout"
 require "term/ansicolor"
 require "fileutils"
+require "thread"
 
 class Foreman::Engine
 
