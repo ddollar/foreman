@@ -46,10 +46,14 @@ describe Foreman::Export::Upstart do
     end
 
     it "can export with alternate template files" do
+      Dir.chdir("/tmp")
+
       upstart.export("/tmp/init")
 
       File.read("/tmp/init/app.conf").should == "default_alternate_template\n"
     end
+
+
   end
 
 end
