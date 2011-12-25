@@ -58,7 +58,7 @@ private ######################################################################
 
     procfile.entries.each do |entry|
       reader, writer = IO.pipe
-      entry.spawn(concurrency[entry.name], writer, @directory, @environment, base_port).each do |process|
+      entry.spawn(concurrency[entry.name], writer, @directory, @environment, port_for(entry, 1, base_port)).each do |process|
         running_processes[process.pid] = process
         readers[process] = reader
       end
