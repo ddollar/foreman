@@ -89,5 +89,54 @@ describe "Foreman::CLI" do
       end
     end
   end
+  
+  describe "exec" do
+    describe "with a valid Procfile" do
+      before { write_procfile }
+
+      describe "and a command" do
+        let(:command) { ["ls", "-l"] }
+        
+        before(:each) do
+          stub(Kernel).exec
+        end
+        
+        it "should load the environment file" do
+          write_env
+          preserving_env do
+            subject.exec *command
+            ENV["FOO"].should == "bar"
+          end
+          
+          ENV["FOO"].should be_nil
+        end
+        
+        it "should execute the command as a string" do
+          mock(Kernel).exec(command.join(" "))
+          subject.exec *command
+        end
+      end
+      
+      describe "and a non-existent command" do
+        let(:command) { "iuhtngrglhulhdfg" }
+        
+        it "should print an error" do
+          mock_error(subject, "command not found: #{command}") do
+            subject.exec command
+          end
+        end
+      end
+      
+      describe "and a non-executable command" do
+        let(:command) { __FILE__ }
+        
+        it "should print an error" do
+          mock_error(subject, "not executable: #{command}") do
+            subject.exec command
+          end
+        end
+      end
+    end
+  end
 
 end

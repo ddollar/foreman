@@ -53,7 +53,18 @@ class Foreman::CLI < Thor
     error "no processes defined" unless engine.procfile.entries.length > 0
     display "valid procfile detected (#{engine.procfile.process_names.join(', ')})"
   end
+  
+  desc "exec COMMAND", "Run a command using your application's environment"
 
+  def exec(*args)
+    engine.apply_environment!
+    Kernel.exec args.join(" ")
+  rescue Errno::EACCES
+    error "not executable: #{args.first}"
+  rescue Errno::ENOENT
+    error "command not found: #{args.first}"
+  end
+  
 private ######################################################################
 
   def check_procfile!
