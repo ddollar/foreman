@@ -28,16 +28,14 @@ class Foreman::Process
 private
 
   def fork_with_io(command)
-    io = case RUBY_VERSION
-    when /^1\.9\./
-      IO.popen([Foreman.runner, replace_command_env(command)], "w+")
-    when /^1\.8\./
-      full_command = replace_command_env(command).gsub("'", "\\'")
-      IO.popen("#{Foreman.runner} '#{full_command}'", "w+")
-    else
-      raise "Unknown Ruby version: #{RUBY_VERSION}"
+    reader, writer = IO.pipe
+    pid = fork do
+      trap("INT", "IGNORE")
+      $stdout.reopen writer
+      reader.close
+      exec Foreman.runner, replace_command_env(command)
     end
-    [ io, io.pid ]
+    [ reader, pid ]
   end
 
   def run_process(command, pipe)
