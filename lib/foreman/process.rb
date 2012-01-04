@@ -42,7 +42,6 @@ private
 
   def run_process(command, pipe)
     io, @pid = fork_with_io(command)
-    trap("SIGTERM") { "got sigterm for %d" % @pid }
     output pipe, "started with pid %d" % @pid
     Thread.new do
       until io.eof?
