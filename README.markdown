@@ -20,7 +20,8 @@ http://blog.daviddollar.org/2011/05/06/introducing-foreman.html
 
 ## Manual
 
-See the [man page](http://ddollar.github.com/foreman) for usage.
+* [man page](http://ddollar.github.com/foreman)
+* [wiki](http://github.com/ddollar/foreman/wiki)
 
 ## Authorship
 
