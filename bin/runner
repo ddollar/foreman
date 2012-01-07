@@ -1,2 +1,2 @@
-#!/bin/sh
-eval "$1" 2>&1
+#!/usr/bin/env ruby
+exec "#{ARGV.first} 2>&1"
