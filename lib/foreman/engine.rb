@@ -73,7 +73,6 @@ private ######################################################################
     running_processes.each do |pid, process|
       info "sending #{signal} to pid #{pid}"
       kill(signal, -pid) or kill(signal, pid)
-      Process.kill(signal, pid) rescue Errno::ESRCH
     end
   end
 
