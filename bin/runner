@@ -1,2 +1,2 @@
 #!/usr/bin/env ruby
-exec "#{ARGV.first} 2>&1"
+exec "#{ARGV.join(' ')} 2>&1"
