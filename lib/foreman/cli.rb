@@ -5,7 +5,9 @@ require "thor"
 require "yaml"
 
 class Foreman::CLI < Thor
+  
   class_option :procfile, :type => :string, :aliases => "-f", :desc => "Default: Procfile"
+  
   desc "start", "Start the application"
 
   method_option :env,         :type => :string,  :aliases => "-e", :desc => "Specify an environment file to load, defaults to .env"
