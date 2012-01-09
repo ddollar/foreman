@@ -63,6 +63,16 @@ def example_export_file(filename)
   data
 end
 
+def preserving_env
+  old_env = ENV.to_hash
+  begin
+    yield
+  ensure
+    ENV.clear
+    ENV.update(old_env)
+  end
+end
+
 RSpec.configure do |config|
   config.color_enabled = true
   config.include FakeFS::SpecHelpers
