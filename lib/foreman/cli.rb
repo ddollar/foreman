@@ -5,15 +5,21 @@ require "thor"
 require "yaml"
 
 class Foreman::CLI < Thor
-
   class_option :procfile, :type => :string, :aliases => "-f", :desc => "Default: Procfile"
-
   desc "start", "Start the application"
 
   method_option :env,         :type => :string,  :aliases => "-e", :desc => "Specify an environment file to load, defaults to .env"
   method_option :port,        :type => :numeric, :aliases => "-p"
   method_option :concurrency, :type => :string,  :aliases => "-c", :banner => '"alpha=5,bar=3"'
 
+  class << self
+    # Hackery. Take the run method away from Thor so that we can redefine it.
+    def is_thor_reserved_word?(word, type)
+      return false if word == 'run'
+      super
+    end
+  end
+  
   def start
     check_procfile!
     engine.start
@@ -54,15 +60,17 @@ class Foreman::CLI < Thor
     display "valid procfile detected (#{engine.procfile.process_names.join(', ')})"
   end
   
-  desc "exec COMMAND", "Run a command using your application's environment"
+  desc "run COMMAND", "Run a command using your application's environment"
 
-  def exec(*args)
+  def run(*args)
     engine.apply_environment!
-    Kernel.exec args.join(" ")
-  rescue Errno::EACCES
-    error "not executable: #{args.first}"
-  rescue Errno::ENOENT
-    error "command not found: #{args.first}"
+    begin
+      exec args.join(" ")
+    rescue Errno::EACCES
+      error "not executable: #{args.first}"
+    rescue Errno::ENOENT
+      error "command not found: #{args.first}"
+    end
   end
   
 private ######################################################################
@@ -98,5 +106,4 @@ private ######################################################################
     defaults = YAML::load_file(".foreman") || {}
     Thor::CoreExt::HashWithIndifferentAccess.new(defaults.merge(original_options))
   end
-
 end
