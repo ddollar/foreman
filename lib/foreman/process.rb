@@ -30,11 +30,13 @@ private
   def fork_with_io(command)
     reader, writer = IO.pipe
     pid = fork do
+      Process.setpgrp
       trap("INT", "IGNORE")
       $stdout.reopen writer
       reader.close
       exec Foreman.runner, replace_command_env(command)
     end
+    Process.detach pid
     [ reader, pid ]
   end
 
