@@ -66,6 +66,10 @@ The following options control how the application is run:
 
 These options control all modes of foreman's operation.
 
+  * `-d`, `--directory`:
+    Specify an alternate application root. This defaults to the directory
+    containing the Procfile.
+
   * `-e`, `--env`:
     Specify an alternate environment file. You can specify more than one
     file by using: `--env file1,file2`.
