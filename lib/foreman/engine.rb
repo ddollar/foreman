@@ -17,7 +17,9 @@ class Foreman::Engine
 
   extend Term::ANSIColor
 
-  COLORS = [ cyan, yellow, green, magenta, red ]
+  COLORS = [ cyan, yellow, green, magenta, red, blue,
+             intense_cyan, intense_yellow, intense_green, intense_magenta,
+             intense_red, intense_blue ]
 
   def initialize(procfile, options={})
     @procfile  = Foreman::Procfile.new(procfile)
