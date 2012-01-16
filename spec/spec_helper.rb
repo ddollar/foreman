@@ -75,6 +75,7 @@ end
 
 RSpec.configure do |config|
   config.color_enabled = true
+  config.order = 'rand'
   config.include FakeFS::SpecHelpers
   config.mock_with :rr
 end
