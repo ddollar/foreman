@@ -30,7 +30,7 @@ class Foreman::Export::Runit < Foreman::Export::Base
         run = ERB.new(run_template).result(binding)
         write_file "#{process_directory}/run", run
         FileUtils.chmod 0755, "#{process_directory}/run"
-        
+
         port = engine.port_for(process, num, options[:port])
         environment_variables = {'PORT' => port}.
             merge(engine.environment).
@@ -42,7 +42,7 @@ class Foreman::Export::Runit < Foreman::Export::Base
 
         log_run = ERB.new(log_run_template).result(binding)
         write_file "#{process_log_directory}/run", log_run
-        FileUtils.chmod 0755, "#{process_log_directory}/run"        
+        FileUtils.chmod 0755, "#{process_log_directory}/run"
       end
     end
 
