@@ -19,26 +19,29 @@ Bluepill.application("app", :foreground => false, :log_file => "/var/log/bluepil
     process.monitor_children do |children|
       children.stop_command "kill -QUIT {{PID}}"
     end
-
+    
     process.group = "app-alpha"
   end
 
-  app.process("bravo-1") do |process|
-    process.start_command = "./bravo"
+
+  app.process("alpha-2") do |process|
+    process.start_command = "./alpha"
 
     process.working_dir = "/tmp/app"
     process.daemonize = true
-    process.environment = {"PORT" => "5100"}
+    process.environment = {"PORT" => "5001"}
     process.stop_signals = [:quit, 30.seconds, :term, 5.seconds, :kill]
 
-    process.stdout = process.stderr = "/var/log/app/app-bravo-1.log"
+    process.stdout = process.stderr = "/var/log/app/app-alpha-2.log"
 
     process.monitor_children do |children|
       children.stop_command "kill -QUIT {{PID}}"
     end
-
-    process.group = "app-bravo"
+    
+    process.group = "app-alpha"
   end
+
+
 
 
 end
