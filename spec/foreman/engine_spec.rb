@@ -35,7 +35,7 @@ describe "Foreman::Engine" do
       write_procfile
       engine = Foreman::Engine.new("Procfile",:concurrency => "alpha=2")
       mock.instance_of(Foreman::Process).run_process("./alpha", is_a(IO)).twice
-      mock.instance_of(Foreman::Process).run_process("./bravo", is_a(IO))
+      mock.instance_of(Foreman::Process).run_process("./bravo", is_a(IO)).never
       mock(engine).watch_for_output
       mock(engine).watch_for_termination
       engine.start

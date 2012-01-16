@@ -73,6 +73,10 @@ def preserving_env
   end
 end
 
+def normalize_space(s)
+  s.gsub(/\n[\n\s]*/, "\n")
+end
+  
 RSpec.configure do |config|
   config.color_enabled = true
   config.order = 'rand'

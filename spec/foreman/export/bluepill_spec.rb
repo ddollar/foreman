@@ -12,8 +12,13 @@ describe Foreman::Export::Bluepill do
   before(:each) { stub(bluepill).say }
 
   it "exports to the filesystem" do
-    bluepill.export("/tmp/init", :concurrency => "alpha=2")
-    File.read("/tmp/init/app.pill").should == example_export_file("bluepill/app.pill")
+    bluepill.export("/tmp/init")
+    normalize_space(File.read("/tmp/init/app.pill")).should == normalize_space(example_export_file("bluepill/app.pill"))
   end
 
+  it "exports to the filesystem with concurrency" do
+    bluepill.export("/tmp/init", :concurrency => "alpha=2")
+    
+    normalize_space(File.read("/tmp/init/app.pill")).should == normalize_space(example_export_file("bluepill/app-concurrency.pill"))
+  end
 end
