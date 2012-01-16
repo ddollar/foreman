@@ -5,7 +5,9 @@ require "thor"
 require "yaml"
 
 class Foreman::CLI < Thor
-  
+
+  desc "start", "Start the application"
+
   class_option :procfile, :type => :string, :aliases => "-f", :desc => "Default: Procfile"
   class_option :app_root, :type => :string, :aliases => "-d", :desc => "Default: Procfile directory"
 
@@ -20,7 +22,7 @@ class Foreman::CLI < Thor
       super
     end
   end
-  
+
   def start
     check_procfile!
     engine.start
@@ -60,7 +62,7 @@ class Foreman::CLI < Thor
     error "no processes defined" unless engine.procfile.entries.length > 0
     display "valid procfile detected (#{engine.procfile.process_names.join(', ')})"
   end
-  
+
   desc "run COMMAND", "Run a command using your application's environment"
 
   def run(*args)
@@ -73,7 +75,7 @@ class Foreman::CLI < Thor
       error "command not found: #{args.first}"
     end
   end
-  
+
 private ######################################################################
 
   def check_procfile!
