@@ -38,11 +38,17 @@ describe Foreman::Export::Upstart do
   end
 
   context "with alternate templates from home dir" do
-    let(:default_template_root) {File.expand_path("~/.foreman/templates")}
+    let(:default_template_root) {File.expand_path("#{ENV['HOME']}/.foreman/templates")}
 
     before do
+      ENV['_FOREMAN_SPEC_HOME'] = ENV['HOME']
+      ENV['HOME'] = "/home/appuser"
       FileUtils.mkdir_p default_template_root
       File.open("#{default_template_root}/master.conf.erb", "w") { |f| f.puts "default_alternate_template" }
+    end
+
+    after do
+      ENV['HOME'] = ENV.delete('_FOREMAN_SPEC_HOME')
     end
 
     it "can export with alternate template files" do
