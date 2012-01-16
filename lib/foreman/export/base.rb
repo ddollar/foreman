@@ -3,10 +3,16 @@ require "foreman/utils"
 
 class Foreman::Export::Base
 
-  attr_reader :engine
+  attr_reader :engine, :app, :log, :port, :user, :template, :concurrency
 
-  def initialize(engine)
-    @engine = engine
+  def initialize(engine, options={})
+    @engine      = engine
+    @app         = options[:app]
+    @log         = options[:log]
+    @port        = options[:port]
+    @user        = options[:user]
+    @template    = options[:template]
+    @concurrency = Foreman::Utils.parse_concurrency(options[:concurrency])
   end
 
   def export

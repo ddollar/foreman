@@ -3,19 +3,17 @@ require "foreman/export"
 class Foreman::Export::Inittab < Foreman::Export::Base
 
   def export(fname=nil, options={})
-    app = options[:app] || File.basename(engine.directory)
-    user = options[:user] || app
-    log_root = options[:log] || "/var/log/#{app}"
-
-    concurrency = Foreman::Utils.parse_concurrency(options[:concurrency])
+    app = self.app || File.basename(engine.directory)
+    user = self.user || app
+    log_root = self.log || "/var/log/#{app}"
 
     inittab = []
     inittab << "# ----- foreman #{app} processes -----"
 
     engine.procfile.entries.inject(1) do |index, process|
-      1.upto(concurrency[process.name]) do |num|
+      1.upto(self.concurrency[process.name]) do |num|
         id = app.slice(0, 2).upcase + sprintf("%02d", index)
-        port = engine.port_for(process, num, options[:port])
+        port = engine.port_for(process, num, self.port)
         inittab << "#{id}:4:respawn:/bin/su - #{user} -c 'PORT=#{port} #{process.command} >> #{log_root}/#{process.name}-#{num}.log 2>&1'"
         index += 1
       end

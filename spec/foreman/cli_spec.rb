@@ -30,7 +30,9 @@ describe "Foreman::CLI", :fakefs do
       it "respects --env" do
         write_procfile
         write_env("envfile")
-        mock.instance_of(Foreman::Export::Upstart).export("/upstart", { "env" => "envfile" })
+        mock_export = mock(Foreman::Export::Upstart)
+        mock(Foreman::Export::Upstart).new(is_a(Foreman::Engine), { "env" => "envfile" }) { mock_export }
+        mock_export.export("/upstart")
         foreman %{ export upstart /upstart --env envfile }
       end
     end
@@ -60,7 +62,9 @@ describe "Foreman::CLI", :fakefs do
 
         it "runs successfully" do
           dont_allow(subject).error
-          mock.instance_of(Foreman::Export::Upstart).export("/tmp/foo", {})
+          mock_export = mock(Foreman::Export::Upstart)
+          mock(Foreman::Export::Upstart).new(is_a(Foreman::Engine), {}) { mock_export }
+          mock_export.export("/tmp/foo")
           subject.export("upstart", "/tmp/foo")
         end
       end

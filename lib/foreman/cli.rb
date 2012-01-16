@@ -49,7 +49,7 @@ class Foreman::CLI < Thor
     classy_format = classify(format)
     formatter     = constantize("Foreman::Export::#{ classy_format }")
 
-    formatter.new(engine).export(location, options)
+    formatter.new(engine, options).export(location)
 
   rescue NameError => ex
     error "Unknown export format: #{format}."

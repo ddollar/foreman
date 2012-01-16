@@ -6,7 +6,7 @@ require "tmpdir"
 describe Foreman::Export::Upstart, :fakefs do
   let(:procfile) { FileUtils.mkdir_p("/tmp/app"); write_procfile("/tmp/app/Procfile") }
   let(:engine) { Foreman::Engine.new(procfile) }
-  let(:upstart) { Foreman::Export::Upstart.new(engine) }
+  let(:upstart) { Foreman::Export::Upstart.new(engine, :concurrency => "alpha=2") }
 
   before(:each) { load_export_templates_into_fakefs("upstart") }
   before(:each) { stub(upstart).say }
@@ -33,6 +33,7 @@ describe Foreman::Export::Upstart, :fakefs do
 
   context "with alternate templates" do
     let(:template_root) { "/tmp/alternate" }
+    let(:upstart) { Foreman::Export::Upstart.new(engine, :template => template_root) }
 
     before do
       FileUtils.mkdir_p template_root
@@ -40,7 +41,7 @@ describe Foreman::Export::Upstart, :fakefs do
     end
 
     it "can export with alternate template files" do
-      upstart.export("/tmp/init", :template => template_root)
+      upstart.export("/tmp/init")
 
       File.read("/tmp/init/app.conf").should == "alternate_template\n"
     end

@@ -6,7 +6,7 @@ require "tmpdir"
 describe Foreman::Export::Bluepill, :fakefs do
   let(:procfile) { FileUtils.mkdir_p("/tmp/app"); write_procfile("/tmp/app/Procfile") }
   let(:engine) { Foreman::Engine.new(procfile) }
-  let(:bluepill) { Foreman::Export::Bluepill.new(engine) }
+  let(:bluepill) { Foreman::Export::Bluepill.new(engine, :concurrency => "alpha=2") }
 
   before(:each) { load_export_templates_into_fakefs("bluepill") }
   before(:each) { stub(bluepill).say }
