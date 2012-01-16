@@ -14,7 +14,7 @@ describe Foreman::Export::Runit do
   
   it "exports to the filesystem" do
     FileUtils.mkdir_p('/tmp/init')
-    runit.export('/tmp/init', :concurrency => 'alpha=2')
+    runit.export('/tmp/init', :concurrency => "alpha=2,bravo=1")
     
     File.read("/tmp/init/app-alpha-1/run").should == example_export_file('runit/app-alpha-1-run')
     File.read("/tmp/init/app-alpha-1/log/run").should == 
