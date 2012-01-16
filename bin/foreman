@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
+
 $:.unshift File.expand_path("../../lib", __FILE__)
 
 require "foreman/cli"
