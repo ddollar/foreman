@@ -46,14 +46,14 @@ class Foreman::CLI < Thor
   def export(format, location=nil)
     check_procfile!
 
-    classy_format = classify(format)
-    formatter     = constantize("Foreman::Export::#{ classy_format }")
+    begin
+      classy_format = classify(format)
+      formatter     = constantize("Foreman::Export::#{ classy_format }")
+    rescue NameError => ex
+      error "Unknown export format: #{format} (no class Foreman::Export::#{ classy_format })."
+    end
 
     formatter.new(engine, options).export(location)
-
-  rescue NameError => ex
-    error "Unknown export format: #{format}."
-    raise ex
   rescue Foreman::Export::Exception => ex
     error ex.message
   end
