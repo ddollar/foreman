@@ -51,7 +51,7 @@ describe "Foreman::CLI", :fakefs do
 
       describe "with an invalid formatter" do
         it "prints an error" do
-          mock_error(subject, "Unknown export format: invalidformatter.") do
+          mock_error(subject, "Unknown export format: invalidformatter (unable to load file 'foreman/export/invalidformatter').") do
             subject.export("invalidformatter")
           end
         end

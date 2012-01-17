@@ -47,10 +47,13 @@ class Foreman::CLI < Thor
     check_procfile!
 
     begin
+      require "foreman/export/#{ format.tr('-', '_') }"
       classy_format = classify(format)
       formatter     = constantize("Foreman::Export::#{ classy_format }")
     rescue NameError => ex
       error "Unknown export format: #{format} (no class Foreman::Export::#{ classy_format })."
+    rescue LoadError => ex
+      error "Unknown export format: #{format} (unable to load file 'foreman/export/#{ format.tr('-', '_') }')."
     end
 
     formatter.new(engine, options).export(location)
