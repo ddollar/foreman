@@ -3,7 +3,7 @@ require "foreman/export"
 
 class Foreman::Export::Bluepill < Foreman::Export::Base
 
-  def export(location, options={})
+  def export
     error("Must specify a location") unless location
 
     FileUtils.mkdir_p location

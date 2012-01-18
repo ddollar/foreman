@@ -2,7 +2,7 @@ require "foreman/export"
 
 class Foreman::Export::Inittab < Foreman::Export::Base
 
-  def export(fname=nil, options={})
+  def export
     app = self.app || File.basename(engine.directory)
     user = self.user || app
     log_root = self.log || "/var/log/#{app}"

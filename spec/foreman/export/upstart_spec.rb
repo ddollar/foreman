@@ -5,14 +5,15 @@ require "tmpdir"
 
 describe Foreman::Export::Upstart, :fakefs do
   let(:procfile) { FileUtils.mkdir_p("/tmp/app"); write_procfile("/tmp/app/Procfile") }
-  let(:engine) { Foreman::Engine.new(procfile) }
-  let(:upstart) { Foreman::Export::Upstart.new(engine, :concurrency => "alpha=2") }
+  let(:engine)   { Foreman::Engine.new(procfile) }
+  let(:options)  { Hash.new }
+  let(:upstart)  { Foreman::Export::Upstart.new("/tmp/init", engine, options) }
 
   before(:each) { load_export_templates_into_fakefs("upstart") }
   before(:each) { stub(upstart).say }
 
   it "exports to the filesystem" do
-    upstart.export("/tmp/init")
+    upstart.export
 
     File.read("/tmp/init/app.conf").should         == example_export_file("upstart/app.conf")
     File.read("/tmp/init/app-alpha.conf").should   == example_export_file("upstart/app-alpha.conf")
@@ -21,19 +22,23 @@ describe Foreman::Export::Upstart, :fakefs do
     File.read("/tmp/init/app-bravo-1.conf").should == example_export_file("upstart/app-bravo-1.conf")
   end
 
-  it "exports to the filesystem with concurrency" do
-    upstart.export("/tmp/init", :concurrency => "alpha=2")
+  context "with concurrency" do
+    let(:options) { Hash[:concurrency => "alpha=2"] }
 
-    File.read("/tmp/init/app.conf").should         == example_export_file("upstart/app.conf")
-    File.read("/tmp/init/app-alpha.conf").should   == example_export_file("upstart/app-alpha.conf")
-    File.read("/tmp/init/app-alpha-1.conf").should == example_export_file("upstart/app-alpha-1.conf")
-    File.read("/tmp/init/app-alpha-2.conf").should == example_export_file("upstart/app-alpha-2.conf")
-    File.exists?("/tmp/init/app-bravo-1.conf").should == false
+    it "exports to the filesystem with concurrency" do
+      upstart.export
+
+      File.read("/tmp/init/app.conf").should            == example_export_file("upstart/app.conf")
+      File.read("/tmp/init/app-alpha.conf").should      == example_export_file("upstart/app-alpha.conf")
+      File.read("/tmp/init/app-alpha-1.conf").should    == example_export_file("upstart/app-alpha-1.conf")
+      File.read("/tmp/init/app-alpha-2.conf").should    == example_export_file("upstart/app-alpha-2.conf")
+      File.exists?("/tmp/init/app-bravo-1.conf").should == false
+    end
   end
 
   context "with alternate templates" do
     let(:template_root) { "/tmp/alternate" }
-    let(:upstart) { Foreman::Export::Upstart.new(engine, :template => template_root) }
+    let(:upstart) { Foreman::Export::Upstart.new("/tmp/init", engine, :template => template_root) }
 
     before do
       FileUtils.mkdir_p template_root
@@ -41,7 +46,7 @@ describe Foreman::Export::Upstart, :fakefs do
     end
 
     it "can export with alternate template files" do
-      upstart.export("/tmp/init")
+      upstart.export
 
       File.read("/tmp/init/app.conf").should == "alternate_template\n"
     end
@@ -62,7 +67,7 @@ describe Foreman::Export::Upstart, :fakefs do
     end
 
     it "can export with alternate template files" do
-      upstart.export("/tmp/init")
+      upstart.export
 
       File.read("/tmp/init/app.conf").should == "default_alternate_template\n"
     end

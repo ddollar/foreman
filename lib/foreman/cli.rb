@@ -56,7 +56,7 @@ class Foreman::CLI < Thor
       error "Unknown export format: #{format} (unable to load file 'foreman/export/#{ format.tr('-', '_') }')."
     end
 
-    formatter.new(engine, options).export(location)
+    formatter.new(location, engine, options).export
   rescue Foreman::Export::Exception => ex
     error ex.message
   end

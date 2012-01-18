@@ -6,7 +6,7 @@ require "tmpdir"
 describe Foreman::Export::Runit, :fakefs do
   let(:procfile) { FileUtils.mkdir_p("/tmp/app"); write_procfile("/tmp/app/Procfile", 'bar=baz') }
   let(:engine) { Foreman::Engine.new(procfile) }
-  let(:runit) { Foreman::Export::Runit.new(engine, :concurrency => 'alpha=2') }
+  let(:runit) { Foreman::Export::Runit.new('/tmp/init', engine, :concurrency => 'alpha=2,bravo=1') }
 
   before(:each) { load_export_templates_into_fakefs("runit") }
   before(:each) { stub(runit).say }
@@ -15,7 +15,7 @@ describe Foreman::Export::Runit, :fakefs do
   it "exports to the filesystem" do
     FileUtils.mkdir_p('/tmp/init')
 
-    runit.export('/tmp/init')
+    runit.export
 
     File.read("/tmp/init/app-alpha-1/run").should == example_export_file('runit/app-alpha-1-run')
     File.read("/tmp/init/app-alpha-1/log/run").should ==
@@ -36,6 +36,6 @@ describe Foreman::Export::Runit, :fakefs do
   end
 
   it "creates a full path to the export directory" do
-    expect { runit.export('/tmp/init', :concurrency => "alpha=2,bravo=1") }.to_not raise_error(Errno::ENOENT)
+    expect { runit.export }.to_not raise_error(Errno::ENOENT)
   end
 end

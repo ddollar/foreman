@@ -4,7 +4,7 @@ require "foreman/export"
 class Foreman::Export::Runit < Foreman::Export::Base
   ENV_VARIABLE_REGEX = /([a-zA-Z_]+[a-zA-Z0-9_]*)=(\S+)/
 
-  def export(location, options={})
+  def export
     error("Must specify a location") unless location
 
     app = self.app || File.basename(engine.directory)

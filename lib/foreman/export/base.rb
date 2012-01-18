@@ -3,10 +3,12 @@ require "foreman/utils"
 
 class Foreman::Export::Base
 
-  attr_reader :engine, :app, :log, :port, :user, :template, :concurrency
+  attr_reader :location, :engine, :options, :app, :log, :port, :user, :template, :concurrency
 
-  def initialize(engine, options={})
+  def initialize(location, engine, options={})
+    @location    = location
     @engine      = engine
+    @options     = options
     @app         = options[:app]
     @log         = options[:log]
     @port        = options[:port]
