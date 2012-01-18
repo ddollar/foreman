@@ -8,6 +8,7 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
+    ZenTest (4.6.2)
     aws-s3 (0.6.2)
       builder
       mime-types
@@ -56,6 +57,7 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
+  ZenTest
   aws-s3
   fakefs (~> 0.3.2)
   foreman!
