@@ -32,6 +32,7 @@ private
     pid = fork do
       trap("INT", "IGNORE")
       $stdout.reopen writer
+      $stderr.reopen writer
       reader.close
       exec Foreman.runner, replace_command_env(command)
     end
