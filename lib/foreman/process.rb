@@ -31,6 +31,7 @@ private
     reader, writer = IO.pipe
     pid = fork do
       trap("INT", "IGNORE")
+      writer.sync = true
       $stdout.reopen writer
       $stderr.reopen writer
       reader.close
