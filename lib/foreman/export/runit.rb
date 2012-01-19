@@ -51,7 +51,7 @@ class Foreman::Export::Runit < Foreman::Export::Base
   private
   def create_directory(location)
     say "creating: #{location}"
-    FileUtils.mkdir(location)
+    FileUtils.mkdir_p(location)
   end
 
   def inline_variables(command)
