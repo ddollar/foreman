@@ -42,7 +42,7 @@ desc "Publish .deb to S3."
 task "deb:release" => "deb:build" do |t|
   Dir["pkg/apt-#{version}/*"].each do |file|
     unless File.directory?(file)
-      store file, "apt/#{File.basename(file)}", "foreman"
+      store file, "apt/#{File.basename(file)}"
     end
   end
 end
