@@ -2,7 +2,6 @@ PATH
   remote: .
   specs:
     foreman (0.36.1)
-      spoon (~> 0.0.1)
       term-ansicolor (~> 1.0.7)
       thor (>= 0.13.6)
 
@@ -65,3 +64,4 @@ DEPENDENCIES
   rr (~> 1.0.2)
   rspec (~> 2.0)
   rubyzip
+  spoon (~> 0.0.1)
