@@ -1,6 +1,5 @@
 require "foreman"
 require "rubygems"
-require "spoon" if RUBY_PLATFORM == "java"
 
 class Foreman::Process
 
@@ -35,7 +34,7 @@ private
     reader, writer = IO.pipe
     command = replace_command_env(command)
     pid = if jruby?
-      Spoon.spawnp Foreman.runner, command
+      require "spoon"
       Spoon.spawnp Foreman.runner, "-d", basedir, command
     else
       fork do
