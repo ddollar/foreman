@@ -18,7 +18,7 @@ usage() {
 
 while getopts ":hd:" OPT; do
   case $OPT in
-     d) echo "cd:[$OPTARG]"; cd $OPTARG ;;
+     d) cd $OPTARG ;;
      h) usage ;;
     \?) error "invalid option: -$OPTARG" ;;
      :) error "option -$OPTARG requires an argument" ;;
@@ -33,5 +33,4 @@ if [ "$1" == "" ]; then
   usage
 fi
 
-echo "1:[$1]"
 exec $1 2>&1
