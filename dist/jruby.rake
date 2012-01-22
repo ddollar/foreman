@@ -1,6 +1,6 @@
 file pkg("foreman-#{version}-jruby.gem") => distribution_files do |t|
   sh "env JRUBY=true gem build foreman.gemspec"
-  sh "mv foreman-#{version}.gem #{t.name}"
+  sh "mv foreman-#{version}-java.gem #{t.name}"
 end
 
 task "jruby:build" => pkg("foreman-#{version}-jruby.gem")
