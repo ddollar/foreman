@@ -1,2 +1,37 @@
 #!/bin/sh
+#
+#/ Usage: runner [-d <dir>] <command>
+#/
+#/ Run a command with exec, optionally changing directory first
+
+set -e
+
+error() {
+  echo $@ >&2
+  exit 1
+}
+
+usage() {
+  cat $0 | grep '^#/' | cut -c4-
+  exit
+}
+
+while getopts ":hd:" OPT; do
+  case $OPT in
+     d) echo "cd:[$OPTARG]"; cd $OPTARG ;;
+     h) usage ;;
+    \?) error "invalid option: -$OPTARG" ;;
+     :) error "option -$OPTARG requires an argument" ;;
+  esac
+done
+
+shift $((OPTIND-1))
+
+command=$1
+
+if [ "$1" == "" ]; then
+  usage
+fi
+
+echo "1:[$1]"
 exec $1 2>&1
