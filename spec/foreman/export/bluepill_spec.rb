@@ -3,7 +3,7 @@ require "foreman/engine"
 require "foreman/export/bluepill"
 require "tmpdir"
 
-describe Foreman::Export::Bluepill do
+describe Foreman::Export::Bluepill, :fakefs do
   let(:procfile) { FileUtils.mkdir_p("/tmp/app"); write_procfile("/tmp/app/Procfile") }
   let(:engine) { Foreman::Engine.new(procfile) }
   let(:bluepill) { Foreman::Export::Bluepill.new(engine) }
@@ -18,7 +18,7 @@ describe Foreman::Export::Bluepill do
 
   it "exports to the filesystem with concurrency" do
     bluepill.export("/tmp/init", :concurrency => "alpha=2")
-    
+
     normalize_space(File.read("/tmp/init/app.pill")).should == normalize_space(example_export_file("bluepill/app-concurrency.pill"))
   end
 end

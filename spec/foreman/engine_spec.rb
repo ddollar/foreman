@@ -1,7 +1,7 @@
 require "spec_helper"
 require "foreman/engine"
 
-describe "Foreman::Engine" do
+describe "Foreman::Engine", :fakefs do
   subject { Foreman::Engine.new("Procfile", {}) }
 
   describe "initialize" do

@@ -3,7 +3,7 @@ require "foreman/engine"
 require "foreman/export/upstart"
 require "tmpdir"
 
-describe Foreman::Export::Upstart do
+describe Foreman::Export::Upstart, :fakefs do
   let(:procfile) { FileUtils.mkdir_p("/tmp/app"); write_procfile("/tmp/app/Procfile") }
   let(:engine) { Foreman::Engine.new(procfile) }
   let(:upstart) { Foreman::Export::Upstart.new(engine) }

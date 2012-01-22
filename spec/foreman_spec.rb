@@ -8,13 +8,8 @@ describe Foreman do
     it { should be_a String }
   end
 
-  describe "::load_env!(env_file)" do
-    before do
-      FakeFS.activate!
-    end
-
+  describe "::load_env!(env_file)", :fakefs do
     after do
-      FakeFS.deactivate!
       ENV['FOO'] = nil
     end
 
@@ -22,7 +17,7 @@ describe Foreman do
       File.open("/tmp/env1", "w") { |f| f.puts("FOO=bar") }
       Foreman.load_env!("/tmp/env1")
       ENV['FOO'].should == 'bar'
-    end 
+    end
 
     it "should assume env_file in ./.env" do
       File.open("./.env", "w") { |f| f.puts("FOO=bar") }
