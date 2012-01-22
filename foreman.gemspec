@@ -18,4 +18,5 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'term-ansicolor', '~> 1.0.7'
   gem.add_dependency 'thor',           '>= 0.13.6'
+  gem.add_dependency 'spoon',          '~> 0.0.1'
 end
