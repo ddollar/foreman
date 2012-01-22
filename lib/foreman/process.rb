@@ -16,10 +16,8 @@ class Foreman::Process
   end
 
   def run(pipe, basedir, environment)
-    Dir.chdir(basedir) do
-      with_environment(environment.merge("PORT" => port.to_s)) do
-        run_process entry.command, pipe
-      end
+    with_environment(environment.merge("PORT" => port.to_s)) do
+      run_process basedir, entry.command, pipe
     end
   end
 
@@ -33,11 +31,12 @@ private
     defined?(RUBY_PLATFORM) and RUBY_PLATFORM == "java"
   end
 
-  def fork_with_io(command)
+  def fork_with_io(command, basedir)
     reader, writer = IO.pipe
     command = replace_command_env(command)
     pid = if jruby?
       Spoon.spawnp Foreman.runner, command
+      Spoon.spawnp Foreman.runner, "-d", basedir, command
     else
       fork do
         trap("INT", "IGNORE")
@@ -45,14 +44,14 @@ private
         $stdout.reopen writer
         $stderr.reopen writer
         reader.close
-        exec Foreman.runner, command
+        exec Foreman.runner, "-d", basedir, command
       end
     end
     [ reader, pid ]
   end
 
-  def run_process(command, pipe)
-    io, @pid = fork_with_io(command)
+  def run_process(basedir, command, pipe)
+    io, @pid = fork_with_io(command, basedir)
     output pipe, "started with pid %d" % @pid
     Thread.new do
       until io.eof?
