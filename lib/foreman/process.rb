@@ -34,8 +34,10 @@ private
     reader, writer = IO.pipe
     command = replace_command_env(command)
     pid = if jruby?
-      require "spoon"
-      Spoon.spawnp Foreman.runner, "-d", basedir, command
+      require "posix/spawn"
+      POSIX::Spawn.spawn(Foreman.runner, "-d", basedir, command, {
+        :out => writer, :err => writer
+      })
     else
       fork do
         trap("INT", "IGNORE")

@@ -2,6 +2,10 @@ source "http://rubygems.org"
 
 gemspec
 
+platform :jruby do
+  gem "posix-spawn", "~> 0.3.6"
+end
+
 group :development do
   gem 'parka'
   gem 'rake'

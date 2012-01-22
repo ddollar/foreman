@@ -24,6 +24,7 @@ GEM
       crack
       rest-client
       thor
+    posix-spawn (0.3.6)
     rake (0.9.2.2)
     rcov (0.9.8)
     rcov (0.9.8-java)
@@ -57,6 +58,7 @@ DEPENDENCIES
   fakefs (~> 0.3.2)
   foreman!
   parka
+  posix-spawn (~> 0.3.6)
   rake
   rcov (~> 0.9.8)
   ronn
