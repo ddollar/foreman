@@ -16,4 +16,39 @@ describe Foreman::Process do
   its(:port)  { port }
   its(:name)  { "#{name}.#{port}" }
   its(:pid)   { nil }
+
+  describe '#run' do
+    let(:pipe)    { :pipe }
+    let(:basedir) { Dir.mktmpdir }
+    let(:env)     {{ 'foo' => 'bar' }}
+
+    let(:run) do
+      subject.run pipe, basedir, env
+    end
+
+    it 'should change to basedir' do
+      mock(Dir).chdir basedir
+      run
+    end
+
+    it 'should set PORT for environment' do
+      mock(subject).run_process(command, pipe) do
+        ENV['PORT'].should == port.to_s
+      end
+      run
+    end
+
+    it 'should set custom variables for environment' do
+      mock(subject).run_process(command, pipe) do
+        ENV['foo'].should == 'bar'
+      end
+      run
+    end
+
+    it 'should restore environment afterwards' do
+      mock(subject).run_process command, pipe
+      run
+      ENV.should_not include('PORT', 'foo')
+    end
+  end
 end
