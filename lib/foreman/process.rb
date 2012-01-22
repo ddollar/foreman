@@ -25,6 +25,24 @@ class Foreman::Process
     "%s.%s" % [ entry.name, num ]
   end
 
+  def kill(signal)
+    pid && Process.kill(signal, pid)
+  rescue Errno::ESRCH
+    false
+  end
+
+  def detach
+    pid && Process.detach(pid)
+  end
+
+  def alive?
+    kill(0)
+  end
+
+  def dead?
+    !alive?
+  end
+
 private
 
   def fork_with_io(command)
@@ -65,5 +83,4 @@ private
   ensure
     ENV.replace original
   end
-
 end
