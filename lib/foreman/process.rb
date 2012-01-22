@@ -59,12 +59,11 @@ private
   end
 
   def with_environment(environment)
-    old_env = ENV.each_pair.inject({}) { |h,(k,v)| h.update(k => v) }
-    environment.each { |k,v| ENV[k] = v }
-    ret = yield
-    ENV.clear
-    old_env.each { |k,v| ENV[k] = v}
-    ret
+    original = ENV.to_hash
+    ENV.update environment
+    yield
+  ensure
+    ENV.replace original
   end
 
 end
