@@ -2,10 +2,6 @@ source "http://rubygems.org"
 
 gemspec
 
-platform :jruby do
-  gem 'spoon', '~> 0.0.1'
-end
-
 group :development do
   gem 'parka'
   gem 'rake'
