@@ -1,4 +1,6 @@
 require "foreman"
+require "rubygems"
+require "spoon" if RUBY_PLATFORM == "java"
 
 class Foreman::Process
 
@@ -27,15 +29,24 @@ class Foreman::Process
 
 private
 
+  def jruby?
+    defined?(RUBY_PLATFORM) and RUBY_PLATFORM == "java"
+  end
+
   def fork_with_io(command)
     reader, writer = IO.pipe
-    pid = fork do
-      trap("INT", "IGNORE")
-      writer.sync = true
-      $stdout.reopen writer
-      $stderr.reopen writer
-      reader.close
-      exec Foreman.runner, replace_command_env(command)
+    command = replace_command_env(command)
+    pid = if jruby?
+      Spoon.spawnp Foreman.runner, command
+    else
+      fork do
+        trap("INT", "IGNORE")
+        writer.sync = true
+        $stdout.reopen writer
+        $stderr.reopen writer
+        reader.close
+        exec Foreman.runner, command
+      end
     end
     [ reader, pid ]
   end
