@@ -93,7 +93,9 @@ private ######################################################################
         loop do
           rs, ws = IO.select(readers.values, [], [], 1)
           (rs || []).each do |r|
-            ps, message = r.gets.split(",", 2)
+            data = r.gets
+            next unless data
+            ps, message = data.split(",", 2)
             color = colors[ps.split(".").first]
             info message, ps, color
           end
