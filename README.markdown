@@ -1,20 +1,27 @@
 # Foreman
 
-## Installation
+Manage Procfile-based applications
 
-* Rubygems
+<table>
+  <tr>
+    <th>If you have...</th>
+    <th>Install with...</th>
+  </tr>
+  <tr>
+    <td>Ruby + Rubygems</td>
+    <td style="text-align: left"><code>$ gem install foreman</code></td>
+  </tr>
+  <tr>
+    <td>Mac OS X</td>
+    <td style="text-align: left"><a href="http://assets.foreman.io/foreman/foreman.pkg">foreman.pkg</a></td>
+  </tr>
+  <tr>
+    <td>Other</td>
+    <td style="text-align: left"><a href="http://assets.foreman.io/foreman/foreman.tgz">foreman.tgz</a> (add contents to your <code>$PATH</code>)</td>
+  </tr>
+</table>
 
-    gem install foreman
-
-* OSX
-
-    http://assets.foreman.io/foreman/foreman.pkg
-
-* Standalone Tarball
-
-    http://assets.foreman.io/foreman/foreman.tgz
-
-## Description
+## Getting Started
 
 http://blog.daviddollar.org/2011/05/06/introducing-foreman.html
 
