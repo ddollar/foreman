@@ -39,6 +39,7 @@ http://blog.daviddollar.org/2011/05/06/introducing-foreman.html
 Created and maintained by David Dollar
 
 Patches contributed by:
+
 * Adam Wiggins
 * Chris Continanza
 * Chris Lowder
