@@ -39,11 +39,6 @@ describe Foreman::Process do
     end
 
     context 'options' do
-      it 'should change to basedir' do
-        mock(Dir).chdir basedir
-        run
-      end
-
       it 'should set PORT for environment' do
         mock(subject).run_process(command, pipe) do
           ENV['PORT'].should == port.to_s
