@@ -14,5 +14,12 @@ module Foreman
     File.expand_path("../../bin/runner", __FILE__)
   end
 
-end
+  def self.jruby?
+    defined?(RUBY_PLATFORM) and RUBY_PLATFORM == "java"
+  end
 
+  def self.windows?
+    defined?(RUBY_PLATFORM) and RUBY_PLATFORM =~ /(win|w)32$/
+  end
+
+end

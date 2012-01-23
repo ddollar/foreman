@@ -23,4 +23,9 @@ Gem::Specification.new do |gem|
     gem.add_dependency "posix-spawn", "~> 0.3.6"
     gem.platform = Gem::Platform.new("java")
   end
+
+  if ENV["PLATFORM"] == "mingw32"
+    gem.add_dependency "win32console", "~> 1.3.0"
+    gem.platform = Gem::Platform.new("mingw32")
+  end
 end

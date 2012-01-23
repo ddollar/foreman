@@ -26,22 +26,14 @@ class Foreman::Process
 
 private
 
-  def jruby?
-    defined?(RUBY_PLATFORM) and RUBY_PLATFORM == "java"
-  end
-
-  def windows?
-    defined?(RUBY_PLATFORM) and RUBY_PLATFORM =~ /(win|w)32$/
-  end
-
   def fork_with_io(command, basedir)
     reader, writer = IO.pipe
     command = replace_command_env(command)
-    pid = if windows?
+    pid = if Foreman.windows?
       Dir.chdir(basedir) do
         Process.spawn command, :out => writer, :err => writer
       end
-    elsif jruby?
+    elsif Foreman.jruby?
       require "posix/spawn"
       POSIX::Spawn.spawn(Foreman.runner, "-d", basedir, command, {
         :out => writer, :err => writer

@@ -88,6 +88,7 @@ private ######################################################################
 
   def watch_for_output
     Thread.new do
+      require "win32console" if Foreman.windows?
       begin
         loop do
           rs, ws = IO.select(readers.values, [], [], 1)
@@ -155,7 +156,7 @@ private ######################################################################
   end
 
   def termtitle(title)
-    printf("\033]0;#{title}\007")
+    printf("\033]0;#{title}\007") unless Foreman.windows?
   end
 
   def running_processes
