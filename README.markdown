@@ -19,23 +19,26 @@ Manage Procfile-based applications
     <td>Other</td>
     <td style="text-align: left"><a href="http://assets.foreman.io/foreman/foreman.tgz">foreman.tgz</a> (add contents to your <code>$PATH</code>)</td>
   </tr>
+  <tr>
+    <td>Other</td>
+    <td style="text-align: left"><a href="http://assets.foreman.io/foreman/foreman.tgz">foreman.tgz</a> (add contents to your <code>$PATH</code>)</td>
+  </tr>
 </table>
 
 ## Getting Started
 
 http://blog.daviddollar.org/2011/05/06/introducing-foreman.html
 
-## Manual
+## Documentation
 
 * [man page](http://ddollar.github.com/foreman)
 * [wiki](http://github.com/ddollar/foreman/wiki)
 
-## Authorship
+## Authors
 
-Created by David Dollar
+Created and maintained by David Dollar
 
 Patches contributed by:
-
 * Adam Wiggins
 * Chris Continanza
 * Chris Lowder
