@@ -24,8 +24,8 @@ describe "Foreman::Engine" do
   describe "start" do
     it "forks the processes" do
       write_procfile
-      mock.instance_of(Foreman::Process).run_process("./alpha", is_a(IO))
-      mock.instance_of(Foreman::Process).run_process("./bravo", is_a(IO))
+      mock.instance_of(Foreman::Process).run_process(Dir.pwd, "./alpha", is_a(IO))
+      mock.instance_of(Foreman::Process).run_process(Dir.pwd, "./bravo", is_a(IO))
       mock(subject).watch_for_output
       mock(subject).watch_for_termination
       subject.start
@@ -34,8 +34,8 @@ describe "Foreman::Engine" do
     it "handles concurrency" do
       write_procfile
       engine = Foreman::Engine.new("Procfile",:concurrency => "alpha=2")
-      mock.instance_of(Foreman::Process).run_process("./alpha", is_a(IO)).twice
-      mock.instance_of(Foreman::Process).run_process("./bravo", is_a(IO)).never
+      mock.instance_of(Foreman::Process).run_process(Dir.pwd, "./alpha", is_a(IO)).twice
+      mock.instance_of(Foreman::Process).run_process(Dir.pwd, "./bravo", is_a(IO)).never
       mock(engine).watch_for_output
       mock(engine).watch_for_termination
       engine.start
