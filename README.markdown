@@ -8,12 +8,12 @@ Manage Procfile-based applications
     <th>Install with...</th>
   </tr>
   <tr>
-    <td>Ruby + Rubygems</td>
-    <td style="text-align: left"><code>$ gem install foreman</code></td>
+    <td>Ruby (MRI, JRuby, Windows)</td>
+    <td><pre>$ gem install foreman</pre></td>
   </tr>
   <tr>
     <td>Mac OS X</td>
-    <td style="text-align: left"><a href="http://assets.foreman.io/foreman/foreman.pkg">foreman.pkg</a></td>
+    <td><a href="http://assets.foreman.io/foreman/foreman.pkg">foreman.pkg</a></td>
   </tr>
 </table>
 
