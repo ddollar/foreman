@@ -24,6 +24,24 @@ class Foreman::Process
     "%s.%s" % [ entry.name, num ]
   end
 
+  def kill(signal)
+    pid && Process.kill(signal, pid)
+  rescue Errno::ESRCH
+    false
+  end
+
+  def detach
+    pid && Process.detach(pid)
+  end
+
+  def alive?
+    kill(0)
+  end
+
+  def dead?
+    !alive?
+  end
+
 private
 
   def fork_with_io(command, basedir)
@@ -69,12 +87,10 @@ private
   end
 
   def with_environment(environment)
-    old_env = ENV.each_pair.inject({}) { |h,(k,v)| h.update(k => v) }
-    environment.each { |k,v| ENV[k] = v }
-    ret = yield
-    ENV.clear
-    old_env.each { |k,v| ENV[k] = v}
-    ret
+    original = ENV.to_hash
+    ENV.update environment
+    yield
+  ensure
+    ENV.replace original
   end
-
 end
