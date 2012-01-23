@@ -15,10 +15,6 @@ Manage Procfile-based applications
     <td>Mac OS X</td>
     <td style="text-align: left"><a href="http://assets.foreman.io/foreman/foreman.pkg">foreman.pkg</a></td>
   </tr>
-  <tr>
-    <td>Other</td>
-    <td style="text-align: left"><a href="http://assets.foreman.io/foreman/foreman.tgz">foreman.tgz</a> (add contents to your <code>$PATH</code>)</td>
-  </tr>
 </table>
 
 ## Getting Started
