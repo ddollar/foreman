@@ -11,4 +11,4 @@ notifications:
     on_success: always
     on_failure: always
     urls:
-      - https://dx-helper.herokuapp.com/travis
+      - http://dx-helper.herokuapp.com/travis
