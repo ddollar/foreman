@@ -19,7 +19,7 @@ Manage Procfile-based applications
 
 ## Getting Started
 
-http://blog.daviddollar.org/2011/05/06/introducing-foreman.html
+* http://blog.daviddollar.org/2011/05/06/introducing-foreman.html
 
 ## Documentation
 
