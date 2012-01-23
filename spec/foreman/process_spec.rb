@@ -34,27 +34,27 @@ describe Foreman::Process do
     end
 
     def run_file(executable, code)
-      file = File.open("#{basedir}/script.rb", 'w+') {|it| it << code }
+      file = File.open("#{basedir}/script", 'w') {|it| it << code }
       run "#{executable} #{file.path}"
     end
 
     context 'options' do
       it 'should set PORT for environment' do
-        mock(subject).run_process(command, pipe) do
+        mock(subject).run_process(basedir, command, pipe) do
           ENV['PORT'].should == port.to_s
         end
         run
       end
 
       it 'should set custom variables for environment' do
-        mock(subject).run_process(command, pipe) do
+        mock(subject).run_process(basedir, command, pipe) do
           ENV['foo'].should == 'bar'
         end
         run
       end
 
       it 'should restore environment afterwards' do
-        mock(subject).run_process command, pipe
+        mock(subject).run_process(basedir, command, pipe)
         run
         ENV.should_not include('PORT', 'foo')
       end
@@ -95,9 +95,11 @@ describe Foreman::Process do
 
       it 'should send different signals' do
         run_file 'ruby', <<-CODE
-          trap 'TERM', 'IGNORE'
+          trap "TERM", "IGNORE"
           loop { sleep 1 }
         CODE
+        sleep 1  # wait for ruby to start
+        subject.should be_alive
         subject.kill 'TERM'
         subject.should be_alive
         subject.kill 'KILL'
