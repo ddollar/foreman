@@ -9,8 +9,8 @@ describe Foreman::Process do
 
   let(:number)  { 1 }
   let(:port)    { 777 }
-  let(:command) { :script }
-  let(:name)    { :foobar }
+  let(:command) { "script" }
+  let(:name)    { "foobar" }
   let(:entry)   { OpenStruct.new :name => name, :command => command }
 
   its(:entry) { entry }
