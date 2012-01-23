@@ -134,11 +134,6 @@ private ######################################################################
     end
   end
 
-  def error(message)
-    puts "ERROR: #{message}"
-    exit 1
-  end
-
   def longest_process_name
     @longest_process_name ||= begin
       longest = procfile.process_names.map { |name| name.length }.sort.last
@@ -216,6 +211,11 @@ private ######################################################################
 
     def apply_environment!
       @environment.each { |k,v| ENV[k] = v }
+    end
+
+    def error(message)
+      puts "ERROR: #{message}"
+      exit 1
     end
   end
 
