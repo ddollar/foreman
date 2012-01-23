@@ -51,6 +51,11 @@ task :pages => "man:commit" do
   }
 end
 
+task :authors do
+  authors = %x{ git log --pretty=format:"%an" | sort -u }.split("\n")
+  puts authors.join(", ")
+end
+
 ## dist
 
 require "erb"
