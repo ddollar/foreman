@@ -19,10 +19,6 @@ Manage Procfile-based applications
     <td>Other</td>
     <td style="text-align: left"><a href="http://assets.foreman.io/foreman/foreman.tgz">foreman.tgz</a> (add contents to your <code>$PATH</code>)</td>
   </tr>
-  <tr>
-    <td>Other</td>
-    <td style="text-align: left"><a href="http://assets.foreman.io/foreman/foreman.tgz">foreman.tgz</a> (add contents to your <code>$PATH</code>)</td>
-  </tr>
 </table>
 
 ## Getting Started
