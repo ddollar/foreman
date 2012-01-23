@@ -24,6 +24,7 @@ describe Foreman::Process do
     let(:basedir)    { Dir.mktmpdir }
     let(:env)        {{ 'foo' => 'bar' }}
     let(:init_delta) { 0.1 }
+    let(:file_delta) { 0.4 }
 
     after { FileUtils.remove_entry_secure basedir }
 
@@ -36,6 +37,7 @@ describe Foreman::Process do
     def run_file(executable, code)
       file = File.open("#{basedir}/script", 'w') {|it| it << code }
       run "#{executable} #{file.path}"
+      sleep file_delta
     end
 
     context 'options' do
