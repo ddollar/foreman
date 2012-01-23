@@ -33,4 +33,4 @@ if [ "$1" == "" ]; then
   usage
 fi
 
-exec $1 2>&1
+exec $1
