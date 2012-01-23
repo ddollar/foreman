@@ -33,4 +33,8 @@ describe Foreman::Export::Runit, :fakefs do
         example_export_file('runit/app-bravo-1-log-run')
     File.read("/tmp/init/app-bravo-1/env/PORT").should == "5100\n"
   end
+
+  it "creates a full path to the export directory" do
+    expect { runit.export('/tmp/init', :concurrency => "alpha=2,bravo=1") }.to_not raise_error(Errno::ENOENT)
+  end
 end
