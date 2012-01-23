@@ -53,7 +53,7 @@ end
 
 task :authors do
   authors = %x{ git log --pretty=format:"%an" | sort -u }.split("\n")
-  puts "Patches contributed by: " + authors.join(", ")
+  puts authors.join(", ")
 end
 
 ## dist
