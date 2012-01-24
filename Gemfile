@@ -18,6 +18,7 @@ group :development do
   gem 'rcov',   '~> 0.9.8'
   gem 'rr',     '~> 1.0.2'
   gem 'rspec',  '~> 2.0'
+  gem 'ZenTest'
   gem 'aws-s3'
   gem "rubyzip"
 end

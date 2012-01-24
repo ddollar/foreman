@@ -1,10 +1,14 @@
 require "foreman"
+require "foreman/helpers"
 require "foreman/engine"
 require "foreman/export"
 require "thor"
 require "yaml"
 
 class Foreman::CLI < Thor
+  include Foreman::Helpers
+
+  class_option :procfile, :type => :string, :aliases => "-f", :desc => "Default: Procfile"
 
   desc "start", "Start the application"
 
@@ -42,16 +46,17 @@ class Foreman::CLI < Thor
   def export(format, location=nil)
     check_procfile!
 
-    formatter = case format
-      when "inittab" then Foreman::Export::Inittab
-      when "upstart" then Foreman::Export::Upstart
-      when "bluepill" then Foreman::Export::Bluepill
-      when "runit"    then Foreman::Export::Runit
-      else error "Unknown export format: #{format}."
+    begin
+      require "foreman/export/#{ format.tr('-', '_') }"
+      classy_format = classify(format)
+      formatter     = constantize("Foreman::Export::#{ classy_format }")
+    rescue NameError => ex
+      error "Unknown export format: #{format} (no class Foreman::Export::#{ classy_format })."
+    rescue LoadError => ex
+      error "Unknown export format: #{format} (unable to load file 'foreman/export/#{ format.tr('-', '_') }')."
     end
 
-    formatter.new(engine).export(location, options)
-
+    formatter.new(location, engine, options).export
   rescue Foreman::Export::Exception => ex
     error ex.message
   end
