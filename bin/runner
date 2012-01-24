@@ -29,7 +29,7 @@ shift $((OPTIND-1))
 
 command=$1
 
-if [ "$1" == "" ]; then
+if [ -z "$1" ]; then
   usage
 fi
 
