@@ -4,21 +4,19 @@ require "foreman/export"
 class Foreman::Export::Runit < Foreman::Export::Base
   ENV_VARIABLE_REGEX = /([a-zA-Z_]+[a-zA-Z0-9_]*)=(\S+)/
 
-  def export(location, options={})
+  def export
     error("Must specify a location") unless location
 
-    app = options[:app] || File.basename(engine.directory)
-    user = options[:user] || app
-    log_root = options[:log] || "/var/log/#{app}"
-    template_root = options[:template]
-
-    concurrency = Foreman::Utils.parse_concurrency(options[:concurrency])
+    app = self.app || File.basename(engine.directory)
+    user = self.user || app
+    log_root = self.log || "/var/log/#{app}"
+    template_root = self.template
 
     run_template = export_template('runit', 'run.erb', template_root)
     log_run_template = export_template('runit', 'log_run.erb', template_root)
 
     engine.procfile.entries.each do |process|
-      1.upto(concurrency[process.name]) do |num|
+      1.upto(self.concurrency[process.name]) do |num|
         process_directory     = "#{location}/#{app}-#{process.name}-#{num}"
         process_env_directory = "#{process_directory}/env"
         process_log_directory = "#{process_directory}/log"
@@ -31,7 +29,7 @@ class Foreman::Export::Runit < Foreman::Export::Base
         write_file "#{process_directory}/run", run
         FileUtils.chmod 0755, "#{process_directory}/run"
 
-        port = engine.port_for(process, num, options[:port])
+        port = engine.port_for(process, num, self.port)
         environment_variables = {'PORT' => port}.
             merge(engine.environment).
             merge(inline_variables(process.command))
