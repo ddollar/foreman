@@ -10,10 +10,6 @@ platform :jruby do
   gem "posix-spawn", "~> 0.3.6"
 end
 
-platform :ruby_19 do
-  gem "simplecov"
-end
-
 group :development do
   gem 'parka'
   gem 'rake'
@@ -25,4 +21,5 @@ group :development do
   gem 'ZenTest'
   gem 'aws-s3'
   gem "rubyzip"
+  gem "simplecov", :platform => :ruby_19, :require => false
 end
