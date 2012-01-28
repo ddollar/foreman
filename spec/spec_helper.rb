@@ -1,9 +1,19 @@
 require "rubygems"
+
+require "simplecov"
+SimpleCov.start do
+  add_filter "/spec/"
+end
+
 require "rspec"
 require "fakefs/safe"
 require "fakefs/spec_helpers"
 
 $:.unshift File.expand_path("../../lib", __FILE__)
+
+def mock_export_error(message)
+  lambda { yield }.should raise_error(Foreman::Export::Exception, message)
+end
 
 def mock_error(subject, message)
   mock_exit do
@@ -37,9 +47,11 @@ def write_procfile(procfile="Procfile", alpha_env="")
   File.expand_path(procfile)
 end
 
-def write_env(env=".env")
+def write_env(env=".env", options={"FOO"=>"bar"})
   File.open(env, "w") do |file|
-    file.puts "FOO=bar"
+    options.each do |key, val|
+      file.puts "#{key}=#{val}"
+    end
   end
 end
 

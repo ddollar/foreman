@@ -25,4 +25,10 @@ describe Foreman do
       ENV['FOO'].should == 'bar'
     end
   end
+
+  describe "runner" do
+    it "should exist" do
+      File.exists?(Foreman.runner).should == true
+    end
+  end
 end

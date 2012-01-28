@@ -27,6 +27,15 @@ describe "Foreman::CLI", :fakefs do
 
   describe "export" do
     describe "options" do
+      it "uses .foreman" do
+        write_procfile
+        File.open(".foreman", "w") { |f| f.puts "concurrency: alpha=2" }
+        mock_export = mock(Foreman::Export::Upstart)
+        mock(Foreman::Export::Upstart).new("/upstart", is_a(Foreman::Engine), { "concurrency" => "alpha=2" }) { mock_export }
+        mock_export.export
+        foreman %{ export upstart /upstart }
+      end
+
       it "respects --env" do
         write_procfile
         write_env("envfile")
@@ -49,10 +58,18 @@ describe "Foreman::CLI", :fakefs do
     describe "with a Procfile" do
       before(:each) { write_procfile }
 
-      describe "with an invalid formatter" do
+      describe "with a formatter with a generic error" do
+        before do
+          mock(Foreman::Export).formatter("errorful") { Class.new(Foreman::Export::Base) do
+            def export
+              raise Foreman::Export::Exception.new("foo")
+            end
+          end }
+        end
+
         it "prints an error" do
-          mock_error(subject, "Unknown export format: invalidformatter (unable to load file 'foreman/export/invalidformatter').") do
-            subject.export("invalidformatter")
+          mock_error(subject, "foo") do
+            subject.export("errorful")
           end
         end
       end
@@ -76,7 +93,7 @@ describe "Foreman::CLI", :fakefs do
       before { write_procfile }
 
       it "displays the jobs" do
-        mock(subject).display("valid procfile detected (alpha, bravo)")
+        mock(subject).puts("valid procfile detected (alpha, bravo)")
         subject.check
       end
     end

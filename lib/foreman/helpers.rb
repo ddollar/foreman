@@ -6,9 +6,8 @@ module Foreman::Helpers
   # classify('job-name') # => 'JobName'
   def classify(dashed_word)
     dashed_word.split('-').each { |part| part[0] = part[0].chr.upcase }.join
-  end
+  end  # Tries to find a constant with the name specified in the argument string:
 
-  # Tries to find a constant with the name specified in the argument string:
   #
   # constantize("Module") # => Module
   # constantize("Test::Unit") # => Test::Unit
@@ -27,10 +26,6 @@ module Foreman::Helpers
   # NameError is raised when the constant is unknown.
   def constantize(camel_cased_word)
     camel_cased_word = camel_cased_word.to_s
-
-    if camel_cased_word.include?('-')
-      camel_cased_word = classify(camel_cased_word)
-    end
 
     names = camel_cased_word.split('::')
     names.shift if names.empty? || names.first.empty?

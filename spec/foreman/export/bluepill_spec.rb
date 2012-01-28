@@ -17,7 +17,14 @@ describe Foreman::Export::Bluepill, :fakefs do
     normalize_space(File.read("/tmp/init/app.pill")).should == normalize_space(example_export_file("bluepill/app.pill"))
   end
 
-  context "with concurrency" do
+  it "cleans up if exporting into an existing dir" do
+    mock(FileUtils).rm("/tmp/init/app.pill")
+
+    bluepill.export
+    bluepill.export
+  end
+
+  context  "with concurrency" do
     let(:options) { Hash[:concurrency => "alpha=2"] }
 
     it "exports to the filesystem with concurrency" do

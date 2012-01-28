@@ -22,6 +22,17 @@ describe Foreman::Export::Upstart, :fakefs do
     File.read("/tmp/init/app-bravo-1.conf").should == example_export_file("upstart/app-bravo-1.conf")
   end
 
+  it "cleans up if exporting into an existing dir" do
+    mock(FileUtils).rm("/tmp/init/app.conf")
+    mock(FileUtils).rm("/tmp/init/app-alpha.conf")
+    mock(FileUtils).rm("/tmp/init/app-alpha-1.conf")
+    mock(FileUtils).rm("/tmp/init/app-bravo.conf")
+    mock(FileUtils).rm("/tmp/init/app-bravo-1.conf")
+
+    upstart.export
+    upstart.export
+  end
+
   context "with concurrency" do
     let(:options) { Hash[:concurrency => "alpha=2"] }
 

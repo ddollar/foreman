@@ -24,12 +24,12 @@ class Foreman::Export::Inittab < Foreman::Export::Base
 
     inittab = inittab.join("\n") + "\n"
 
-    if fname
+    if location == "-"
+      puts inittab
+    else
       FileUtils.mkdir_p(log_root) rescue error "could not create #{log_root}"
       FileUtils.chown(user, nil, log_root) rescue error "could not chown #{log_root} to #{user}"
-      write_file(fname, inittab)
-    else
-      puts inittab
+      write_file(location, inittab)
     end
   end
 

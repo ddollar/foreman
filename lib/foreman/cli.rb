@@ -40,22 +40,11 @@ class Foreman::CLI < Thor
   method_option :port,        :type => :numeric, :aliases => "-p"
   method_option :user,        :type => :string,  :aliases => "-u"
   method_option :template,    :type => :string,  :aliases => "-t"
-  method_option :concurrency, :type => :string,  :aliases => "-c",
-    :banner => '"alpha=5,bar=3"'
+  method_option :concurrency, :type => :string,  :aliases => "-c", :banner => '"alpha=5,bar=3"'
 
   def export(format, location=nil)
     check_procfile!
-
-    begin
-      require "foreman/export/#{ format.tr('-', '_') }"
-      classy_format = classify(format)
-      formatter     = constantize("Foreman::Export::#{ classy_format }")
-    rescue NameError => ex
-      error "Unknown export format: #{format} (no class Foreman::Export::#{ classy_format })."
-    rescue LoadError => ex
-      error "Unknown export format: #{format} (unable to load file 'foreman/export/#{ format.tr('-', '_') }')."
-    end
-
+    formatter = Foreman::Export.formatter(format)
     formatter.new(location, engine, options).export
   rescue Foreman::Export::Exception => ex
     error ex.message
@@ -65,7 +54,7 @@ class Foreman::CLI < Thor
 
   def check
     error "no processes defined" unless engine.procfile.entries.length > 0
-    display "valid procfile detected (#{engine.procfile.process_names.join(', ')})"
+    puts "valid procfile detected (#{engine.procfile.process_names.join(', ')})"
   end
 
   desc "run COMMAND", "Run a command using your application's environment"
@@ -95,17 +84,9 @@ private ######################################################################
     options[:procfile] || "Procfile"
   end
 
-  def display(message)
-    puts message
-  end
-
   def error(message)
     puts "ERROR: #{message}"
     exit 1
-  end
-
-  def procfile_exists?(procfile)
-    File.exist?(procfile)
   end
 
   def options
