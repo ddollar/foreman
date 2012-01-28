@@ -10,6 +10,10 @@ platform :jruby do
   gem "posix-spawn", "~> 0.3.6"
 end
 
+platform :ruby_19 do
+  gem "simplecov"
+end
+
 group :development do
   gem 'parka'
   gem 'rake'
