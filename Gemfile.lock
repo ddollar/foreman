@@ -28,8 +28,6 @@ GEM
       thor
     posix-spawn (0.3.6)
     rake (0.9.2.2)
-    rcov (0.9.8)
-    rcov (0.9.8-java)
     rdiscount (1.6.5)
     rest-client (1.6.1)
       mime-types (>= 1.16)
@@ -69,7 +67,6 @@ DEPENDENCIES
   parka
   posix-spawn (~> 0.3.6)
   rake
-  rcov (~> 0.9.8)
   ronn
   rr (~> 1.0.2)
   rspec (~> 2.0)

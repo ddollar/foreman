@@ -15,11 +15,10 @@ group :development do
   gem 'rake'
   gem 'ronn'
   gem 'fakefs', '~> 0.3.2'
-  gem 'rcov',   '~> 0.9.8'
   gem 'rr',     '~> 1.0.2'
   gem 'rspec',  '~> 2.0'
   gem 'ZenTest'
   gem 'aws-s3'
   gem "rubyzip"
-  gem "simplecov", :platform => :ruby_19, :require => false
+  gem "simplecov", :require => false
 end
