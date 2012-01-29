@@ -1,3 +1,5 @@
+require "time"
+
 desc "Build the manual"
 task :man do
   ENV['RONN_MANUAL']  = "Foreman Manual"
@@ -31,22 +33,49 @@ task :authors do
   puts authors.join(", ")
 end
 
+def latest_release
+  latest = File.read("Changelog.md").split("\n").first.split(" ").last
+end
+
+def newer_release
+  release = %x{ git tag --contains #{latest_release} }.split("\n")[1]
+end
+
 desc "Generate a Changelog"
 task :changelog do
-  timestamp = Time.now.utc.strftime('%m/%d/%Y')
-  sha = `git log | head -1`.split(' ').last
-  changelog = ["#{version} #{timestamp} #{sha}"]
-  changelog << ('=' * changelog[0].length)
-  changelog << ''
+  while release = newer_release
+    entry = %x{ git show --format="%h %cd" #{release} | head -n 1 }
+    commit, date_raw = entry.split(" ", 2)
+    date = Time.parse(date_raw).strftime("%Y-%m-%d")
 
-  last_sha = `cat Changelog | head -1`.split(' ').last
-  shortlog = `git log #{last_sha}..HEAD --pretty=format:'%s   [%an]'`
-  changelog << shortlog.split("\n")
-  changelog.concat ['', '', '']
+    message  = "## #{release[1..-1]} #{date} #{commit}\n"
+    message += %x{ git log --format="%s  [%an]" #{latest_release}..#{release} }
 
-  old_changelog = File.read('Changelog')
-  File.open('Changelog', 'w') do |file|
-    file.write(changelog.join("\n"))
-    file.write(old_changelog)
+    changelog = File.read("Changelog.md")
+    changelog = message + "\n" + changelog
+
+    File.open("Changelog.md", "w") do |file|
+      file.puts changelog
+    end
   end
+    
+
+  #   date = 
+  #   message = "## #{release[1..-1]} 
+  # timestamp = Time.now.utc.strftime('%m/%d/%Y')
+  # sha = `git log | head -1`.split(' ').last
+  # changelog = ["#{version} #{timestamp} #{sha}"]
+  # changelog << ('=' * changelog[0].length)
+  # changelog << ''
+
+  # last_sha = `cat Changelog | head -1`.split(' ').last
+  # shortlog = `git log #{last_sha}..HEAD --pretty=format:'%s   [%an]'`
+  # changelog << shortlog.split("\n")
+  # changelog.concat ['', '', '']
+
+  # old_changelog = File.read('Changelog')
+  # File.open('Changelog', 'w') do |file|
+  #   file.write(changelog.join("\n"))
+  #   file.write(old_changelog)
+  # end
 end
