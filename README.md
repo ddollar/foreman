@@ -25,6 +25,7 @@ Manage Procfile-based applications
 
 * [man page](http://ddollar.github.com/foreman)
 * [wiki](http://github.com/ddollar/foreman/wiki)
+* [changelog](https://github.com/ddollar/foreman/blob/master/Changelog.md)
 
 ## Authors
 
