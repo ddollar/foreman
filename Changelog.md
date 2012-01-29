@@ -1,3 +1,12 @@
+## 0.37.1 (2012-01-29)
+
+* use binary pipes to better handle UTF-8 data  [David Dollar]
+* set up example procfile with UTF-8 item  [David Dollar]
+* remove autotest  [David Dollar]
+* fix up authors generation  [David Dollar]
+* fix up packaging after moving tasks  [David Dollar]
+* fix up changelog tasks  [David Dollar]
+
 ## 0.37.0 (2012-01-29)
 
 * put an entire line of output inside a single mutex so we don't cross the streams  [David Dollar]
