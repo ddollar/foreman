@@ -36,6 +36,7 @@ describe Foreman::Process do
     def run_file(executable, code)
       file = File.open("#{basedir}/script", 'w') {|it| it << code }
       run "#{executable} #{file.path}"
+      sleep 1
     end
 
     context 'options' do
@@ -98,7 +99,6 @@ describe Foreman::Process do
           trap "TERM", "IGNORE"
           loop { sleep 1 }
         CODE
-        sleep 1  # wait for ruby to start
         subject.should be_alive
         subject.kill 'TERM'
         subject.should be_alive
