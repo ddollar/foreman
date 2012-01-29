@@ -31,6 +31,9 @@ desc "Generate an authors list"
 task :authors do
   authors = %x{ git log --pretty=format:"%an" | sort -u }.split("\n")
   puts authors.join(", ")
+  readme = File.read("README.md")
+  readme.gsub!(/#### Patches contributed by\n([^\n]*)\n/m, "#### Patches contributes by\n#{authors.join(", ")}\n")
+  File.open("README.md", "w") { |f| f.print readme }
 end
 
 def latest_release
@@ -59,7 +62,7 @@ task :changelog do
     puts release
 
     File.open("Changelog.md", "w") do |file|
-      file.puts changelog
+      file.print changelog
     end
   end
 end
