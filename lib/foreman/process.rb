@@ -63,7 +63,7 @@ private
         $stderr.reopen writer
         reader.close
         exec Foreman.runner, "-d", basedir, command
-     end
+      end
     end
     [ reader, pid ]
   end
