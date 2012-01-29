@@ -21,7 +21,7 @@ end
 GEM_BLACKLIST = %w( bundler foreman )
 
 def assemble_gems(target_dir=Dir.pwd)
-  lines = %x{ bundle show }.strip.split("\n")
+  lines = %x{ cd #{project_root} && bundle show }.strip.split("\n")
   raise "error running bundler" unless $?.success?
 
   %x{ env BUNDLE_WITHOUT="development:test" bundle show }.split("\n").each do |line|
@@ -47,8 +47,7 @@ def distribution_files(type=nil)
   require "foreman/distribution"
   base_files = Foreman::Distribution.files
   type_files = type ?
-    Dir[File.expand_path("../dist/resources/#{type}/**/*", __FILE__)] :
-    []
+    Dir[File.expand_path("../../dist/resources/#{type}/**/*", __FILE__)] : []
   base_files.concat(type_files)
 end
 
@@ -60,15 +59,15 @@ def mkchdir(dir)
 end
 
 def pkg(filename)
-  File.expand_path("../pkg/#{filename}", __FILE__)
+  File.expand_path("../../pkg/#{filename}", __FILE__)
 end
 
 def project_root
-  File.dirname(__FILE__)
+  File.expand_path("../..", __FILE__)
 end
 
 def resource(name)
-  File.expand_path("../dist/resources/#{name}", __FILE__)
+  File.expand_path("../../dist/resources/#{name}", __FILE__)
 end
 
 def s3_connect
