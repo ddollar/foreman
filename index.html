@@ -73,7 +73,7 @@
     <a href="#DEFAULT-OPTIONS">DEFAULT OPTIONS</a>
     <a href="#EXAMPLES">EXAMPLES</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
-    </div>
+  </div>
 
   <ol class='man-decor man-head man head'>
     <li class='tl'>foreman(1)</li>
@@ -146,6 +146,8 @@ app name</p></dd>
 <p>These options control all modes of foreman's operation.</p>
 
 <dl>
+<dt><code>-d</code>, <code>--directory</code></dt><dd><p>Specify an alternate application root. This defaults to the directory
+containing the Procfile.</p></dd>
 <dt><code>-e</code>, <code>--env</code></dt><dd><p>Specify an alternate environment file. You can specify more than one
 file by using: <code>--env file1,file2</code>.</p></dd>
 <dt><code>-f</code>, <code>--procfile</code></dt><dd><p>Specify an alternate location for the application's Procfile. This file's
@@ -161,6 +163,7 @@ application.</p></dd>
 <ul>
 <li><p>bluepill</p></li>
 <li><p>inittab</p></li>
+<li><p>runit</p></li>
 <li><p>upstart</p></li>
 </ul>
 
@@ -195,7 +198,8 @@ to run it.</p>
 job: bundle exec rake jobs:work
 </code></pre>
 
-<p>You can validate your Procfile format using the <code>check</code> command</p>
+<p>A process name may contain letters, numbers amd the underscore character.
+You can validate your Procfile format using the <code>check</code> command:</p>
 
 <pre><code>$ foreman check
 </code></pre>
@@ -243,8 +247,8 @@ port: 15000
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>Foreman 0.23.0</li>
-    <li class='tc'>September 2011</li>
+    <li class='tl'>Foreman 0.37.0</li>
+    <li class='tc'>January 2012</li>
     <li class='tr'>foreman(1)</li>
   </ol>
 
