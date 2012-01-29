@@ -124,11 +124,12 @@ private ######################################################################
   end
 
   def info(message, name="system", color=Term::ANSIColor.white)
-    print color
-    print "#{Time.now.strftime("%H:%M:%S")} #{pad_process_name(name)} | "
-    print Term::ANSIColor.reset
-    print message.chomp
-    puts ""
+    output  = ""
+    output += color
+    output += "#{Time.now.strftime("%H:%M:%S")} #{pad_process_name(name)} | "
+    output += Term::ANSIColor.reset
+    output += message.chomp
+    puts output
   end
 
   def print(message=nil)
