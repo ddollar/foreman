@@ -34,11 +34,11 @@ task :authors do
 end
 
 def latest_release
-  latest = File.read("Changelog.md").split("\n").first.split(" ").last
+  latest = File.read("Changelog.md").split("\n").first.split(" ")[1]
 end
 
 def newer_release
-  tags = %x{ git tag --contains #{latest_release} }.split("\n").sort_by do |tag|
+  tags = %x{ git tag --contains v#{latest_release} }.split("\n").sort_by do |tag|
     Gem::Version.new(tag[1..-1])
   end
   tags.reject { |tag| Gem::Version.new(tag[1..-1]).prerelease? }[1]
@@ -47,12 +47,11 @@ end
 desc "Generate a Changelog"
 task :changelog do
   while release = newer_release
-    entry = %x{ git show --format="%h %cd" #{release} | head -n 1 }
-    commit, date_raw = entry.split(" ", 2)
-    date = Time.parse(date_raw).strftime("%Y-%m-%d")
+    entry = %x{ git show --format="%cd" #{release} | head -n 1 }
+    date = Time.parse(entry.chomp).strftime("%Y-%m-%d")
 
-    message  = "## #{release[1..-1]} #{date} #{commit}\n\n"
-    message += %x{ git log --format="* %s  [%an]" #{latest_release}..#{release} }
+    message  = "## #{release[1..-1]} (#{date})\n\n"
+    message += %x{ git log --format="* %s  [%an]" v#{latest_release}..#{release} }
 
     changelog = File.read("Changelog.md")
     changelog = message + "\n" + changelog
