@@ -38,7 +38,10 @@ def latest_release
 end
 
 def newer_release
-  release = %x{ git tag --contains #{latest_release} }.split("\n")[1]
+  tags = %x{ git tag --contains #{latest_release} }.split("\n").sort_by do |tag|
+    Gem::Version.new(tag[1..-1])
+  end
+  tags.reject { |tag| Gem::Version.new(tag[1..-1]).prerelease? }[1]
 end
 
 desc "Generate a Changelog"
@@ -48,11 +51,13 @@ task :changelog do
     commit, date_raw = entry.split(" ", 2)
     date = Time.parse(date_raw).strftime("%Y-%m-%d")
 
-    message  = "## #{release[1..-1]} #{date} #{commit}\n"
-    message += %x{ git log --format="%s  [%an]" #{latest_release}..#{release} }
+    message  = "## #{release[1..-1]} #{date} #{commit}\n\n"
+    message += %x{ git log --format="* %s  [%an]" #{latest_release}..#{release} }
 
     changelog = File.read("Changelog.md")
     changelog = message + "\n" + changelog
+
+    puts release
 
     File.open("Changelog.md", "w") do |file|
       file.puts changelog
