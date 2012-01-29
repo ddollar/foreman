@@ -3,7 +3,7 @@
 * put an entire line of output inside a single mutex so we don't cross the streams  [David Dollar]
 * fix race condition with process termination  [David Dollar]
 * allow external custom exporters [Chris Lowder]
-* Fix the test for an empty string in bin/runner  [Florian Apolloner]
+* fix the test for an empty string in bin/runner  [Florian Apolloner]
 * ensure we have non-nil data, fixes #111  [David Dollar]
 * make sure error method exists, fixes #104  [David Dollar]
 * clean up chdir usage  [David Dollar]
@@ -12,8 +12,8 @@
 * add jruby support  [David Dollar]
 * pass basedir along to the runner script  [David Dollar]
 * harden runner script  [David Dollar]
-* Add many missing specs  [brainopia]
-* Clean up fakefs usage in specs  [brainopia]
+* add many missing specs  [brainopia]
+* clean up fakefs usage in specs  [brainopia]
 * runit creates a full path to export directory.  [Fletcher Nichol]
 
 ## 0.36.1 (2012-01-18)
