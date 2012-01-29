@@ -83,4 +83,25 @@ describe "Foreman::Engine", :fakefs do
       engine.start
     end
   end
+
+  describe "utf8" do
+    before(:each) do
+      File.open("Procfile", "w") do |file|
+        file.puts "utf8: #{resource_path("bin/utf8")}"
+      end
+    end
+
+    it "should spawn" do
+      stub(subject).watch_for_output
+      stub(subject).watch_for_termination
+      subject.start
+      sleep 1
+      mock(subject).info(/started with pid \d+/, "utf8.1", anything)
+      mock(subject).info("\xff\x03\n", "utf8.1", anything)
+      subject.send(:poll_readers)
+      subject.send(:poll_readers)
+      subject.send(:poll_readers)
+      subject.send(:poll_readers)
+    end
+  end
 end
