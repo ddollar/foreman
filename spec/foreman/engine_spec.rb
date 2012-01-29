@@ -100,8 +100,6 @@ describe "Foreman::Engine", :fakefs do
       mock(subject).info("\xff\x03\n", "utf8.1", anything)
       subject.send(:poll_readers)
       subject.send(:poll_readers)
-      subject.send(:poll_readers)
-      subject.send(:poll_readers)
     end
   end
 end
