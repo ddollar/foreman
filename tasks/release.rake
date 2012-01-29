@@ -62,24 +62,4 @@ task :changelog do
       file.puts changelog
     end
   end
-    
-
-  #   date = 
-  #   message = "## #{release[1..-1]} 
-  # timestamp = Time.now.utc.strftime('%m/%d/%Y')
-  # sha = `git log | head -1`.split(' ').last
-  # changelog = ["#{version} #{timestamp} #{sha}"]
-  # changelog << ('=' * changelog[0].length)
-  # changelog << ''
-
-  # last_sha = `cat Changelog | head -1`.split(' ').last
-  # shortlog = `git log #{last_sha}..HEAD --pretty=format:'%s   [%an]'`
-  # changelog << shortlog.split("\n")
-  # changelog.concat ['', '', '']
-
-  # old_changelog = File.read('Changelog')
-  # File.open('Changelog', 'w') do |file|
-  #   file.write(changelog.join("\n"))
-  #   file.write(old_changelog)
-  # end
 end
