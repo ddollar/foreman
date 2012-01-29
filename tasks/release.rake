@@ -9,8 +9,8 @@ end
 
 desc "Commit the manual to git"
 task "man:commit" => :man do
-  sh "git add README.markdown"
-  sh "git commit -m 'update readme' || echo 'nothing to commit'"
+  sh "git add README.md"
+  sh "git commit -am 'update docs' || echo 'nothing to commit'"
 end
 
 desc "Generate the Github docs"
