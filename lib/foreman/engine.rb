@@ -78,9 +78,17 @@ private ######################################################################
   end
 
   def terminate_gracefully
+    return if @terminating
+    @terminating = true
     info "sending SIGTERM to all processes"
     kill_all "SIGTERM"
-    Timeout.timeout(5) { Process.waitall }
+    Timeout.timeout(5) do
+      while running_processes.length > 0
+        pid, status = Process.wait2
+        process = running_processes.delete(pid)
+        info "process terminated", process.name
+      end
+    end
   rescue Timeout::Error
     info "sending SIGKILL to all processes"
     kill_all "SIGKILL"
@@ -112,7 +120,6 @@ private ######################################################################
     process = running_processes.delete(pid)
     info "process terminated", process.name
     terminate_gracefully
-    kill_all
   rescue Errno::ECHILD
   end
 
