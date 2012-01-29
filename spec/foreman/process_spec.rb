@@ -121,23 +121,6 @@ describe Foreman::Process do
         output.should include('777')
       end
 
-      it 'should handle utf8 data' do
-        preserving_env do
-          ENV.clear
-          run_file 'ruby', <<-CODE
-            # encoding: BINARY
-            $stdout.sync = true
-            while true
-              puts "\u65e5\u672c\u8a9e\u6587\u5b57\u5217"
-              puts "\u0915\u0932\u094d\u0907\u0928\u0643\u0637\u0628\u041a\u0430\u043b\u0438\u043d\u0430"
-              puts "\xff\x03"
-              sleep 1
-            end
-          CODE
-        end
-        lambda { output.split("\n") }.should_not raise_error
-      end
-
       it 'should handle arguments' do
         pending
         run %{ sh -c "trap '' TERM; sleep 10" }
