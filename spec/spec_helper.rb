@@ -68,9 +68,13 @@ def load_export_templates_into_fakefs(type)
   end
 end
 
+def resource_path(filename)
+  File.expand_path("../resources/#{filename}", __FILE__)
+end
+
 def example_export_file(filename)
   FakeFS.deactivate!
-  data = File.read(File.expand_path("../resources/export/#{filename}", __FILE__))
+  data = File.read(File.expand_path(resource_path("export/#{filename}"), __FILE__))
   FakeFS.activate!
   data
 end
