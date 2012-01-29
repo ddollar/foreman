@@ -94,19 +94,23 @@ private ######################################################################
     kill_all "SIGKILL"
   end
 
+  def poll_readers
+    rs, ws = IO.select(readers.values, [], [], 1)
+    (rs || []).each do |r|
+      data = r.gets
+      next unless data
+      ps, message = data.split(",", 2)
+      color = colors[ps.split(".").first]
+      info message, ps, color
+    end
+  end
+
   def watch_for_output
     Thread.new do
       require "win32console" if Foreman.windows?
       begin
         loop do
-          rs, ws = IO.select(readers.values, [], [], 1)
-          (rs || []).each do |r|
-            data = r.gets
-            next unless data
-            ps, message = data.split(",", 2)
-            color = colors[ps.split(".").first]
-            info message, ps, color
-          end
+          poll_readers
         end
       rescue Exception => ex
         puts ex.message
