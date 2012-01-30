@@ -99,6 +99,7 @@ private ######################################################################
     (rs || []).each do |r|
       data = r.gets
       next unless data
+      data.force_encoding("BINARY") if data.respond_to?(:force_encoding)
       ps, message = data.split(",", 2)
       color = colors[ps.split(".").first]
       info message, ps, color
