@@ -95,7 +95,7 @@ describe "Foreman::Engine", :fakefs do
       stub(subject).watch_for_output
       stub(subject).watch_for_termination
       subject.start
-      sleep 1
+      Process.waitall
       mock(subject).info(/started with pid \d+/, "utf8.1", anything)
       mock(subject).info("\xff\x03\n", "utf8.1", anything)
       subject.send(:poll_readers)
