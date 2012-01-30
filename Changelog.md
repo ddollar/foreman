@@ -1,3 +1,10 @@
+## 0.37.2 (2012-01-29)
+
+* 0.37.2  [David Dollar]
+* handle directories with spaces in runner  [David Dollar]
+* update docs  [David Dollar]
+* changelog  [David Dollar]
+
 ## 0.37.1 (2012-01-29)
 
 * use binary pipes to better handle UTF-8 data  [David Dollar]
