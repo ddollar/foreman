@@ -17,8 +17,5 @@ group :development do
   gem 'fakefs', '~> 0.3.2'
   gem 'rr',     '~> 1.0.2'
   gem 'rspec',  '~> 2.0'
-  gem 'ZenTest'
-  gem 'aws-s3'
-  gem "rubyzip"
   gem "simplecov", :require => false
 end
