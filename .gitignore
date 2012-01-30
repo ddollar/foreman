@@ -1,4 +1,5 @@
 /.bundle
+/.rbenv-version
 /coverage
 /example/log/*
 /man/*.html
