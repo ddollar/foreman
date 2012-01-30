@@ -18,7 +18,7 @@ usage() {
 
 while getopts ":hd:" OPT; do
   case $OPT in
-     d) cd $OPTARG ;;
+     d) cd "$OPTARG" ;;
      h) usage ;;
     \?) error "invalid option: -$OPTARG" ;;
      :) error "option -$OPTARG requires an argument" ;;
