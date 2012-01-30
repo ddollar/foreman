@@ -1,6 +1,6 @@
 script: bundle exec rake spec
 
-env: JRUBY_OPTS="--debug -X+O"
+env: JRUBY_OPTS="-X+O"
 
 rvm:
   - 1.8.7
