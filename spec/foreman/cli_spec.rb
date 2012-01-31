@@ -148,15 +148,12 @@ describe "Foreman::CLI", :fakefs do
         end
       end
 
-      # inconsistency in jruby, disabling for now
-      unless Foreman.jruby?
-        describe "and a non-executable command" do
-          let(:command) { __FILE__ }
+      describe "and a non-executable command" do
+        let(:command) { __FILE__ }
 
-          it "should print an error" do
-            mock_error(subject, "not executable: #{command}") do
-              subject.run command
-            end
+        it "should print an error" do
+          mock_error(subject, "not executable: #{command}") do
+            subject.run command
           end
         end
       end
