@@ -4,6 +4,13 @@ require "foreman/engine"
 describe "Foreman::Engine", :fakefs do
   subject { Foreman::Engine.new("Procfile", {}) }
 
+  before do
+    any_instance_of(Foreman::Engine) do |engine|
+      stub(engine).proctitle
+      stub(engine).termtitle
+    end
+  end
+
   describe "initialize" do
     describe "without an existing Procfile" do
       it "raises an error" do
