@@ -3,6 +3,8 @@ require "foreman/cli"
 
 describe "Foreman::CLI", :fakefs do
   subject { Foreman::CLI.new }
+  let(:engine) { subject.send(:engine) }
+  let(:entries) { engine.procfile.entries.inject({}) { |h,e| h.update(e.name => e) } }
 
   describe "start" do
     describe "with a non-existent Procfile" do
@@ -21,6 +23,15 @@ describe "Foreman::CLI", :fakefs do
         dont_allow(subject).error
         mock.instance_of(Foreman::Engine).start
         subject.start
+      end
+
+      it "can run a single process" do
+        dont_allow(subject).error
+        stub(engine).watch_for_output
+        stub(engine).watch_for_termination
+        mock(entries["alpha"]).spawn(1, is_a(IO), engine.directory, {}, 5000) { [] }
+        mock(entries["bravo"]).spawn(0, is_a(IO), engine.directory, {}, 5100) { [] }
+        subject.start("alpha")
       end
     end
   end

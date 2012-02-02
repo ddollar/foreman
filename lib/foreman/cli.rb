@@ -10,7 +10,7 @@ class Foreman::CLI < Thor
 
   class_option :procfile, :type => :string, :aliases => "-f", :desc => "Default: Procfile"
 
-  desc "start", "Start the application"
+  desc "start [PROCESS]", "Start the application (or a specific PROCESS)"
 
   class_option :procfile, :type => :string, :aliases => "-f", :desc => "Default: Procfile"
   class_option :app_root, :type => :string, :aliases => "-d", :desc => "Default: Procfile directory"
@@ -27,8 +27,9 @@ class Foreman::CLI < Thor
     end
   end
 
-  def start
+  def start(process=nil)
     check_procfile!
+    engine.options[:concurrency] = "#{process}=1" if process
     engine.start
   end
 
