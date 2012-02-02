@@ -1,3 +1,10 @@
+## 0.38.0 (2012-02-02)
+
+* bring back single process starting  [David Dollar]
+* more attempts at getting ci working with jruby  [David Dollar]
+* ignore .rbenv-version  [David Dollar]
+* force to binary encoding if supported  [David Dollar]
+
 ## 0.37.2 (2012-01-29)
 
 * handle directories with spaces in runner  [David Dollar]
