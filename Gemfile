@@ -11,6 +11,7 @@ platform :jruby do
 end
 
 group :development do
+  gem 'aws-s3'
   gem 'parka'
   gem 'rake'
   gem 'ronn'

@@ -1,5 +1,7 @@
 file pkg("foreman-#{version}-mingw32.gem") => distribution_files do |t|
-  sh "env PLATFORM=mingw32 gem build foreman.gemspec"
+  Bundler.with_clean_env do
+    sh "env PLATFORM=mingw32 gem build foreman.gemspec"
+  end
   sh "mv foreman-#{version}-mingw32.gem #{t.name}"
 end
 

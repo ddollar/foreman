@@ -1,5 +1,7 @@
 file pkg("foreman-#{version}-jruby.gem") => distribution_files do |t|
-  sh "env PLATFORM=java gem build foreman.gemspec"
+  Bundler.with_clean_env do
+    sh "env PLATFORM=java gem build foreman.gemspec"
+  end
   sh "mv foreman-#{version}-java.gem #{t.name}"
 end
 
