@@ -13,7 +13,7 @@ file pkg("foreman-#{version}.pkg") => distribution_files do |t|
 
     mkdir_p "pkg"
     mkdir_p "pkg/Resources"
-    mkdir_p "pkg/foreman-#{version}.pkg"
+    mkdir_p "pkg/foreman.pkg"
 
     dist = File.read(resource("pkg/Distribution.erb"))
     dist = ERB.new(dist).result(binding)
@@ -21,16 +21,16 @@ file pkg("foreman-#{version}.pkg") => distribution_files do |t|
 
     dist = File.read(resource("pkg/PackageInfo.erb"))
     dist = ERB.new(dist).result(binding)
-    File.open("pkg/foreman-#{version}.pkg/PackageInfo", "w") { |f| f.puts dist }
+    File.open("pkg/foreman.pkg/PackageInfo", "w") { |f| f.puts dist }
 
-    mkdir_p "pkg/foreman-#{version}.pkg/Scripts"
-    cp resource("pkg/postinstall"), "pkg/foreman-#{version}.pkg/Scripts/postinstall"
-    chmod 0755, "pkg/foreman-#{version}.pkg/Scripts/postinstall"
+    mkdir_p "pkg/foreman.pkg/Scripts"
+    cp resource("pkg/postinstall"), "pkg/foreman.pkg/Scripts/postinstall"
+    chmod 0755, "pkg/foreman.pkg/Scripts/postinstall"
 
-    sh %{ mkbom -s foreman pkg/foreman-#{version}.pkg/Bom }
+    sh %{ mkbom -s foreman pkg/foreman.pkg/Bom }
 
     Dir.chdir("foreman") do
-      sh %{ pax -wz -x cpio . > ../pkg/foreman-#{version}.pkg/Payload }
+      sh %{ pax -wz -x cpio . > ../pkg/foreman.pkg/Payload }
     end
 
     sh %{ pkgutil --flatten pkg foreman-#{version}.pkg }
