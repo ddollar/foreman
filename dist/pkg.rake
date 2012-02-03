@@ -35,6 +35,7 @@ file pkg("foreman-#{version}.pkg") => distribution_files do |t|
 
     sh %{ pkgutil --flatten pkg foreman-#{version}.pkg }
 
+    FileUtils.mkdir_p(File.dirname(t.name))
     cp_r "foreman-#{version}.pkg", t.name
   end
 end
