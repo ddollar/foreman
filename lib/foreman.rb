@@ -11,7 +11,7 @@ module Foreman
   end
 
   def self.runner
-    File.expand_path("../../bin/runner", __FILE__)
+    File.expand_path("../../bin/foreman-runner", __FILE__)
   end
 
   def self.jruby?

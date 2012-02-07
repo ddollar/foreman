@@ -4,7 +4,7 @@ file pkg("/apt-#{version}/foreman-#{version}.deb") => distribution_files("deb") 
       assemble_distribution
       assemble_gems
       assemble resource("deb/foreman"), "bin/foreman", 0755
-      File.chmod 0755, "bin/runner"
+      File.chmod 0755, "bin/foreman-runner"
     end
 
     assemble resource("deb/control"), "control"

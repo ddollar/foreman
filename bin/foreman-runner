@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#/ Usage: runner [-d <dir>] <command>
+#/ Usage: foreman-runner [-d <dir>] <command>
 #/
 #/ Run a command with exec, optionally changing directory first
 
