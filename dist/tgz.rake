@@ -3,7 +3,7 @@ file pkg("foreman-#{version}.tgz") => distribution_files do |t|
     mkchdir("foreman") do
       assemble_distribution
       assemble_gems
-      rm_rf "bin"
+      rm_f "bin/foreman"
       assemble resource("tgz/foreman"), "foreman", 0755
     end
 
