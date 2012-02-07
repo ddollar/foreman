@@ -33,7 +33,7 @@ Manage Procfile-based applications
 David Dollar
 
 #### Patches contributed by
-Adam Wiggins, Chris Continanza, Chris Lowder, Craig R Webster, Dan Farina, Dan Peterson, David Dollar, Fletcher Nichol, Florian Apolloner, Gabriel Burt, Gamaliel Toro, Greg Reinacker, Hugues Le Gendre, Hunter Nield, Iain Hecker, Jay Zeschin, Keith Rarick, Khaja Minhajuddin, Lincoln Stoll, Marcos Muino Garcia, Mark McGranaghan, Matt Griffin, Matt Haynes, Matthijs Langenberg, Michael Dwan, Michael van Rooijen, Mike Javorski, Nathan Broadbent, Nathan L Smith, Nick Zadrozny, Phil Hagelberg, Ricardo Chimal, Jr, Thom May, Tom Ward, brainopia, clifff, jc00ke
+Adam Wiggins, Chris Continanza, Chris Lowder, Craig R Webster, Dan Farina, Dan Peterson, David Dollar, Fletcher Nichol, Florian Apolloner, Gabriel Burt, Gamaliel Toro, Greg Reinacker, Hugues Le Gendre, Hunter Nield, Iain Hecker, Jay Zeschin, John Firebaugh, Keith Rarick, Khaja Minhajuddin, Lincoln Stoll, Marcos Muino Garcia, Mark McGranaghan, Matt Griffin, Matt Haynes, Matthijs Langenberg, Michael Dwan, Michael van Rooijen, Mike Javorski, Nathan Broadbent, Nathan L Smith, Nick Zadrozny, Phil Hagelberg, Ricardo Chimal, Jr, Thom May, Tom Ward, brainopia, clifff, jc00ke
 
 ## License
 
