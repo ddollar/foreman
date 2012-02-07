@@ -1,3 +1,10 @@
+## 0.39.0 (2012-02-07)
+
+* rename bin/runner to bin/foreman-runner  [David Dollar]
+* fix tgz release  [David Dollar]
+* bundle update hpricot  [John Firebaugh]
+* touch up .pkg release tasks  [David Dollar]
+
 ## 0.38.0 (2012-02-02)
 
 * bring back single process starting  [David Dollar]
