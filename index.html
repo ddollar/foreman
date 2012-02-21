@@ -64,7 +64,7 @@
     <a href="#DESCRIPTION">DESCRIPTION</a>
     <a href="#RUNNING">RUNNING</a>
     <a href="#EXPORTING">EXPORTING</a>
-    <a href="#OPTIONS">OPTIONS</a>
+    <a href="#GLOBAL-OPTIONS">GLOBAL OPTIONS</a>
     <a href="#EXPORT-FORMATS">EXPORT FORMATS</a>
     <a href="#INITTAB-EXPORT">INITTAB EXPORT</a>
     <a href="#UPSTART-EXPORT">UPSTART EXPORT</a>
@@ -73,7 +73,7 @@
     <a href="#DEFAULT-OPTIONS">DEFAULT OPTIONS</a>
     <a href="#EXAMPLES">EXAMPLES</a>
     <a href="#COPYRIGHT">COPYRIGHT</a>
-  </div>
+    </div>
 
   <ol class='man-decor man-head man head'>
     <li class='tl'>foreman(1)</li>
@@ -93,7 +93,7 @@
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
-<p><strong>Foreman</strong> is a manager for Procfile-based applications. Its aim is to
+<p>Foreman is a manager for Procfile-based applications. Its aim is to
 abstract away the details of the Procfile format, and allow you to either run
 your application directly or export it to some other process management
 format.</p>
@@ -118,6 +118,9 @@ a multiple of 1000.</p></dd>
 </dl>
 
 
+<p><code>foreman run</code> is used to run one-off commands using the same environment
+as your defined processes.</p>
+
 <h2 id="EXPORTING">EXPORTING</h2>
 
 <p><code>foreman export</code> is used to export your application to another process
@@ -136,12 +139,14 @@ should be in the format <code>process=num,process=num</code></p></dd>
 <dt><code>-l</code>, <code>--log</code></dt><dd><p>Specify the directory to place process logs in.</p></dd>
 <dt><code>-p</code>, <code>--port</code></dt><dd><p>Specify which port to use as the base for this application. Should be
 a multiple of 1000.</p></dd>
+<dt><code>-t</code>, <code>--template</code></dt><dd><p>Specify an alternate template to use for creating export files.
+See <a href="https://github.com/ddollar/foreman/tree/master/data/export" data-bare-link="true">https://github.com/ddollar/foreman/tree/master/data/export</a> for examples.</p></dd>
 <dt><code>-u</code>, <code>--user</code></dt><dd><p>Specify the user the application should be run as. Defaults to the
 app name</p></dd>
 </dl>
 
 
-<h2 id="OPTIONS">OPTIONS</h2>
+<h2 id="GLOBAL-OPTIONS">GLOBAL OPTIONS</h2>
 
 <p>These options control all modes of foreman's operation.</p>
 
@@ -247,8 +252,8 @@ port: 15000
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>Foreman 0.37.2</li>
-    <li class='tc'>January 2012</li>
+    <li class='tl'>Foreman 0.39.0</li>
+    <li class='tc'>February 2012</li>
     <li class='tr'>foreman(1)</li>
   </ol>
 
