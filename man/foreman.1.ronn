@@ -8,7 +8,7 @@ foreman(1) -- manage Procfile-based applications
 
 ## DESCRIPTION
 
-**Foreman** is a manager for Procfile-based applications. Its aim is to
+Foreman is a manager for Procfile-based applications. Its aim is to
 abstract away the details of the Procfile format, and allow you to either run
 your application directly or export it to some other process management
 format.
@@ -32,6 +32,9 @@ The following options control how the application is run:
   * `-p`, `--port`:
     Specify which port to use as the base for this application. Should be
     a multiple of 1000.
+
+`foreman run` is used to run one-off commands using the same environment
+as your defined processes.
 
 ## EXPORTING
 
@@ -58,11 +61,15 @@ The following options control how the application is run:
     Specify which port to use as the base for this application. Should be
     a multiple of 1000.
 
+  * `-t`, `--template`:
+    Specify an alternate template to use for creating export files.
+    See <https://github.com/ddollar/foreman/tree/master/data/export> for examples.
+
   * `-u`, `--user`:
     Specify the user the application should be run as. Defaults to the
     app name
 
-## OPTIONS
+## GLOBAL OPTIONS
 
 These options control all modes of foreman's operation.
 
