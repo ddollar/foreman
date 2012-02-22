@@ -54,6 +54,7 @@ class Foreman::CLI < Thor
   desc "check", "Validate your application's Procfile"
 
   def check
+    check_procfile!
     error "no processes defined" unless engine.procfile.entries.length > 0
     puts "valid procfile detected (#{engine.procfile.process_names.join(', ')})"
   end
