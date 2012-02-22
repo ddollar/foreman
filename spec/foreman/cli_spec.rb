@@ -120,6 +120,14 @@ describe "Foreman::CLI", :fakefs do
         end
       end
     end
+
+    describe "without a Procfile" do
+      it "displays an error" do
+        mock_error(subject, "Procfile does not exist.") do
+          subject.check
+        end
+      end
+    end
   end
 
   describe "run" do
