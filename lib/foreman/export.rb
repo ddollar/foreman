@@ -30,3 +30,5 @@ require "foreman/export/inittab"
 require "foreman/export/upstart"
 require "foreman/export/bluepill"
 require "foreman/export/runit"
+require "foreman/export/supervisord"
+
