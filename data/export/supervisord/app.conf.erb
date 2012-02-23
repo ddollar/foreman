@@ -13,7 +13,7 @@ stdout_logfile=<%= log_root %>/<%=process.name%>-<%=num%>.log
 stderr_logfile=<%= log_root %>/<%=process.name%>-<%=num%>err.log
 user=<%= user %>
 directory=<%= engine.directory %>
-environment=<% engine.environment.each_pair { |var,env| "#{var.upcase}=#{env}" }.join(',') %>,<%= "PORT=#{port}" %>
+environment=<% (engine.environment.each_pair { |var,env| "#{var.upcase}=#{env}" }.to_a + ["PORT=#{port}"]).join(',') %>
 <% 
   end
 end 
