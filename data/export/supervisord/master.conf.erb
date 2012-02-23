@@ -1,0 +1,10 @@
+[program:<%= app %>-<%= process.name %>]
+command=<%= process.command %>
+autostart=true
+autorestart=true
+stopsignal=QUIT
+stdout_logfile=<%= log_root %>/<%=process.name%>-<%=num%>.log
+stderr_logfile=<%= log_root %>/<%=process.name%>-<%=num%>err.log
+user=<%= user %>
+directory=<%= engine.directory %>
+environment=<% engine.environment.each_pair { |var,env| "#{var.upcase}=#{env}" }.join(',') %>
