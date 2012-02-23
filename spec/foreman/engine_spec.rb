@@ -26,6 +26,22 @@ describe "Foreman::Engine", :fakefs do
         subject.procfile["bravo"].command.should == "./bravo"
       end
     end
+    
+    describe "with a Hash as Procfile" do
+
+      subject { Foreman::Engine.new({ 'gamma' => './gamma', 'delta' => './delta' }, { :app_root => __FILE__ }) }
+      
+      it "reads the processes" do
+        subject.procfile["gamma"].command.should == "./gamma"
+        subject.procfile["delta"].command.should == "./delta"
+      end
+      
+      it "requires the presence of the app_root option" do
+        lambda { Foreman::Engine.new({'gamma' => './gamma', 'delta' => './delta'}, {}) }.should raise_error
+      end
+      
+    end
+    
   end
 
   describe "start" do
