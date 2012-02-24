@@ -10,6 +10,7 @@ require "thread"
 
 class Foreman::Engine
 
+  attr_reader :environment
   attr_reader :procfile
   attr_reader :directory
   attr_reader :options
@@ -26,11 +27,6 @@ class Foreman::Engine
     @options = options.dup
     @environment = read_environment_files(options[:env])
     @output_mutex = Mutex.new
-  end
-
-  def self.load_env!(env_file)
-    @environment = read_environment_files(env_file)
-    apply_environment!
   end
 
   def start
@@ -50,6 +46,10 @@ class Foreman::Engine
     base_port ||= 5000
     offset = procfile.process_names.index(process.name) * 100
     base_port.to_i + offset + num - 1
+  end
+
+  def apply_environment!
+    environment.each { |k,v| ENV[k] = v }
   end
 
 private ######################################################################
@@ -198,42 +198,27 @@ private ######################################################################
     COLORS[@current_color]
   end
 
-  module Env
-    attr_reader :environment
+  def read_environment_files(filenames)
+    environment = {}
 
-    def read_environment_files(filenames)
-      environment = {}
-
-      (filenames || "").split(",").map(&:strip).each do |filename|
-        error "No such file: #{filename}" unless File.exists?(filename)
-        environment.merge!(read_environment(filename))
-      end
-
-      environment.merge!(read_environment(".env")) unless filenames
-      environment
+    (filenames || "").split(",").map(&:strip).each do |filename|
+      error "No such file: #{filename}" unless File.exists?(filename)
+      environment.merge!(read_environment(filename))
     end
 
-    def read_environment(filename)
-      return {} unless File.exists?(filename)
-
-      File.read(filename).split("\n").inject({}) do |hash, line|
-        if line =~ /\A([A-Za-z_0-9]+)=(.*)\z/
-          hash[$1] = $2
-        end
-        hash
-      end
-    end
-
-    def apply_environment!
-      @environment.each { |k,v| ENV[k] = v }
-    end
-
-    def error(message)
-      puts "ERROR: #{message}"
-      exit 1
-    end
+    environment.merge!(read_environment(".env")) unless filenames
+    environment
   end
 
-  include Env
-  extend  Env
+  def read_environment(filename)
+    return {} unless File.exists?(filename)
+
+        if line =~ /\A([A-Za-z_0-9]+)=(.*)\z/
+          hash[$1] = $2
+    File.read(filename).split("\n").inject({}) do |hash, line|
+        end
+      end
+      hash
+    end
+  end
 end
