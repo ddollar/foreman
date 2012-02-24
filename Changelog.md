@@ -1,3 +1,10 @@
+## 0.40.0 (2012-02-24)
+
+* support various quoting styles in .env  [David Dollar]
+* remove load_env! as it's made unnecessary by foreman run  [David Dollar]
+* Provide a useful error if `foreman check` fails to find a Procfile  [R. Tyler Croy]
+* update docs  [David Dollar]
+
 ## 0.39.0 (2012-02-07)
 
 * rename bin/runner to bin/foreman-runner  [David Dollar]
