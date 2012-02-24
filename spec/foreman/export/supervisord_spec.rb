@@ -29,21 +29,25 @@ describe Foreman::Export::Supervisord, :fakefs do
     let(:options) { Hash[:concurrency => "alpha=2"] }
 
     it "exports to the filesystem with concurrency" do
-      pending
+      supervisord.export
+      
+      File.read("/tmp/init/app.conf").should            == example_export_file("supervisord/app-alpha-2.conf")
     end
   end
 
   context "with alternate templates" do
     let(:template_root) { "/tmp/alternate" }
-    let(:supervisord) { Foreman::Export::Upstart.new("/tmp/init", engine, :template => template_root) }
+    let(:supervisord) { Foreman::Export::Supervisord.new("/tmp/init", engine, :template => template_root) }
 
     before do
       FileUtils.mkdir_p template_root
-      File.open("#{template_root}/master.conf.erb", "w") { |f| f.puts "alternate_template" }
+      File.open("#{template_root}/app.conf.erb", "w") { |f| f.puts "alternate_template" }
     end
 
     it "can export with alternate template files" do
-      pending
+      supervisord.export
+      
+      File.read("/tmp/init/app.conf").should == "alternate_template\n"
     end
   end
 
@@ -54,7 +58,7 @@ describe Foreman::Export::Supervisord, :fakefs do
       ENV['_FOREMAN_SPEC_HOME'] = ENV['HOME']
       ENV['HOME'] = "/home/appuser"
       FileUtils.mkdir_p default_template_root
-      File.open("#{default_template_root}/master.conf.erb", "w") { |f| f.puts "default_alternate_template" }
+      File.open("#{default_template_root}/app.conf.erb", "w") { |f| f.puts "default_alternate_template" }
     end
 
     after do
@@ -62,7 +66,9 @@ describe Foreman::Export::Supervisord, :fakefs do
     end
 
     it "can export with alternate template files" do
-      pending
+      supervisord.export
+
+      File.read("/tmp/init/app.conf").should == "default_alternate_template\n"
     end
   end
 

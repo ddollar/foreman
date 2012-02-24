@@ -1,16 +1,21 @@
-<% engine.procfile.entries.each do |process|
-  p self.concurrency[process.name]
+<% 
+engine.procfile.entries.each do |process|
   next if (conc = self.concurrency[process.name]) < 1 
   1.upto(self.concurrency[process.name]) do |num| 
-    port = engine.port_for(process, num, self.port) %>  
-[program:<%= app %>-<%= process.name %>]
+    port = engine.port_for(process, num, self.port) 
+    name = if (conc > 1); "#{process.name}-#{num}" else process.name; end
+    environment = (engine.environment.each_pair { |var,env| "#{var.upcase}=#{env}" }.to_a << "PORT=#{port}")
+%>  
+[program:<%= app %>-<%= name %>]
 command=<%= process.command %>
 autostart=true
 autorestart=true
 stopsignal=QUIT
-stdout_logfile=<%= log_root %>/<%=process.name%>-<%=num%>.log
-stderr_logfile=<%= log_root %>/<%=process.name%>-<%=num%>err.log
+stdout_logfile=<%= log_root %>/<%=process.name%>-<%=num%>-out.log
+stderr_logfile=<%= log_root %>/<%=process.name%>-<%=num%>-err.log
 user=<%= user %>
 directory=<%= engine.directory %>
-environment=<% (engine.environment.each_pair { |var,env| "#{var.upcase}=#{env}" }.to_a + ["PORT=#{port}"]).join(',') 
-end end %>
+environment=<%= environment.join(',') %><%
+  end 
+end 
+%>
