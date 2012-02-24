@@ -53,14 +53,16 @@ describe "Foreman::Engine", :fakefs do
     before(:each) do
       write_procfile
       stub(Process).fork
+      any_instance_of(Foreman::Engine) do |engine|
+        stub(engine).info
+        stub(engine).spawn_processes
+        stub(engine).watch_for_termination
+      end
     end
 
     it "should read if specified" do
       File.open("/tmp/env", "w") { |f| f.puts("FOO=baz") }
       engine = Foreman::Engine.new("Procfile", :env => "/tmp/env")
-      stub(engine).info
-      mock(engine).spawn_processes
-      mock(engine).watch_for_termination
       engine.environment.should == {"FOO"=>"baz"}
       engine.start
     end
@@ -69,11 +71,19 @@ describe "Foreman::Engine", :fakefs do
       File.open("/tmp/env1", "w") { |f| f.puts("FOO=bar") }
       File.open("/tmp/env2", "w") { |f| f.puts("BAZ=qux") }
       engine = Foreman::Engine.new("Procfile", :env => "/tmp/env1,/tmp/env2")
-      stub(engine).info
-      mock(engine).spawn_processes
-      mock(engine).watch_for_termination
       engine.environment.should == { "FOO"=>"bar", "BAZ"=>"qux" }
       engine.start
+    end
+
+    it "should handle quoted values" do
+      File.open("/tmp/env", "w") do |f|
+        f.puts 'FOO=bar'
+        f.puts 'BAZ="qux"'
+        f.puts "FRED='barney'"
+        f.puts 'OTHER="escaped\"quote"'
+      end
+      engine = Foreman::Engine.new("Procfile", :env => "/tmp/env")
+      engine.environment.should == { "FOO" => "bar", "BAZ" => "qux", "FRED" => "barney", "OTHER" => 'escaped"quote' }
     end
 
     it "should fail if specified and doesnt exist" do
@@ -84,8 +94,6 @@ describe "Foreman::Engine", :fakefs do
     it "should read .env if none specified" do
       File.open(".env", "w") { |f| f.puts("FOO=qoo") }
       engine = Foreman::Engine.new("Procfile")
-      mock(engine).spawn_processes
-      mock(engine).watch_for_termination
       engine.environment.should == {"FOO"=>"qoo"}
       engine.start
     end
