@@ -19,7 +19,7 @@ class Foreman::Export::Supervisord < Foreman::Export::Base
     end
 
     app_template = export_template("supervisord", "app.conf.erb", template_root)
-    app_config   = ERB.new(app_template).result(binding)
+    app_config   = ERB.new(app_template, 0, '<').result(binding)
     write_file "#{location}/#{app}.conf", app_config
   end
 
