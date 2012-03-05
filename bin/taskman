@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+$:.unshift File.expand_path("../../lib", __FILE__)
+
+require "foreman/cli"
+
+Foreman::CLI.engine_class = Foreman::TmuxEngine
+Foreman::CLI.start
