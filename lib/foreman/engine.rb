@@ -1,10 +1,10 @@
 require "foreman"
+require "foreman/color"
 require "foreman/process"
 require "foreman/procfile"
 require "foreman/utils"
 require "tempfile"
 require "timeout"
-require "term/ansicolor"
 require "fileutils"
 require "thread"
 
@@ -15,11 +15,10 @@ class Foreman::Engine
   attr_reader :directory
   attr_reader :options
 
-  extend Term::ANSIColor
+  COLORS = %w( cyan yellow green magenta red blue intense_cyan intense_yellow
+               intense_green intense_magenta intense_red, intense_blue )
 
-  COLORS = [ cyan, yellow, green, magenta, red, blue,
-             intense_cyan, intense_yellow, intense_green, intense_magenta,
-             intense_red, intense_blue ]
+  Foreman::Color.enable($stdout)
 
   def initialize(procfile, options={})
     @procfile  = Foreman::Procfile.new(procfile)
@@ -128,11 +127,11 @@ private ######################################################################
   rescue Errno::ECHILD
   end
 
-  def info(message, name="system", color=Term::ANSIColor.white)
+  def info(message, name="system", color=:white)
     output  = ""
-    output += color
+    output += $stdout.color(color)
     output += "#{Time.now.strftime("%H:%M:%S")} #{pad_process_name(name)} | "
-    output += Term::ANSIColor.reset
+    output += $stdout.color(:reset)
     output += message.chomp
     puts output
   end
@@ -182,20 +181,13 @@ private ######################################################################
   end
 
   def assign_colors
-    procfile.entries.each do |entry|
-      colors[entry.name] = next_color
+    procfile.entries.each_with_index do |entry, idx|
+      colors[entry.name] = COLORS[idx % COLORS.length]
     end
   end
 
   def process_by_reader(reader)
     readers.invert[reader]
-  end
-
-  def next_color
-    @current_color ||= -1
-    @current_color  +=  1
-    @current_color = 0 if COLORS.length < @current_color
-    COLORS[@current_color]
   end
 
   def read_environment_files(filenames)

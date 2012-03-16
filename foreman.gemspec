@@ -16,8 +16,7 @@ Gem::Specification.new do |gem|
   gem.files = Dir["**/*"].select { |d| d =~ %r{^(README|bin/|data/|ext/|lib/|spec/|test/)} }
   gem.files << "man/foreman.1"
 
-  gem.add_dependency 'term-ansicolor', '~> 1.0.7'
-  gem.add_dependency 'thor',           '>= 0.13.6'
+  gem.add_dependency 'thor', '>= 0.13.6'
 
   if ENV["PLATFORM"] == "java"
     gem.add_dependency "posix-spawn", "~> 0.3.6"
