@@ -30,7 +30,7 @@ describe Foreman::Export::Supervisord, :fakefs do
 
     it "exports to the filesystem with concurrency" do
       supervisord.export
-      
+
       File.read("/tmp/init/app.conf").should            == example_export_file("supervisord/app-alpha-2.conf")
     end
   end
@@ -46,7 +46,7 @@ describe Foreman::Export::Supervisord, :fakefs do
 
     it "can export with alternate template files" do
       supervisord.export
-      
+
       File.read("/tmp/init/app.conf").should == "alternate_template\n"
     end
   end
