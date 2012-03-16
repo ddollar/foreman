@@ -1,3 +1,8 @@
+## 0.41.0 (2012-03-16)
+
+* replace term-ansicolor with built-in colorization  [David Dollar]
+* supervisord export template  [Raphael Randschau]
+
 ## 0.40.0 (2012-02-24)
 
 * support various quoting styles in .env  [David Dollar]
