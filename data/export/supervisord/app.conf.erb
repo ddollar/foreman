@@ -1,12 +1,15 @@
 <%
+app_names = []
 engine.procfile.entries.each do |process|
   next if (conc = self.concurrency[process.name]) < 1
   1.upto(self.concurrency[process.name]) do |num|
     port = engine.port_for(process, num, self.port)
     name = if (conc > 1); "#{process.name}-#{num}" else process.name; end
-    environment = (engine.environment.each_pair { |var,env| "#{var.upcase}=#{env}" }.to_a << "PORT=#{port}")
+    environment = (engine.environment.map{ |var,env| "#{var.upcase}=#{env}" } + ["PORT=#{port}"])
+    app_name = "#{app}-#{name}"
+    app_names << app_name
 %>
-[program:<%= app %>-<%= name %>]
+[program:<%= app_name %>]
 command=<%= process.command %>
 autostart=true
 autorestart=true
@@ -19,3 +22,6 @@ environment=<%= environment.join(',') %><%
   end
 end
 %>
+
+[group:<%= app %>]
+programs=<%= app_names.join(',') %>
