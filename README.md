@@ -27,6 +27,12 @@ Manage Procfile-based applications
 * [wiki](http://github.com/ddollar/foreman/wiki)
 * [changelog](https://github.com/ddollar/foreman/blob/master/Changelog.md)
 
+## Ports
+
+* [shoreman](https://github.com/hecticjeff/shoreman) - shell
+* [honcho](https://github.com/nickstenning/honcho) - python
+* [norman](https://github.com/josh/norman) - node.js
+
 ## Authors
 
 #### Created and maintained by
