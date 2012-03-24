@@ -16,18 +16,10 @@ describe Foreman::Export::Monit, :fakefs do
     monit.export
 
     File.read("/tmp/init/app.monitrc").should         == example_export_file("monit/app-alpha1-bravo1.monitrc")
-    # File.read("/tmp/init/app-alpha.conf").should   == example_export_file("monit/app-alpha.conf")
-    # File.read("/tmp/init/app-alpha-1.conf").should == example_export_file("monit/app-alpha-1.conf")
-    # File.read("/tmp/init/app-bravo.conf").should   == example_export_file("monit/app-bravo.conf")
-    # File.read("/tmp/init/app-bravo-1.conf").should == example_export_file("monit/app-bravo-1.conf")
   end
 
   it "cleans up if exporting into an existing dir" do
     mock(FileUtils).rm("/tmp/init/app.monitrc")
-    # mock(FileUtils).rm("/tmp/init/app-alpha.conf")
-    # mock(FileUtils).rm("/tmp/init/app-alpha-1.conf")
-    # mock(FileUtils).rm("/tmp/init/app-bravo.conf")
-    # mock(FileUtils).rm("/tmp/init/app-bravo-1.conf")
 
     monit.export
     monit.export
@@ -40,10 +32,6 @@ describe Foreman::Export::Monit, :fakefs do
       monit.export
 
       File.read("/tmp/init/app.monitrc").should         == example_export_file("monit/app-alpha2.monitrc")
-      # File.read("/tmp/init/app-alpha.conf").should      == example_export_file("monit/app-alpha.conf")
-      # File.read("/tmp/init/app-alpha-1.conf").should    == example_export_file("monit/app-alpha-1.conf")
-      # File.read("/tmp/init/app-alpha-2.conf").should    == example_export_file("monit/app-alpha-2.conf")
-      # File.exists?("/tmp/init/app-bravo-1.conf").should == false
     end
   end
 
