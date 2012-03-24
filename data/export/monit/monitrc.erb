@@ -5,6 +5,18 @@ check process <%= app %>-<%= process.name %>-<%= num %>
   with pidfile <%= pid_file_for(process, num) %>
   start program "/bin/sh -c 'PORT=<%= port %> PID_FILE=<%= pid_file_for(process, num) %> LOG_FILE=<%= log_file_for(process, num) %> <%= wrapper_path_for(process) %> start'" as uid <%= user %>
   stop program "/bin/sh -c 'PID_FILE=<%= pid_file_for(process, num) %> <%= wrapper_path_for(process) %> stop'" as uid <%= user %>
+<%- if alert_on_mem[process.name] -%>
+  if mem > <%= alert_on_mem[process.name] %> for 2 cycles then alert
+<% end -%>
+<%- if restart_on_mem[process.name] -%>
+  if mem > <%= restart_on_mem[process.name] %> for 1 cycles then restart
+<%- end -%>
+<%- if alert_on_cpu[process.name] -%>
+  if cpu > <%= alert_on_cpu[process.name] %> for 2 cycles then alert
+<%- end -%>
+<%- if restart_on_cpu[process.name] -%>
+  if cpu > <%= restart_on_cpu[process.name] %> for 1 cycles then restart
+<%- end -%>
   group <%= app %>-<%= process.name %>
   depends on <%= File.basename(check_file_for(process)) %>
 

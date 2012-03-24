@@ -2,8 +2,8 @@ check process app-alpha-1
   with pidfile /var/run/app/alpha-1.pid
   start program "/bin/sh -c 'PORT=5000 PID_FILE=/var/run/app/alpha-1.pid LOG_FILE=/var/log/app/alpha-1.log /tmp/init/app-alpha.sh start'" as uid app
   stop program "/bin/sh -c 'PID_FILE=/var/run/app/alpha-1.pid /tmp/init/app-alpha.sh stop'" as uid app
-  if mem > 175.0 MB for 2 cycles then alert
-  if mem > 200.0 MB for 1 cycles then restart
+  if mem > 175 MB for 2 cycles then alert
+  if mem > 200 MB for 1 cycles then restart
   if cpu > 22% for 2 cycles then alert
   if cpu > 25% for 1 cycles then restart
   group app-alpha
@@ -13,8 +13,8 @@ check process app-alpha-2
   with pidfile /var/run/app/alpha-2.pid
   start program "/bin/sh -c 'PORT=5001 PID_FILE=/var/run/app/alpha-2.pid LOG_FILE=/var/log/app/alpha-2.log /tmp/init/app-alpha.sh start'" as uid app
   stop program "/bin/sh -c 'PID_FILE=/var/run/app/alpha-2.pid /tmp/init/app-alpha.sh stop'" as uid app
-  if mem > 175.0 MB for 2 cycles then alert
-  if mem > 200.0 MB for 1 cycles then restart
+  if mem > 175 MB for 2 cycles then alert
+  if mem > 200 MB for 1 cycles then restart
   if cpu > 22% for 2 cycles then alert
   if cpu > 25% for 1 cycles then restart
   group app-alpha
@@ -33,6 +33,7 @@ check process app-bravo-1
   group app-bravo
   depends on bravo.restart
 
-check file bravo.restart with path /var/lock/subsys/app/bravo.restart
+check file bravo.restart
+  with path /var/lock/subsys/app/bravo.restart
   if changed timestamp then restart
 
