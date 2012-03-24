@@ -37,26 +37,23 @@ function start() {
 
 function stop() {
     echo -n "Terminating process $0 ..."
-    if [ -s $PID_FILE ]
-    then
-        read pid < $PID_FILE
-        if checkpid $pid 2>&1; then
-            kill -SIGTERM $pid
-            if [ $? -eq 0 ]; then
-                echo $! > $PID_FILE
-                echo "[OK]"
-                rm -rf $PID_FILE
-            else
-                echo "[FAIL]"
-                exit $STATUS_UNKNOWN
-            fi
-        else
-            echo "[FAIL] process with PID ${pid} does not exist"
-            exit $STATUS_DEAD_WITH_PID
+    GRACE_TIME=${GRACE_TIME:-40}
+    if [ -f $PID_FILE ]; then
+      PID=`cat $PID_FILE`
+      kill $PID 2>/dev/null; true
+      SLEEP_COUNT=0
+      while [ -e /proc/$PID ]; do
+        sleep .25
+        let "SLEEP_COUNT+=1"
+        if(( "$SLEEP_COUNT" > $GRACE_TIME )); then
+          echo "Stop wait time exceeded. Killing..."
+          kill -9 $PID 2>/dev/null; true
+          break
         fi
+      done
+      rm $PID_FILE
     else
-        echo "[FAIL] pid file $PID_FILE is not found"
-        exit $STATUS_UNKOWN
+      echo "No PID file found! Cannot stop $COMMAND_NAME"
     fi
 }
 
