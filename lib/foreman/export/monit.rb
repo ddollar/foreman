@@ -2,14 +2,18 @@ require "erb"
 require "foreman/export"
 
 # Example usage (from root of this project):
-# $ foreman export monit tmp/ -l tmp/ -f data/example/Procfile --alert-on-mem=300MB
-# [foreman export] writing: /Users/drnic/Projects/gems/foreman/tmp/example-ticker.sh
-# [foreman export] writing: /Users/drnic/Projects/gems/foreman/tmp/example-error.sh
-# [foreman export] writing: /Users/drnic/Projects/gems/foreman/tmp/example-utf8.sh
-# [foreman export] writing: /Users/drnic/Projects/gems/foreman/tmp/example.monitrc
+# $ foreman export monit /etc/monit.d -f data/example/Procfile --alert-on-mem="300 MB" -u deploy
+#[foreman export] cleaning up: /etc/monit.d/example.monitrc
+#[foreman export] writing: /etc/monit.d/example-ticker.sh
+#[foreman export] writing: /etc/monit.d/example-error.sh
+#[foreman export] writing: /etc/monit.d/example-utf8.sh
+#[foreman export] writing: /etc/monit.d/example.monitrc
 #
+# $ monit reload
+# Reinitializing monit daemon
+
 # Generated example monitrc file:
-# $ cat tmp/example.monitrc
+# $ cat /etc/monit.d/example.monitrc
 
 
 class Foreman::Export::Monit < Foreman::Export::Base
