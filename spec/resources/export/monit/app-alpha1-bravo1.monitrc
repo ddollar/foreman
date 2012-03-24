@@ -1,18 +1,22 @@
-check process app-alpha-1 with pidfile /var/run/app/alpha-1.pid
-  depends on alpha.restart
-  group app-alpha
+check process app-alpha-1
+  with pidfile /var/run/app/alpha-1.pid
   start program "/bin/sh -c 'PORT=5000 PID_FILE=/var/run/app/alpha-1.pid LOG_FILE=/var/log/app/alpha-1.log /tmp/init/app-alpha.sh start'" as uid app
   stop program "/bin/sh -c 'PID_FILE=/var/run/app/alpha-1.pid /tmp/init/app-alpha.sh stop'" as uid app
+  group app-alpha
+  depends on alpha.restart
 
-check file alpha.restart with path /var/lock/subsys/app/alpha.restart
+check file alpha.restart
+  with path /var/lock/subsys/app/alpha.restart
   if changed timestamp then restart
 
-check process app-bravo-1 with pidfile /var/run/app/bravo-1.pid
-  depends on bravo.restart
-  group app-bravo
+check process app-bravo-1
+  with pidfile /var/run/app/bravo-1.pid
   start program "/bin/sh -c 'PORT=5100 PID_FILE=/var/run/app/bravo-1.pid LOG_FILE=/var/log/app/bravo-1.log /tmp/init/app-bravo.sh start'" as uid app
   stop program "/bin/sh -c 'PID_FILE=/var/run/app/bravo-1.pid /tmp/init/app-bravo.sh stop'" as uid app
+  group app-bravo
+  depends on bravo.restart
 
-check file bravo.restart with path /var/lock/subsys/app/bravo.restart
+check file bravo.restart
+  with path /var/lock/subsys/app/bravo.restart
   if changed timestamp then restart
 
