@@ -47,6 +47,7 @@ describe Foreman::Export::Monit, :fakefs do
     end
 
     it "exports to the filesystem with concurrency and cpu/mem monitoring" do
+      p monit
       monit.export
 
       File.read("/tmp/init/app.monitrc").should == example_export_file("monit/app-alpha2-bravo1-monitoring.monitrc")

@@ -16,20 +16,18 @@ class Foreman::Utils
     end
   end
 
-  # Converts "alpha=300 MB" into { "alpha" => "300 MB" }, with "300 MB" as the default
-  # Converts "alpha=25%,bravo=10%" into { "alpha" => "25%", "bravo" => "10%" }, with "25%" as the default
+  # Converts "alpha=300 MB" into { "alpha" => "300 MB" }, with nil as the default
+  # Converts "alpha=25%,bravo=10%" into { "alpha" => "25%", "bravo" => "10%" }, with nil as the default
   # Converts "25%" into {}, with "25%" as the default
   # Converts "25%, cameo=15%" into { "cameo" => "15%" }, with "25%" as the default
-  # Converts "cameo=15%" into { "cameo" => "15%" }, with "15%" as the default
   def self.parse_process_attribute(process_attributes)
     begin
       pairs = process_attributes.to_s.split(",")
 
-      if first_pair = pairs[0] && first_pair !~ /=/
+      if (first_pair = pairs[0]) && first_pair !~ /=/
         default = pairs.shift.strip # drop the leading default string
       else
-        # take the specified value as the default
-        _, default = first_pair.strip.split("=")
+        default = nil
       end
       
       pairs.inject(Hash.new(default)) do |hash, pair|
