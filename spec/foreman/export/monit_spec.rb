@@ -15,7 +15,7 @@ describe Foreman::Export::Monit, :fakefs do
   it "exports to the filesystem" do
     monit.export
 
-    File.read("/tmp/init/app.monitrc").should         == example_export_file("monit/app.monitrc")
+    File.read("/tmp/init/app.monitrc").should         == example_export_file("monit/app-alpha1-bravo1.monitrc")
     # File.read("/tmp/init/app-alpha.conf").should   == example_export_file("monit/app-alpha.conf")
     # File.read("/tmp/init/app-alpha-1.conf").should == example_export_file("monit/app-alpha-1.conf")
     # File.read("/tmp/init/app-bravo.conf").should   == example_export_file("monit/app-bravo.conf")
@@ -39,7 +39,7 @@ describe Foreman::Export::Monit, :fakefs do
     it "exports to the filesystem with concurrency" do
       monit.export
 
-      File.read("/tmp/init/app.monitrc").should         == example_export_file("monit/app.monitrc")
+      File.read("/tmp/init/app.monitrc").should         == example_export_file("monit/app-alpha2.monitrc")
       # File.read("/tmp/init/app-alpha.conf").should      == example_export_file("monit/app-alpha.conf")
       # File.read("/tmp/init/app-alpha-1.conf").should    == example_export_file("monit/app-alpha-1.conf")
       # File.read("/tmp/init/app-alpha-2.conf").should    == example_export_file("monit/app-alpha-2.conf")

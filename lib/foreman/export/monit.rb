@@ -3,6 +3,8 @@ require "foreman/export"
 
 class Foreman::Export::Monit < Foreman::Export::Base
 
+  attr_reader :pid, :check
+  
   def export
     error("Must specify a location") unless location
 
@@ -14,6 +16,11 @@ class Foreman::Export::Monit < Foreman::Export::Base
     @pid = File.expand_path(@pid || "/var/run/#{app}")
     @check = File.expand_path(@check || "/var/lock/subsys/#{app}")
     @location = File.expand_path(@location)
+
+    Dir["#{location}/#{app}*.monitrc"].each do |file|
+      say "cleaning up: #{file}"
+      FileUtils.rm(file)
+    end
 
     template_root = template
 

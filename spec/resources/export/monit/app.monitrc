@@ -1,6 +1,0 @@
-check process app with pidfile /var/run/app/app.pid
-  start program = "/etc/init.d/app start with timeout 30 seconds"
-  stop program = "/etc/init.d/app stop"
-  if failed host 127.0.0.1 port 8088 then restart
-  if 5 restarts within 5 cycles then timeout
-  group app
