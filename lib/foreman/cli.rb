@@ -35,13 +35,16 @@ class Foreman::CLI < Thor
 
   desc "export FORMAT LOCATION", "Export the application to another process management format"
 
-  method_option :app,         :type => :string,  :aliases => "-a"
-  method_option :log,         :type => :string,  :aliases => "-l"
-  method_option :env,         :type => :string,  :aliases => "-e", :desc => "Specify an environment file to load, defaults to .env"
-  method_option :port,        :type => :numeric, :aliases => "-p"
-  method_option :user,        :type => :string,  :aliases => "-u"
-  method_option :template,    :type => :string,  :aliases => "-t"
-  method_option :concurrency, :type => :string,  :aliases => "-c", :banner => '"alpha=5,bar=3"'
+  method_option :app,              :type => :string,  :aliases => "-a"
+  method_option :log,              :type => :string,  :aliases => "-l"
+  method_option :env,              :type => :string,  :aliases => "-e", :desc => "Specify an environment file to load, defaults to .env"
+  method_option :port,             :type => :numeric, :aliases => "-p"
+  method_option :user,             :type => :string,  :aliases => "-u"
+  method_option :template,         :type => :string,  :aliases => "-t"
+  method_option :concurrency,      :type => :string,  :aliases => "-c", :banner => '"alpha=5,bar=3"'
+  method_option :"restart-on-mem", :type => :string, :banner => '"alpha=157 MB,bar=300 MB" or "300 MB"'
+  method_option :"restart-on-cpu", :type => :string, :banner => '"alpha=25%,bar=30%" or "25%"'
+  method_option :"alert-on-cpu",   :type => :string, :banner => '"alpha=20%,bar=28%" or "22%"'
 
   def export(format, location=nil)
     check_procfile!
