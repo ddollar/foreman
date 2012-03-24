@@ -39,9 +39,10 @@ describe Foreman::Export::Monit, :fakefs do
   context "with concurrency and process monitoring" do
     let(:options) do {
       :concurrency      => "alpha=2,bravo=1",
-      :"restart-on-mem" => "alpha=157 MB,bravo=300 MB", # explicit processes
-      :"restart-on-cpu" => "alpha=25%",                 # specific processes
-      :"alert-on-cpu"   => "22%"                        # all
+      :"alert-on-mem"   => "alpha=175 MB",              # specific processes
+      :"restart-on-mem" => "alpha=200 MB,bravo=300 MB", # explicit processes
+      :"alert-on-cpu"   => "22%",                       # all processes
+      :"restart-on-cpu" => "alpha=25%"                  # specific processes
     }
     end
 
