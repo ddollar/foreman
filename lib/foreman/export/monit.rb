@@ -1,6 +1,17 @@
 require "erb"
 require "foreman/export"
 
+# Example usage (from root of this project):
+# $ foreman export monit tmp/ -l tmp/ -f data/example/Procfile --alert-on-mem=300MB
+# [foreman export] writing: /Users/drnic/Projects/gems/foreman/tmp/example-ticker.sh
+# [foreman export] writing: /Users/drnic/Projects/gems/foreman/tmp/example-error.sh
+# [foreman export] writing: /Users/drnic/Projects/gems/foreman/tmp/example-utf8.sh
+# [foreman export] writing: /Users/drnic/Projects/gems/foreman/tmp/example.monitrc
+#
+# Generated example monitrc file:
+# $ cat tmp/example.monitrc
+
+
 class Foreman::Export::Monit < Foreman::Export::Base
 
   attr_reader :pid, :check
