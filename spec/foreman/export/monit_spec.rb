@@ -11,6 +11,7 @@ describe Foreman::Export::Monit, :fakefs do
 
   before(:each) { load_export_templates_into_fakefs("monit") }
   before(:each) { stub(monit).say }
+  before(:each) { stub(FakeFS::FileUtils).chmod }
 
   it "exports to the filesystem" do
     monit.export
