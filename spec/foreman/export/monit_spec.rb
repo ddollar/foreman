@@ -26,6 +26,11 @@ describe Foreman::Export::Monit, :fakefs do
     monit.export
   end
 
+  it "has default location" do
+    monit = Foreman::Export::Monit.new(nil, engine, options)
+    monit.location.should == "/etc/monit.d"
+  end
+
   context "with concurrency" do
     let(:options) { Hash[:concurrency => "alpha=2"] }
 

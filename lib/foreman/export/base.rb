@@ -7,7 +7,7 @@ class Foreman::Export::Base
   attr_reader :concurrency, :alert_on_mem, :restart_on_mem, :alert_on_cpu, :restart_on_cpu
 
   def initialize(location, engine, options={})
-    @location    = location
+    @location    = location || default_location
     @engine      = engine
     @app         = options[:app]
     @log         = options[:log]
@@ -26,8 +26,10 @@ class Foreman::Export::Base
     raise "export method must be overridden"
   end
   
+protected ####################################################################
+
   def default_location
-    raise "default location for #{engine} not supported"
+    nil
   end
 
 private ######################################################################
