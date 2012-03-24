@@ -21,8 +21,6 @@ class Foreman::Export::Monit < Foreman::Export::Base
   attr_reader :pid, :check
   
   def export
-    error("Must specify a location") unless location
-
     FileUtils.mkdir_p location
 
     @app ||= File.basename(engine.directory)
@@ -49,6 +47,10 @@ class Foreman::Export::Monit < Foreman::Export::Base
     monitrc_template = export_template("monit", "monitrc.erb", template_root)
     monitrc_config   = ERB.new(monitrc_template, 0, "-").result(binding)
     write_file "#{location}/#{app}.monitrc", monitrc_config
+  end
+
+  def default_location
+    "/etc/monit.d"
   end
 
   def wrapper_path_for(process)

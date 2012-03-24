@@ -25,6 +25,10 @@ class Foreman::Export::Base
   def export
     raise "export method must be overridden"
   end
+  
+  def default_location
+    raise "default location for #{engine} not supported"
+  end
 
 private ######################################################################
 
