@@ -3,8 +3,8 @@
 <% port = engine.port_for(process, num, self.port) -%>
 check process <%= app %>-<%= process.name %>-<%= num %>
   with pidfile <%= pid_file_for(process, num) %>
-  start program "/bin/sh -c 'PORT=<%= port %> PID_FILE=<%= pid_file_for(process, num) %> LOG_FILE=<%= log_file_for(process, num) %> <%= wrapper_path_for(process) %> start'" as uid <%= user %>
-  stop program "/bin/sh -c 'PID_FILE=<%= pid_file_for(process, num) %> <%= wrapper_path_for(process) %> stop'" as uid <%= user %>
+  start program = "/usr/bin/env PORT=<%= port %> PID_FILE=<%= pid_file_for(process, num) %> LOG_FILE=<%= log_file_for(process, num) %> <%= wrapper_path_for(process) %> start" as uid <%= user %> and gid <%= user %>
+  stop program = "/usr/bin/env PID_FILE=<%= pid_file_for(process, num) %> <%= wrapper_path_for(process) %> stop" as uid <%= user %> and gid <%= user %>
 <%- if alert_on_mem[process.name] -%>
   if mem > <%= alert_on_mem[process.name] %> for 2 cycles then alert
 <% end -%>

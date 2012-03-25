@@ -24,7 +24,7 @@ function start() {
       fi
     fi
 
-    <%= process.command %> >> $LOG_FILE 2>&1 &
+    exec <%= process.command %> >> $LOG_FILE 2>&1 &
 
     if [ $? -eq 0 ]; then
         echo $! > $PID_FILE
