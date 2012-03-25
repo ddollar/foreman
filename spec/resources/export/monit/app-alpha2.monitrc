@@ -1,12 +1,34 @@
-check process app-alpha-1
-  with pidfile /var/run/app/alpha-1.pid
-  start program = "/usr/bin/env PORT=5000 PID_FILE=/var/run/app/alpha-1.pid LOG_FILE=/var/log/app/alpha-1.log /tmp/init/app-alpha.sh start" as uid app and gid app
-  stop program = "/usr/bin/env PID_FILE=/var/run/app/alpha-1.pid /tmp/init/app-alpha.sh stop" as uid app and gid app
+check directory app-alpha-log-dir with path /var/log/app
+  start = "/usr/bin/env mkdir /var/log/app"
+  if failed uid app then exec "/usr/bin/env chown app.app /var/log/app"
   group app-alpha
 
-check process app-alpha-2
-  with pidfile /var/run/app/alpha-2.pid
-  start program = "/usr/bin/env PORT=5001 PID_FILE=/var/run/app/alpha-2.pid LOG_FILE=/var/log/app/alpha-2.log /tmp/init/app-alpha.sh start" as uid app and gid app
-  stop program = "/usr/bin/env PID_FILE=/var/run/app/alpha-2.pid /tmp/init/app-alpha.sh stop" as uid app and gid app
+check file app-alpha-1-log with path /var/log/app/app-alpha-1.log
+  start = "/usr/bin/env touch /var/log/app/app-alpha-1.log"
+  if failed uid app then exec "/usr/bin/env chown app.app /var/log/app/app-alpha-1.log"
+  depends on app-alpha-log-dir
   group app-alpha
+check process app-alpha-1
+  with pidfile /var/run/app/app-alpha-1.pid
+  start program = "/sbin/start-stop-daemon -S -q -b -g app -c app -m -p /var/run/app/app-alpha-1.pid -a /tmp/init/app-alpha.sh"
+  stop program = "/sbin/start-stop-daemon -K -s QUIT -p /var/run/app/app-alpha-1.pid"
+  depends on app-alpha-1-log
+  group app-alpha
+
+check file app-alpha-2-log with path /var/log/app/app-alpha-2.log
+  start = "/usr/bin/env touch /var/log/app/app-alpha-2.log"
+  if failed uid app then exec "/usr/bin/env chown app.app /var/log/app/app-alpha-2.log"
+  depends on app-alpha-log-dir
+  group app-alpha
+check process app-alpha-2
+  with pidfile /var/run/app/app-alpha-2.pid
+  start program = "/sbin/start-stop-daemon -S -q -b -g app -c app -m -p /var/run/app/app-alpha-2.pid -a /tmp/init/app-alpha.sh"
+  stop program = "/sbin/start-stop-daemon -K -s QUIT -p /var/run/app/app-alpha-2.pid"
+  depends on app-alpha-2-log
+  group app-alpha
+
+check directory app-bravo-log-dir with path /var/log/app
+  start = "/usr/bin/env mkdir /var/log/app"
+  if failed uid app then exec "/usr/bin/env chown app.app /var/log/app"
+  group app-bravo
 

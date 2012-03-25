@@ -57,16 +57,16 @@ class Foreman::Export::Monit < Foreman::Export::Base
     File.join(location, "#{app}-#{process.name}.sh")
   end
 
+  def file_prefix_for(process, num)
+    "#{app}-#{process.name}-#{num}"
+  end
+
   def pid_file_for(process, num)
-    File.join(pid, "#{process.name}-#{num}.pid")
+    File.join(pid, "#{file_prefix_for(process, num)}.pid")
   end
 
   def log_file_for(process, num)
-    File.join(log, "#{process.name}-#{num}.log")
-  end
-
-  def check_file_for(process)
-    File.join(check, "#{process.name}.restart")
+    File.join(log, "#{file_prefix_for(process, num)}.log")
   end
 
 end

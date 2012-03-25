@@ -1,10 +1,20 @@
 <% engine.procfile.entries.each do |process| -%>
+check directory <%= app %>-<%= process.name %>-log-dir with path <%= log %>
+  start = "/usr/bin/env mkdir <%= log %>"
+  if failed uid <%= user %> then exec "/usr/bin/env chown <%= user %>.<%= user %> <%= log %>"
+  group <%= app %>-<%= process.name %>
 <% 1.upto(concurrency[process.name]) do |num| -%>
 <% port = engine.port_for(process, num, self.port) -%>
-check process <%= app %>-<%= process.name %>-<%= num %>
+
+check file <%= file_prefix_for(process, num) %>-log with path <%= log_file_for(process, num) %>
+  start = "/usr/bin/env touch <%= log_file_for(process, num) %>"
+  if failed uid <%= user %> then exec "/usr/bin/env chown <%= user %>.<%= user %> <%= log_file_for(process, num) %>"
+  depends on <%= app %>-<%= process.name %>-log-dir
+  group <%= app %>-<%= process.name %>
+check process <%= file_prefix_for(process, num) %>
   with pidfile <%= pid_file_for(process, num) %>
-  start program = "/usr/bin/env PORT=<%= port %> PID_FILE=<%= pid_file_for(process, num) %> LOG_FILE=<%= log_file_for(process, num) %> <%= wrapper_path_for(process) %> start" as uid <%= user %> and gid <%= user %>
-  stop program = "/usr/bin/env PID_FILE=<%= pid_file_for(process, num) %> <%= wrapper_path_for(process) %> stop" as uid <%= user %> and gid <%= user %>
+  start program = "/sbin/start-stop-daemon -S -q -b -g <%= user %> -c <%= user %> -m -p <%= pid_file_for(process, num) %> -a <%= wrapper_path_for(process) %>"
+  stop program = "/sbin/start-stop-daemon -K -s QUIT -p <%= pid_file_for(process, num) %>"
 <%- if alert_on_mem[process.name] -%>
   if mem > <%= alert_on_mem[process.name] %> for 2 cycles then alert
 <% end -%>
@@ -17,7 +27,8 @@ check process <%= app %>-<%= process.name %>-<%= num %>
 <%- if restart_on_cpu[process.name] -%>
   if cpu > <%= restart_on_cpu[process.name] %> for 1 cycles then restart
 <%- end -%>
+  depends on <%= file_prefix_for(process, num) %>-log
   group <%= app %>-<%= process.name %>
-
 <% end -%>
+
 <% end -%>
