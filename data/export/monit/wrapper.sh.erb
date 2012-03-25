@@ -1,6 +1,5 @@
 #!/usr/bin/env sh
-PID_FILE=${PID_FILE:-/var/run/<%= app %>/<%= process.name %>.pid}
-LOG_FILE=${LOG_FILE:-<%= log %>/<%= process.name %>.log}
+LOG_FILE=${LOG_FILE:-<%= log %>/<%= app %>-<%= process.name %>.log}
 
 cd <%= engine.directory %>
 exec <%= process.command %> >> ${LOG_FILE} 2>&1 

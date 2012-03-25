@@ -13,7 +13,7 @@ check file <%= file_prefix_for(process, num) %>-log with path <%= log_file_for(p
   group <%= app %>-<%= process.name %>
 check process <%= file_prefix_for(process, num) %>
   with pidfile <%= pid_file_for(process, num) %>
-  start program = "/sbin/start-stop-daemon -S -q -b -g <%= user %> -c <%= user %> -m -p <%= pid_file_for(process, num) %> -a <%= wrapper_path_for(process) %>"
+  start program = "/sbin/start-stop-daemon -S -q -b -g <%= user %> -c <%= user %> -m -p <%= pid_file_for(process, num) %> -a /usr/bin/env PORT=<%= port %> LOG_FILE=<%= log_file_for(process, num) %> <%= wrapper_path_for(process) %>"
   stop program = "/sbin/start-stop-daemon -K -s QUIT -p <%= pid_file_for(process, num) %>"
 <%- if alert_on_mem[process.name] -%>
   if mem > <%= alert_on_mem[process.name] %> for 2 cycles then alert
