@@ -18,11 +18,6 @@ check process <%= app %>-<%= process.name %>-<%= num %>
   if cpu > <%= restart_on_cpu[process.name] %> for 1 cycles then restart
 <%- end -%>
   group <%= app %>-<%= process.name %>
-  depends on <%= File.basename(check_file_for(process)) %>
 
 <% end -%>
-check file <%= File.basename(check_file_for(process)) %>
-  with path <%= check_file_for(process) %>
-  if changed timestamp then restart
-
 <% end -%>
