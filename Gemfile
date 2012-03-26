@@ -12,7 +12,6 @@ end
 
 group :development do
   gem 'aws-s3'
-  gem 'parka'
   gem 'rake'
   gem 'ronn'
   gem 'fakefs', '~> 0.3.2'
