@@ -3,11 +3,12 @@ require "foreman/export"
 
 # Example usage (from root of this project):
 # $ foreman export monit /etc/monit.d -f data/example/Procfile --alert-on-mem="300 MB" -u deploy
-#[foreman export] cleaning up: /etc/monit.d/example.monitrc
 #[foreman export] writing: /etc/monit.d/example-ticker.sh
 #[foreman export] writing: /etc/monit.d/example-error.sh
 #[foreman export] writing: /etc/monit.d/example-utf8.sh
-#[foreman export] writing: /etc/monit.d/example.monitrc
+#[foreman export] writing: /etc/monit.d/example-ticker.monitrc
+#[foreman export] writing: /etc/monit.d/example-error.monitrc
+#[foreman export] writing: /etc/monit.d/example-utf8.monitrc
 #
 # $ monit reload
 # Reinitializing monit daemon
