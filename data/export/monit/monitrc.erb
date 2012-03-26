@@ -1,4 +1,3 @@
-<% engine.procfile.entries.each do |process| -%>
 check directory <%= app %>-<%= process.name %>-log-dir with path <%= log %>
   start = "/usr/bin/env mkdir <%= log %>"
   if failed uid <%= user %> then exec "/usr/bin/env chown <%= user %>.<%= user %> <%= log %>"
@@ -29,6 +28,4 @@ check process <%= file_prefix_for(process, num) %>
 <%- end -%>
   depends on <%= file_prefix_for(process, num) %>-log
   group <%= app %>-<%= process.name %>
-<% end -%>
-
-<% end -%>
+<% end %>

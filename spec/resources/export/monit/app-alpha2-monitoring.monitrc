@@ -35,22 +35,3 @@ check process app-alpha-2
   depends on app-alpha-2-log
   group app-alpha
 
-check directory app-bravo-log-dir with path /var/log/app
-  start = "/usr/bin/env mkdir /var/log/app"
-  if failed uid app then exec "/usr/bin/env chown app.app /var/log/app"
-  group app-bravo
-
-check file app-bravo-1-log with path /var/log/app/app-bravo-1.log
-  start = "/usr/bin/env touch /var/log/app/app-bravo-1.log"
-  if failed uid app then exec "/usr/bin/env chown app.app /var/log/app/app-bravo-1.log"
-  depends on app-bravo-log-dir
-  group app-bravo
-check process app-bravo-1
-  with pidfile /var/run/app/app-bravo-1.pid
-  start program = "/sbin/start-stop-daemon -S -q -b -g app -c app -m -p /var/run/app/app-bravo-1.pid -a /usr/bin/env PORT=5100 LOG_FILE=/var/log/app/app-bravo-1.log /tmp/init/app-bravo.sh"
-  stop program = "/sbin/start-stop-daemon -K -s QUIT -p /var/run/app/app-bravo-1.pid"
-  if mem > 300 MB for 1 cycles then restart
-  if cpu > 22% for 2 cycles then alert
-  depends on app-bravo-1-log
-  group app-bravo
-

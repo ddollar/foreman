@@ -16,11 +16,13 @@ describe Foreman::Export::Monit, :fakefs do
   it "exports to the filesystem" do
     monit.export
 
-    File.read("/tmp/init/app.monitrc").should == example_export_file("monit/app-alpha1-bravo1.monitrc")
+    File.read("/tmp/init/app-alpha.monitrc").should == example_export_file("monit/app-alpha1.monitrc")
+    File.read("/tmp/init/app-bravo.monitrc").should == example_export_file("monit/app-bravo1.monitrc")
   end
 
   it "cleans up if exporting into an existing dir" do
-    mock(FileUtils).rm("/tmp/init/app.monitrc")
+    mock(FileUtils).rm("/tmp/init/app-alpha.monitrc")
+    mock(FileUtils).rm("/tmp/init/app-bravo.monitrc")
 
     monit.export
     monit.export
@@ -37,7 +39,7 @@ describe Foreman::Export::Monit, :fakefs do
     it "exports to the filesystem with concurrency" do
       monit.export
 
-      File.read("/tmp/init/app.monitrc").should == example_export_file("monit/app-alpha2.monitrc")
+      File.read("/tmp/init/app-alpha.monitrc").should == example_export_file("monit/app-alpha2.monitrc")
     end
   end
 
@@ -54,7 +56,8 @@ describe Foreman::Export::Monit, :fakefs do
     it "exports to the filesystem with concurrency and cpu/mem monitoring" do
       monit.export
 
-      File.read("/tmp/init/app.monitrc").should == example_export_file("monit/app-alpha2-bravo1-monitoring.monitrc")
+      File.read("/tmp/init/app-alpha.monitrc").should == example_export_file("monit/app-alpha2-monitoring.monitrc")
+      File.read("/tmp/init/app-bravo.monitrc").should == example_export_file("monit/app-bravo1-monitoring.monitrc")
     end
   end
 

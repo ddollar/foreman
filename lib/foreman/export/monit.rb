@@ -45,8 +45,10 @@ class Foreman::Export::Monit < Foreman::Export::Base
     end
 
     monitrc_template = export_template("monit", "monitrc.erb", template_root)
-    monitrc_config   = ERB.new(monitrc_template, 0, "-").result(binding)
-    write_file "#{location}/#{app}.monitrc", monitrc_config
+    engine.procfile.entries.each do |process|
+      monitrc_config   = ERB.new(monitrc_template, 0, "-").result(binding)
+      write_file "#{location}/#{app}-#{process.name}.monitrc", monitrc_config
+    end
   end
 
   def default_location
