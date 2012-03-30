@@ -16,6 +16,8 @@ class Foreman::TmuxEngine < Foreman::Engine
     assign_colors
     concurrency = Foreman::Utils.parse_concurrency(@options[:concurrency])
 
+    ENV['BUNDLE_GEMFILE'] = nil
+
     %x{tmux new-session -d -s #{session}}
     procfile.entries.each_with_index do |entry, index|
       name = "#{entry.name}.#{concurrency[entry.name]}"
