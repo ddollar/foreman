@@ -51,6 +51,27 @@ class Foreman::Engine
     environment.each { |k,v| ENV[k] = v }
   end
 
+  def terminate_gracefully
+    return if @terminating
+    @terminating = true
+    info "sending SIGTERM to all processes"
+    kill_all "SIGTERM"
+    Timeout.timeout(5) do
+      while running_processes.length > 0
+        pid, status = Process.wait2
+        process = running_processes.delete(pid)
+        info "process terminated", process.name
+      end
+    end
+  rescue Timeout::Error
+    info "sending SIGKILL to all processes"
+    kill_all "SIGKILL"
+  end
+
+  def running_processes
+    @running_processes ||= {}
+  end
+
 private ######################################################################
 
   def spawn_processes
@@ -74,23 +95,6 @@ private ######################################################################
       info "sending #{signal} to pid #{pid}"
       process.kill signal
     end
-  end
-
-  def terminate_gracefully
-    return if @terminating
-    @terminating = true
-    info "sending SIGTERM to all processes"
-    kill_all "SIGTERM"
-    Timeout.timeout(5) do
-      while running_processes.length > 0
-        pid, status = Process.wait2
-        process = running_processes.delete(pid)
-        info "process terminated", process.name
-      end
-    end
-  rescue Timeout::Error
-    info "sending SIGKILL to all processes"
-    kill_all "SIGKILL"
   end
 
   def poll_readers
@@ -166,10 +170,6 @@ private ######################################################################
 
   def termtitle(title)
     printf("\033]0;#{title}\007") unless Foreman.windows?
-  end
-
-  def running_processes
-    @running_processes ||= {}
   end
 
   def readers
