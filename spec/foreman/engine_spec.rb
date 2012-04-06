@@ -35,6 +35,7 @@ describe "Foreman::Engine", :fakefs do
       mock.instance_of(Foreman::Process).run_process(Dir.pwd, "./bravo", is_a(IO))
       mock(subject).watch_for_output
       mock(subject).watch_for_termination
+      mock(subject).terminate_gracefully
       subject.start
     end
 
@@ -45,6 +46,7 @@ describe "Foreman::Engine", :fakefs do
       mock.instance_of(Foreman::Process).run_process(Dir.pwd, "./bravo", is_a(IO)).never
       mock(engine).watch_for_output
       mock(engine).watch_for_termination
+      mock(engine).terminate_gracefully
       engine.start
     end
   end
@@ -109,6 +111,7 @@ describe "Foreman::Engine", :fakefs do
     it "should spawn" do
       stub(subject).watch_for_output
       stub(subject).watch_for_termination
+      stub(subject).terminate_gracefully
       subject.start
       Process.waitall
       mock(subject).info(/started with pid \d+/, "utf8.1", anything)

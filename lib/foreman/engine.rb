@@ -39,6 +39,22 @@ class Foreman::Engine
     spawn_processes
     watch_for_output
     watch_for_termination
+    terminate_gracefully
+  end
+
+  def stop(name)
+    running_processes.each do |pid, process|
+      next unless process.name.start_with? name
+
+      process.kill 'SIGTERM'
+      process = running_processes.delete(pid)
+      Timeout.timeout(5) do
+        begin
+          Process.waitpid(pid)
+        rescue Errno::ECHILD
+        end
+      end
+    end
   end
 
   def port_for(process, num, base_port=nil)
@@ -91,6 +107,7 @@ private ######################################################################
   rescue Timeout::Error
     info "sending SIGKILL to all processes"
     kill_all "SIGKILL"
+  rescue Errno::ECHILD
   end
 
   def poll_readers
@@ -123,7 +140,6 @@ private ######################################################################
     pid, status = Process.wait2
     process = running_processes.delete(pid)
     info "process terminated", process.name
-    terminate_gracefully
   rescue Errno::ECHILD
   end
 
