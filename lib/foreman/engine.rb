@@ -15,9 +15,6 @@ class Foreman::Engine
   attr_reader :directory
   attr_reader :options
 
-  # This constant is here to make the invocations of #start and #stop methods
-  # clearer
-  ALL_PROCESSES = nil
   COLORS = %w( cyan yellow green magenta red blue intense_cyan intense_yellow
                intense_green intense_magenta intense_red, intense_blue )
 
@@ -39,17 +36,17 @@ class Foreman::Engine
     trap("INT")  { puts "SIGINT received";  terminate_gracefully }
 
     assign_colors
-    start ALL_PROCESSES
+    start
     watch_for_output
     watch_for_termination
     terminate_gracefully
   end
 
-  def start(name)
+  def start(name=nil)
     concurrency = Foreman::Utils.parse_concurrency(@options[:concurrency])
 
     procfile.entries.each do |entry|
-      unless name == ALL_PROCESSES
+      unless name == nil
         next unless entry.name == name
       end
 
@@ -61,7 +58,7 @@ class Foreman::Engine
     end
   end
 
-  def stop(name, signal='SIGTERM')
+  def stop(name=nil, signal='SIGTERM')
     running_processes.each do |pid, process|
       unless name == ALL_PROCESSES
         # Comparing against process.entry.name instead of process.name to
@@ -104,10 +101,10 @@ private ######################################################################
     return if @terminating
     @terminating = true
     Timeout.timeout(5) do
-      stop ALL_PROCESSES
+      stop
     end
   rescue Timeout::Error
-    stop(ALL_PROCESSES, 'SIGKILL')
+    stop(nil, 'SIGKILL')
   rescue Errno::ECHILD
   end
 
