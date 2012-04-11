@@ -44,7 +44,14 @@ class Foreman::Engine
 
   def stop(name, signal='SIGTERM')
     running_processes.each do |pid, process|
-      next unless process.name.start_with? name
+      unless name.nil?
+        # Comparing against process.entry.name instead of process.name to
+        # make sure we match the process name exactly for any/all
+        # concurrently running processes by this name
+        next unless process.entry.name == name
+      else
+        info "sending #{signal} to all processes"
+      end
 
       process.kill signal
       process = running_processes.delete(pid)
@@ -89,18 +96,11 @@ private ######################################################################
   def terminate_gracefully
     return if @terminating
     @terminating = true
-    info "sending SIGTERM to all processes"
     Timeout.timeout(5) do
-      running_processes.each do |pid, process|
-        stop(process.name)
-      end
+      stop(nil)
     end
   rescue Timeout::Error
-    info "sending SIGKILL to all processes"
-    running_process.each do |pid, process|
-      info "sending #{signal} to pid #{pid}"
-      stop(process.name, 'SIGKILL')
-    end
+    stop(nil, 'SIGKILL')
   rescue Errno::ECHILD
   end
 
