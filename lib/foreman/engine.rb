@@ -42,15 +42,16 @@ class Foreman::Engine
     terminate_gracefully
   end
 
-  def stop(name)
+  def stop(name, signal='SIGTERM')
     running_processes.each do |pid, process|
       next unless process.name.start_with? name
 
-      process.kill 'SIGTERM'
+      process.kill signal
       process = running_processes.delete(pid)
       Timeout.timeout(5) do
         begin
           Process.waitpid(pid)
+          info "process terminated", process.name
         rescue Errno::ECHILD
         end
       end
@@ -85,28 +86,21 @@ private ######################################################################
     options[:port] || 5000
   end
 
-  def kill_all(signal="SIGTERM")
-    running_processes.each do |pid, process|
-      info "sending #{signal} to pid #{pid}"
-      process.kill signal
-    end
-  end
-
   def terminate_gracefully
     return if @terminating
     @terminating = true
     info "sending SIGTERM to all processes"
-    kill_all "SIGTERM"
     Timeout.timeout(5) do
-      while running_processes.length > 0
-        pid, status = Process.wait2
-        process = running_processes.delete(pid)
-        info "process terminated", process.name
+      running_processes.each do |pid, process|
+        stop(process.name)
       end
     end
   rescue Timeout::Error
     info "sending SIGKILL to all processes"
-    kill_all "SIGKILL"
+    running_process.each do |pid, process|
+      info "sending #{signal} to pid #{pid}"
+      stop(process.name, 'SIGKILL')
+    end
   rescue Errno::ECHILD
   end
 
