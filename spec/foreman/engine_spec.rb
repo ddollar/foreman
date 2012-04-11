@@ -28,14 +28,15 @@ describe "Foreman::Engine", :fakefs do
     end
   end
 
-  describe "start" do
+  describe "run" do
     it "forks the processes" do
       write_procfile
       mock.instance_of(Foreman::Process).run_process(Dir.pwd, "./alpha", is_a(IO))
       mock.instance_of(Foreman::Process).run_process(Dir.pwd, "./bravo", is_a(IO))
       mock(subject).watch_for_output
       mock(subject).watch_for_termination
-      subject.start
+      mock(subject).terminate_gracefully
+      subject.run
     end
 
     it "handles concurrency" do
@@ -45,7 +46,8 @@ describe "Foreman::Engine", :fakefs do
       mock.instance_of(Foreman::Process).run_process(Dir.pwd, "./bravo", is_a(IO)).never
       mock(engine).watch_for_output
       mock(engine).watch_for_termination
-      engine.start
+      mock(engine).terminate_gracefully
+      engine.run
     end
   end
 
@@ -55,7 +57,7 @@ describe "Foreman::Engine", :fakefs do
       stub(Process).fork
       any_instance_of(Foreman::Engine) do |engine|
         stub(engine).info
-        stub(engine).spawn_processes
+        stub(engine).start
         stub(engine).watch_for_termination
       end
     end
@@ -64,7 +66,7 @@ describe "Foreman::Engine", :fakefs do
       File.open("/tmp/env", "w") { |f| f.puts("FOO=baz") }
       engine = Foreman::Engine.new("Procfile", :env => "/tmp/env")
       engine.environment.should == {"FOO"=>"baz"}
-      engine.start
+      engine.run
     end
 
     it "should read more than one if specified" do
@@ -72,7 +74,7 @@ describe "Foreman::Engine", :fakefs do
       File.open("/tmp/env2", "w") { |f| f.puts("BAZ=qux") }
       engine = Foreman::Engine.new("Procfile", :env => "/tmp/env1,/tmp/env2")
       engine.environment.should == { "FOO"=>"bar", "BAZ"=>"qux" }
-      engine.start
+      engine.run
     end
 
     it "should handle quoted values" do
@@ -95,7 +97,7 @@ describe "Foreman::Engine", :fakefs do
       File.open(".env", "w") { |f| f.puts("FOO=qoo") }
       engine = Foreman::Engine.new("Procfile")
       engine.environment.should == {"FOO"=>"qoo"}
-      engine.start
+      engine.run
     end
   end
 
@@ -109,7 +111,8 @@ describe "Foreman::Engine", :fakefs do
     it "should spawn" do
       stub(subject).watch_for_output
       stub(subject).watch_for_termination
-      subject.start
+      stub(subject).terminate_gracefully
+      subject.run
       Process.waitall
       mock(subject).info(/started with pid \d+/, "utf8.1", anything)
       mock(subject).info("\xff\x03\n", "utf8.1", anything)

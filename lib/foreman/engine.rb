@@ -28,7 +28,7 @@ class Foreman::Engine
     @output_mutex = Mutex.new
   end
 
-  def start
+  def run
     proctitle "ruby: foreman master"
     termtitle "#{File.basename(@directory)} - foreman"
 
@@ -36,9 +36,49 @@ class Foreman::Engine
     trap("INT")  { puts "SIGINT received";  terminate_gracefully }
 
     assign_colors
-    spawn_processes
+    start
     watch_for_output
     watch_for_termination
+    terminate_gracefully
+  end
+
+  def start(name=nil)
+    concurrency = Foreman::Utils.parse_concurrency(@options[:concurrency])
+
+    procfile.entries.each do |entry|
+      unless name == nil
+        next unless entry.name == name
+      end
+
+      reader, writer = (IO.method(:pipe).arity == 0 ? IO.pipe : IO.pipe("BINARY"))
+      entry.spawn(concurrency[entry.name], writer, @directory, @environment, port_for(entry, 1, base_port)).each do |process|
+        running_processes[process.pid] = process
+        readers[process] = reader
+      end
+    end
+  end
+
+  def stop(name=nil, signal='SIGTERM')
+    running_processes.each do |pid, process|
+      unless name == ALL_PROCESSES
+        # Comparing against process.entry.name instead of process.name to
+        # make sure we match the process name exactly for any/all
+        # concurrently running processes by this name
+        next unless process.entry.name == name
+      else
+        info "sending #{signal} to all processes"
+      end
+
+      process.kill signal
+      process = running_processes.delete(pid)
+      Timeout.timeout(5) do
+        begin
+          Process.waitpid(pid)
+          info "process terminated", process.name
+        rescue Errno::ECHILD
+        end
+      end
+    end
   end
 
   def port_for(process, num, base_port=nil)
@@ -53,44 +93,19 @@ class Foreman::Engine
 
 private ######################################################################
 
-  def spawn_processes
-    concurrency = Foreman::Utils.parse_concurrency(@options[:concurrency])
-
-    procfile.entries.each do |entry|
-      reader, writer = (IO.method(:pipe).arity == 0 ? IO.pipe : IO.pipe("BINARY"))
-      entry.spawn(concurrency[entry.name], writer, @directory, @environment, port_for(entry, 1, base_port)).each do |process|
-        running_processes[process.pid] = process
-        readers[process] = reader
-      end
-    end
-  end
-
   def base_port
     options[:port] || 5000
-  end
-
-  def kill_all(signal="SIGTERM")
-    running_processes.each do |pid, process|
-      info "sending #{signal} to pid #{pid}"
-      process.kill signal
-    end
   end
 
   def terminate_gracefully
     return if @terminating
     @terminating = true
-    info "sending SIGTERM to all processes"
-    kill_all "SIGTERM"
     Timeout.timeout(5) do
-      while running_processes.length > 0
-        pid, status = Process.wait2
-        process = running_processes.delete(pid)
-        info "process terminated", process.name
-      end
+      stop
     end
   rescue Timeout::Error
-    info "sending SIGKILL to all processes"
-    kill_all "SIGKILL"
+    stop(nil, 'SIGKILL')
+  rescue Errno::ECHILD
   end
 
   def poll_readers
@@ -123,7 +138,6 @@ private ######################################################################
     pid, status = Process.wait2
     process = running_processes.delete(pid)
     info "process terminated", process.name
-    terminate_gracefully
   rescue Errno::ECHILD
   end
 
