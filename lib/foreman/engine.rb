@@ -15,6 +15,9 @@ class Foreman::Engine
   attr_reader :directory
   attr_reader :options
 
+  # This constant is here to make the invocations of #start and #stop methods
+  # clearer
+  ALL_PROCESSES = nil
   COLORS = %w( cyan yellow green magenta red blue intense_cyan intense_yellow
                intense_green intense_magenta intense_red, intense_blue )
 
@@ -36,10 +39,26 @@ class Foreman::Engine
     trap("INT")  { puts "SIGINT received";  terminate_gracefully }
 
     assign_colors
-    spawn_processes
+    start ALL_PROCESSES
     watch_for_output
     watch_for_termination
     terminate_gracefully
+  end
+
+  def start(name)
+    concurrency = Foreman::Utils.parse_concurrency(@options[:concurrency])
+
+    procfile.entries.each do |entry|
+      unless name == ALL_PROCESSES
+        next unless entry.name == name
+      end
+
+      reader, writer = (IO.method(:pipe).arity == 0 ? IO.pipe : IO.pipe("BINARY"))
+      entry.spawn(concurrency[entry.name], writer, @directory, @environment, port_for(entry, 1, base_port)).each do |process|
+        running_processes[process.pid] = process
+        readers[process] = reader
+      end
+    end
   end
 
   def stop(name, signal='SIGTERM')
@@ -76,18 +95,6 @@ class Foreman::Engine
   end
 
 private ######################################################################
-
-  def spawn_processes
-    concurrency = Foreman::Utils.parse_concurrency(@options[:concurrency])
-
-    procfile.entries.each do |entry|
-      reader, writer = (IO.method(:pipe).arity == 0 ? IO.pipe : IO.pipe("BINARY"))
-      entry.spawn(concurrency[entry.name], writer, @directory, @environment, port_for(entry, 1, base_port)).each do |process|
-        running_processes[process.pid] = process
-        readers[process] = reader
-      end
-    end
-  end
 
   def base_port
     options[:port] || 5000

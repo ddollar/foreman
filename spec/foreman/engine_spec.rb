@@ -57,7 +57,7 @@ describe "Foreman::Engine", :fakefs do
       stub(Process).fork
       any_instance_of(Foreman::Engine) do |engine|
         stub(engine).info
-        stub(engine).spawn_processes
+        stub(engine).start
         stub(engine).watch_for_termination
       end
     end
