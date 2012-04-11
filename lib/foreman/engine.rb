@@ -28,7 +28,7 @@ class Foreman::Engine
     @output_mutex = Mutex.new
   end
 
-  def start
+  def run
     proctitle "ruby: foreman master"
     termtitle "#{File.basename(@directory)} - foreman"
 

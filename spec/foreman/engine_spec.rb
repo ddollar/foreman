@@ -28,7 +28,7 @@ describe "Foreman::Engine", :fakefs do
     end
   end
 
-  describe "start" do
+  describe "run" do
     it "forks the processes" do
       write_procfile
       mock.instance_of(Foreman::Process).run_process(Dir.pwd, "./alpha", is_a(IO))
@@ -36,7 +36,7 @@ describe "Foreman::Engine", :fakefs do
       mock(subject).watch_for_output
       mock(subject).watch_for_termination
       mock(subject).terminate_gracefully
-      subject.start
+      subject.run
     end
 
     it "handles concurrency" do
@@ -47,7 +47,7 @@ describe "Foreman::Engine", :fakefs do
       mock(engine).watch_for_output
       mock(engine).watch_for_termination
       mock(engine).terminate_gracefully
-      engine.start
+      engine.run
     end
   end
 
@@ -66,7 +66,7 @@ describe "Foreman::Engine", :fakefs do
       File.open("/tmp/env", "w") { |f| f.puts("FOO=baz") }
       engine = Foreman::Engine.new("Procfile", :env => "/tmp/env")
       engine.environment.should == {"FOO"=>"baz"}
-      engine.start
+      engine.run
     end
 
     it "should read more than one if specified" do
@@ -74,7 +74,7 @@ describe "Foreman::Engine", :fakefs do
       File.open("/tmp/env2", "w") { |f| f.puts("BAZ=qux") }
       engine = Foreman::Engine.new("Procfile", :env => "/tmp/env1,/tmp/env2")
       engine.environment.should == { "FOO"=>"bar", "BAZ"=>"qux" }
-      engine.start
+      engine.run
     end
 
     it "should handle quoted values" do
@@ -97,7 +97,7 @@ describe "Foreman::Engine", :fakefs do
       File.open(".env", "w") { |f| f.puts("FOO=qoo") }
       engine = Foreman::Engine.new("Procfile")
       engine.environment.should == {"FOO"=>"qoo"}
-      engine.start
+      engine.run
     end
   end
 
@@ -112,7 +112,7 @@ describe "Foreman::Engine", :fakefs do
       stub(subject).watch_for_output
       stub(subject).watch_for_termination
       stub(subject).terminate_gracefully
-      subject.start
+      subject.run
       Process.waitall
       mock(subject).info(/started with pid \d+/, "utf8.1", anything)
       mock(subject).info("\xff\x03\n", "utf8.1", anything)
