@@ -60,7 +60,7 @@ class Foreman::Engine
 
   def stop(name=nil, signal='SIGTERM')
     running_processes.each do |pid, process|
-      unless name == ALL_PROCESSES
+      unless name == nil
         # Comparing against process.entry.name instead of process.name to
         # make sure we match the process name exactly for any/all
         # concurrently running processes by this name
