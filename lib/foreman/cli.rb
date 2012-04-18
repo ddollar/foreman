@@ -30,7 +30,7 @@ class Foreman::CLI < Thor
   def start(process=nil)
     check_procfile!
     engine.options[:concurrency] = "#{process}=1" if process
-    engine.run
+    engine.start
   end
 
   desc "export FORMAT LOCATION", "Export the application to another process management format"

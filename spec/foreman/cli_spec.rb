@@ -21,7 +21,7 @@ describe "Foreman::CLI", :fakefs do
 
       it "runs successfully" do
         dont_allow(subject).error
-        mock.instance_of(Foreman::Engine).run
+        mock.instance_of(Foreman::Engine).start
         subject.start
       end
 
