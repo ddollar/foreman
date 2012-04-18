@@ -51,6 +51,22 @@ class Foreman::Engine
     environment.each { |k,v| ENV[k] = v }
   end
 
+  def self.read_environment(filename)
+    return {} unless File.exists?(filename)
+
+    File.read(filename).split("\n").inject({}) do |hash, line|
+      if line =~ /\A([A-Za-z_0-9]+)=(.*)\z/
+        key, val = [$1, $2]
+        case val
+          when /\A'(.*)'\z/ then hash[key] = $1
+          when /\A"(.*)"\z/ then hash[key] = $1.gsub(/\\(.)/, '\1')
+          else hash[key] = val
+        end
+      end
+      hash
+    end
+  end
+
 private ######################################################################
 
   def spawn_processes
@@ -195,26 +211,10 @@ private ######################################################################
 
     (filenames || "").split(",").map(&:strip).each do |filename|
       error "No such file: #{filename}" unless File.exists?(filename)
-      environment.merge!(read_environment(filename))
+      environment.merge!(Foreman::Engine.read_environment(filename))
     end
 
-    environment.merge!(read_environment(".env")) unless filenames
+    environment.merge!(Foreman::Engine.read_environment(".env")) unless filenames
     environment
-  end
-
-  def read_environment(filename)
-    return {} unless File.exists?(filename)
-
-    File.read(filename).split("\n").inject({}) do |hash, line|
-      if line =~ /\A([A-Za-z_0-9]+)=(.*)\z/
-        key, val = [$1, $2]
-        case val
-          when /\A'(.*)'\z/ then hash[key] = $1
-          when /\A"(.*)"\z/ then hash[key] = $1.gsub(/\\(.)/, '\1')
-          else hash[key] = val
-        end
-      end
-      hash
-    end
   end
 end
