@@ -1,3 +1,10 @@
+## 0.42.0 (2012-04-18)
+
+* Move read_environment to a public class method.  [Phil Hagelberg]
+* Drop parka dependency  [Phil Hagelberg]
+* add group support for supervisord  [Raphael Randschau]
+* fix enviroment export  [Raphael Randschau]
+
 ## 0.41.0 (2012-03-16)
 
 * replace term-ansicolor with built-in colorization  [David Dollar]
