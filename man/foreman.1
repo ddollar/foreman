@@ -35,6 +35,14 @@ The following options control how the application is run:
 Specify the number of each process type to run\. The value passed in should be in the format \fBprocess=num,process=num\fR
 .
 .TP
+\fB\-e\fR, \fB\-\-env\fR
+Specify one or more \.env files to load
+.
+.TP
+\fB\-f\fR, \fB\-\-procfile\fR
+Specify an alternate Procfile to load, implies \fB\-d\fR at the Procfile root\.
+.
+.TP
 \fB\-p\fR, \fB\-\-port\fR
 Specify which port to use as the base for this application\. Should be a multiple of 1000\.
 .
