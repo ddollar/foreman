@@ -15,12 +15,11 @@ describe Foreman::Export::Supervisord, :fakefs do
   it "exports to the filesystem" do
     supervisord.export
 
-    File.read("/tmp/init/app.conf").should         == example_export_file("supervisord/app.conf")
+    File.read("/tmp/init/app.conf").should == example_export_file("supervisord/app.conf")
   end
 
   it "cleans up if exporting into an existing dir" do
     mock(FileUtils).rm("/tmp/init/app.conf")
-
     supervisord.export
     supervisord.export
   end
@@ -30,8 +29,7 @@ describe Foreman::Export::Supervisord, :fakefs do
 
     it "exports to the filesystem with concurrency" do
       supervisord.export
-
-      File.read("/tmp/init/app.conf").should            == example_export_file("supervisord/app-alpha-2.conf")
+      File.read("/tmp/init/app.conf").should == example_export_file("supervisord/app-alpha-2.conf")
     end
   end
 
@@ -46,7 +44,6 @@ describe Foreman::Export::Supervisord, :fakefs do
 
     it "can export with alternate template files" do
       supervisord.export
-
       File.read("/tmp/init/app.conf").should == "alternate_template\n"
     end
   end
@@ -67,16 +64,11 @@ describe Foreman::Export::Supervisord, :fakefs do
 
     it "can export with alternate template files" do
       supervisord.export
-
       File.read("/tmp/init/app.conf").should == "default_alternate_template\n"
     end
   end
 
   context "environment export" do
-    it "wraps the original environment with quotes" do
-      supervisord.wrap_environment("slowqueue,fastqueue").should == '"slowqueue,fastqueue"'
-    end
-
     it "correctly translates environment when exporting" do
       File.open("/tmp/supervisord_env", "w") { |f| f.puts("QUEUE=fastqueue,slowqueue\nVERBOSE=1") }
 

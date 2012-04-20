@@ -5,7 +5,7 @@ engine.procfile.entries.each do |process|
   1.upto(self.concurrency[process.name]) do |num|
     port = engine.port_for(process, num, self.port)
     name = if (conc > 1); "#{process.name}-#{num}" else process.name; end
-    environment = (engine.environment.map{ |var,env| "#{var.upcase}=#{wrap_environment env}" } + ["PORT=#{wrap_environment port}"])
+    environment = (engine.environment.map{ |var,env| %{#{var.upcase}="#{env}"} } + [%{PORT="#{port}"}])
     app_name = "#{app}-#{name}"
     app_names << app_name
 %>

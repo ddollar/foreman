@@ -23,8 +23,4 @@ class Foreman::Export::Supervisord < Foreman::Export::Base
     write_file "#{location}/#{app}.conf", app_config
   end
 
-  def wrap_environment env
-    "\"#{env}\""
-  end
-
 end
