@@ -1,3 +1,7 @@
+## 0.43.0 (2012-04-20)
+
+* wrap supervisord env vars in quotes  [Raphael Randschau]
+
 ## 0.42.0 (2012-04-18)
 
 * Move read_environment to a public class method.  [Phil Hagelberg]
