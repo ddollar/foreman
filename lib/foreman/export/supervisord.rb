@@ -24,11 +24,7 @@ class Foreman::Export::Supervisord < Foreman::Export::Base
   end
 
   def wrap_environment env
-    if env.index(',').nil?
-      env
-    else
-      "\"#{env}\""
-    end
+    "\"#{env}\""
   end
 
 end

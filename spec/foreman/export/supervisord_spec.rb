@@ -73,12 +73,20 @@ describe Foreman::Export::Supervisord, :fakefs do
   end
 
   context "environment export" do
-    it "returns the original environment if it contains no comma" do
-      supervisord.wrap_environment("production").should == "production"
+    it "wraps the original environment with quotes" do
+      supervisord.wrap_environment("slowqueue,fastqueue").should == '"slowqueue,fastqueue"'
     end
 
-    it "wraps the original environment with quotes if it contains a comma" do
-      supervisord.wrap_environment("slowqueue,fastqueue").should == '"slowqueue,fastqueue"'
+    it "correctly translates environment when exporting" do
+      File.open("/tmp/supervisord_env", "w") { |f| f.puts("QUEUE=fastqueue,slowqueue\nVERBOSE=1") }
+
+      engine = Foreman::Engine.new(procfile,:env => "/tmp/supervisord_env")
+      supervisor = Foreman::Export::Supervisord.new("/tmp/init", engine, options)
+      stub(supervisor).say
+
+      supervisor.export
+
+      File.read("/tmp/init/app.conf").should == example_export_file("supervisord/app-env-with-comma.conf")
     end
   end
 
