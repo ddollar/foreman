@@ -77,7 +77,7 @@ describe Foreman::Export::Supervisord, :fakefs do
       supervisord.wrap_environment("production").should == "production"
     end
 
-    it "wrapps the original environment with quotes if it contains a comma" do
+    it "wraps the original environment with quotes if it contains a comma" do
       supervisord.wrap_environment("slowqueue,fastqueue").should == '"slowqueue,fastqueue"'
     end
   end
