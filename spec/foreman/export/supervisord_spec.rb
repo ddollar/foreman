@@ -72,4 +72,14 @@ describe Foreman::Export::Supervisord, :fakefs do
     end
   end
 
+  context "environment export" do
+    it "returns the original environment if it contains no comma" do
+      supervisord.wrap_environment("production").should == "production"
+    end
+
+    it "wrapps the original environment with quotes if it contains a comma" do
+      supervisord.wrap_environment("slowqueue,fastqueue").should == '"slowqueue,fastqueue"'
+    end
+  end
+
 end
