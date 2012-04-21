@@ -79,7 +79,10 @@ private ######################################################################
   end
 
   def engine
-    @engine ||= Foreman::Engine.new(procfile, options)
+    root = File.expand_path(File.dirname(procfile))
+    env = File.expand_path(File.join(root, ".env"))
+    @engine ||= Foreman::Engine.new(procfile, options.merge({:app_root => root,
+                                                             :env => env}))
   end
 
   def procfile

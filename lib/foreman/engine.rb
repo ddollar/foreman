@@ -22,7 +22,7 @@ class Foreman::Engine
 
   def initialize(procfile, options={})
     @procfile  = Foreman::Procfile.new(procfile)
-    @directory = options[:app_root] || File.expand_path(File.dirname(procfile))
+    @directory = options[:app_root]
     @options = options.dup
     @environment = read_environment_files(options[:env])
     @output_mutex = Mutex.new
@@ -214,7 +214,6 @@ private ######################################################################
       environment.merge!(Foreman::Engine.read_environment(filename))
     end
 
-    environment.merge!(Foreman::Engine.read_environment(".env")) unless filenames
     environment
   end
 end
