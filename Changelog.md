@@ -1,3 +1,9 @@
+## 0.44.0 (2012-04-23)
+
+* make var output order repeatable in supervisord export [David Dollar]
+* make --procfile and --app-root influence each other in a more intuitive way  [David Dollar]
+* Look for .env and app_root in the same dir as the Procfile.  [Phil Hagelberg]
+
 ## 0.43.0 (2012-04-20)
 
 * wrap supervisord env vars in quotes  [Raphael Randschau]
