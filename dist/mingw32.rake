@@ -12,5 +12,5 @@ task "mingw32:clean" do
 end
 
 task "mingw32:release" => "mingw32:build" do |t|
-  sh "parka push -f #{pkg("foreman-#{version}-mingw32.gem")}"
+  sh "gem push #{pkg("foreman-#{version}-mingw32.gem")} || echo 'error'"
 end

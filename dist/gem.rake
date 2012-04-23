@@ -10,5 +10,5 @@ task "gem:clean" do
 end
 
 task "gem:release" => "gem:build" do |t|
-  sh "parka push -f #{pkg("foreman-#{version}.gem")}"
+  sh "gem push #{pkg("foreman-#{version}.gem")} || echo 'error'"
 end

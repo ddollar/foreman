@@ -12,5 +12,5 @@ task "jruby:clean" do
 end
 
 task "jruby:release" => "jruby:build" do |t|
-  sh "parka push -f #{pkg("foreman-#{version}-jruby.gem")}"
+  sh "gem push #{pkg("foreman-#{version}-jruby.gem")} || echo 'error'"
 end
