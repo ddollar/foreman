@@ -49,6 +49,14 @@ describe "Foreman::Engine", :fakefs do
     end
   end
 
+  describe "directories" do
+    it "has the directory default relative to the Procfile" do
+      write_procfile "/some/app/Procfile"
+      engine = Foreman::Engine.new("/some/app/Procfile")
+      engine.directory.should == "/some/app"
+    end
+  end
+
   describe "environment" do
     before(:each) do
       write_procfile
@@ -94,6 +102,15 @@ describe "Foreman::Engine", :fakefs do
     it "should read .env if none specified" do
       File.open(".env", "w") { |f| f.puts("FOO=qoo") }
       engine = Foreman::Engine.new("Procfile")
+      engine.environment.should == {"FOO"=>"qoo"}
+      engine.start
+    end
+
+    it "should be loaded relative to the Procfile" do
+      FileUtils.mkdir_p "/some/app"
+      File.open("/some/app/.env", "w") { |f| f.puts("FOO=qoo") }
+      write_procfile "/some/app/Procfile"
+      engine = Foreman::Engine.new("/some/app/Procfile")
       engine.environment.should == {"FOO"=>"qoo"}
       engine.start
     end

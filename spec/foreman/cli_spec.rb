@@ -34,6 +34,15 @@ describe "Foreman::CLI", :fakefs do
         subject.start("alpha")
       end
     end
+
+    describe "with an alternate root" do
+      it "reads the Procfile from that root" do
+        write_procfile "/some/app/Procfile"
+        mock(Foreman::Procfile).new("/some/app/Procfile")
+        mock.instance_of(Foreman::Engine).start
+        foreman %{ start -d /some/app }
+      end
+    end
   end
 
   describe "export" do

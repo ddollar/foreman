@@ -79,14 +79,15 @@ private ######################################################################
   end
 
   def engine
-    root = File.expand_path(File.dirname(procfile))
-    env = File.expand_path(File.join(root, ".env"))
-    @engine ||= Foreman::Engine.new(procfile, options.merge({:app_root => root,
-                                                             :env => env}))
+    @engine ||= Foreman::Engine.new(procfile, options)
   end
 
   def procfile
-    options[:procfile] || "Procfile"
+    case
+      when options[:procfile] then options[:procfile]
+      when options[:app_root] then File.expand_path(File.join(options[:app_root], "Procfile"))
+      else "Procfile"
+    end
   end
 
   def error(message)
