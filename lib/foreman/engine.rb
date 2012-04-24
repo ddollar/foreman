@@ -21,7 +21,7 @@ class Foreman::Engine
   Foreman::Color.enable($stdout)
 
   def initialize(procfile, options={})
-    @procfile  = Foreman::Procfile.new(procfile)
+    @procfile  = Foreman::Procfile.new(procfile) if File.exists?(procfile)
     @directory = options[:app_root] || File.expand_path(File.dirname(procfile))
     @options = options.dup
     @output_mutex = Mutex.new
