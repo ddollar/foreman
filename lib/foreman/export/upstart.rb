@@ -36,6 +36,8 @@ class Foreman::Export::Upstart < Foreman::Export::Base
         write_file "#{location}/#{app}-#{process.name}-#{num}.conf", process_config
       end
     end
-  end
 
+    FileUtils.mkdir_p(log_root) rescue error "could not create #{log_root}"
+    FileUtils.chown(user, nil, log_root) rescue error "could not chown #{log_root} to #{user}"
+  end
 end
