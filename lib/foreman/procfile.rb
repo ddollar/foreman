@@ -13,8 +13,8 @@ class Foreman::Procfile
 
   attr_reader :entries
 
-  def initialize(filename)
-    @entries = parse_procfile(filename)
+  def initialize(filename_or_entries)
+    @entries = filename_or_entries.is_a?(Array) ? filename_or_entries : parse_procfile(filename_or_entries)
   end
 
   def [](name)

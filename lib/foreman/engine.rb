@@ -20,8 +20,13 @@ class Foreman::Engine
 
   Foreman::Color.enable($stdout)
 
-  def initialize(procfile, options={})
-    @procfile  = Foreman::Procfile.new(procfile)
+  def initialize(procfile, options={})  
+    @procfile = if procfile.is_a?(Hash)
+      raise "No :app_root specified" unless options[:app_root]
+      Foreman::Procfile.new(procfile.map { |k,v| Foreman::ProcfileEntry.new k, v })
+    else
+      Foreman::Procfile.new(procfile)
+    end    
     @directory = options[:app_root] || File.expand_path(File.dirname(procfile))
     @options = options.dup
     @output_mutex = Mutex.new
