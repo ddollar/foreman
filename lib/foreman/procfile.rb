@@ -13,8 +13,9 @@ class Foreman::Procfile
 
   attr_reader :entries
 
-  def initialize(filename)
-    @entries = parse_procfile(filename)
+  def initialize(filename=nil)
+    @entries = []
+    load(filename) if filename
   end
 
   def [](name)
@@ -25,12 +26,31 @@ class Foreman::Procfile
     entries.map(&:name)
   end
 
-private
+  def load(filename)
+    entries.clear
+    parse_procfile(filename)
+  end
+
+  def write(filename)
+    File.open(filename, 'w') do |io|
+      entries.each do |ent|
+        io.puts(ent)
+      end
+    end
+  end
+
+  def <<(entry)
+    entries << Foreman::ProcfileEntry.new(*entry)
+    self
+  end
+
+
+protected
 
   def parse_procfile(filename)
     File.read(filename).split("\n").map do |line|
       if line =~ /^([A-Za-z0-9_]+):\s*(.+)$/
-        Foreman::ProcfileEntry.new($1, $2)
+        self << [ $1, $2 ]
       end
     end.compact
   end
