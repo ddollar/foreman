@@ -19,4 +19,8 @@ class Foreman::ProcfileEntry
     end
   end
 
+  def to_s
+    "#{name}: #{command}"
+  end
+
 end
