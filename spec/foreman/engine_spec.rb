@@ -12,12 +12,6 @@ describe "Foreman::Engine", :fakefs do
   end
 
   describe "initialize" do
-    describe "without an existing Procfile" do
-      it "raises an error" do
-        lambda { subject }.should raise_error
-      end
-    end
-
     describe "with a Procfile" do
       before { write_procfile }
 
