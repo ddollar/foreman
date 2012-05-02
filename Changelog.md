@@ -1,3 +1,8 @@
+## 0.46.0 (2012-05-02)
+
+* Add Profile load/write/append API  [Michael Granger]
+* Guard against missing Procfile in engine.rb  [Brian Kaney]
+
 ## 0.45.0 (2012-04-26)
 
 * create and chown log dir in upstart export.  [Phil Hagelberg]
