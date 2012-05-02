@@ -128,4 +128,13 @@ describe "Foreman::Engine", :fakefs do
       subject.send(:poll_readers)
     end
   end
+
+  describe "base_port" do
+    it "should use environment if no option exists" do
+      write_procfile
+      File.open("/tmp/env", "w") { |f| f.puts("PORT=3000") }
+      engine = Foreman::Engine.new("Procfile", :env => "/tmp/env")
+      engine.send(:base_port).should == "3000"
+    end
+  end
 end
