@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string><%= "#{app}-#{process.name}-#{num}" %></string>
+    <key>ProgramArguments</key>
+    <array>
+        <string><%= process.command %></string>
+    </array>
+    <key>KeepAlive</key>
+    <true/>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>StandardErrorPath</key>
+    <string><%= log_root %>/<%= app %>-<%= process.name %>-<%=num%>.log</string>
+    <key>UserName</key>
+    <string><%= user %></string>
+    <key>WorkingDirectory</key>
+    <string><%= engine.directory %></string>
+</dict>
+</plist>
