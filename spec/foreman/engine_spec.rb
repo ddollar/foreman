@@ -100,6 +100,13 @@ describe "Foreman::Engine", :fakefs do
       engine.start
     end
 
+    it "should set port from .env if specified" do
+      File.open(".env", "w") { |f| f.puts("PORT=8017") }
+      engine = Foreman::Engine.new("Procfile")
+      engine.send(:base_port).should == "8017"
+      engine.start
+    end
+
     it "should be loaded relative to the Procfile" do
       FileUtils.mkdir_p "/some/app"
       File.open("/some/app/.env", "w") { |f| f.puts("FOO=qoo") }
