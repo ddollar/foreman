@@ -84,7 +84,7 @@ private ######################################################################
   end
 
   def base_port
-    options[:port] || 5000
+    options[:port] || environment["PORT"] || ENV["PORT"] || 5000
   end
 
   def kill_all(signal="SIGTERM")
