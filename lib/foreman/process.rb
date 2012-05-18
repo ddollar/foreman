@@ -1,7 +1,12 @@
 require "foreman"
+require "foreman/io"
 require "rubygems"
 
 class Foreman::Process
+  if Foreman.jruby? or RUBY_VERSION < "1.9"
+    require "posix/spawn"
+    include POSIX::Spawn
+  end
 
   attr_reader :entry
   attr_reader :num
@@ -45,26 +50,16 @@ class Foreman::Process
 private
 
   def fork_with_io(command, basedir)
-    reader, writer = IO.pipe
+    reader, writer = Foreman::IO.open
+
     command = replace_command_env(command)
-    pid = if Foreman.windows?
-      Dir.chdir(basedir) do
-        Process.spawn command, :out => writer, :err => writer
-      end
-    elsif Foreman.jruby?
-      require "posix/spawn"
-      POSIX::Spawn.spawn(Foreman.runner, "-d", basedir, command, {
-        :out => writer, :err => writer
-      })
-    else
-      fork do
-        writer.sync = true
-        $stdout.reopen writer
-        $stderr.reopen writer
-        reader.close
-        exec Foreman.runner, "-d", basedir, command
-      end
-    end
+    pid = spawn(command, {
+      :out => writer,
+      :err => writer, # POSIX::Spawn doesn't support [:child, :out] as of 0.3.6
+      :in => :close,
+      :chdir => basedir
+    })
+    writer.close
     [ reader, pid ]
   end
 

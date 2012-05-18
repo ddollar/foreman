@@ -2,13 +2,8 @@ source "http://rubygems.org"
 
 gemspec
 
-platform :mingw do
-  gem "win32console", "~> 1.3.0"
-end
-
-platform :jruby do
-  gem "posix-spawn", "~> 0.3.6"
-end
+gem 'win32console', '~> 1.3.0', :platform => :mingw
+gem 'posix-spawn', '~> 0.3.6', :platforms => [:ruby_18, :jruby]
 
 group :development do
   gem 'aws-s3'
