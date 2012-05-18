@@ -84,7 +84,7 @@ describe Foreman::Process do
       end
 
       it 'should be dead' do
-        run 'exit'
+        run 'kill -SIGINT $$'
         subject.should be_dead
       end
 
@@ -112,8 +112,18 @@ describe Foreman::Process do
       end
 
       it 'should redirect stderr' do
-        run 'echo hey >2'
+        run 'echo hey >&2'
         output.should include('hey')
+      end
+
+      it 'should not have a tty on stdin' do
+        run '[ -t 0 ] && echo tty'
+        output.should_not include('tty')
+      end
+
+      it 'should have a tty on stdout' do
+        run '[ -t 1 ] && echo tty'
+        output.should include('tty')
       end
 
       it 'should handle variables' do
