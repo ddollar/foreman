@@ -160,6 +160,20 @@ describe "Foreman::CLI", :fakefs do
           ENV["FOO"].should be_nil
         end
 
+        it "should handle variables" do
+          write_env('.env', 'FOO' => 'bar', 'BAR' => "qux", 'FOOBAR' => "$FOO-$BAR", 'PATH' => 'my/path:$PATH')
+          orig_path = ENV['PATH']
+
+          preserving_env do
+            subject.run *command
+            ENV["FOOBAR"].should == "bar-qux"
+            ENV["PATH"].should == "my/path:#{orig_path}"
+          end
+
+          ENV["FOOBAR"].should be_nil
+          ENV["PATH"].should == orig_path
+        end
+
         it "should runute the command as a string" do
           mock(subject).exec(command.join(" "))
           subject.run *command

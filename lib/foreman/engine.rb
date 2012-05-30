@@ -50,7 +50,7 @@ class Foreman::Engine
   end
 
   def apply_environment!
-    environment.each { |k,v| ENV[k] = v }
+    environment.each { |k,v| ENV[k] = v.gsub(/\$([A-Za-z_0-9]+)/){ ENV[$1] } }
   end
 
   def self.read_environment(filename)
