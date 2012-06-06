@@ -144,7 +144,7 @@ describe "Foreman::CLI", :fakefs do
       before { write_procfile }
 
       describe "and a command" do
-        let(:command) { ["ls", "-l"] }
+        let(:command) { ["ls", "-l", "foo bar"] }
 
         before(:each) do
           stub(subject).exec
@@ -160,8 +160,8 @@ describe "Foreman::CLI", :fakefs do
           ENV["FOO"].should be_nil
         end
 
-        it "should runute the command as a string" do
-          mock(subject).exec(command.join(" "))
+        it "should exec the argument list as a shell command" do
+          mock(subject).exec(command.shelljoin)
           subject.run *command
         end
       end

@@ -2,6 +2,7 @@ require "foreman"
 require "foreman/helpers"
 require "foreman/engine"
 require "foreman/export"
+require "shellwords"
 require "thor"
 require "yaml"
 
@@ -59,12 +60,12 @@ class Foreman::CLI < Thor
     puts "valid procfile detected (#{engine.procfile.process_names.join(', ')})"
   end
 
-  desc "run COMMAND", "Run a command using your application's environment"
+  desc "run COMMAND [ARGS...]", "Run a command using your application's environment"
 
   def run(*args)
     engine.apply_environment!
     begin
-      exec args.join(" ")
+      exec args.shelljoin
     rescue Errno::EACCES
       error "not executable: #{args.first}"
     rescue Errno::ENOENT

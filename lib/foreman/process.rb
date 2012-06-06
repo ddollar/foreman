@@ -62,7 +62,7 @@ private
         $stdout.reopen writer
         $stderr.reopen writer
         reader.close
-        exec Foreman.runner, "-d", basedir, command
+        exec Foreman.runner, "-d", basedir, *command.shellsplit
       end
     end
     [ reader, pid ]
