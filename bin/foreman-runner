@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#/ Usage: foreman-runner [-d <dir>] <command>
+#/ Usage: foreman-runner [-d <dir>] <command> [<args>...]
 #/
 #/ Run a command with exec, optionally changing directory first
 
@@ -27,10 +27,6 @@ done
 
 shift $((OPTIND-1))
 
-command=$1
+[ -z "$1" ] && usage
 
-if [ -z "$1" ]; then
-  usage
-fi
-
-exec $1
+exec "$@"

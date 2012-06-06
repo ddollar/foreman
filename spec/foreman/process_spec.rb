@@ -121,10 +121,24 @@ describe Foreman::Process do
         output.should include('777')
       end
 
-      it 'should handle arguments' do
-        pending
+      it 'should handle multi-word arguments (old test)' do
+        # TODO: This test used to be marked pending; it now passes,
+        # but is very slow.  The next test is a fast replacement.
         run %{ sh -c "trap '' TERM; sleep 10" }
         subject.should be_alive
+      end
+
+      it 'should handle multi-word arguments' do
+        # We have to be a little clever here since Foreman will always
+        # print a status message that includes the command.
+        run %{ sh -c 'echo abcdef | tr a-c x | tr d-f y' }
+        output.should include('xxxyyy')
+      end
+
+      it 'should not clobber "$x"-subexpressions' do
+        pending 'this conflicts with the variable interpolation hack'
+        run %{ sh -c 'echo \$abcdef | tr \$ %' }
+        output.should include('%abcdef')
       end
     end
   end
