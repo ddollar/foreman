@@ -161,15 +161,17 @@ describe "Foreman::CLI", :fakefs do
         end
 
         it "should handle variables" do
-          write_env('.env', 'FOO' => 'bar', 'BAR' => "qux", 'FOOBAR' => "$FOO-$BAR", 'PATH' => 'my/path:$PATH')
+          write_env('.env', 'FOO' => 'bar', 'BAR' => "qux", 'FOOBAR' => "$FOO-$BAR", 'PATH' => 'my/path:$PATH', 'MARS' => 'bars:\$PATH')
           orig_path = ENV['PATH']
 
           preserving_env do
             subject.run *command
             ENV["FOOBAR"].should == "bar-qux"
+            ENV["MARS"].should == 'bars:\$PATH'
             ENV["PATH"].should == "my/path:#{orig_path}"
           end
 
+          ENV["MARS"].should be_nil
           ENV["FOOBAR"].should be_nil
           ENV["PATH"].should == orig_path
         end
