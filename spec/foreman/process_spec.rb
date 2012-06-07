@@ -112,7 +112,7 @@ describe Foreman::Process do
       end
 
       it 'should redirect stderr' do
-        run 'echo hey >2'
+        run 'echo hey >&2'
         output.should include('hey')
       end
 
