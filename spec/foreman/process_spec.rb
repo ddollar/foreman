@@ -22,7 +22,7 @@ describe Foreman::Process do
   describe '#run' do
     let(:pipe)       { :pipe }
     let(:basedir)    { Dir.mktmpdir }
-    let(:env)        {{ 'foo' => 'bar' }}
+    let(:env)        {{ 'foo' => 'xyzzy' }}
     let(:init_delta) { 0.1 }
 
     after { FileUtils.remove_entry_secure basedir }
@@ -49,7 +49,7 @@ describe Foreman::Process do
 
       it 'should set custom variables for environment' do
         mock(subject).run_process(basedir, command, pipe) do
-          ENV['foo'].should == 'bar'
+          ENV['foo'].should == 'xyzzy'
         end
         run
       end
@@ -121,7 +121,7 @@ describe Foreman::Process do
       # of the fact that all commands are passed through the shell.
       it 'should substitute environment variables' do
         run %q{ echo $foo }
-        output.should include('bar')
+        output.should include('xyzzy')
       end
 
       it 'should handle shell commands' do
