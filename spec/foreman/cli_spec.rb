@@ -160,8 +160,8 @@ describe "Foreman::CLI", :fakefs do
           ENV["FOO"].should be_nil
         end
 
-        it "should exec the argument list as a shell command" do
-          mock(subject).exec(command.shelljoin)
+        it "should exec the argument list" do
+          mock(subject).exec(*command)
           subject.run *command
         end
       end

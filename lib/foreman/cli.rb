@@ -65,7 +65,7 @@ class Foreman::CLI < Thor
   def run(*args)
     engine.apply_environment!
     begin
-      exec args.shelljoin
+      exec *args
     rescue Errno::EACCES
       error "not executable: #{args.first}"
     rescue Errno::ENOENT
