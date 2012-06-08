@@ -46,9 +46,9 @@ private
 
   def fork_with_io(command, basedir)
     reader, writer = IO.pipe
-    command = replace_command_env(command)
     pid = if Foreman.windows?
       Dir.chdir(basedir) do
+        # TODO: Should we pass the command through a shell on Windows?
         Process.spawn command, :out => writer, :err => writer
       end
     elsif Foreman.jruby?
@@ -62,7 +62,7 @@ private
         $stdout.reopen writer
         $stderr.reopen writer
         reader.close
-        exec Foreman.runner, "-d", basedir, *command.shellsplit
+        exec Foreman.runner, "-d", basedir, command
       end
     end
     [ reader, pid ]
@@ -80,10 +80,6 @@ private
 
   def output(pipe, message)
     pipe.puts "%s,%s" % [ name, message ]
-  end
-
-  def replace_command_env(command)
-    command.gsub(/\$(\w+)/) { |e| ENV[e[1..-1]] }
   end
 
   def with_environment(environment)

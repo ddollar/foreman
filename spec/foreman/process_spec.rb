@@ -10,7 +10,7 @@ describe Foreman::Process do
   let(:number)  { 1 }
   let(:port)    { 777 }
   let(:command) { "script" }
-  let(:name)    { "foobar" }
+  let(:name)    { "testproc" }
   let(:entry)   { OpenStruct.new :name => name, :command => command }
 
   its(:entry) { entry }
@@ -22,7 +22,7 @@ describe Foreman::Process do
   describe '#run' do
     let(:pipe)       { :pipe }
     let(:basedir)    { Dir.mktmpdir }
-    let(:env)        {{ 'foo' => 'bar' }}
+    let(:env)        {{ 'foo' => 'xyzzy' }}
     let(:init_delta) { 0.1 }
 
     after { FileUtils.remove_entry_secure basedir }
@@ -49,7 +49,7 @@ describe Foreman::Process do
 
       it 'should set custom variables for environment' do
         mock(subject).run_process(basedir, command, pipe) do
-          ENV['foo'].should == 'bar'
+          ENV['foo'].should == 'xyzzy'
         end
         run
       end
@@ -83,11 +83,6 @@ describe Foreman::Process do
         subject.should be_alive
       end
 
-      it 'should be dead' do
-        run 'exit'
-        subject.should be_dead
-      end
-
       it 'should be killable' do
         run 'sleep 1'
         subject.kill 'TERM'
@@ -106,39 +101,44 @@ describe Foreman::Process do
         subject.should be_dead
       end
 
-      it 'should redirect stdout' do
-        run 'echo hey'
-        output.should include('hey')
+      # Sanity check to ensure subsequent tests make sense.
+      it 'should not echo command line in output' do
+        run %q{ true xyzzy }
+        output.should_not include('xyzzy')
       end
 
-      it 'should redirect stderr' do
-        run 'echo hey >2'
-        output.should include('hey')
+      it 'should capture stdout' do
+        run %q{ echo xyzzy }
+        output.should include('xyzzy')
       end
 
-      it 'should handle variables' do
-        run 'echo $PORT'
-        output.should include('777')
+      # There used to be a hack for this but now simply it falls out
+      # of the fact that all commands are passed through the shell.
+      it 'should substitute environment variables' do
+        run %q{ echo $foo }
+        output.should include('xyzzy')
       end
 
-      it 'should handle multi-word arguments (old test)' do
-        # TODO: This test used to be marked pending; it now passes,
-        # but is very slow.  The next test is a fast replacement.
-        run %{ sh -c "trap '' TERM; sleep 10" }
-        subject.should be_alive
+      it 'should handle shell commands' do
+        run %q{ echo xyzzy | tr x-z a-c }
+        output.should include('abccb')
+      end
+
+      it 'should capture stderr' do
+        run %q{ echo xyzzy >&2 }
+        output.should include('xyzzy')
       end
 
       it 'should handle multi-word arguments' do
-        # We have to be a little clever here since Foreman will always
-        # print a status message that includes the command.
-        run %{ sh -c 'echo abcdef | tr a-c x | tr d-f y' }
-        output.should include('xxxyyy')
+        run %{ sh -c 'echo xyzzy | tr x-z a-c' }
+        output.should include('abccb')
       end
 
-      it 'should not clobber "$x"-subexpressions' do
-        pending 'this conflicts with the variable interpolation hack'
-        run %{ sh -c 'echo \$abcdef | tr \$ %' }
-        output.should include('%abcdef')
+      # This used to fail because Foreman had a special hack for
+      # parsing out things that looked like environment variables.
+      it 'should not clobber "$foo"-subexpressions' do
+        run %q{ echo '$xyzzy' }
+        output.should include('$xyzzy')
       end
     end
   end
