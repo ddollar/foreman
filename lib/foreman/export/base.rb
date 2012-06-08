@@ -3,21 +3,33 @@ require "foreman/utils"
 
 class Foreman::Export::Base
 
-  attr_reader :location, :engine, :app, :log, :port, :user, :template, :concurrency
+  attr_reader :location, :engine, :app, :log, :port, :user, :template
+  attr_reader :concurrency, :alert_on_mem, :restart_on_mem, :alert_on_cpu, :restart_on_cpu
 
   def initialize(location, engine, options={})
-    @location    = location
+    @location    = location || default_location
     @engine      = engine
     @app         = options[:app]
     @log         = options[:log]
     @port        = options[:port]
     @user        = options[:user]
     @template    = options[:template]
-    @concurrency = Foreman::Utils.parse_concurrency(options[:concurrency])
+
+    @concurrency    = Foreman::Utils.parse_concurrency(options[:concurrency])
+    @alert_on_mem   = Foreman::Utils.parse_process_attribute(options[:"alert-on-mem"])
+    @restart_on_mem = Foreman::Utils.parse_process_attribute(options[:"restart-on-mem"])
+    @alert_on_cpu   = Foreman::Utils.parse_process_attribute(options[:"alert-on-cpu"])
+    @restart_on_cpu = Foreman::Utils.parse_process_attribute(options[:"restart-on-cpu"])
   end
 
   def export
     raise "export method must be overridden"
+  end
+  
+protected ####################################################################
+
+  def default_location
+    nil
   end
 
 private ######################################################################

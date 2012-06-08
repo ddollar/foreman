@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+LOG_FILE=${LOG_FILE:-<%= log %>/<%= app %>-<%= process.name %>.log}
+
+cd <%= engine.directory %>
+exec <%= process.command %> >> ${LOG_FILE} 2>&1 
