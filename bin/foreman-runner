@@ -2,7 +2,7 @@
 #
 #/ Usage: foreman-runner [-d <dir>] <command> [<args>...]
 #/
-#/ Run a command with exec, optionally changing directory first
+#/ Run a simple shell command, optionally changing directory first
 
 set -e
 
@@ -29,4 +29,4 @@ shift $((OPTIND-1))
 
 [ -z "$1" ] && usage
 
-exec "$@"
+exec sh -c "exec $*"

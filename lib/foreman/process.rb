@@ -53,7 +53,7 @@ private
       end
     elsif Foreman.jruby?
       require "posix/spawn"
-      POSIX::Spawn.spawn(Foreman.runner, "-d", basedir, "sh", "-c", command, {
+      POSIX::Spawn.spawn(Foreman.runner, "-d", basedir, command, {
         :out => writer, :err => writer
       })
     else
@@ -62,7 +62,7 @@ private
         $stdout.reopen writer
         $stderr.reopen writer
         reader.close
-        exec Foreman.runner, "-d", basedir, "sh", "-c", command
+        exec Foreman.runner, "-d", basedir, command
       end
     end
     [ reader, pid ]
