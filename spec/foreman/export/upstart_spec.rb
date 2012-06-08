@@ -33,6 +33,12 @@ describe Foreman::Export::Upstart, :fakefs do
     upstart.export
   end
 
+  it "quotes and escapes environment variables" do
+    engine.environment['KEY'] = 'd"\|d'
+    upstart.export
+    File.read("/tmp/init/app-alpha-1.conf").should include('KEY="d\"\\\\|d"')
+  end
+
   context "with concurrency" do
     let(:options) { Hash[:concurrency => "alpha=2"] }
 
