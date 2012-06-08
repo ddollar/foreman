@@ -48,4 +48,19 @@ private ######################################################################
     end
   end
 
+  # Quote a string to be used on the command line. Backslashes are escapde to \\ and quotes 
+  # escaped to \"
+  #
+  #   str - string to be quoted
+  #
+  # Examples
+  # 
+  #  shell_quote("FB|123\"\\1")
+  #  # => "\"FB|123\"\\"\\\\1\""
+  #
+  # Returns the the escaped string surrounded by quotes 
+  def shell_quote(str)
+    "\"#{str.gsub(/\\/){ '\\\\' }.gsub(/["]/){ "\\\"" }}\""
+  end
+
 end
