@@ -83,11 +83,6 @@ describe Foreman::Process do
         subject.should be_alive
       end
 
-      it 'should be dead' do
-        run 'exit'
-        subject.should be_dead
-      end
-
       it 'should be killable' do
         run 'sleep 1'
         subject.kill 'TERM'
