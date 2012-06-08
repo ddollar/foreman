@@ -1,6 +1,7 @@
 require "foreman"
 require "foreman/helpers"
 require "foreman/engine"
+require "foreman/tmux_engine"
 require "foreman/export"
 require "shellwords"
 require "thor"
@@ -10,6 +11,7 @@ class Foreman::CLI < Thor
   include Foreman::Helpers
 
   class_option :procfile, :type => :string, :aliases => "-f", :desc => "Default: Procfile"
+  class_option :tmux, :type => :boolean, :aliases => "-t", :desc => "Run in tmux session"
 
   desc "start [PROCESS]", "Start the application (or a specific PROCESS)"
 
@@ -73,6 +75,17 @@ class Foreman::CLI < Thor
     end
   end
 
+  class << self
+    def new_engine(procfile, options)
+      @engine_class ||= options[:tmux] ? Foreman::TmuxEngine : Foreman::Engine
+      @engine_class.new(procfile, options)
+    end
+
+    def engine_class=(klass)
+      @engine_class = klass
+    end
+  end
+
 private ######################################################################
 
   def check_procfile!
@@ -80,7 +93,7 @@ private ######################################################################
   end
 
   def engine
-    @engine ||= Foreman::Engine.new(procfile, options)
+    @engine ||= self.class.new_engine(procfile, options)
   end
 
   def procfile
