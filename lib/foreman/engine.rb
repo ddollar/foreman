@@ -36,6 +36,7 @@ class Foreman::Engine
 
     trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
     trap("INT")  { puts "SIGINT received";  terminate_gracefully }
+    trap("HUP")  { puts "SIGHUP received";  terminate_gracefully }
 
     assign_colors
     spawn_processes
