@@ -40,6 +40,10 @@ The following options control how the application is run:
     Specify which port to use as the base for this application. Should be
     a multiple of 1000.
 
+  * `-t`, `--tmux`:
+    Runs the processes in a tmux session. Creates one window for each process
+    and an extra window containing the output of each window (requires gawk).
+
 `foreman run` is used to run one-off commands using the same environment
 as your defined processes.
 

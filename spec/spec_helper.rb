@@ -6,6 +6,7 @@ SimpleCov.start do
 end
 
 require "rspec"
+require "timecop"
 require "fakefs/safe"
 require "fakefs/spec_helpers"
 

@@ -46,6 +46,10 @@ Specify an alternate Procfile to load, implies \fB\-d\fR at the Procfile root\.
 \fB\-p\fR, \fB\-\-port\fR
 Specify which port to use as the base for this application\. Should be a multiple of 1000\.
 .
+.TP
+\fB\-t\fR, \fB\-\-tmux\fR
+Runs the processes in a tmux session\. Creates one window for each process and an extra window containing the output of each window (requires gawk)\.
+.
 .P
 \fBforeman run\fR is used to run one\-off commands using the same environment as your defined processes\.
 .
