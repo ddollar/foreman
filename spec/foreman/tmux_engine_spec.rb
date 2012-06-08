@@ -35,39 +35,41 @@ describe "Foreman::TmuxEngine", :fakefs do
     end
   end
 
-  describe "start" do
-    before do
-      write_procfile
-      @pid = fork do
-        exec("tmux start-server")
-      end
-    end
-
-    after do
-      Process.waitpid(@pid)
-      %x{tmux kill-session -t #{session} &> /dev/null}
-    end
-
-    it "creates a tmux session and attaches" do
-      %x{tmux has-session -t #{session} &> /dev/null}
-      $?.exitstatus.should == 1
-
-      mock(Kernel).exec("tmux attach-session -t #{session}")
-      subject.start
-
-      %x{tmux has-session -t #{session}}
-      $?.exitstatus.should == 0
-
-      %x{tmux list-windows -t #{session}}.split("\n").map { |window|
-        if window =~ /[0-9]+:\s(.+?)\s/
-          $1
+  if system("which tmux")
+    describe "start" do
+      before do
+        write_procfile
+        @pid = fork do
+          exec("tmux start-server")
         end
-      }.should == ["alpha.1", "bravo.1", "all"]
-      sleep 1
-      %x{tmux kill-session -t #{session}}
-      output = %x[cat /tmp/foreman.#{session}.log]
-      output.should =~ /alpha\.1.+\.\/alpha: No such file or directory/
-      output.should =~ /bravo\.1.+\.\/bravo: No such file or directory/
+      end
+
+      after do
+        Process.waitpid(@pid)
+        %x{tmux kill-session -t #{session} &> /dev/null}
+      end
+
+      it "creates a tmux session and attaches" do
+        %x{tmux has-session -t #{session} &> /dev/null}
+        $?.exitstatus.should == 1
+
+        mock(Kernel).exec("tmux attach-session -t #{session}")
+        subject.start
+
+        %x{tmux has-session -t #{session}}
+        $?.exitstatus.should == 0
+
+        %x{tmux list-windows -t #{session}}.split("\n").map { |window|
+          if window =~ /[0-9]+:\s(.+?)\s/
+            $1
+          end
+        }.should == ["alpha.1", "bravo.1", "all"]
+        sleep 1
+        %x{tmux kill-session -t #{session}}
+        output = %x[cat /tmp/foreman.#{session}.log]
+        output.should =~ /alpha\.1.+\.\/alpha: No such file or directory/
+        output.should =~ /bravo\.1.+\.\/bravo: No such file or directory/
+      end
     end
   end
 end
