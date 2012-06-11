@@ -1,3 +1,20 @@
+## 0.48.0.pre1 (2012-06-11)
+
+* Massive refactoring for programmatic control and stability  [David Dollar]
+* Procfile commands with shell interpolations now work again  [David Dollar]
+* Stop trying to test on Ruby 1.8  [David Dollar]
+
+## 0.47.0 (2012-06-07)
+
+* Fix multi-word argument handling in `foreman run`.  [Daniel Brockman]
+* Make 'PORT=5000 foreman start' work  [Koen Van der Auwera]
+* Terminate gracefully upon SIGHUP  [Stefan Schüßler]
+* Set port from .env if specified  [Koen Van der Auwera]
+* Updated bluepill exporter to use environment variables from .env  [Aneeth]
+* Added launchd exporter  [Maxwell Swadling]
+* Quote and escape environment variables in upstart templates  [Matt Griffin]
+* Added list of ports to other languages to README  [elf Pavlik]
+
 ## 0.46.0 (2012-05-02)
 
 * Add Profile load/write/append API  [Michael Granger]

@@ -35,7 +35,7 @@ def newer_release
   tags = %x{ git tag --contains v#{latest_release} }.split("\n").sort_by do |tag|
     Gem::Version.new(tag[1..-1])
   end
-  tags.reject { |tag| Gem::Version.new(tag[1..-1]).prerelease? }[1]
+  tags[1]
 end
 
 desc "Generate a Changelog"
