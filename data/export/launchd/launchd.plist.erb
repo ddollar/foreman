@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string><%= "#{app}-#{process.name}-#{num}" %></string>
+    <string><%= "#{app}-#{name}-#{num}" %></string>
     <key>ProgramArguments</key>
     <array>
         <string><%= process.command %></string>
@@ -13,10 +13,10 @@
     <key>RunAtLoad</key>
     <true/>
     <key>StandardErrorPath</key>
-    <string><%= log_root %>/<%= app %>-<%= process.name %>-<%=num%>.log</string>
+    <string><%= log %>/<%= app %>-<%= name %>-<%=num%>.log</string>
     <key>UserName</key>
     <string><%= user %></string>
     <key>WorkingDirectory</key>
-    <string><%= engine.directory %></string>
+    <string><%= engine.root %></string>
 </dict>
 </plist>

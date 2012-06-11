@@ -1,23 +1,23 @@
 <%
 app_names = []
-engine.procfile.entries.each do |process|
-  next if (conc = self.concurrency[process.name]) < 1
-  1.upto(self.concurrency[process.name]) do |num|
-    port = engine.port_for(process, num, self.port)
-    name = if (conc > 1); "#{process.name}-#{num}" else process.name; end
-    environment = (engine.environment.keys.sort.map{ |var| %{#{var.upcase}="#{engine.environment[var]}"} } + [%{PORT="#{port}"}])
-    app_name = "#{app}-#{name}"
-    app_names << app_name
+engine.each_process do |name, process|
+  1.upto(engine.formation[name]) do |num|
+    port = engine.port_for(process, num)
+    full_name = "#{app}-#{name}-#{num}"
+    environment = engine.env.merge("PORT" => port.to_s).map do |key, value|
+      "#{key}=#{shell_quote(value)}"
+    end
+    app_names << full_name
 %>
-[program:<%= app_name %>]
+[program:<%= full_name %>]
 command=<%= process.command %>
 autostart=true
 autorestart=true
 stopsignal=QUIT
-stdout_logfile=<%= log_root %>/<%=process.name%>-<%=num%>-out.log
-stderr_logfile=<%= log_root %>/<%=process.name%>-<%=num%>-err.log
+stdout_logfile=<%= log %>/<%= name %>-<%= num %>.log
+stderr_logfile=<%= log %>/<%= name %>-<%= num %>.error.log
 user=<%= user %>
-directory=<%= engine.directory %>
+directory=<%= engine.root %>
 environment=<%= environment.join(',') %><%
   end
 end

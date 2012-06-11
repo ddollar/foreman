@@ -1,56 +1,90 @@
 require "foreman"
-require "foreman/procfile_entry"
 
-# A valid Procfile entry is captured by this regex.
+# Reads and writes Procfiles
+#
+# A valid Procfile entry is captured by this regex:
+#
+#   /^([A-Za-z0-9_]+):\s*(.+)$/
+#
 # All other lines are ignored.
-#
-# /^([A-Za-z0-9_]+):\s*(.+)$/
-#
-# $1 = name
-# $2 = command
 #
 class Foreman::Procfile
 
-  attr_reader :entries
-
+  # Initialize a Procfile
+  #
+  # @param [String] filename (nil)  An optional filename to read from
+  #
   def initialize(filename=nil)
     @entries = []
     load(filename) if filename
   end
 
-  def [](name)
-    entries.detect { |entry| entry.name == name }
-  end
-
-  def process_names
-    entries.map(&:name)
-  end
-
-  def load(filename)
-    entries.clear
-    parse_procfile(filename)
-  end
-
-  def write(filename)
-    File.open(filename, 'w') do |io|
-      entries.each do |ent|
-        io.puts(ent)
-      end
+  # Yield each +Procfile+ entry in order
+  #
+  def entries(&blk)
+    @entries.each do |(name, command)|
+      yield name, command
     end
   end
 
-  def <<(entry)
-    entries << Foreman::ProcfileEntry.new(*entry)
-    self
+  # Retrieve a +Procfile+ command by name
+  #
+  # @param [String] name  The name of the Procfile entry to retrieve
+  #
+  def [](name)
+    @entries.detect { |n,c| name == n }.last
   end
 
+  # Create a +Procfile+ entry
+  #
+  # @param [String] name     The name of the +Procfile+ entry to create
+  # @param [String] command  The command of the +Procfile+ entry to create
+  #
+  def []=(name, command)
+    delete name
+    @entries << [name, command]
+  end
 
-protected
+  # Remove a +Procfile+ entry
+  #
+  # @param [String] name  The name of the +Procfile+ entry to remove
+  #
+  def delete(name)
+    @entries.reject! { |n,c| name == n }
+  end
 
-  def parse_procfile(filename)
+  # Load a Procfile from a file
+  #
+  # @param [String] filename  The filename of the +Procfile+ to load
+  #
+  def load(filename)
+    @entries.replace parse(filename)
+  end
+
+  # Save a Procfile to a file
+  #
+  # @param [String] filename  Save the +Procfile+ to this file
+  #
+  def save(filename)
+    File.open(filename, 'w') do |file|
+      file.puts self.to_s
+    end
+  end
+
+  # Get the +Procfile+ as a +String+
+  #
+  def to_s
+    @entries.map do |name, command|
+      [ name, command ].join(": ")
+    end.join("\n")
+  end
+
+private
+
+  def parse(filename)
     File.read(filename).split("\n").map do |line|
       if line =~ /^([A-Za-z0-9_]+):\s*(.+)$/
-        self << [ $1, $2 ]
+        [$1, $2]
       end
     end.compact
   end

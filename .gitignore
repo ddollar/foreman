@@ -1,5 +1,6 @@
 /.bundle
 /.rbenv-version
+/.yardoc
 /coverage
 /example/log/*
 /man/*.html

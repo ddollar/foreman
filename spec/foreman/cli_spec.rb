@@ -3,12 +3,23 @@ require "foreman/cli"
 
 describe "Foreman::CLI", :fakefs do
   subject { Foreman::CLI.new }
-  let(:engine) { subject.send(:engine) }
-  let(:entries) { engine.procfile.entries.inject({}) { |h,e| h.update(e.name => e) } }
+
+  describe ".foreman" do
+    before { File.open(".foreman", "w") { |f| f.puts "formation: alpha=2" } }
+
+    it "provides default options" do
+      subject.send(:options)["formation"].should == "alpha=2"
+    end
+
+    it "is overridden by options at the cli" do
+      subject = Foreman::CLI.new([], :formation => "alpha=3")
+      subject.send(:options)["formation"].should == "alpha=3"
+    end
+  end
 
   describe "start" do
-    describe "with a non-existent Procfile" do
-      it "prints an error" do
+    describe "when a Procfile doesnt exist", :fakefs do
+      it "displays an error" do
         mock_error(subject, "Procfile does not exist.") do
           dont_allow.instance_of(Foreman::Engine).start
           subject.start
@@ -16,175 +27,50 @@ describe "Foreman::CLI", :fakefs do
       end
     end
 
-    describe "with a Procfile" do
-      before(:each) { write_procfile }
-
-      it "runs successfully" do
-        dont_allow(subject).error
-        mock.instance_of(Foreman::Engine).start
-        subject.start
-      end
-
-      it "can run a single process" do
-        dont_allow(subject).error
-        stub(engine).watch_for_output
-        stub(engine).watch_for_termination
-        mock(entries["alpha"]).spawn(1, is_a(IO), engine.directory, {}, 5000) { [] }
-        mock(entries["bravo"]).spawn(0, is_a(IO), engine.directory, {}, 5100) { [] }
-        subject.start("alpha")
-      end
-    end
-
-    describe "with an alternate root" do
-      it "reads the Procfile from that root" do
-        write_procfile "/some/app/Procfile"
-        mock(Foreman::Procfile).new("/some/app/Procfile")
-        mock.instance_of(Foreman::Engine).start
-        foreman %{ start -d /some/app }
-      end
-    end
-  end
-
-  describe "export" do
-    describe "options" do
-      it "uses .foreman" do
-        write_procfile
-        File.open(".foreman", "w") { |f| f.puts "concurrency: alpha=2" }
-        mock_export = mock(Foreman::Export::Upstart)
-        mock(Foreman::Export::Upstart).new("/upstart", is_a(Foreman::Engine), { "concurrency" => "alpha=2" }) { mock_export }
-        mock_export.export
-        foreman %{ export upstart /upstart }
-      end
-
-      it "respects --env" do
-        write_procfile
-        write_env("envfile")
-        mock_export = mock(Foreman::Export::Upstart)
-        mock(Foreman::Export::Upstart).new("/upstart", is_a(Foreman::Engine), { "env" => "envfile" }) { mock_export }
-        mock_export.export
-        foreman %{ export upstart /upstart --env envfile }
-      end
-    end
-
-    describe "with a non-existent Procfile" do
-      it "prints an error" do
-        mock_error(subject, "Procfile does not exist.") do
-          dont_allow.instance_of(Foreman::Engine).export
-          subject.export("testapp")
-        end
-      end
-    end
-
-    describe "with a Procfile" do
-      before(:each) { write_procfile }
-
-      describe "with a formatter with a generic error" do
-        before do
-          mock(Foreman::Export).formatter("errorful") { Class.new(Foreman::Export::Base) do
-            def export
-              raise Foreman::Export::Exception.new("foo")
-            end
-          end }
-        end
-
-        it "prints an error" do
-          mock_error(subject, "foo") do
-            subject.export("errorful")
-          end
+    describe "with a valid Procfile" do
+      it "can run a single command" do
+        without_fakefs do
+          output = foreman("start env -f #{resource_path("Procfile")}")
+          output.should     =~ /env.1/
+          output.should_not =~ /test.1/
         end
       end
 
-      describe "with a valid config" do
-        before(:each) { write_foreman_config("testapp") }
-
-        it "runs successfully" do
-          dont_allow(subject).error
-          mock_export = mock(Foreman::Export::Upstart)
-          mock(Foreman::Export::Upstart).new("/tmp/foo", is_a(Foreman::Engine), {}) { mock_export }
-          mock_export.export
-          subject.export("upstart", "/tmp/foo")
+      it "can run all commands" do
+        without_fakefs do
+          output = foreman("start -f #{resource_path("Procfile")} -e #{resource_path(".env")}")
+          output.should =~ /echo.1 \| echoing/
+          output.should =~ /env.1  \| bar/
+          output.should =~ /test.1 \| testing/
         end
       end
     end
   end
 
   describe "check" do
-    describe "with a valid Procfile" do
-      before { write_procfile }
-
-      it "displays the jobs" do
-        mock(subject).puts("valid procfile detected (alpha, bravo)")
-        subject.check
-      end
+    it "with a valid Procfile displays the jobs" do
+      write_procfile
+      foreman("check").should == "valid procfile detected (alpha, bravo)\n"
     end
 
-    describe "with a blank Procfile" do
-      before do
-        FileUtils.touch("Procfile")
-      end
-
-      it "displays an error" do
-        mock_error(subject, "no processes defined") do
-          subject.check
-        end
-      end
+    it "with a blank Procfile displays an error" do
+      FileUtils.touch "Procfile"
+      foreman("check").should == "ERROR: no processes defined\n"
     end
 
-    describe "without a Procfile" do
-      it "displays an error" do
-        mock_error(subject, "Procfile does not exist.") do
-          subject.check
-        end
-      end
+    it "without a Procfile displays an error" do
+      FileUtils.rm_f "Procfile"
+      foreman("check").should == "ERROR: Procfile does not exist.\n"
     end
   end
 
   describe "run" do
-    describe "with a valid Procfile" do
-      before { write_procfile }
+    it "can run a command" do
+      forked_foreman("run echo 1").should == "1\n"
+    end
 
-      describe "and a command" do
-        let(:command) { ["ls", "-l", "foo bar"] }
-
-        before(:each) do
-          stub(subject).exec
-        end
-
-        it "should load the environment file" do
-          write_env
-          preserving_env do
-            subject.run *command
-            ENV["FOO"].should == "bar"
-          end
-
-          ENV["FOO"].should be_nil
-        end
-
-        it "should exec the argument list as a shell command" do
-          mock(subject).exec(command.shelljoin)
-          subject.run *command
-        end
-      end
-
-      describe "and a non-existent command" do
-        let(:command) { "iuhtngrglhulhdfg" }
-
-        it "should print an error" do
-          mock_error(subject, "command not found: #{command}") do
-            subject.run command
-          end
-        end
-      end
-
-      describe "and a non-executable command" do
-        let(:command) { __FILE__ }
-
-        it "should print an error" do
-          mock_error(subject, "not executable: #{command}") do
-            subject.run command
-          end
-        end
-      end
+    it "includes the environment" do
+      forked_foreman("run #{resource_path("bin/env FOO")} -e #{resource_path(".env")}").should == "bar\n"
     end
   end
 

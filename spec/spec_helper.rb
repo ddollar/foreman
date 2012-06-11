@@ -24,7 +24,39 @@ def mock_error(subject, message)
 end
 
 def foreman(args)
-  Foreman::CLI.start(args.split(" "))
+  capture_stdout do
+    begin
+      Foreman::CLI.start(args.split(" "))
+    rescue SystemExit
+    end
+  end
+end
+
+def forked_foreman(args)
+  rd, wr = IO.pipe("BINARY")
+  Process.spawn("bundle exec bin/foreman #{args}", :out => wr, :err => wr)
+  wr.close
+  rd.read
+end
+
+def fork_and_capture(&blk)
+  rd, wr = IO.pipe("BINARY")
+  pid = fork do
+    rd.close
+    wr.sync = true
+    $stdout.reopen wr
+    $stderr.reopen wr
+    blk.call
+    $stdout.flush
+    $stdout.close
+  end
+  wr.close
+  Process.wait pid
+  buffer = ""
+  until rd.eof?
+    p [:foo]
+    buffer += rd.gets
+  end
 end
 
 def mock_exit(&block)
@@ -56,13 +88,21 @@ def write_env(env=".env", options={"FOO"=>"bar"})
   end
 end
 
-def load_export_templates_into_fakefs(type)
+def without_fakefs
   FakeFS.deactivate!
-  files = Dir[File.expand_path("../../data/export/#{type}/**", __FILE__)].inject({}) do |hash, file|
-    hash.update(file => File.read(file))
-  end
+  ret = yield
   FakeFS.activate!
-  files.each do |filename, contents|
+  ret
+end
+
+def load_export_templates_into_fakefs(type)
+  without_fakefs do
+    Dir[File.expand_path("../../data/export/#{type}/**/*", __FILE__)].inject({}) do |hash, file|
+      next(hash) if File.directory?(file)
+      hash.update(file => File.read(file))
+    end
+  end.each do |filename, contents|
+    FileUtils.mkdir_p File.dirname(filename)
     File.open(filename, "w") do |f|
       f.puts contents
     end
@@ -92,6 +132,17 @@ end
 
 def normalize_space(s)
   s.gsub(/\n[\n\s]*/, "\n")
+end
+
+def capture_stdout
+  old_stdout = $stdout.dup
+  rd, wr = IO.method(:pipe).arity.zero? ? IO.pipe : IO.pipe("BINARY")
+  $stdout = wr
+  yield
+  wr.close
+  rd.read
+ensure
+  $stdout = old_stdout
 end
 
 RSpec.configure do |config|
