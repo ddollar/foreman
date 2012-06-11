@@ -4,6 +4,7 @@ require "foreman/engine"
 require "foreman/engine/cli"
 require "foreman/export"
 require "shellwords"
+require "yaml"
 require "thor"
 
 class Foreman::CLI < Thor
@@ -126,7 +127,7 @@ private ######################################################################
   def options
     original_options = super
     return original_options unless File.exists?(".foreman")
-    defaults = YAML::load_file(".foreman") || {}
+    defaults = ::YAML::load_file(".foreman") || {}
     Thor::CoreExt::HashWithIndifferentAccess.new(defaults.merge(original_options))
   end
 
