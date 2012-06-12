@@ -3,6 +3,7 @@ require "foreman/helpers"
 require "foreman/engine"
 require "foreman/engine/cli"
 require "foreman/export"
+require "foreman/version"
 require "shellwords"
 require "yaml"
 require "thor"
@@ -10,6 +11,8 @@ require "thor"
 class Foreman::CLI < Thor
 
   include Foreman::Helpers
+
+  map ["-v", "--version"] => :version
 
   class_option :procfile, :type => :string, :aliases => "-f", :desc => "Default: Procfile"
   class_option :root,     :type => :string, :aliases => "-d", :desc => "Default: Procfile directory"
@@ -78,6 +81,12 @@ class Foreman::CLI < Thor
     rescue Errno::ENOENT
       error "command not found: #{args.first}"
     end
+  end
+
+  desc "version", "Display Foreman gem version"
+
+  def version
+    puts Foreman::VERSION
   end
 
   no_tasks do
