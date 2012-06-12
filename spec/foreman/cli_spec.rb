@@ -74,4 +74,14 @@ describe "Foreman::CLI", :fakefs do
     end
   end
 
+  describe "version" do
+    it "displays gem version" do
+      foreman("version").chomp.should == Foreman::VERSION
+    end
+
+    it "displays gem version on shortcut command" do
+      foreman("-v").chomp.should == Foreman::VERSION
+    end
+  end
+
 end
