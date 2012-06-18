@@ -58,6 +58,7 @@ class Foreman::Engine::CLI < Foreman::Engine
       output += $stdout.color(:reset)
       output += message
       $stdout.puts output
+      $stdout.flush
     end
   end
 
