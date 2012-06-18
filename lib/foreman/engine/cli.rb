@@ -60,6 +60,8 @@ class Foreman::Engine::CLI < Foreman::Engine
       $stdout.puts output
       $stdout.flush
     end
+  rescue Errno::EPIPE
+    terminate_gracefully
   end
 
   def shutdown
