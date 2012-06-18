@@ -24,11 +24,13 @@ class Foreman::Engine::CLI < Foreman::Engine
       :bright_white   => 37,
     }
 
-    def self.enable(io)
+    def self.enable(io, force=false)
       io.extend(self)
+      @@color_force = force
     end
 
     def color?
+      return true if @@color_force
       return false unless self.respond_to?(:isatty)
       self.isatty && ENV["TERM"]
     end
@@ -51,7 +53,7 @@ class Foreman::Engine::CLI < Foreman::Engine
 
   def output(name, data)
     data.to_s.chomp.split("\n").each do |message|
-      Color.enable($stdout) unless $stdout.respond_to?(:color?)
+      Color.enable($stdout, options[:color]) unless $stdout.respond_to?(:color?)
       output  = ""
       output += $stdout.color(@colors[name.split(".").first].to_sym)
       output += "#{Time.now.strftime("%H:%M:%S")} #{pad_process_name(name)} | "
