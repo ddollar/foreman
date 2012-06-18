@@ -19,6 +19,7 @@ class Foreman::CLI < Thor
 
   desc "start [PROCESS]", "Start the application (or a specific PROCESS)"
 
+  method_option :color,     :type => :boolean, :aliases => "-c", :desc => "Force color to be enabled"
   method_option :env,       :type => :string,  :aliases => "-e", :desc => "Specify an environment file to load, defaults to .env"
   method_option :formation, :type => :string,  :aliases => "-m", :banner => '"alpha=5,bar=3"'
   method_option :port,      :type => :numeric, :aliases => "-p"
@@ -93,11 +94,7 @@ class Foreman::CLI < Thor
     def engine
       @engine ||= begin
         engine_class = Foreman::Engine::CLI
-        engine = engine_class.new(
-          :formation => options[:formation],
-          :port      => options[:port],
-          :root      => options[:root]
-        )
+        engine = engine_class.new(options)
         engine
       end
     end
