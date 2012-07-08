@@ -39,7 +39,7 @@ class Foreman::Engine
   def start
     trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
     trap("INT")  { puts "SIGINT received";  terminate_gracefully }
-    trap("HUP")  { puts "SIGHUP received";  terminate_gracefully }
+    trap("HUP")  { puts "SIGHUP received";  terminate_gracefully } if ::Signal.list.keys.include? 'HUP'
 
     startup
     spawn_processes
