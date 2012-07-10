@@ -24,7 +24,7 @@ class Foreman::Engine
   def initialize(options={})
     @options = options.dup
 
-    @options[:formation] ||= "all=1"
+    @options[:formation] ||= (options[:concurrency] || "all=1")
 
     @env       = {}
     @mutex     = Mutex.new
@@ -154,11 +154,28 @@ class Foreman::Engine
   #
   # @param [Foreman::Process] process   A +Process+ associated with this engine
   # @param [Fixnum]           instance  The instance of the process
-  # 
+  #
   # @returns [Fixnum] port  The port to use for this instance of this process
   #
-  def port_for(process, instance)
-    base_port + (@processes.index(process) * 100) + (instance - 1)
+  def port_for(process, instance, base=nil)
+    if base
+      base + (@processes.index(process.process) * 100) + (instance - 1)
+    else
+      base_port + (@processes.index(process) * 100) + (instance - 1)
+    end
+  end
+
+  # Get the base port for this foreman instance
+  #
+  # @returns [Fixnum] port  The base port
+  #
+  def base_port
+    (options[:port] || env["PORT"] || ENV["PORT"] || 5000).to_i
+  end
+
+  # deprecated
+  def environment
+    env
   end
 
 private
@@ -179,10 +196,6 @@ private
 
 ## Helpers ##########################################################
 
-  def base_port
-    (options[:port] || env["PORT"] || ENV["PORT"] || 5000).to_i
-  end
-
   def create_pipe
     IO.method(:pipe).arity.zero? ? IO.pipe : IO.pipe("BINARY")
   end
@@ -193,7 +206,7 @@ private
   end
 
   def parse_formation(formation)
-    pairs = @options[:formation].to_s.gsub(/\s/, "").split(",")
+    pairs = formation.to_s.gsub(/\s/, "").split(",")
 
     pairs.inject(Hash.new(0)) do |ax, pair|
       process, amount = pair.split("=")
