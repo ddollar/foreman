@@ -54,7 +54,6 @@ def fork_and_capture(&blk)
   Process.wait pid
   buffer = ""
   until rd.eof?
-    p [:foo]
     buffer += rd.gets
   end
 end
