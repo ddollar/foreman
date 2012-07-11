@@ -9,6 +9,6 @@ sigterm() {
 #trap sigterm SIGTERM
 
 while true; do
-  echo "$NAME: ping"
+  echo "$NAME: ping $$"
   sleep 1
 done
