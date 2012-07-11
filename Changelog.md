@@ -1,17 +1,36 @@
-## 0.48.0.pre2 (2012-06-17)
+## 0.50.0 (2012-07-11)
 
-* 0.48.0.pre2  [David Dollar]
+* handle windows  [David Dollar]
+
+## 0.49.0 (2012-07-11)
+
+* 1.8 compatibility  [David Dollar]
+* use one pgroup for all of foreman and kill that since ruby 1.8 sucks at pgroups  [David Dollar]
+* better debugging  [David Dollar]
+
+## 0.48.0 (2012-07-10)
+
+* allow old exporter format to work, but with deprecation warning  [David Dollar]
+* remove debugging code  [David Dollar]
+* Merge pull request #219 from MarkDBlackwell/patch-1  [David Dollar]
+* Avoid crash by verifying the existence of SIGHUP before accessing it.  [Mark D. Blackwell]
 * allow color to be forced on  [David Dollar]
 * terminate gracefully if stdout goes away  [David Dollar]
 * always flush output  [David Dollar]
+* Merge pull request #212 from morgoth/added-version-command  [David Dollar]
+* added command for displaying foreman version  [Wojciech Wnętrzak]
+* Merge pull request #211 from morgoth/fixed-yaml-usage  [David Dollar]
+* fixed using YAML  [Wojciech Wnętrzak]
 * test on more things, but don't fail  [David Dollar]
 * changelog  [David Dollar]
-
-## 0.48.0.pre1 (2012-06-11)
-
-* Massive refactoring for programmatic control and stability  [David Dollar]
-* Procfile commands with shell interpolations now work again  [David Dollar]
-* Stop trying to test on Ruby 1.8  [David Dollar]
+* 0.48.0.pre1  [David Dollar]
+* foreman doesn't work on ruby 1.8, may try to fix later  [David Dollar]
+* use bash  [David Dollar]
+* massive refactoring for programmatic control and stability  [David Dollar]
+* Merge pull request #164 from hsume2/master  [David Dollar]
+* Only run tmux specs if tmux is installed  [Henry Hsu]
+* Do not assume BUNDLE_GEMFILE  [Henry Hsu]
+* Add support for starting procfile in tmux session  [Henry Hsu]
 
 ## 0.47.0 (2012-06-07)
 
