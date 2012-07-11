@@ -99,7 +99,20 @@ class Foreman::Engine
   # @param [String] signal  The signal to send to each process
   #
   def killall(signal="SIGTERM")
-    Process.kill "-#{signal}", Process.pid
+    if Foreman.windows?
+      @running.each do |pid, (process, index)|
+        system "sending #{signal} to #{name_for(pid)} at pid #{pid}"
+        begin
+          Process.kill(signal, pid)
+        rescue Errno::ESRCH, Errno::EPERM
+        end
+      end
+    else
+      begin
+        Process.kill "-#{signal}", Process.pid
+      rescue Errno::ESRCH, Errno::EPERM
+      end
+    end
   end
 
   # Get the process formation
@@ -282,8 +295,13 @@ private
   def terminate_gracefully
     return if @terminating
     @terminating = true
-    system  "sending SIGTERM to all processes"
-    killall "SIGTERM"
+    if Foreman.windows?
+      system  "sending SIGKILL to all processes"
+      killall "SIGKILL"
+    else
+      system  "sending SIGTERM to all processes"
+      killall "SIGTERM"
+    end
     Timeout.timeout(5) do
       watch_for_termination while @running.length > 0
     end

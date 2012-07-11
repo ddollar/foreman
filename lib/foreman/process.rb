@@ -36,7 +36,11 @@ class Foreman::Process
 
     if Foreman.windows?
       Dir.chdir(cwd) do
-        Process.spawn env, command, :out => output, :err => output
+        expanded_command = command.dup
+        env.each do |key, val|
+          expanded_command.gsub!("$#{key}", val)
+        end
+        Process.spawn env, expanded_command, :out => output, :err => output
       end
     elsif Foreman.jruby?
       Dir.chdir(cwd) do
@@ -64,7 +68,11 @@ class Foreman::Process
   # @param [String] signal  The signal to send
   #
   def kill(signal)
-    pid && Process.kill("-#{signal}", pid)
+    if Foreman.windows?
+      pid && Process.kill(signal, pid)
+    else
+      pid && Process.kill("-#{signal}", pid)
+    end
   rescue Errno::ESRCH
     false
   end

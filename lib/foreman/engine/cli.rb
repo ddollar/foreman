@@ -31,6 +31,7 @@ class Foreman::Engine::CLI < Foreman::Engine
 
     def color?
       return true if @@color_force
+      return true if Foreman.windows?
       return false unless self.respond_to?(:isatty)
       self.isatty && ENV["TERM"]
     end
@@ -49,11 +50,12 @@ class Foreman::Engine::CLI < Foreman::Engine
   def startup
     @colors = map_colors
     proctitle "foreman: master"
+    require "win32console" if Foreman.windows?
+    Color.enable($stdout, options[:color]) unless $stdout.respond_to?(:color?)
   end
 
   def output(name, data)
     data.to_s.chomp.split("\n").each do |message|
-      Color.enable($stdout, options[:color]) unless $stdout.respond_to?(:color?)
       output  = ""
       output += $stdout.color(@colors[name.split(".").first].to_sym)
       output += "#{Time.now.strftime("%H:%M:%S")} #{pad_process_name(name)} | "
