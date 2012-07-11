@@ -118,6 +118,8 @@ should be in the format <code>process=num,process=num</code></p></dd>
 <dt><code>-f</code>, <code>--procfile</code></dt><dd><p>Specify an alternate Procfile to load, implies <code>-d</code> at the Procfile root.</p></dd>
 <dt><code>-p</code>, <code>--port</code></dt><dd><p>Specify which port to use as the base for this application. Should be
 a multiple of 1000.</p></dd>
+<dt><code>-t</code>, <code>--tmux</code></dt><dd><p>Runs the processes in a tmux session. Creates one window for each process
+and an extra window containing the output of each window (requires gawk).</p></dd>
 </dl>
 
 
@@ -255,8 +257,8 @@ port: 15000
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>Foreman 0.46.0</li>
-    <li class='tc'>April 2012</li>
+    <li class='tl'>Foreman 0.49.0</li>
+    <li class='tc'>June 2012</li>
     <li class='tr'>foreman(1)</li>
   </ol>
 
