@@ -32,7 +32,7 @@ def latest_release
 end
 
 def newer_release
-  tags = %x{ git tag --contains v#{latest_release} }.split("\n").sort_by do |tag|
+  tags = %x{ git tag --contains v#{latest_release} | grep -v pre }.split("\n").sort_by do |tag|
     Gem::Version.new(tag[1..-1])
   end
   tags[1]
