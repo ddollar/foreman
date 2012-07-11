@@ -99,13 +99,7 @@ class Foreman::Engine
   # @param [String] signal  The signal to send to each process
   #
   def killall(signal="SIGTERM")
-    @running.each do |pid, (process, index)|
-      system "sending #{signal} to #{name_for(pid)} at pid #{pid}"
-      begin
-        Process.kill(signal, -1 * pid)
-      rescue Errno::ESRCH, Errno::EPERM
-      end
-    end
+    Process.kill "-#{signal}", Process.pid
   end
 
   # Get the process formation

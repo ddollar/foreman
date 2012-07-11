@@ -36,16 +36,16 @@ class Foreman::Process
 
     if Foreman.windows?
       Dir.chdir(cwd) do
-        Process.spawn env, command, :out => output, :err => output, :new_pgroup => true
+        Process.spawn env, command, :out => output, :err => output
       end
     elsif Foreman.jruby?
       Dir.chdir(cwd) do
         require "posix/spawn"
-        POSIX::Spawn.spawn env, command, :out => output, :err => output, :pgroup => 0
+        POSIX::Spawn.spawn env, command, :out => output, :err => output
       end
     else
       Dir.chdir(cwd) do
-        Process.spawn env, command, :out => output, :err => output, :pgroup => 0
+        Process.spawn env, command, :out => output, :err => output
       end
     end
   end
@@ -55,7 +55,7 @@ class Foreman::Process
   # @param [String] signal  The signal to send
   #
   def kill(signal)
-    pid && Process.kill(signal, -1 * pid)
+    pid && Process.kill("-#{signal}", pid)
   rescue Errno::ESRCH
     false
   end
