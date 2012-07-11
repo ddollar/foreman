@@ -1,3 +1,7 @@
+## 0.51.0 (2012-07-11)
+
+* dont try to colorize windows  [David Dollar]
+
 ## 0.50.0 (2012-07-11)
 
 * handle windows  [David Dollar]
