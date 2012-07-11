@@ -60,7 +60,6 @@ end
 
 desc "Cut a release"
 task :release do
-  Rake::Task["authors"].invoke
   Rake::Task["changelog"].invoke
   Rake::Task["pages"].invoke
 end

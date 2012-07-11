@@ -1,3 +1,12 @@
+## 0.48.0.pre2 (2012-06-17)
+
+* 0.48.0.pre2  [David Dollar]
+* allow color to be forced on  [David Dollar]
+* terminate gracefully if stdout goes away  [David Dollar]
+* always flush output  [David Dollar]
+* test on more things, but don't fail  [David Dollar]
+* changelog  [David Dollar]
+
 ## 0.48.0.pre1 (2012-06-11)
 
 * Massive refactoring for programmatic control and stability  [David Dollar]
