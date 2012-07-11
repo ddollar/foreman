@@ -260,7 +260,7 @@ private
         loop do
           (IO.select(@readers.values).first || []).each do |reader|
             data = reader.gets
-            output_with_mutex name_for(@readers.key(reader)), data
+            output_with_mutex name_for(@readers.invert[reader]), data
           end
         end
       rescue Exception => ex

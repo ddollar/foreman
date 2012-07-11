@@ -43,6 +43,15 @@ class Foreman::Process
         require "posix/spawn"
         POSIX::Spawn.spawn env, command, :out => output, :err => output
       end
+    elsif Foreman.ruby_18?
+      Dir.chdir(cwd) do
+        fork do
+          $stdout.reopen output
+          $stderr.reopen output
+          env.each { |k,v| ENV[k] = v }
+          exec command
+        end
+      end
     else
       Dir.chdir(cwd) do
         Process.spawn env, command, :out => output, :err => output
