@@ -125,7 +125,7 @@ private ######################################################################
   def procfile
     case
       when options[:procfile] then options[:procfile]
-      when options[:root]     then File.expand_path(File.join(options[:app_root], "Procfile"))
+      when options[:root]     then File.expand_path(File.join(options[:root], "Procfile"))
       else "Procfile"
     end
   end
