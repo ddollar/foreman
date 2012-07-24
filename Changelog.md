@@ -1,3 +1,7 @@
+## 0.53.0 (2012-07-24)
+
+* put app root in $HOME  [David Dollar]
+
 ## 0.52.0 (2012-07-24)
 
 * wrap command in a runner that sources .profile.d scripts  [David Dollar]
