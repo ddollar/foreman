@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 #
-#/ Usage: foreman-runner [-d <dir>] <command> [<args>...]
+#/ Usage: foreman-runner [-d <dir>] [-p] <command> [<args>...]
 #/
 #/ Run a command with exec, optionally changing directory first
 
@@ -16,9 +16,12 @@ usage() {
   exit
 }
 
-while getopts ":hd:" OPT; do
+read_profiled=""
+
+while getopts ":hd:p" OPT; do
   case $OPT in
      d) cd "$OPTARG" ;;
+     p) read_profiled="1" ;;
      h) usage ;;
     \?) error "invalid option: -$OPTARG" ;;
      :) error "option -$OPTARG requires an argument" ;;
@@ -28,5 +31,14 @@ done
 shift $((OPTIND-1))
 
 [ -z "$1" ] && usage
+
+if [ "$read_profiled" == "1" ]; then
+  shopt -s nullglob
+  for script in .profile.d/*; do
+    echo "sourcing $script"
+    source $script
+  done
+  shopt -u nullglob
+fi
 
 exec "$@"

@@ -43,23 +43,20 @@ class Foreman::Process
         Process.spawn env, expanded_command, :out => output, :err => output
       end
     elsif Foreman.jruby?
-      Dir.chdir(cwd) do
-        require "posix/spawn"
-        POSIX::Spawn.spawn env, command, :out => output, :err => output
-      end
+      require "posix/spawn"
+      wrapped_command = "#{Foreman.runner} -d '#{cwd}' -p -- #{command}"
+      POSIX::Spawn.spawn env, wrapped_command, :out => output, :err => output
     elsif Foreman.ruby_18?
-      Dir.chdir(cwd) do
-        fork do
-          $stdout.reopen output
-          $stderr.reopen output
-          env.each { |k,v| ENV[k] = v }
-          exec command
-        end
+      fork do
+        $stdout.reopen output
+        $stderr.reopen output
+        env.each { |k,v| ENV[k] = v }
+        wrapped_command = "#{Foreman.runner} -d '#{cwd}' -p -- #{command}"
+        exec wrapped_command
       end
     else
-      Dir.chdir(cwd) do
-        Process.spawn env, command, :out => output, :err => output
-      end
+      wrapped_command = "#{Foreman.runner} -d '#{cwd}' -p -- #{command}"
+      Process.spawn env, wrapped_command, :out => output, :err => output
     end
   end
 
@@ -96,7 +93,7 @@ class Foreman::Process
 private
 
   def cwd
-    @options[:cwd] || "."
+    File.expand_path(@options[:cwd] || ".")
   end
 
 end
