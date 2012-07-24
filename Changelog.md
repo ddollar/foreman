@@ -1,3 +1,9 @@
+## 0.52.0 (2012-07-24)
+
+* wrap command in a runner that sources .profile.d scripts  [David Dollar]
+* fix upstart export specs  [David Dollar]
+* Make upstart export start/stop with network  [Daniel Farrell]
+
 ## 0.51.0 (2012-07-11)
 
 * dont try to colorize windows  [David Dollar]
