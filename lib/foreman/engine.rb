@@ -256,7 +256,10 @@ private
       1.upto(formation[@names[process]]) do |n|
         reader, writer = create_pipe
         begin
-          pid = process.run(:output => writer, :env => { "PORT" => port_for(process, n).to_s })
+          pid = process.run(:output => writer, :env => {
+            "HOME" => process.cwd,
+            "PORT" => port_for(process, n).to_s
+          })
           writer.puts "started with pid #{pid}"
         rescue Errno::ENOENT
           writer.puts "unknown command: #{process.command}"

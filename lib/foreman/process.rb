@@ -90,8 +90,10 @@ class Foreman::Process
     !alive?
   end
 
-private
-
+  # Returns the working directory for this +Process+
+  #
+  # @returns [String]
+  #
   def cwd
     File.expand_path(@options[:cwd] || ".")
   end
