@@ -13,7 +13,16 @@ class Foreman::Export::Inittab < Foreman::Export::Base
       1.upto(engine.formation[name]) do |num|
         id = app.slice(0, 2).upcase + sprintf("%02d", index)
         port = engine.port_for(process, num)
-        inittab << "#{id}:4:respawn:/bin/su - #{user} -c 'PORT=#{port} #{process.command} >> #{log}/#{name}-#{num}.log 2>&1'"
+
+        commands = []
+        commands << "cd #{engine.root}"
+        commands << "export PORT=#{port}"
+        engine.env.each_pair do |var, env|
+          commands << "export #{var.upcase}=#{shell_quote(env)}"
+        end
+        commands << "#{process.command} >> #{log}/#{name}-#{num}.log 2>&1"
+
+        inittab << "#{id}:4:respawn:/bin/su - #{user} -c '#{commands.join(";")}'"
         index += 1
       end
     end
