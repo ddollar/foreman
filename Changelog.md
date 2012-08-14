@@ -1,3 +1,7 @@
+## 0.55.0 (2012-08-14)
+
+* use a forked process to exec a run with environment  [David Dollar]
+
 ## 0.54.0 (2012-08-14)
 
 * use Foreman::Process to extract command running  [David Dollar]
