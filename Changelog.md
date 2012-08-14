@@ -1,3 +1,8 @@
+## 0.54.0 (2012-08-14)
+
+* use Foreman::Process to extract command running  [David Dollar]
+* changed to check env for bash  [brntbeer]
+
 ## 0.53.0 (2012-07-24)
 
 * put app root in $HOME  [David Dollar]
