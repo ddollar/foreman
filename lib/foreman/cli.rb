@@ -75,14 +75,17 @@ class Foreman::CLI < Thor
 
   def run(*args)
     load_environment!
-    begin
-      process = Foreman::Process.new(args.shelljoin, :env => engine.env)
-      process.run
-    rescue Errno::EACCES
-      error "not executable: #{args.first}"
-    rescue Errno::ENOENT
-      error "command not found: #{args.first}"
+    pid = fork do
+      begin
+        engine.env.each { |k,v| ENV[k] = v }
+        exec args.shelljoin
+      rescue Errno::EACCES
+        error "not executable: #{args.first}"
+      rescue Errno::ENOENT
+        error "command not found: #{args.first}"
+      end
     end
+    Process.wait(pid)
   end
 
   desc "version", "Display Foreman gem version"
