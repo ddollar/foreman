@@ -76,7 +76,8 @@ class Foreman::CLI < Thor
   def run(*args)
     load_environment!
     begin
-      exec engine.env, args.shelljoin
+      process = Foreman::Process.new(args.shelljoin, :env => engine.env)
+      process.run
     rescue Errno::EACCES
       error "not executable: #{args.first}"
     rescue Errno::ENOENT
