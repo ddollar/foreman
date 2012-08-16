@@ -16,12 +16,12 @@ usage() {
   exit
 }
 
-read_profiled=""
+read_profile=""
 
 while getopts ":hd:p" OPT; do
   case $OPT in
      d) cd "$OPTARG" ;;
-     p) read_profiled="1" ;;
+     p) read_profile="1" ;;
      h) usage ;;
     \?) error "invalid option: -$OPTARG" ;;
      :) error "option -$OPTARG requires an argument" ;;
@@ -32,13 +32,10 @@ shift $((OPTIND-1))
 
 [ -z "$1" ] && usage
 
-if [ "$read_profiled" == "1" ]; then
-  shopt -s nullglob
-  for script in .profile.d/*; do
-    echo "sourcing $script"
-    source $script
-  done
-  shopt -u nullglob
+if [ "$read_profile" == "1" ]; then
+  if [ -f .profile ]; then
+    source .profile
+  fi
 fi
 
 exec "$@"
