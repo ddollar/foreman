@@ -1,3 +1,7 @@
+## 0.56.0 (2012-08-19)
+
+* read .profile, not .profile.d  [David Dollar]
+
 ## 0.55.0 (2012-08-14)
 
 * use a forked process to exec a run with environment  [David Dollar]
