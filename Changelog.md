@@ -1,3 +1,7 @@
+## 0.57.0 (2012-08-21)
+
+* fix startup checks for upstart exporter  [Aditya Sanghi]
+
 ## 0.56.0 (2012-08-19)
 
 * read .profile, not .profile.d  [David Dollar]
