@@ -58,6 +58,12 @@ def fork_and_capture(&blk)
   end
 end
 
+def fork_and_get_exitstatus(args)
+  pid = Process.spawn("bundle exec bin/foreman #{args}", :out => "/dev/null", :err => "/dev/null")
+  Process.wait(pid)
+  $?.exitstatus
+end
+
 def mock_exit(&block)
   block.should raise_error(SystemExit)
 end
