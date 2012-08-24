@@ -72,6 +72,11 @@ describe "Foreman::CLI", :fakefs do
     it "includes the environment" do
       forked_foreman("run #{resource_path("bin/env FOO")} -e #{resource_path(".env")}").should == "bar\n"
     end
+
+    it "exits with the same exit code as the command" do
+      fork_and_get_exitstatus("run echo 1").should == 0
+      fork_and_get_exitstatus("run date 'invalid_date'").should == 1
+    end
   end
 
   describe "version" do
