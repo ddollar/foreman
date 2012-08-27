@@ -3,3 +3,12 @@ stop on stopping <%= app %>-<%= name %>
 respawn
 
 exec su - <%= user %> -c 'cd <%= engine.root %>; export PORT=<%= port %>;<% engine.env.each_pair do |var,env| %> export <%= var.upcase %>=<%= shell_quote(env) %>; <% end %> <%= process.command %> >> <%= log %>/<%=name%>-<%=num%>.log 2>&1'
+
+post-start script
+  PID=`status <%= app %>-<%= name %> | egrep -oi '([0-9]+)$' | head -n1`
+  echo $PID > /var/run/<%= app %>-<%= name %>.pid
+end script
+
+post-stop script
+  rm -f /var/run/<%= app %>-<%= name %>.pid
+end script
