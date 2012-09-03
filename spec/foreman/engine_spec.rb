@@ -90,6 +90,14 @@ describe "Foreman::Engine", :fakefs do
       subject.env["OTHER"].should == 'escaped"quote'
     end
 
+    it "should handle multiline strings" do
+      File.open("/tmp/env", "w") do |f|
+        f.puts 'FOO="bar\nbaz"'
+      end
+      subject.load_env "/tmp/env"
+      subject.env["FOO"].should == "bar\nbaz"
+    end
+
     it "should fail if specified and doesnt exist" do
       lambda { subject.load_env "/tmp/env" }.should raise_error(Errno::ENOENT)
     end
