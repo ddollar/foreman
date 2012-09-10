@@ -6,10 +6,8 @@
     <string>app-alpha-1</string>
     <key>EnvironmentVariables</key>
     <dict>
-    
-      <key>PORT</key>
-      <string>5000</string>
-    
+        <key>PORT</key>
+        <string>5000</string>
     </dict>
     <key>ProgramArguments</key>
     <array>
