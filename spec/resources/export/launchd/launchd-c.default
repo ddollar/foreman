@@ -3,29 +3,26 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string><%= "#{app}-#{name}-#{num}" %></string>
+    <string>app-alpha-1</string>
     <key>EnvironmentVariables</key>
     <dict>
-    <%- engine.env.merge("PORT" => port).each_pair do |var,env| -%>
-        <key><%= var.upcase %></key>
-        <string><%= env %></string>
-    <%- end -%>
+        <key>PORT</key>
+        <string>5000</string>
     </dict>
     <key>ProgramArguments</key>
     <array>
-    <%- command_args.each do |command| -%>
-        <string><%= command %></string>
-    <%- end -%>
+        <string>./alpha</string>
+        <string>charlie</string>
     </array>
     <key>KeepAlive</key>
     <true/>
     <key>RunAtLoad</key>
     <true/>
     <key>StandardErrorPath</key>
-    <string><%= log %>/<%= app %>-<%= name %>-<%=num%>.log</string>
+    <string>/var/log/app/app-alpha-1.log</string>
     <key>UserName</key>
-    <string><%= user %></string>
+    <string>app</string>
     <key>WorkingDirectory</key>
-    <string><%= engine.root %></string>
+    <string>/tmp/app</string>
 </dict>
 </plist>
