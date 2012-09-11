@@ -18,6 +18,8 @@
     <true/>
     <key>RunAtLoad</key>
     <true/>
+    <key>StandardOutPath</key>
+    <string>/var/log/app/app-alpha-1.log</string>
     <key>StandardErrorPath</key>
     <string>/var/log/app/app-alpha-1.log</string>
     <key>UserName</key>

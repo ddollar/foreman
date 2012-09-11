@@ -17,6 +17,8 @@
     <true/>
     <key>RunAtLoad</key>
     <true/>
+    <key>StandardOutPath</key>
+    <string>/var/log/app/app-bravo-1.log</string>
     <key>StandardErrorPath</key>
     <string>/var/log/app/app-bravo-1.log</string>
     <key>UserName</key>
