@@ -21,6 +21,21 @@ class Foreman::Process
     @options[:env] ||= {}
   end
 
+  # Get environment-expanded command for a +Process+
+  #
+  # @param [Hash] custom_env ({}) Environment variables to merge with defaults
+  #
+  # @return [String]  The expanded command
+  #
+  def expanded_command(custom_env={})
+    env = @options[:env].merge(custom_env)
+    expanded_command = command.dup
+    env.each do |key, val|
+      expanded_command.gsub!("$#{key}", val)
+    end
+    expanded_command
+  end
+
   # Run a +Process+
   #
   # @param [Hash] options
@@ -31,16 +46,12 @@ class Foreman::Process
   # @returns [Fixnum] pid  The +pid+ of the process
   #
   def run(options={})
-    env    = options[:env] ? @options[:env].merge(options[:env]) : @options[:env]
+    env    = @options[:env].merge(options[:env] || {})
     output = options[:output] || $stdout
 
     if Foreman.windows?
       Dir.chdir(cwd) do
-        expanded_command = command.dup
-        env.each do |key, val|
-          expanded_command.gsub!("$#{key}", val)
-        end
-        Process.spawn env, expanded_command, :out => output, :err => output
+        Process.spawn env, expanded_command(env), :out => output, :err => output
       end
     elsif Foreman.jruby?
       require "posix/spawn"
@@ -52,12 +63,26 @@ class Foreman::Process
         $stderr.reopen output
         env.each { |k,v| ENV[k] = v }
         wrapped_command = "#{Foreman.runner} -d '#{cwd}' -p -- #{command}"
-        exec wrapped_command
+        Kernel.exec wrapped_command
       end
     else
       wrapped_command = "#{Foreman.runner} -d '#{cwd}' -p -- #{command}"
       Process.spawn env, wrapped_command, :out => output, :err => output
     end
+  end
+
+  # Exec a +Process+
+  #
+  # @param [Hash] options
+  #
+  # @option options :env ({}) Environment variables to set for this execution
+  #
+  # @return Does not return
+  def exec(options={})
+    env = @options[:env].merge(options[:env] || {})
+    env.each { |k, v| ENV[k] = v }
+    Dir.chdir(cwd)
+    Kernel.exec expanded_command(env)
   end
 
   # Send a signal to this +Process+
