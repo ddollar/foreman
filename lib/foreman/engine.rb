@@ -257,7 +257,6 @@ private
         reader, writer = create_pipe
         begin
           pid = process.run(:output => writer, :env => {
-            "HOME" => process.cwd,
             "PORT" => port_for(process, n).to_s
           })
           writer.puts "started with pid #{pid}"
