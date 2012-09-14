@@ -3,24 +3,25 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>app-bravo-1</string>
+    <string>app-alpha-1</string>
     <key>EnvironmentVariables</key>
     <dict>
         <key>PORT</key>
-        <string>5100</string>
+        <string>5000</string>
     </dict>
     <key>ProgramArguments</key>
     <array>
-        <string>./bravo</string>
+        <string>./alpha</string>
+        <string>charlie</string>
     </array>
     <key>KeepAlive</key>
     <true/>
     <key>RunAtLoad</key>
     <true/>
     <key>StandardOutPath</key>
-    <string>/var/log/app/app-bravo-1.log</string>
+    <string>/var/log/app/app-alpha-1.log</string>
     <key>StandardErrorPath</key>
-    <string>/var/log/app/app-bravo-1.log</string>
+    <string>/var/log/app/app-alpha-1.log</string>
     <key>UserName</key>
     <string>app</string>
     <key>WorkingDirectory</key>

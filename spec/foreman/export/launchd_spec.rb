@@ -18,4 +18,14 @@ describe Foreman::Export::Launchd, :fakefs do
     File.read("/tmp/init/app-bravo-1.plist").should == example_export_file("launchd/launchd-b.default")
   end
 
+  context "with multiple command arguments" do
+    let(:procfile) { FileUtils.mkdir_p("/tmp/app"); write_procfile("/tmp/app/Procfile", "charlie") }
+
+    it "splits each command argument" do
+      launchd.export
+      File.read("/tmp/init/app-alpha-1.plist").should == example_export_file("launchd/launchd-c.default")
+    end
+
+  end
+
 end
