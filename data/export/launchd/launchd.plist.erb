@@ -4,14 +4,25 @@
 <dict>
     <key>Label</key>
     <string><%= "#{app}-#{name}-#{num}" %></string>
+    <key>EnvironmentVariables</key>
+    <dict>
+    <%- engine.env.merge("PORT" => port).each_pair do |var,env| -%>
+        <key><%= var.upcase %></key>
+        <string><%= env %></string>
+    <%- end -%>
+    </dict>
     <key>ProgramArguments</key>
     <array>
-        <string><%= process.command %></string>
+    <%- command_args.each do |command| -%>
+        <string><%= command %></string>
+    <%- end -%>
     </array>
     <key>KeepAlive</key>
     <true/>
     <key>RunAtLoad</key>
     <true/>
+    <key>StandardOutPath</key>
+    <string><%= log %>/<%= app %>-<%= name %>-<%=num%>.log</string>
     <key>StandardErrorPath</key>
     <string><%= log %>/<%= app %>-<%= name %>-<%=num%>.log</string>
     <key>UserName</key>

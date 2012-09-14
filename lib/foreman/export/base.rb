@@ -119,7 +119,7 @@ private ######################################################################
   end
 
   def write_template(name, target, binding)
-    compiled = ERB.new(export_template(name)).result(binding)
+    compiled = ERB.new(export_template(name), nil, '-').result(binding)
     write_file target, compiled
   end
 
