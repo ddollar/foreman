@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    foreman (0.58.0)
+    foreman (0.59.0)
       thor (>= 0.13.6)
 
 GEM
