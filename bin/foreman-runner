@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 #
 #/ Usage: foreman-runner [-d <dir>] [-p] <command> [<args>...]
 #/
@@ -32,9 +32,9 @@ shift $((OPTIND-1))
 
 [ -z "$1" ] && usage
 
-if [ "$read_profile" == "1" ]; then
+if [ "$read_profile" = "1" ]; then
   if [ -f .profile ]; then
-    source .profile
+    . .profile
   fi
 fi
 
