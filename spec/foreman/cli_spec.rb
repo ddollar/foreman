@@ -73,6 +73,10 @@ describe "Foreman::CLI", :fakefs do
       forked_foreman("run #{resource_path("bin/env FOO")} -e #{resource_path(".env")}").should == "bar\n"
     end
 
+    it "can run a command from the Procfile" do
+      forked_foreman("run -f #{resource_path("Procfile")} test").should == "testing\n"
+    end
+
     it "exits with the same exit code as the command" do
       fork_and_get_exitstatus("run echo 1").should == 0
       fork_and_get_exitstatus("run date 'invalid_date'").should == 1
