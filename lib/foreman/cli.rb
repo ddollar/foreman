@@ -75,10 +75,19 @@ class Foreman::CLI < Thor
 
   def run(*args)
     load_environment!
+
+    if File.exist?(procfile)
+      engine.load_procfile(procfile)
+    end
+
     pid = fork do
       begin
         engine.env.each { |k,v| ENV[k] = v }
-        exec args.shelljoin
+        if args.size == 1 && process = engine.process(args.first)
+          process.exec(:env => engine.env)
+        else
+          exec args.shelljoin
+        end
       rescue Errno::EACCES
         error "not executable: #{args.first}"
       rescue Errno::ENOENT
