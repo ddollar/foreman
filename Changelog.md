@@ -1,3 +1,25 @@
+## 0.60.0 (2012-09-25)
+
+* foreman run can run things from the Procfile like heroku run.  [Dan Peterson]
+
+## 0.59.0 (2012-09-15)
+
+* Use /bin/sh instead of bash for foreman-runner  [Jeremy Evans]
+
+## 0.58.0 (2012-09-14)
+
+* dont set HOME  [David Dollar]
+* Add StandardOutPath to launchd export  [Aaron Kalin]
+* Add command argument string splitting  [Aaron Kalin]
+* Cleanup launchd exporter  [Aaron Kalin]
+* Enable trim_mode via '-' in ERB templates  [Aaron Kalin]
+* Add support for setting environment variables  [Aaron Kalin]
+* foreman run should exit with the same code as its command  [Omar Khan]
+* Handle multiline strings in .env file  [Szymon Nowak]
+* Use path and env variables in the inittab export  [Indrek Juhkam]
+* fixed the directory option  [Arnaud Lachaume]
+* Add capistrano export support  [Daniel Farrell]
+
 ## 0.57.0 (2012-08-21)
 
 * fix startup checks for upstart exporter  [Aditya Sanghi]
