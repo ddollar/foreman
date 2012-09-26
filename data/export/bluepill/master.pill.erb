@@ -5,13 +5,13 @@ Bluepill.application("<%= app %>", :foreground => false, :log_file => "/var/log/
 
 <% engine.each_process do |name, process| %>
 <% 1.upto(engine.formation[name]) do |num| %>
-  <% port = engine.port_for(process, num, 0) %>
+  <% environment = engine.env.dup; process.ports.each_with_index { |port, index| environment[port] = engine.port_for(process, num, index).to_s } %>
   app.process("<%= name %>-<%= num %>") do |process|
     process.start_command = "<%= process.command %>"
 
     process.working_dir = "<%= engine.root %>"
     process.daemonize = true
-    process.environment = <%= engine.env.merge("PORT" => port.to_s).inspect %>
+    process.environment = <%= environment.inspect %>
     process.stop_signals = [:quit, 30.seconds, :term, 5.seconds, :kill]
     process.stop_grace_time = 45.seconds
 
