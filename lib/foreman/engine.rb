@@ -171,9 +171,11 @@ class Foreman::Engine
       base = base_port
       process_index = @processes.index(process)
     end
+
     for i in 0..process_index - 1
-      index += process.ports.length
+      index += @processes[i].ports.length
     end
+
     base + (index * 100) + (instance - 1)
   end
 
@@ -261,9 +263,11 @@ private
       1.upto(formation[@names[process]]) do |n|
         reader, writer = create_pipe
         begin
-          pid = process.run(:output => writer, :env => {
-            "PORT" => port_for(process, n, 0).to_s
-          })
+          env = {}
+          process.ports.each_with_index { |port, index|
+            env[port] = port_for(process, n, index).to_s
+          }
+          pid = process.run(:output => writer, :env => env)
           writer.puts "started with pid #{pid}"
         rescue Errno::ENOENT
           writer.puts "unknown command: #{process.command}"
