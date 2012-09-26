@@ -4,7 +4,7 @@ require "foreman/export/inittab"
 require "tmpdir"
 
 describe Foreman::Export::Inittab, :fakefs do
-  let(:procfile)  { FileUtils.mkdir_p("/tmp/app"); write_procfile("/tmp/app/Procfile") }
+  let(:procfile)  { FileUtils.mkdir_p("/tmp/app"); write_procfile("/tmp/app/Procfile", "PORT2=$PORT2") }
   let(:location)  { "/tmp/inittab" }
   let(:formation) { nil }
   let(:engine)    { Foreman::Engine.new(:formation => formation).load_procfile(procfile) }

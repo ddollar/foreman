@@ -23,7 +23,7 @@ class Foreman::Process
 
     # parse list of ports needed for this command
     @ports = @command.scan(/\$(PORT[0-9]?)/)
-    @ports = [ "PORT" ] if @ports.length == 0
+    @ports = [ "PORT" ] + @ports
     @ports = @ports.flatten.uniq
   end
 
