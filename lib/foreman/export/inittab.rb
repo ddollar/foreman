@@ -12,7 +12,7 @@ class Foreman::Export::Inittab < Foreman::Export::Base
     engine.each_process do |name, process|
       1.upto(engine.formation[name]) do |num|
         id = app.slice(0, 2).upcase + sprintf("%02d", index)
-        port = engine.port_for(process, num)
+        port = engine.port_for(process, num, 0)
 
         commands = []
         commands << "cd #{engine.root}"

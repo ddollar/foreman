@@ -2,7 +2,7 @@
 app_names = []
 engine.each_process do |name, process|
   1.upto(engine.formation[name]) do |num|
-    port = engine.port_for(process, num)
+    port = engine.port_for(process, num, 0)
     full_name = "#{app}-#{name}-#{num}"
     environment = engine.env.merge("PORT" => port.to_s).map do |key, value|
       "#{key}=#{shell_quote(value)}"

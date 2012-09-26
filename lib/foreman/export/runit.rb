@@ -19,7 +19,7 @@ class Foreman::Export::Runit < Foreman::Export::Base
         write_template "runit/run.erb", "#{process_directory}/run", binding
         chmod 0755, "#{process_directory}/run"
 
-        port = engine.port_for(process, num)
+        port = engine.port_for(process, num, 0)
         engine.env.merge("PORT" => port.to_s).each do |key, value|
           write_file "#{process_directory}/env/#{key}", value
         end

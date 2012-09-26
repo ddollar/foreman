@@ -164,12 +164,17 @@ class Foreman::Engine
   #
   # @returns [Fixnum] port  The port to use for this instance of this process
   #
-  def port_for(process, instance, base=nil)
+  def port_for(process, instance, index, base=nil)
     if base
-      base + (@processes.index(process.process) * 100) + (instance - 1)
+      process_index = @processes.index(process.process)
     else
-      base_port + (@processes.index(process) * 100) + (instance - 1)
+      base = base_port
+      process_index = @processes.index(process)
     end
+    for i in 0..process_index - 1
+      index += process.ports.length
+    end
+    base + (index * 100) + (instance - 1)
   end
 
   # Get the base port for this foreman instance
@@ -257,7 +262,7 @@ private
         reader, writer = create_pipe
         begin
           pid = process.run(:output => writer, :env => {
-            "PORT" => port_for(process, n).to_s
+            "PORT" => port_for(process, n, 0).to_s
           })
           writer.puts "started with pid #{pid}"
         rescue Errno::ENOENT

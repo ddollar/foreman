@@ -5,7 +5,7 @@ Bluepill.application("<%= app %>", :foreground => false, :log_file => "/var/log/
 
 <% engine.each_process do |name, process| %>
 <% 1.upto(engine.formation[name]) do |num| %>
-  <% port = engine.port_for(process, num) %>
+  <% port = engine.port_for(process, num, 0) %>
   app.process("<%= name %>-<%= num %>") do |process|
     process.start_command = "<%= process.command %>"
 
