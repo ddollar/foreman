@@ -4,7 +4,7 @@ require "foreman/export/bluepill"
 require "tmpdir"
 
 describe Foreman::Export::Bluepill, :fakefs do
-  let(:procfile)  { FileUtils.mkdir_p("/tmp/app"); write_procfile("/tmp/app/Procfile") }
+  let(:procfile)  { FileUtils.mkdir_p("/tmp/app"); write_procfile("/tmp/app/Procfile", "PORT2=$PORT2") }
   let(:formation) { nil }
   let(:engine)    { Foreman::Engine.new(:formation => formation).load_procfile(procfile) }
   let(:options)   { Hash.new }
