@@ -5,6 +5,7 @@ class Foreman::Process
 
   attr_reader :command
   attr_reader :env
+  attr_reader :ports
 
   # Create a Process
   #
@@ -19,6 +20,11 @@ class Foreman::Process
     @options = options.dup
 
     @options[:env] ||= {}
+
+    # parse list of ports needed for this command
+    @ports = @command.scan(/\$(PORT[0-9]?)/)
+    @ports = [ "PORT" ] if @ports.length == 0
+    @ports = @ports.flatten.uniq
   end
 
   # Get environment-expanded command for a +Process+
