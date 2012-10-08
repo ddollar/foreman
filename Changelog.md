@@ -1,3 +1,7 @@
+## 0.60.2 (2012-10-08)
+
+* Fix for nil value on io select loop, fixes #260  [Silvio Relli]
+
 ## 0.60.1 (2012-10-08)
 
 * sleep on select() to avoid spinning the cpu  [Silvio Relli]
