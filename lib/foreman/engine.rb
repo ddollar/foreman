@@ -273,7 +273,8 @@ private
     Thread.new do
       begin
         loop do
-          (IO.select(@readers.values, nil, nil, 30).first || []).each do |reader|
+          io = IO.select(@readers.values, nil, nil, 30)
+          (io.nil? ? [] : io.first).each do |reader|
             data = reader.gets
             output_with_mutex name_for(@readers.invert[reader]), data
           end
