@@ -1,3 +1,7 @@
+## 0.60.1 (2012-10-08)
+
+* sleep on select() to avoid spinning the cpu  [Silvio Relli]
+
 ## 0.60.0 (2012-09-25)
 
 * foreman run can run things from the Procfile like heroku run.  [Dan Peterson]
