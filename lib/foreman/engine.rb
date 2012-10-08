@@ -273,13 +273,10 @@ private
     Thread.new do
       begin
         loop do
-          wrote_data = false
-          (IO.select(@readers.values).first || []).each do |reader|
+          (IO.select(@readers.values, nil, nil, 30).first || []).each do |reader|
             data = reader.gets
-            wrote_data = !data.nil?
             output_with_mutex name_for(@readers.invert[reader]), data
           end
-          sleep(1) unless wrote_data
         end
       rescue Exception => ex
         puts ex.message
