@@ -23,6 +23,7 @@ class Foreman::CLI < Thor
   method_option :env,       :type => :string,  :aliases => "-e", :desc => "Specify an environment file to load, defaults to .env"
   method_option :formation, :type => :string,  :aliases => "-m", :banner => '"alpha=5,bar=3"'
   method_option :port,      :type => :numeric, :aliases => "-p"
+  method_option :graceful_shutdown_timeout, :type => :numeric,  :aliases => "-w", :desc => "How many seconds to wait before KILL signal is sent when shutdown gracefully. (Default: 5)"
 
   class << self
     # Hackery. Take the run method away from Thor so that we can redefine it.
