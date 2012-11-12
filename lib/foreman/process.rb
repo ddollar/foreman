@@ -1,5 +1,4 @@
 require "foreman"
-require "rubygems"
 
 class Foreman::Process
 
