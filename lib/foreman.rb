@@ -9,7 +9,7 @@ module Foreman
   end
 
   def self.jruby?
-    defined?(RUBY_PLATFORM) and RUBY_PLATFORM == "java"
+    defined?(RUBY_PLATFORM) and RUBY_PLATFORM == "java" and RUBY_VERSION =~ /^1\.8\.\d+/
   end
 
   def self.ruby_18?
