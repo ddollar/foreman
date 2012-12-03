@@ -3,6 +3,7 @@ require "foreman/version"
 
 Gem::Specification.new do |gem|
   gem.name     = "foreman"
+  gem.license  = "MIT"
   gem.version  = Foreman::VERSION
 
   gem.author   = "David Dollar"
