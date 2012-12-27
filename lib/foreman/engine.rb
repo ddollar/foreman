@@ -37,6 +37,9 @@ class Foreman::Engine
   # Start the processes registered to this +Engine+
   #
   def start
+    # Make sure foreman is the process group leader.
+    Process.setpgrp unless Foreman.windows?
+
     trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
     trap("INT")  { puts "SIGINT received";  terminate_gracefully }
     trap("HUP")  { puts "SIGHUP received";  terminate_gracefully } if ::Signal.list.keys.include? 'HUP'
@@ -109,7 +112,7 @@ class Foreman::Engine
       end
     else
       begin
-        Process.kill "-#{signal}", Process.pid
+        Process.kill "-#{signal}", Process.getpgrp
       rescue Errno::ESRCH, Errno::EPERM
       end
     end
