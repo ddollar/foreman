@@ -31,7 +31,7 @@ The following options control how the application is run:
     should be in the format `process=num,process=num`
 
   * `-e`, `--env`:
-    Specify one or more .env files to load
+    Specify one or more .env files or urls to load (urls must be in the proper form as http://localhost/envfile)
 
   * `-f`, `--procfile`:
     Specify an alternate Procfile to load, implies `-d` at the Procfile root.
@@ -89,8 +89,8 @@ These options control all modes of foreman's operation.
     containing the Procfile.
 
   * `-e`, `--env`:
-    Specify an alternate environment file. You can specify more than one
-    file by using: `--env file1,file2`.
+    Specify an alternate environment file or url to load config file from. You can specify more than one
+    file by using: `--env file1,file2` or `--env http://localhost/envfile`.
 
   * `-f`, `--procfile`:
     Specify an alternate location for the application's Procfile. This file's
@@ -150,6 +150,8 @@ one key/value pair per line.
 
     FOO=bar
     BAZ=qux
+
+You can also load the env file from an url. The format is the same as the local .env file. 
 
 ## DEFAULT OPTIONS
 

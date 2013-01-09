@@ -8,3 +8,4 @@
 /pkg
 /tags
 /vendor
+*.gem
