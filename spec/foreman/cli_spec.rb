@@ -73,6 +73,13 @@ describe "Foreman::CLI", :fakefs do
       forked_foreman("run #{resource_path("bin/env FOO")} -e #{resource_path(".env")}").should == "bar\n"
     end
 
+    it "includes the default environment" do
+      pending
+      write_env("#{ENV["HOME"]}/.env", {"GLOBAL_FOO" => "GLOBAL_BAR"})
+      forked_foreman("run #{resource_path("bin/env FOO")} -e #{resource_path("#{ENV["HOME"]}/.env")}").should == "bar\n"
+      forked_foreman("run #{resource_path("bin/env FOO")} -e #{resource_path(".env")}").should == "bar\n"
+    end
+
     it "can run a command from the Procfile" do
       forked_foreman("run -f #{resource_path("Procfile")} test").should == "testing\n"
     end

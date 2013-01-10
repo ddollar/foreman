@@ -126,6 +126,7 @@ private ######################################################################
   end
 
   def load_environment!
+    load_global_environment!
     if options[:env]
       options[:env].split(",").each do |file|
         engine.load_env file
@@ -134,6 +135,11 @@ private ######################################################################
       default_env = File.join(engine.root, ".env")
       engine.load_env default_env if File.exists?(default_env)
     end
+  end
+
+  def load_global_environment!
+    global_env = File.join(ENV["HOME"], ".env")
+    engine.load_env global_env if File.exists?(global_env)
   end
 
   def procfile
