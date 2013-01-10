@@ -67,6 +67,15 @@ describe "Foreman::Engine", :fakefs do
       subject.env["FOO"].should == "baz"
     end
 
+    it "should read env file from webserver" do
+      subject.load_env("http://example.com/myapplication/env")
+      subject.env["API_KEY"].should == "12345"
+    end
+
+    it "should read env not found file from webserver" do
+      lambda { subject.load_env("http://example.com/myapplication/env_not_found")}.should raise_error(OpenURI::HTTPError)
+    end
+
     it "should read more than one if specified" do
       File.open("/tmp/env1", "w") { |f| f.puts("FOO=bar") }
       File.open("/tmp/env2", "w") { |f| f.puts("BAZ=qux") }

@@ -9,6 +9,10 @@ require "rspec"
 require "timecop"
 require "fakefs/safe"
 require "fakefs/spec_helpers"
+require "fakeweb"
+
+FakeWeb.register_uri(:get, "http://example.com/myapplication/env", :body => "API_KEY=12345")
+FakeWeb.register_uri(:get, "http://example.com/myapplication/env_not_found", :body => "File not Found", :status => ["404", "Not found"])
 
 $:.unshift File.expand_path("../../lib", __FILE__)
 

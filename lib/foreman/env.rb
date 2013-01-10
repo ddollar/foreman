@@ -35,8 +35,8 @@ class Foreman::Env
   end
 
   def load_url(url)
-    open(url) do |f|                                                  
-      f.read                                                                  
+    open(url) do |f|
+      f.read
     end
   end
 

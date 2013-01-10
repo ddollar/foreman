@@ -20,4 +20,5 @@ group :development do
   gem "simplecov", :require => false
   gem 'timecop'
   gem 'yard'
+  gem 'fakeweb'
 end
