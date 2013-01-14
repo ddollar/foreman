@@ -1,3 +1,20 @@
+## 0.61.0 (2013-01-14)
+
+* 0.61.0  [David Dollar]
+* Fix bug in color definitons  [nseo]
+* Fix for high CPU load when processes close output  [Pavel Forkert]
+* Ensure foreman is the process group leader  [Christos Trochalakis]
+* Don't ignore blank lines in the output  [Matt Venables]
+* Add license to gemspec  [petedmarsh]
+* Since JRuby 1.9 doesn't require posix/spawn, only follow that path if JRuby is loaded and running in 1.8 mode.  [Adam Hutchison]
+* Remove explicit requirement on rubygems.  [Cyril Rohr]
+* Dont use shared_path variable before multistage has a chance at it  [Aditya Sanghi]
+* Strip Windows Line Endings  [Paul Morton]
+* Fix man page: --directory is actually --root.  [Evan Jones]
+* Add timeout switch to CLI  [Paulo Luis Franchini Casaretto]
+* Remove expectation of double quotes around environment variables from test comparisons  [Kevin McAllister]
+* Remove explicit wrapping of Shellwords.escape in double quotes  [Kevin McAllister]
+
 ## 0.60.2 (2012-10-08)
 
 * Fix for nil value on io select loop, fixes #260  [Silvio Relli]
