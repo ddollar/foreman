@@ -25,6 +25,7 @@ class Foreman::Engine
     @options = options.dup
 
     @options[:formation] ||= (options[:concurrency] || "all=1")
+    @options[:timeout] ||= 5
 
     @env       = {}
     @mutex     = Mutex.new
@@ -312,7 +313,7 @@ private
       system  "sending SIGTERM to all processes"
       killall "SIGTERM"
     end
-    Timeout.timeout(5) do
+    Timeout.timeout(options[:timeout]) do
       watch_for_termination while @running.length > 0
     end
   rescue Timeout::Error
