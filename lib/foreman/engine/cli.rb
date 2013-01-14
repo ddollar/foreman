@@ -44,8 +44,8 @@ class Foreman::Engine::CLI < Foreman::Engine
 
   end
 
-  FOREMAN_COLORS = %w( cyan yellow green magenta red blue intense_cyan intense_yellow
-                       intense_green intense_magenta intense_red, intense_blue )
+  FOREMAN_COLORS = %w( cyan yellow green magenta red blue bright_cyan bright_yellow
+                       bright_green bright_magenta bright_red bright_blue )
 
   def startup
     @colors = map_colors
@@ -89,7 +89,7 @@ private
     @names.values.each_with_index do |name, index|
       colors[name] = FOREMAN_COLORS[index % FOREMAN_COLORS.length]
     end
-    colors["system"] = "intense_white"
+    colors["system"] = "bright_white"
     colors
   end
 
