@@ -38,7 +38,7 @@ describe Foreman::Export::Upstart, :fakefs do
     engine.env['KEY'] = 'd"\|d'
     upstart.export
     "foobarfoo".should include "bar"
-    File.read("/tmp/init/app-alpha-1.conf").should =~ /KEY="d\\"\\\\\\\|d/
+    File.read("/tmp/init/app-alpha-1.conf").should =~ /KEY=d\\"\\\\\\\|d/
   end
 
   context "with a formation" do

@@ -91,7 +91,7 @@ private ######################################################################
   end
 
   def shell_quote(value)
-    '"' + Shellwords.escape(value) + '"'
+    Shellwords.escape(value)
   end
 
   # deprecated
