@@ -5,7 +5,7 @@ class Foreman::Env
   attr_reader :entries
 
   def initialize(filename)
-    @entries = File.read(filename).split("\n").inject({}) do |ax, line|
+    @entries = File.read(filename).gsub("\r\n","\n").split("\n").inject({}) do |ax, line|
       if line =~ /\A([A-Za-z_0-9]+)=(.*)\z/
         key = $1
         case val = $2

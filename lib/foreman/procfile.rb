@@ -82,7 +82,7 @@ class Foreman::Procfile
 private
 
   def parse(filename)
-    File.read(filename).split("\n").map do |line|
+    File.read(filename).gsub("\r\n","\n").split("\n").map do |line|
       if line =~ /^([A-Za-z0-9_]+):\s*(.+)$/
         [$1, $2]
       end
