@@ -1,11 +1,19 @@
 require "foreman"
+require 'open-uri'
 
 class Foreman::Env
 
   attr_reader :entries
 
   def initialize(filename)
-    @entries = File.read(filename).split("\n").inject({}) do |ax, line|
+
+    if validate_url(filename) then
+      @content = load_url(filename)
+    else
+      @content = File.read(filename)
+    end
+
+    @entries = @content.split("\n").inject({}) do |ax, line|
       if line =~ /\A([A-Za-z_0-9]+)=(.*)\z/
         key = $1
         case val = $2
@@ -24,6 +32,18 @@ class Foreman::Env
     @entries.each do |key, value|
       yield key, value
     end
+  end
+
+  def load_url(url)
+    open(url) do |f|
+      f.read
+    end
+  end
+
+  def validate_url(url)
+    u = URI.parse url                                                           
+    return true if u.class == URI::HTTP or u.class == URI::HTTPS                
+    false
   end
 
 end
