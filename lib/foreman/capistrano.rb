@@ -12,7 +12,7 @@ if defined?(Capistrano)
         set :foreman_procfile,    "Procfile"
         set :foreman_app,         application
         set :foreman_user,        user
-        set :foreman_log,         "#{shared_path}/log"
+        set :foreman_log,         'shared_path/log'
         set :foreman_concurrency, false
       DESC
       task :export, :roles => :app do
