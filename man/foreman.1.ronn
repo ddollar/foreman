@@ -84,7 +84,7 @@ The following options control how the application is run:
 
 These options control all modes of foreman's operation.
 
-  * `-d`, `--directory`:
+  * `-d`, `--root`:
     Specify an alternate application root. This defaults to the directory
     containing the Procfile.
 
