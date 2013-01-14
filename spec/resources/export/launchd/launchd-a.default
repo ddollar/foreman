@@ -8,10 +8,13 @@
     <dict>
         <key>PORT</key>
         <string>5000</string>
+        <key>PORT2</key>
+        <string>5100</string>
     </dict>
     <key>ProgramArguments</key>
     <array>
         <string>./alpha</string>
+        <string>PORT2=$PORT2</string>
     </array>
     <key>KeepAlive</key>
     <true/>

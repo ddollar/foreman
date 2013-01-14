@@ -4,7 +4,7 @@ require "foreman/export/upstart"
 require "tmpdir"
 
 describe Foreman::Export::Upstart, :fakefs do
-  let(:procfile)  { write_procfile("/tmp/app/Procfile") }
+  let(:procfile)  { write_procfile("/tmp/app/Procfile", "PORT2=$PORT2") }
   let(:formation) { nil }
   let(:engine)    { Foreman::Engine.new(:formation => formation).load_procfile(procfile) }
   let(:options)   { Hash.new }

@@ -17,7 +17,10 @@ class Foreman::Export::Upstart < Foreman::Export::Base
       write_template "upstart/process_master.conf.erb", "#{app}-#{name}.conf", binding
 
       1.upto(engine.formation[name]) do |num|
-        port = engine.port_for(process, num)
+        environment = engine.env.dup
+        process.ports.each_with_index { |port, index|
+          environment[port] = engine.port_for(process, num, index).to_s
+        }
         write_template "upstart/process.conf.erb", "#{app}-#{name}-#{num}.conf", binding
       end
     end

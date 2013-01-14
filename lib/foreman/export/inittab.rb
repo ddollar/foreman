@@ -12,11 +12,12 @@ class Foreman::Export::Inittab < Foreman::Export::Base
     engine.each_process do |name, process|
       1.upto(engine.formation[name]) do |num|
         id = app.slice(0, 2).upcase + sprintf("%02d", index)
-        port = engine.port_for(process, num)
 
         commands = []
         commands << "cd #{engine.root}"
-        commands << "export PORT=#{port}"
+        process.ports.each_with_index { |port, index|
+          commands << "export #{port}=#{engine.port_for(process, num, index)}"
+        }
         engine.env.each_pair do |var, env|
           commands << "export #{var.upcase}=#{shell_quote(env)}"
         end

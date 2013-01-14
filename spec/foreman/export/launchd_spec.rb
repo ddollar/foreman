@@ -4,7 +4,7 @@ require "foreman/export/launchd"
 require "tmpdir"
 
 describe Foreman::Export::Launchd, :fakefs do
-  let(:procfile) { FileUtils.mkdir_p("/tmp/app"); write_procfile("/tmp/app/Procfile") }
+  let(:procfile) { FileUtils.mkdir_p("/tmp/app"); write_procfile("/tmp/app/Procfile", "PORT2=$PORT2") }
   let(:options)  { Hash.new }
   let(:engine)   { Foreman::Engine.new().load_procfile(procfile) }
   let(:launchd)  { Foreman::Export::Launchd.new("/tmp/init", engine, options) }
