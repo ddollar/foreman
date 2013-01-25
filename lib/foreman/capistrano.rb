@@ -14,6 +14,7 @@ if defined?(Capistrano)
         set :foreman_user,        user
         set :foreman_log,         'shared_path/log'
         set :foreman_concurrency, false
+        set :foreman_env,         false
       DESC
       task :export, :roles => :app do
         bundle_cmd          = fetch(:bundle_cmd, "bundle")
@@ -24,6 +25,7 @@ if defined?(Capistrano)
         foreman_user        = fetch(:foreman_user, user)
         foreman_log         = fetch(:foreman_log, "#{shared_path}/log")
         foreman_concurrency = fetch(:foreman_concurrency, false)
+        foreman_env         = fetch(:foreman_env, false)
 
         args = ["#{foreman_format} #{foreman_location}"]
         args << "-f #{foreman_procfile}"
@@ -31,6 +33,7 @@ if defined?(Capistrano)
         args << "-u #{foreman_user}"
         args << "-l #{foreman_log}"
         args << "-c #{foreman_concurrency}" if foreman_concurrency
+        args << "-e #{foreman_env}" if foreman_env
         run "cd #{release_path} && #{sudo} #{bundle_cmd} exec foreman export #{args.join(' ')}"
       end
 
