@@ -15,6 +15,7 @@ if defined?(Capistrano)
         set :foreman_log,         'shared_path/log'
         set :foreman_concurrency, false
         set :foreman_env,         false
+        set :foreman_cmd,         "bundle exec foreman"
       DESC
       task :export, :roles => :app do
         bundle_cmd          = fetch(:bundle_cmd, "bundle")
@@ -26,6 +27,7 @@ if defined?(Capistrano)
         foreman_log         = fetch(:foreman_log, "#{shared_path}/log")
         foreman_concurrency = fetch(:foreman_concurrency, false)
         foreman_env         = fetch(:foreman_env, false)
+        foreman_cmd         = fetch(:foreman_cmd, "#{bundle_cmd} exec foreman")
 
         args = ["#{foreman_format} #{foreman_location}"]
         args << "-f #{foreman_procfile}"
@@ -34,7 +36,7 @@ if defined?(Capistrano)
         args << "-l #{foreman_log}"
         args << "-c #{foreman_concurrency}" if foreman_concurrency
         args << "-e #{foreman_env}" if foreman_env
-        run "cd #{release_path} && #{sudo} #{bundle_cmd} exec foreman export #{args.join(' ')}"
+        run "cd #{release_path} && #{sudo} #{foreman_cmd} export #{args.join(' ')}"
       end
 
       desc "Start the application services"
