@@ -34,6 +34,18 @@ describe Foreman::Export::Upstart, :fakefs do
     upstart.export
   end
 
+  it "does not delete exported files for similarly named applications" do
+    FileUtils.mkdir_p "/tmp/init"
+
+    ["app2", "app2-alpha", "app2-alpha-1"].each do |name|
+      path = "/tmp/init/#{name}.conf"
+      FileUtils.touch(path)
+      dont_allow(FileUtils).rm(path)
+    end
+
+    upstart.export
+  end
+
   it "quotes and escapes environment variables" do
     engine.env['KEY'] = 'd"\|d'
     upstart.export

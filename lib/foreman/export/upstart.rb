@@ -6,7 +6,7 @@ class Foreman::Export::Upstart < Foreman::Export::Base
   def export
     super
 
-    Dir["#{location}/#{app}*.conf"].each do |file|
+    (Dir["#{location}/#{app}-*.conf"] << "#{location}/#{app}.conf").each do |file|
       clean file
     end
 
