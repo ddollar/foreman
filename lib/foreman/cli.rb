@@ -23,7 +23,7 @@ class Foreman::CLI < Thor
   method_option :env,       :type => :string,  :aliases => "-e", :desc => "Specify an environment file to load, defaults to .env"
   method_option :formation, :type => :string,  :aliases => "-m", :banner => '"alpha=5,bar=3"'
   method_option :port,      :type => :numeric, :aliases => "-p"
-  method_option :timeout,   :type => :numeric, :aliases => "-t", :desc => "Specify the amount of time (in seconds) processes have to shudown gracefully before receiving a SIGKILL, defaults to 5."
+  method_option :timeout,   :type => :numeric, :aliases => "-t", :desc => "Specify the amount of time (in seconds) processes have to shutdown gracefully before receiving a SIGKILL, defaults to 5."
 
   class << self
     # Hackery. Take the run method away from Thor so that we can redefine it.
