@@ -50,7 +50,7 @@ describe "Foreman::CLI", :fakefs do
   describe "check" do
     it "with a valid Procfile displays the jobs" do
       write_procfile
-      foreman("check").should == "valid procfile detected (alpha, bravo)\n"
+      foreman("check").should == "valid procfile detected (alpha, bravo, foo_bar, foo-bar)\n"
     end
 
     it "with a blank Procfile displays an error" do
