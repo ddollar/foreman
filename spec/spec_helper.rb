@@ -79,6 +79,8 @@ def write_procfile(procfile="Procfile", alpha_env="")
     file.puts "alpha: ./alpha" + " #{alpha_env}".rstrip
     file.puts "\n"
     file.puts "bravo:\t./bravo"
+    file.puts "foo_bar:\t./foo_bar"
+    file.puts "foo-bar:\t./foo-bar"
   end
   File.expand_path(procfile)
 end

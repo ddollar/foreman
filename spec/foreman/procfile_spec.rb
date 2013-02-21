@@ -16,8 +16,10 @@ describe Foreman::Procfile, :fakefs do
   it "loads a passed-in Procfile" do
     write_procfile
     procfile = Foreman::Procfile.new("Procfile")
-    procfile["alpha"].should == "./alpha"
-    procfile["bravo"].should == "./bravo"
+    procfile["alpha"].should   == "./alpha"
+    procfile["bravo"].should   == "./bravo"
+    procfile["foo-bar"].should == "./foo-bar"
+    procfile["foo_bar"].should == "./foo_bar"
   end
 
   it "can have a process appended to it" do
