@@ -39,7 +39,7 @@ class Foreman::Engine
   #
   def start
     # Make sure foreman is the process group leader.
-    Process.setpgrp unless Foreman.windows?
+    Process.setpgrp if !Foreman.windows? and options[:change_pgrp]
 
     trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
     trap("INT")  { puts "SIGINT received";  terminate_gracefully }
