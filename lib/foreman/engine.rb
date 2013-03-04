@@ -9,6 +9,10 @@ require "thread"
 
 class Foreman::Engine
 
+  # The signals that the engine cares about.
+  #
+  HANDLED_SIGNALS = [ :TERM, :INT, :HUP ]
+
   attr_reader :env
   attr_reader :options
   attr_reader :processes
@@ -33,6 +37,16 @@ class Foreman::Engine
     @processes = []
     @running   = {}
     @readers   = {}
+
+    # Self-pipe for deferred signal-handling (ala djb: http://cr.yp.to/docs/selfpipe.html)
+    reader, writer       = create_pipe
+    reader.close_on_exec = true if reader.respond_to?(:close_on_exec)
+    writer.close_on_exec = true if writer.respond_to?(:close_on_exec)
+    @selfpipe            = { :reader => reader, :writer => writer }
+
+    # Set up a global signal queue
+    # http://blog.rubybestpractices.com/posts/ewong/016-Implementing-Signal-Handlers.html
+    Thread.main[:signal_queue] = []
   end
 
   # Start the processes registered to this +Engine+
@@ -41,16 +55,81 @@ class Foreman::Engine
     # Make sure foreman is the process group leader.
     Process.setpgrp unless Foreman.windows?
 
-    trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
-    trap("INT")  { puts "SIGINT received";  terminate_gracefully }
-    trap("HUP")  { puts "SIGHUP received";  terminate_gracefully } if ::Signal.list.keys.include? 'HUP'
-
+    register_signal_handlers
     startup
     spawn_processes
     watch_for_output
     sleep 0.1
     watch_for_termination { terminate_gracefully }
     shutdown
+  end
+
+  # Set up deferred signal handlers
+  #
+  def register_signal_handlers
+    HANDLED_SIGNALS.each do |sig|
+      if ::Signal.list.include? sig.to_s
+        trap(sig) { Thread.main[:signal_queue] << sig ; notice_signal }
+      end
+    end
+  end
+
+  # Unregister deferred signal handlers
+  #
+  def restore_default_signal_handlers
+    HANDLED_SIGNALS.each do |sig|
+      trap(sig, :DEFAULT) if ::Signal.list.include? sig.to_s
+    end
+  end
+
+  # Wake the main thread up via the selfpipe when there's a signal
+  #
+  def notice_signal
+    @selfpipe[:writer].write_nonblock( '.' )
+  rescue Errno::EAGAIN
+    # Ignore writes that would block
+  rescue Errno::EINT
+    # Retry if another signal arrived while writing
+    retry
+  end
+
+  # Invoke the real handler for signal +sig+. This shouldn't be called directly
+  # by signal handlers, as it might invoke code which isn't re-entrant.
+  #
+  # @param [Symbol] sig  the name of the signal to be handled
+  #
+  def handle_signal(sig)
+    case sig
+    when :TERM
+      handle_term_signal
+    when :INT
+      handle_interrupt
+    when :HUP
+      handle_hangup
+    else
+      system "unhandled signal #{sig}"
+    end
+  end
+
+  # Handle a TERM signal
+  #
+  def handle_term_signal
+    puts "SIGTERM received"
+    terminate_gracefully
+  end
+
+  # Handle an INT signal
+  #
+  def handle_interrupt
+    puts "SIGINT received"
+    terminate_gracefully
+  end
+
+  # Handle a HUP signal
+  #
+  def handle_hangup
+    puts "SIGHUP received"
+    terminate_gracefully
   end
 
   # Register a process to be run by this +Engine+
@@ -277,8 +356,22 @@ private
     Thread.new do
       begin
         loop do
-          io = IO.select(@readers.values, nil, nil, 30)
+          io = IO.select([@selfpipe[:reader]] + @readers.values, nil, nil, 30)
+
+          begin
+            @selfpipe[:reader].read_nonblock(11)
+          rescue Errno::EAGAIN, Errno::EINTR => err
+            # ignore
+          end
+
+          # Look for any signals that arrived and handle them
+          while sig = Thread.main[:signal_queue].shift
+            self.handle_signal(sig)
+          end
+
           (io.nil? ? [] : io.first).each do |reader|
+            next if reader == @selfpipe[:reader]
+
             if reader.eof?
               @readers.delete_if { |key, value| value == reader }
             else
@@ -305,6 +398,7 @@ private
 
   def terminate_gracefully
     return if @terminating
+    restore_default_signal_handlers
     @terminating = true
     if Foreman.windows?
       system  "sending SIGKILL to all processes"
