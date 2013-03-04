@@ -16,6 +16,7 @@ notifications:
       - http://dx-helper.herokuapp.com/travis
 
 rvm:
+  - 2.0.0
   - 1.9.2
   - 1.9.3
   - 2.0.0

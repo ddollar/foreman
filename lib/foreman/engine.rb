@@ -41,9 +41,9 @@ class Foreman::Engine
     # Make sure foreman is the process group leader.
     Process.setpgrp unless Foreman.windows?
 
-    trap("TERM") { puts "SIGTERM received"; terminate_gracefully }
-    trap("INT")  { puts "SIGINT received";  terminate_gracefully }
-    trap("HUP")  { puts "SIGHUP received";  terminate_gracefully } if ::Signal.list.keys.include? 'HUP'
+    trap("TERM") { puts "SIGTERM received"; Thread.new { terminate_gracefully } }
+    trap("INT")  { puts "SIGINT received";  Thread.new { terminate_gracefully } }
+    trap("HUP")  { puts "SIGHUP received";  Thread.new { terminate_gracefully } } if ::Signal.list.keys.include? 'HUP'
 
     startup
     spawn_processes
