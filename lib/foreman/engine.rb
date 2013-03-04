@@ -177,11 +177,11 @@ class Foreman::Engine
     end
   end
 
-  # Send a signal to all processesstarted by this +Engine+
+  # Send a signal to all processes started by this +Engine+
   #
   # @param [String] signal  The signal to send to each process
   #
-  def killall(signal="SIGTERM")
+  def kill_children(signal="SIGTERM")
     if Foreman.windows?
       @running.each do |pid, (process, index)|
         system "sending #{signal} to #{name_for(pid)} at pid #{pid}"
@@ -190,6 +190,21 @@ class Foreman::Engine
         rescue Errno::ESRCH, Errno::EPERM
         end
       end
+    else
+      begin
+        Process.kill signal, *@running.keys unless @running.empty?
+      rescue Errno::ESRCH, Errno::EPERM
+      end
+    end
+  end
+
+  # Send a signal to the whole process group.
+  #
+  # @param [String] signal  The signal to send
+  #
+  def killall(signal="SIGTERM")
+    if Foreman.windows?
+      kill_children(signal)
     else
       begin
         Process.kill "-#{signal}", Process.getpgrp
@@ -402,10 +417,10 @@ private
     @terminating = true
     if Foreman.windows?
       system  "sending SIGKILL to all processes"
-      killall "SIGKILL"
+      kill_children "SIGKILL"
     else
       system  "sending SIGTERM to all processes"
-      killall "SIGTERM"
+      kill_children "SIGTERM"
     end
     Timeout.timeout(options[:timeout]) do
       watch_for_termination while @running.length > 0
