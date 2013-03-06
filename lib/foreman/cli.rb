@@ -81,21 +81,14 @@ class Foreman::CLI < Thor
       engine.load_procfile(procfile)
     end
 
-    pid = fork do
-      begin
-        engine.env.each { |k,v| ENV[k] = v }
-        if args.size == 1 && process = engine.process(args.first)
-          process.exec(:env => engine.env)
-        else
-          exec args.shelljoin
-        end
-      rescue Errno::EACCES
-        error "not executable: #{args.first}"
-      rescue Errno::ENOENT
-        error "command not found: #{args.first}"
-      end
-    end
-    Process.wait(pid)
+    begin
+      pid = spawn(engine.env, args.shelljoin)
+      Process.wait(pid)
+    rescue Errno::EACCES
+      error "not executable: #{args.first}"
+    rescue Errno::ENOENT
+      error "command not found: #{args.first}"
+    end	
     exit $?.exitstatus
   end
 
