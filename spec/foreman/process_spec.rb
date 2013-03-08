@@ -41,7 +41,7 @@ describe Foreman::Process do
 
     it "should output utf8 properly" do
       process = Foreman::Process.new(resource_path("bin/utf8"))
-      run(process).should == "\xFF\x03\n"
+      run(process).should == "\xFF\x03\n".force_encoding('binary')
     end
   end
 
