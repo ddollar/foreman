@@ -1,6 +1,17 @@
+## 0.62.0 (2013-03-08)
+
+* Merge pull request #334 from ged/reentrant_signal_handlers  [David Dollar]
+* Merge pull request #335 from ged/20_encoding_fix  [David Dollar]
+* Try to allow children to shut down gracefully  [Michael Granger]
+* Add deferred signal-handling (fixes #332).  [Michael Granger]
+* Fix spec encoding problem under Ruby 2.0.0.  [Michael Granger]
+* add ruby 2.0 to travis  [David Dollar]
+* Merge pull request #327 from patheticpat/master  [David Dollar]
+* Fixed a typo in cli options description  [Michael Kaiser]
+* handled by mingw now  [David Dollar]
+
 ## 0.61.0 (2013-01-14)
 
-* 0.61.0  [David Dollar]
 * Fix bug in color definitons  [nseo]
 * Fix for high CPU load when processes close output  [Pavel Forkert]
 * Ensure foreman is the process group leader  [Christos Trochalakis]
