@@ -1,5 +1,6 @@
 require "foreman"
 require "foreman/helpers"
+require "pathname"
 
 module Foreman::Export
   extend Foreman::Helpers
@@ -24,11 +25,10 @@ module Foreman::Export
 
 end
 
-
 require "foreman/export/base"
 require "foreman/export/inittab"
 require "foreman/export/upstart"
 require "foreman/export/bluepill"
 require "foreman/export/runit"
 require "foreman/export/supervisord"
-
+require "foreman/export/launchd"

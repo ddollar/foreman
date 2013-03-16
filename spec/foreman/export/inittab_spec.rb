@@ -4,12 +4,12 @@ require "foreman/export/inittab"
 require "tmpdir"
 
 describe Foreman::Export::Inittab, :fakefs do
-  let(:location) { "/tmp/inittab" }
-  let(:procfile) { FileUtils.mkdir_p("/tmp/app"); write_procfile("/tmp/app/Procfile") }
-  let(:location) { "/tmp/inittab" }
-  let(:engine)   { Foreman::Engine.new(procfile) }
-  let(:options)  { Hash.new }
-  let(:inittab)  { Foreman::Export::Inittab.new(location, engine, options) }
+  let(:procfile)  { FileUtils.mkdir_p("/tmp/app"); write_procfile("/tmp/app/Procfile") }
+  let(:location)  { "/tmp/inittab" }
+  let(:formation) { nil }
+  let(:engine)    { Foreman::Engine.new(:formation => formation).load_procfile(procfile) }
+  let(:options)   { Hash.new }
+  let(:inittab)   { Foreman::Export::Inittab.new(location, engine, options) }
 
   before(:each) { load_export_templates_into_fakefs("inittab") }
   before(:each) { stub(inittab).say }
@@ -29,7 +29,7 @@ describe Foreman::Export::Inittab, :fakefs do
   end
 
   context "with concurrency" do
-    let(:options) { Hash[:concurrency => "alpha=2"] }
+    let(:formation) { "alpha=2" }
 
     it "exports to the filesystem with concurrency" do
       inittab.export

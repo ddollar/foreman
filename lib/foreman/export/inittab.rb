@@ -3,21 +3,28 @@ require "foreman/export"
 class Foreman::Export::Inittab < Foreman::Export::Base
 
   def export
-    app = self.app || File.basename(engine.directory)
-    user = self.user || app
-    log_root = self.log || "/var/log/#{app}"
+    error("Must specify a location") unless location
 
     inittab = []
     inittab << "# ----- foreman #{app} processes -----"
 
-    engine.procfile.entries.inject(1) do |index, process|
-      1.upto(self.concurrency[process.name]) do |num|
+    index = 1
+    engine.each_process do |name, process|
+      1.upto(engine.formation[name]) do |num|
         id = app.slice(0, 2).upcase + sprintf("%02d", index)
-        port = engine.port_for(process, num, self.port)
-        inittab << "#{id}:4:respawn:/bin/su - #{user} -c 'PORT=#{port} #{process.command} >> #{log_root}/#{process.name}-#{num}.log 2>&1'"
+        port = engine.port_for(process, num)
+
+        commands = []
+        commands << "cd #{engine.root}"
+        commands << "export PORT=#{port}"
+        engine.env.each_pair do |var, env|
+          commands << "export #{var.upcase}=#{shell_quote(env)}"
+        end
+        commands << "#{process.command} >> #{log}/#{name}-#{num}.log 2>&1"
+
+        inittab << "#{id}:4:respawn:/bin/su - #{user} -c '#{commands.join(";")}'"
         index += 1
       end
-      index
     end
 
     inittab << "# ----- end foreman #{app} processes -----"
@@ -27,9 +34,8 @@ class Foreman::Export::Inittab < Foreman::Export::Base
     if location == "-"
       puts inittab
     else
-      FileUtils.mkdir_p(log_root) rescue error "could not create #{log_root}"
-      FileUtils.chown(user, nil, log_root) rescue error "could not chown #{log_root} to #{user}"
-      write_file(location, inittab)
+      say "writing: #{location}"
+      File.open(location, "w") { |file| file.puts inittab }
     end
   end
 

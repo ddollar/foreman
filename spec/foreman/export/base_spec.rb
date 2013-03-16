@@ -1,19 +1,16 @@
 require "spec_helper"
-require "foreman/export/base"
+require "foreman/engine"
+require "foreman/export"
 
-describe "Foreman::Export::Base" do
+describe "Foreman::Export::Base", :fakefs do
   let(:procfile) { FileUtils.mkdir_p("/tmp/app"); write_procfile("/tmp/app/Procfile") }
   let(:location) { "/tmp/init" }
-  let(:engine)   { Foreman::Engine.new(procfile) }
+  let(:engine)   { Foreman::Engine.new().load_procfile(procfile) }
   let(:subject)  { Foreman::Export::Base.new(location, engine) }
 
   it "has a say method for displaying info" do
     mock(subject).puts("[foreman export] foo")
     subject.send(:say, "foo")
-  end
-
-  it "export needs to be overridden" do
-    lambda { subject.export }.should raise_error("export method must be overridden")
   end
 
   it "raises errors as a Foreman::Export::Exception" do

@@ -1,96 +1,125 @@
 require "foreman"
-require "rubygems"
 
 class Foreman::Process
 
-  attr_reader :entry
-  attr_reader :num
-  attr_reader :pid
-  attr_reader :port
+  attr_reader :command
+  attr_reader :env
 
-  def initialize(entry, num, port)
-    @entry = entry
-    @num = num
-    @port = port
+  # Create a Process
+  #
+  # @param [String] command  The command to run
+  # @param [Hash]   options
+  #
+  # @option options [String] :cwd (./)  Change to this working directory before executing the process
+  # @option options [Hash]   :env ({})  Environment variables to set for this process
+  #
+  def initialize(command, options={})
+    @command = command
+    @options = options.dup
+
+    @options[:env] ||= {}
   end
 
-  def run(pipe, basedir, environment)
-    with_environment(environment.merge("PORT" => port.to_s)) do
-      run_process basedir, entry.command, pipe
+  # Get environment-expanded command for a +Process+
+  #
+  # @param [Hash] custom_env ({}) Environment variables to merge with defaults
+  #
+  # @return [String]  The expanded command
+  #
+  def expanded_command(custom_env={})
+    env = @options[:env].merge(custom_env)
+    expanded_command = command.dup
+    env.each do |key, val|
+      expanded_command.gsub!("$#{key}", val)
+    end
+    expanded_command
+  end
+
+  # Run a +Process+
+  #
+  # @param [Hash] options
+  #
+  # @option options :env    ({})       Environment variables to set for this execution
+  # @option options :output ($stdout)  The output stream
+  #
+  # @returns [Fixnum] pid  The +pid+ of the process
+  #
+  def run(options={})
+    env    = @options[:env].merge(options[:env] || {})
+    output = options[:output] || $stdout
+
+    if Foreman.windows?
+      Dir.chdir(cwd) do
+        Process.spawn env, expanded_command(env), :out => output, :err => output
+      end
+    elsif Foreman.jruby_18?
+      require "posix/spawn"
+      wrapped_command = "#{Foreman.runner} -d '#{cwd}' -p -- #{command}"
+      POSIX::Spawn.spawn env, wrapped_command, :out => output, :err => output
+    elsif Foreman.ruby_18?
+      fork do
+        $stdout.reopen output
+        $stderr.reopen output
+        env.each { |k,v| ENV[k] = v }
+        wrapped_command = "#{Foreman.runner} -d '#{cwd}' -p -- #{command}"
+        Kernel.exec wrapped_command
+      end
+    else
+      wrapped_command = "#{Foreman.runner} -d '#{cwd}' -p -- #{command}"
+      Process.spawn env, wrapped_command, :out => output, :err => output
     end
   end
 
-  def name
-    "%s.%s" % [ entry.name, num ]
+  # Exec a +Process+
+  #
+  # @param [Hash] options
+  #
+  # @option options :env ({}) Environment variables to set for this execution
+  #
+  # @return Does not return
+  def exec(options={})
+    env = @options[:env].merge(options[:env] || {})
+    env.each { |k, v| ENV[k] = v }
+    Dir.chdir(cwd)
+    Kernel.exec expanded_command(env)
   end
 
+  # Send a signal to this +Process+
+  #
+  # @param [String] signal  The signal to send
+  #
   def kill(signal)
-    pid && Process.kill(signal, pid)
+    if Foreman.windows?
+      pid && Process.kill(signal, pid)
+    else
+      pid && Process.kill("-#{signal}", pid)
+    end
   rescue Errno::ESRCH
     false
   end
 
-  def detach
-    pid && Process.detach(pid)
-  end
-
+  # Test whether or not this +Process+ is still running
+  #
+  # @returns [Boolean]
+  #
   def alive?
     kill(0)
   end
 
+  # Test whether or not this +Process+ has terminated
+  #
+  # @returns [Boolean]
+  #
   def dead?
     !alive?
   end
 
-private
-
-  def fork_with_io(command, basedir)
-    reader, writer = IO.pipe
-    command = replace_command_env(command)
-    pid = if Foreman.windows?
-      Dir.chdir(basedir) do
-        Process.spawn command, :out => writer, :err => writer
-      end
-    elsif Foreman.jruby?
-      require "posix/spawn"
-      POSIX::Spawn.spawn(Foreman.runner, "-d", basedir, command, {
-        :out => writer, :err => writer
-      })
-    else
-      fork do
-        writer.sync = true
-        $stdout.reopen writer
-        $stderr.reopen writer
-        reader.close
-        exec Foreman.runner, "-d", basedir, command
-      end
-    end
-    [ reader, pid ]
+  # Returns the working directory for this +Process+
+  #
+  # @returns [String]
+  #
+  def cwd
+    File.expand_path(@options[:cwd] || ".")
   end
 
-  def run_process(basedir, command, pipe)
-    io, @pid = fork_with_io(command, basedir)
-    output pipe, "started with pid %d" % @pid
-    Thread.new do
-      until io.eof?
-        output pipe, io.gets
-      end
-    end
-  end
-
-  def output(pipe, message)
-    pipe.puts "%s,%s" % [ name, message ]
-  end
-
-  def replace_command_env(command)
-    command.gsub(/\$(\w+)/) { |e| ENV[e[1..-1]] }
-  end
-
-  def with_environment(environment)
-    original = ENV.to_hash
-    ENV.update environment
-    yield
-  ensure
-    ENV.replace original
-  end
 end

@@ -1,8 +1,16 @@
 pre-start script
 
 bash << "EOF"
-  mkdir -p <%= log_root %>
-  chown -R <%= user %> <%= log_root %>
+  mkdir -p <%= log %>
+  chown -R <%= user %> <%= log %>
 EOF
 
 end script
+
+start on (started network-interface
+          or started network-manager
+          or started networking)
+
+stop on (stopping network-interface
+         or stopping network-manager
+         or stopping networking)

@@ -32,10 +32,10 @@ def latest_release
 end
 
 def newer_release
-  tags = %x{ git tag --contains v#{latest_release} }.split("\n").sort_by do |tag|
+  tags = %x{ git tag --contains v#{latest_release} | grep -v pre }.split("\n").sort_by do |tag|
     Gem::Version.new(tag[1..-1])
   end
-  tags.reject { |tag| Gem::Version.new(tag[1..-1]).prerelease? }[1]
+  tags[1]
 end
 
 desc "Generate a Changelog"
@@ -60,7 +60,6 @@ end
 
 desc "Cut a release"
 task :release do
-  Rake::Task["authors"].invoke
   Rake::Task["changelog"].invoke
   Rake::Task["pages"].invoke
 end

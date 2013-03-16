@@ -1,3 +1,137 @@
+## 0.62.0 (2013-03-08)
+
+* Merge pull request #334 from ged/reentrant_signal_handlers  [David Dollar]
+* Merge pull request #335 from ged/20_encoding_fix  [David Dollar]
+* Try to allow children to shut down gracefully  [Michael Granger]
+* Add deferred signal-handling (fixes #332).  [Michael Granger]
+* Fix spec encoding problem under Ruby 2.0.0.  [Michael Granger]
+* add ruby 2.0 to travis  [David Dollar]
+* Merge pull request #327 from patheticpat/master  [David Dollar]
+* Fixed a typo in cli options description  [Michael Kaiser]
+* handled by mingw now  [David Dollar]
+
+## 0.61.0 (2013-01-14)
+
+* Fix bug in color definitons  [nseo]
+* Fix for high CPU load when processes close output  [Pavel Forkert]
+* Ensure foreman is the process group leader  [Christos Trochalakis]
+* Don't ignore blank lines in the output  [Matt Venables]
+* Add license to gemspec  [petedmarsh]
+* Since JRuby 1.9 doesn't require posix/spawn, only follow that path if JRuby is loaded and running in 1.8 mode.  [Adam Hutchison]
+* Remove explicit requirement on rubygems.  [Cyril Rohr]
+* Dont use shared_path variable before multistage has a chance at it  [Aditya Sanghi]
+* Strip Windows Line Endings  [Paul Morton]
+* Fix man page: --directory is actually --root.  [Evan Jones]
+* Add timeout switch to CLI  [Paulo Luis Franchini Casaretto]
+* Remove expectation of double quotes around environment variables from test comparisons  [Kevin McAllister]
+* Remove explicit wrapping of Shellwords.escape in double quotes  [Kevin McAllister]
+
+## 0.60.2 (2012-10-08)
+
+* Fix for nil value on io select loop, fixes #260  [Silvio Relli]
+
+## 0.60.1 (2012-10-08)
+
+* sleep on select() to avoid spinning the cpu  [Silvio Relli]
+
+## 0.60.0 (2012-09-25)
+
+* foreman run can run things from the Procfile like heroku run.  [Dan Peterson]
+
+## 0.59.0 (2012-09-15)
+
+* Use /bin/sh instead of bash for foreman-runner  [Jeremy Evans]
+
+## 0.58.0 (2012-09-14)
+
+* dont set HOME  [David Dollar]
+* Add StandardOutPath to launchd export  [Aaron Kalin]
+* Add command argument string splitting  [Aaron Kalin]
+* Cleanup launchd exporter  [Aaron Kalin]
+* Enable trim_mode via '-' in ERB templates  [Aaron Kalin]
+* Add support for setting environment variables  [Aaron Kalin]
+* foreman run should exit with the same code as its command  [Omar Khan]
+* Handle multiline strings in .env file  [Szymon Nowak]
+* Use path and env variables in the inittab export  [Indrek Juhkam]
+* fixed the directory option  [Arnaud Lachaume]
+* Add capistrano export support  [Daniel Farrell]
+
+## 0.57.0 (2012-08-21)
+
+* fix startup checks for upstart exporter  [Aditya Sanghi]
+
+## 0.56.0 (2012-08-19)
+
+* read .profile, not .profile.d  [David Dollar]
+
+## 0.55.0 (2012-08-14)
+
+* use a forked process to exec a run with environment  [David Dollar]
+
+## 0.54.0 (2012-08-14)
+
+* use Foreman::Process to extract command running  [David Dollar]
+* changed to check env for bash  [brntbeer]
+
+## 0.53.0 (2012-07-24)
+
+* put app root in $HOME  [David Dollar]
+
+## 0.52.0 (2012-07-24)
+
+* wrap command in a runner that sources .profile.d scripts  [David Dollar]
+* fix upstart export specs  [David Dollar]
+* Make upstart export start/stop with network  [Daniel Farrell]
+
+## 0.51.0 (2012-07-11)
+
+* dont try to colorize windows  [David Dollar]
+
+## 0.50.0 (2012-07-11)
+
+* handle windows  [David Dollar]
+
+## 0.49.0 (2012-07-11)
+
+* 1.8 compatibility  [David Dollar]
+* use one pgroup for all of foreman and kill that since ruby 1.8 sucks at pgroups  [David Dollar]
+* better debugging  [David Dollar]
+
+## 0.48.0 (2012-07-10)
+
+* allow old exporter format to work, but with deprecation warning  [David Dollar]
+* remove debugging code  [David Dollar]
+* Merge pull request #219 from MarkDBlackwell/patch-1  [David Dollar]
+* Avoid crash by verifying the existence of SIGHUP before accessing it.  [Mark D. Blackwell]
+* allow color to be forced on  [David Dollar]
+* terminate gracefully if stdout goes away  [David Dollar]
+* always flush output  [David Dollar]
+* Merge pull request #212 from morgoth/added-version-command  [David Dollar]
+* added command for displaying foreman version  [Wojciech Wnętrzak]
+* Merge pull request #211 from morgoth/fixed-yaml-usage  [David Dollar]
+* fixed using YAML  [Wojciech Wnętrzak]
+* test on more things, but don't fail  [David Dollar]
+* changelog  [David Dollar]
+* 0.48.0.pre1  [David Dollar]
+* foreman doesn't work on ruby 1.8, may try to fix later  [David Dollar]
+* use bash  [David Dollar]
+* massive refactoring for programmatic control and stability  [David Dollar]
+* Merge pull request #164 from hsume2/master  [David Dollar]
+* Only run tmux specs if tmux is installed  [Henry Hsu]
+* Do not assume BUNDLE_GEMFILE  [Henry Hsu]
+* Add support for starting procfile in tmux session  [Henry Hsu]
+
+## 0.47.0 (2012-06-07)
+
+* Fix multi-word argument handling in `foreman run`.  [Daniel Brockman]
+* Make 'PORT=5000 foreman start' work  [Koen Van der Auwera]
+* Terminate gracefully upon SIGHUP  [Stefan Schüßler]
+* Set port from .env if specified  [Koen Van der Auwera]
+* Updated bluepill exporter to use environment variables from .env  [Aneeth]
+* Added launchd exporter  [Maxwell Swadling]
+* Quote and escape environment variables in upstart templates  [Matt Griffin]
+* Added list of ports to other languages to README  [elf Pavlik]
+
 ## 0.46.0 (2012-05-02)
 
 * Add Profile load/write/append API  [Michael Granger]

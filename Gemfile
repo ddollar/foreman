@@ -18,4 +18,6 @@ group :development do
   gem 'rr',     '~> 1.0.2'
   gem 'rspec',  '~> 2.0'
   gem "simplecov", :require => false
+  gem 'timecop'
+  gem 'yard'
 end

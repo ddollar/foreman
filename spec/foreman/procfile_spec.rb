@@ -3,29 +3,39 @@ require 'foreman/procfile'
 require 'pathname'
 require 'tmpdir'
 
-describe Foreman::Procfile do
-  subject { described_class.new }
+describe Foreman::Procfile, :fakefs do
+  subject { Foreman::Procfile.new }
 
-  let(:testdir) { Pathname(Dir.tmpdir) }
-  let(:procfile) { testdir + 'Procfile' }
+  it "can load from a file" do
+    write_procfile
+    subject.load "Procfile"
+    subject["alpha"].should == "./alpha"
+    subject["bravo"].should == "./bravo"
+  end
+
+  it "loads a passed-in Procfile" do
+    write_procfile
+    procfile = Foreman::Procfile.new("Procfile")
+    procfile["alpha"].should == "./alpha"
+    procfile["bravo"].should == "./bravo"
+  end
 
   it "can have a process appended to it" do
-    subject << ['alpha', './alpha']
-    subject['alpha'].should be_a(Foreman::ProcfileEntry)
+    subject["charlie"] = "./charlie"
+    subject["charlie"].should == "./charlie"
   end
 
-  it "can write itself out to a file" do
-    subject << ['alpha', './alpha']
-    subject.write(procfile)
-    procfile.read.should == "alpha: ./alpha\n"
+  it "can write to a string" do
+    subject["foo"] = "./foo"
+    subject["bar"] = "./bar"
+    subject.to_s.should == "foo: ./foo\nbar: ./bar"
   end
 
-  it "can re-read entries from a file" do
-    procfile.open('w') { |io| io.puts "gamma: ./radiation", "theta: ./rate" }
-    subject << ['alpha', './alpha']
-    subject.load(procfile)
-    subject.process_names.should have(2).members
-    subject.process_names.should include('gamma', 'theta')
+  it "can write to a file" do
+    subject["foo"] = "./foo"
+    subject["bar"] = "./bar"
+    subject.save "/tmp/proc"
+    File.read("/tmp/proc").should == "foo: ./foo\nbar: ./bar\n"
   end
 
 end
