@@ -6,7 +6,7 @@ class Foreman::Env
 
   def initialize(filename)
     @entries = File.read(filename).gsub("\r\n","\n").split("\n").inject({}) do |ax, line|
-      if line =~ /\A([A-Za-z_0-9]+)=(.*)\z/
+      if line =~ /\A([A-Za-z_0-9\.]+)=(.*)\z/
         key = $1
         case val = $2
           # Remove single quotes
