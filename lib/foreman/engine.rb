@@ -1,7 +1,7 @@
 require "foreman"
-require "foreman/env"
 require "foreman/process"
 require "foreman/procfile"
+require "dotenv"
 require "tempfile"
 require "timeout"
 require "fileutils"
@@ -172,9 +172,7 @@ class Foreman::Engine
   # @param [String] filename  A .env file to load into the environment
   #
   def load_env(filename)
-    Foreman::Env.new(filename).entries do |name, value|
-      @env[name] = value
-    end
+    @env.update Dotenv::Environment.new(filename)
   end
 
   # Send a signal to all processes started by this +Engine+
