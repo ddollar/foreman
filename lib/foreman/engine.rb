@@ -52,8 +52,12 @@ class Foreman::Engine
   # Start the processes registered to this +Engine+
   #
   def start
-    # Make sure foreman is the process group leader.
-    Process.setpgrp unless Foreman.windows?
+    begin
+      # Attempt to make foreman the process group leader.
+      Process.setpgrp unless Foreman.windows?
+    rescue Errno::EPERM
+      puts "Warning: Could not make foreman the process group leader. Continuing"
+    end
 
     register_signal_handlers
     startup
