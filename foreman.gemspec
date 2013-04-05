@@ -20,7 +20,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'thor', '>= 0.13.6'
 
   if ENV["PLATFORM"] == "java"
-    gem.add_dependency "posix-spawn", "~> 0.3.6"
     gem.platform = Gem::Platform.new("java")
   end
 
