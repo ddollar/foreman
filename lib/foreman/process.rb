@@ -47,7 +47,8 @@ class Foreman::Process
   def run(options={})
     env    = @options[:env].merge(options[:env] || {})
     output = options[:output] || $stdout
-
+    runner = "#{Foreman.runner}".gsub("'", "\\\\'") # To support directories with single quotes
+    cwd = "#{cwd}".gsub("'", "\\\\'")
     if Foreman.windows?
       Dir.chdir(cwd) do
         Process.spawn env, expanded_command(env), :out => output, :err => output
