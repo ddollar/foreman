@@ -52,9 +52,6 @@ class Foreman::Engine
   # Start the processes registered to this +Engine+
   #
   def start
-    # Make sure foreman is the process group leader.
-    Process.setpgrp unless Foreman.windows?
-
     register_signal_handlers
     startup
     spawn_processes
@@ -207,7 +204,7 @@ class Foreman::Engine
       kill_children(signal)
     else
       begin
-        Process.kill "-#{signal}", Process.getpgrp
+        Process.kill "-#{signal}", Process.pid
       rescue Errno::ESRCH, Errno::EPERM
       end
     end
