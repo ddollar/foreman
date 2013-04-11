@@ -48,25 +48,25 @@ class Foreman::Process
     env    = @options[:env].merge(options[:env] || {})
     output = options[:output] || $stdout
     runner = "#{Foreman.runner}".gsub("'", "\\\\'") # To support directories with single quotes
-    cwd = "#{cwd}".gsub("'", "\\\\'")
+    cwdstr = "#{cwd}".gsub("'", "\\\\'")
     if Foreman.windows?
       Dir.chdir(cwd) do
         Process.spawn env, expanded_command(env), :out => output, :err => output
       end
     elsif Foreman.jruby_18?
       require "posix/spawn"
-      wrapped_command = "#{Foreman.runner} -d '#{cwd}' -p -- #{command}"
+      wrapped_command = "#{runner} -d '#{cwdstr}' -p -- #{command}"
       POSIX::Spawn.spawn env, wrapped_command, :out => output, :err => output
     elsif Foreman.ruby_18?
       fork do
         $stdout.reopen output
         $stderr.reopen output
         env.each { |k,v| ENV[k] = v }
-        wrapped_command = "#{Foreman.runner} -d '#{cwd}' -p -- #{command}"
+        wrapped_command = "#{runner} -d '#{cwdstr}' -p -- #{command}"
         Kernel.exec wrapped_command
       end
     else
-      wrapped_command = "#{Foreman.runner} -d '#{cwd}' -p -- #{command}"
+      wrapped_command = "#{Foreman.runner} -d '#{cwdstr}' -p -- #{command}"
       Process.spawn env, wrapped_command, :out => output, :err => output
     end
   end
