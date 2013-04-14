@@ -18,6 +18,7 @@ Gem::Specification.new do |gem|
   gem.files << "man/foreman.1"
 
   gem.add_dependency 'thor', '>= 0.13.6'
+  gem.add_dependency 'dotenv', '>= 0.7'
 
   if ENV["PLATFORM"] == "java"
     gem.add_dependency "posix-spawn", "~> 0.3.6"
