@@ -21,7 +21,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'dotenv', '>= 0.7'
 
   if ENV["PLATFORM"] == "java"
-    gem.add_dependency "posix-spawn", "~> 0.3.6"
     gem.platform = Gem::Platform.new("java")
   end
 
