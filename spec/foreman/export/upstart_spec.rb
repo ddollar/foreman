@@ -29,6 +29,10 @@ describe Foreman::Export::Upstart, :fakefs do
     mock(FileUtils).rm("/tmp/init/app-alpha-1.conf")
     mock(FileUtils).rm("/tmp/init/app-bravo.conf")
     mock(FileUtils).rm("/tmp/init/app-bravo-1.conf")
+    mock(FileUtils).rm("/tmp/init/app-foo-bar.conf")
+    mock(FileUtils).rm("/tmp/init/app-foo-bar-1.conf")
+    mock(FileUtils).rm("/tmp/init/app-foo_bar.conf")
+    mock(FileUtils).rm("/tmp/init/app-foo_bar-1.conf")
 
     upstart.export
     upstart.export
