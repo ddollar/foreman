@@ -1,3 +1,17 @@
+## 0.63.0 (2013-04-15)
+
+* Revert "Ensure foreman is the process group leader"  [John Griffin]
+* remove posix-spawn dependency as it does not work in jruby 1.7.3  [Andrew Brown & Corey Downing]
+* Replace Foreman::Env with dotenv  [Brandon Keepers]
+* [foreman-runner] fix sourcing as . is rarely in PATH  [Barry Allard]
+* Fixed specs to pass.  [Kentaro Kuribayashi]
+* Permit underscore for command name in Procfile.  [Kentaro Kuribayashi]
+* Update man/foreman.1  [Patrick Ellis]
+* Remove tmux option from man page  [Donald Plummer]
+* Prevent upstart export from deleting similarly named upstart files  [Andy Morris]
+* Add MIT license text  [Per Andersson]
+* use "start|stop\ on runlevel [x]" for upstart config  [Nick Messick]
+
 ## 0.62.0 (2013-03-08)
 
 * Merge pull request #334 from ged/reentrant_signal_handlers  [David Dollar]
