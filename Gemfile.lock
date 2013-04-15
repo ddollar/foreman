@@ -1,10 +1,3 @@
-GIT
-  remote: git://github.com/bkeepers/dotenv.git
-  revision: bd139d3c2e627c4f5958542de50a1ae7038f0f8d
-  branch: 0.7
-  specs:
-    dotenv (0.7.0)
-
 PATH
   remote: .
   specs:
@@ -21,6 +14,7 @@ GEM
       xml-simple
     builder (3.0.0)
     diff-lcs (1.1.3)
+    dotenv (0.7.0)
     fakefs (0.3.2)
     hpricot (0.8.6)
     hpricot (0.8.6-java)
@@ -60,7 +54,6 @@ PLATFORMS
 
 DEPENDENCIES
   aws-s3
-  dotenv!
   fakefs (~> 0.3.2)
   foreman!
   posix-spawn (~> 0.3.6)

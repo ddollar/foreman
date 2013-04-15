@@ -2,8 +2,6 @@ source "http://rubygems.org"
 
 gemspec
 
-gem 'dotenv', :github => 'bkeepers/dotenv', :branch => '0.7'
-
 platform :mingw do
   gem "win32console", "~> 1.3.0"
 end
