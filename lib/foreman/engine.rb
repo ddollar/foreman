@@ -360,7 +360,7 @@ private
         begin
           pid = process.run(:output => writer, :env => {
             "PORT" => port_for(process, n).to_s,
-            "FOREMAN_PROCESS_NAME" => name_for_index(process, n)
+            "PS" => name_for_index(process, n)
           })
           writer.puts "started with pid #{pid}"
         rescue Errno::ENOENT
