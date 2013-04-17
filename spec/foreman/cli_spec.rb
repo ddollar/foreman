@@ -44,6 +44,13 @@ describe "Foreman::CLI", :fakefs do
           output.should =~ /test.1 \| testing/
         end
       end
+
+      it "sets PS variable with the process name" do
+        without_fakefs do
+          output = foreman("start -f #{resource_path("Procfile")}")
+          output.should =~ /ps.1   \| PS env var is ps.1/
+        end
+      end
     end
   end
 
