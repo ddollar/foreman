@@ -29,6 +29,10 @@ describe Foreman::Export::Systemd, :fakefs do
     mock(FileUtils).rm("/tmp/init/app-alpha-1.service")
     mock(FileUtils).rm("/tmp/init/app-bravo.target")
     mock(FileUtils).rm("/tmp/init/app-bravo-1.service")
+    mock(FileUtils).rm("/tmp/init/app-foo-bar.target")
+    mock(FileUtils).rm("/tmp/init/app-foo-bar-1.service")
+    mock(FileUtils).rm("/tmp/init/app-foo_bar.target")
+    mock(FileUtils).rm("/tmp/init/app-foo_bar-1.service")
 
     systemd.export
     systemd.export
