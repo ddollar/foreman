@@ -103,6 +103,8 @@ foreman currently supports the following output formats:
 
   * runit
 
+  * systemd
+
   * upstart
 
 ## INITTAB EXPORT
@@ -113,6 +115,17 @@ Will export a chunk of inittab-compatible configuration:
     EX01:4:respawn:/bin/su - example -c 'PORT=5000 bundle exec thin start >> /var/log/web-1.log 2>&1'
     EX02:4:respawn:/bin/su - example -c 'PORT=5100 bundle exec rake jobs:work >> /var/log/job-1.log 2>&1'
     # ----- end foreman example processes -----
+
+## SYSTEMD EXPORT
+
+Will create a series of systemd scripts in the location you specify. Scripts
+will be structured to make the following commands valid:
+
+  `systemctl start appname.target`
+
+  `systemctl stop appname-processname.target`
+
+  `systemctl restart appname-processname-3.service`
 
 ## UPSTART EXPORT
 
