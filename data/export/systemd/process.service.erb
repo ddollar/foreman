@@ -1,0 +1,18 @@
+[Unit]
+StopWhenUnneeded=true
+
+[Service]
+User=<%= user %>
+WorkingDirectory=<%= engine.root %>
+Environment=PORT=<%= port %><% engine.env.each_pair do |var,env| %>
+Environment=<%= var.upcase %>=<%= env %><% end %>
+ExecStart=/bin/bash -lc '<%= process.command %>'
+Restart=always
+StandardInput=null
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=%n
+KillMode=process
+
+[Install]
+WantedBy=<%= app %>-<%= name %>.target

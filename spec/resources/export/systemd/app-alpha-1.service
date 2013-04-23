@@ -1,0 +1,17 @@
+[Unit]
+StopWhenUnneeded=true
+
+[Service]
+User=app
+WorkingDirectory=/tmp/app
+Environment=PORT=5000
+ExecStart=/bin/bash -lc './alpha'
+Restart=always
+StandardInput=null
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=%n
+KillMode=process
+
+[Install]
+WantedBy=app-alpha.target
