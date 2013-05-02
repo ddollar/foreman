@@ -2,7 +2,6 @@ script: bundle exec rake spec
 
 matrix:
   allow_failures:
-    - rvm: 1.8.7
     - rvm: jruby
     - rvm: rbx
     - rvm: ree
@@ -16,6 +15,7 @@ notifications:
       - http://dx-helper.herokuapp.com/travis
 
 rvm:
+  - 1.8.7
   - 1.9.2
   - 1.9.3
   - 2.0.0
