@@ -1,4 +1,5 @@
 require "foreman"
+require "shellwords"
 
 class Foreman::Process
 
@@ -52,18 +53,10 @@ class Foreman::Process
       Dir.chdir(cwd) do
         Process.spawn env, expanded_command(env), :out => output, :err => output
       end
-    elsif Foreman.jruby_18?
+    elsif Foreman.jruby_18? || Foreman.ruby_18?
       require "posix/spawn"
-      wrapped_command = "#{Foreman.runner} -d '#{cwd}' -p -- #{command}"
-      POSIX::Spawn.spawn env, wrapped_command, :out => output, :err => output
-    elsif Foreman.ruby_18?
-      fork do
-        $stdout.reopen output
-        $stderr.reopen output
-        env.each { |k,v| ENV[k] = v }
-        wrapped_command = "#{Foreman.runner} -d '#{cwd}' -p -- #{command}"
-        Kernel.exec wrapped_command
-      end
+      wrapped_command = "#{Foreman.runner} -d '#{cwd}' -p -- #{expanded_command(env)}"
+      POSIX::Spawn.spawn(*spawn_args(env, wrapped_command.shellsplit, {:out => output, :err => output}))
     else
       wrapped_command = "#{Foreman.runner} -d '#{cwd}' -p -- #{command}"
       Process.spawn env, wrapped_command, :out => output, :err => output
@@ -120,6 +113,16 @@ class Foreman::Process
   #
   def cwd
     File.expand_path(@options[:cwd] || ".")
+  end
+
+private
+
+  def spawn_args(env, argv, options)
+    args = []
+    args << env
+    args += argv
+    args << options
+    args
   end
 
 end

@@ -21,6 +21,10 @@ def mock_error(subject, message)
   end
 end
 
+def make_pipe
+  IO.method(:pipe).arity.zero? ? IO.pipe : IO.pipe("BINARY")
+end
+
 def foreman(args)
   capture_stdout do
     begin
@@ -31,14 +35,19 @@ def foreman(args)
 end
 
 def forked_foreman(args)
-  rd, wr = IO.pipe("BINARY")
-  Process.spawn("bundle exec bin/foreman #{args}", :out => wr, :err => wr)
+  rd, wr = make_pipe
+  if Foreman.jruby_18? || Foreman.ruby_18?
+    require 'posix/spawn'
+    POSIX::Spawn.spawn({}, "bundle exec bin/foreman #{args}", :out => wr, :err => wr)
+  else
+    Process.spawn("bundle exec bin/foreman #{args}", :out => wr, :err => wr)
+  end
   wr.close
   rd.read
 end
 
 def fork_and_capture(&blk)
-  rd, wr = IO.pipe("BINARY")
+  rd, wr = make_pipe
   pid = fork do
     rd.close
     wr.sync = true
@@ -57,7 +66,12 @@ def fork_and_capture(&blk)
 end
 
 def fork_and_get_exitstatus(args)
-  pid = Process.spawn("bundle exec bin/foreman #{args}", :out => "/dev/null", :err => "/dev/null")
+  pid = if Foreman.jruby_18? || Foreman.ruby_18?
+    require 'posix/spawn'
+    POSIX::Spawn.spawn({}, "bundle exec bin/foreman #{args}", :out => "/dev/null", :err => "/dev/null")
+  else
+    Process.spawn("bundle exec bin/foreman #{args}", :out => "/dev/null", :err => "/dev/null")
+  end
   Process.wait(pid)
   $?.exitstatus
 end
@@ -141,7 +155,7 @@ end
 
 def capture_stdout
   old_stdout = $stdout.dup
-  rd, wr = IO.method(:pipe).arity.zero? ? IO.pipe : IO.pipe("BINARY")
+  rd, wr = make_pipe
   $stdout = wr
   yield
   wr.close
