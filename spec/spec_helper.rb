@@ -21,6 +21,10 @@ def mock_error(subject, message)
   end
 end
 
+def make_pipe
+  IO.method(:pipe).arity.zero? ? IO.pipe : IO.pipe("BINARY")
+end
+
 def foreman(args)
   capture_stdout do
     begin
@@ -31,14 +35,14 @@ def foreman(args)
 end
 
 def forked_foreman(args)
-  rd, wr = IO.pipe("BINARY")
+  rd, wr = make_pipe
   Process.spawn("bundle exec bin/foreman #{args}", :out => wr, :err => wr)
   wr.close
   rd.read
 end
 
 def fork_and_capture(&blk)
-  rd, wr = IO.pipe("BINARY")
+  rd, wr = make_pipe
   pid = fork do
     rd.close
     wr.sync = true
@@ -141,7 +145,7 @@ end
 
 def capture_stdout
   old_stdout = $stdout.dup
-  rd, wr = IO.method(:pipe).arity.zero? ? IO.pipe : IO.pipe("BINARY")
+  rd, wr = make_pipe
   $stdout = wr
   yield
   wr.close
