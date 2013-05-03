@@ -302,6 +302,10 @@ private
 
   def name_for(pid)
     process, index = @running[pid]
+    name_for_index(process, index)
+  end
+
+  def name_for_index(process, index)
     [ @names[process], index.to_s ].compact.join(".")
   end
 
@@ -350,7 +354,8 @@ private
         reader, writer = create_pipe
         begin
           pid = process.run(:output => writer, :env => {
-            "PORT" => port_for(process, n).to_s
+            "PORT" => port_for(process, n).to_s,
+            "PS" => name_for_index(process, n)
           })
           writer.puts "started with pid #{pid}"
         rescue Errno::ENOENT
