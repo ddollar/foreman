@@ -47,7 +47,9 @@ class Foreman::Export::Base
     error("Must specify a location") unless location
     FileUtils.mkdir_p(location) rescue error("Could not create: #{location}")
     FileUtils.mkdir_p(log) rescue error("Could not create: #{log}")
+    FileUtils.mkdir_p(run) rescue error("Could not create: #{run}")
     FileUtils.chown(user, nil, log) rescue error("Could not chown #{log} to #{user}")
+    FileUtils.chown(user, nil, run) rescue error("Could not chown #{run} to #{user}")
   end
 
   def app
@@ -56,6 +58,10 @@ class Foreman::Export::Base
 
   def log
     options[:log] || "/var/log/#{app}"
+  end
+
+  def run
+    options[:run] || "/var/run/#{app}"
   end
 
   def user
