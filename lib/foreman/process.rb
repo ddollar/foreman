@@ -48,17 +48,18 @@ class Foreman::Process
   def run(options={})
     env    = @options[:env].merge(options[:env] || {})
     output = options[:output] || $stdout
-
+    runner = "#{Foreman.runner}".shellescape
+    
     if Foreman.windows?
       Dir.chdir(cwd) do
         Process.spawn env, expanded_command(env), :out => output, :err => output
       end
     elsif Foreman.jruby_18? || Foreman.ruby_18?
       require "posix/spawn"
-      wrapped_command = "#{Foreman.runner} -d '#{cwd}' -p -- #{expanded_command(env)}"
+      wrapped_command = "#{runner} -d '#{cwd.shellescape}' -p -- #{expanded_command(env)}"
       POSIX::Spawn.spawn(*spawn_args(env, wrapped_command.shellsplit, {:out => output, :err => output}))
     else
-      wrapped_command = "#{Foreman.runner} -d '#{cwd}' -p -- #{command}"
+      wrapped_command = "#{runner} -d '#{cwd.shellescape}' -p -- #{command}"
       Process.spawn env, wrapped_command, :out => output, :err => output
     end
   end
