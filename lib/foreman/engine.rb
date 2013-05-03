@@ -427,7 +427,7 @@ private
     end
   rescue Timeout::Error
     system  "sending SIGKILL to all processes"
-    killall "SIGKILL"
+    kill_children "SIGKILL"
   end
 
 end
