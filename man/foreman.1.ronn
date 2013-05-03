@@ -101,7 +101,11 @@ foreman currently supports the following output formats:
 
   * inittab
 
+  * launchd
+
   * runit
+
+  * supervisord
 
   * systemd
 
@@ -181,7 +185,7 @@ Export the application in upstart format:
 
 Run one process type from the application defined in a specific Procfile:
 
-    $ foreman start alpha -p ~/myapp/Procfile
+    $ foreman start alpha -f ~/myapp/Procfile
 
 ## COPYRIGHT
 
