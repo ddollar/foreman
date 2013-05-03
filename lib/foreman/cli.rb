@@ -46,6 +46,7 @@ class Foreman::CLI < Thor
 
   method_option :app,         :type => :string,  :aliases => "-a"
   method_option :log,         :type => :string,  :aliases => "-l"
+  method_option :run,         :type => :string,  :aliases => "-r", :desc => "Specify the pid file directory, defaults to /var/run/<application>"
   method_option :env,         :type => :string,  :aliases => "-e", :desc => "Specify an environment file to load, defaults to .env"
   method_option :port,        :type => :numeric, :aliases => "-p"
   method_option :user,        :type => :string,  :aliases => "-u"
