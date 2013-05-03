@@ -146,7 +146,7 @@ to run it.
     web: bundle exec thin start
     job: bundle exec rake jobs:work
 
-A process name may contain letters, numbers amd the underscore character.
+A process name may contain letters, numbers and the underscore character.
 You can validate your Procfile format using the `check` command:
 
     $ foreman check
