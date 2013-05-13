@@ -24,6 +24,7 @@ class Foreman::Engine
   # @option options [String] :formation (all=1)    The process formation to use
   # @option options [Fixnum] :port      (5000)     The base port to assign to processes
   # @option options [String] :root      (Dir.pwd)  The root directory from which to run processes
+  # @option options [String] :prefix    (null)       The prefix to add before each command
   #
   def initialize(options={})
     @options = options.dup
@@ -140,6 +141,7 @@ class Foreman::Engine
   def register(name, command, options={})
     options[:env] ||= env
     options[:cwd] ||= File.dirname(command.split(" ").first)
+    command = [@options[:prefix], command].join(' ') if @options[:prefix] 
     process = Foreman::Process.new(command, options)
     @names[process] = name
     @processes << process
