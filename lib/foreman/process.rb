@@ -59,7 +59,7 @@ class Foreman::Process
       wrapped_command = "#{runner} -d '#{cwd.shellescape}' -p -- #{expanded_command(env)}"
       POSIX::Spawn.spawn(*spawn_args(env, wrapped_command.shellsplit, {:out => output, :err => output}))
     else
-      wrapped_command = "#{runner} -d '#{cwd.shellescape}' -p -- #{command}"
+      wrapped_command = "exec #{runner} -d '#{cwd.shellescape}' -p -- #{command}"
       Process.spawn env, wrapped_command, :out => output, :err => output
     end
   end
