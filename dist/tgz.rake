@@ -4,7 +4,7 @@ file pkg("foreman-#{version}.tgz") => distribution_files do |t|
       assemble_distribution
       assemble_gems
       rm_f "bin/foreman"
-      assemble resource("tgz/foreman"), "foreman", 0755
+      assemble resource("tgz/foreman"), "bin/foreman", 0755
     end
 
     sh "tar czvf #{t.name} foreman"
