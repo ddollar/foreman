@@ -37,4 +37,12 @@ describe Foreman::Export::Inittab, :fakefs do
     end
   end
 
+  context "with alternative application path" do
+    let(:options) { { app_path: "/tmp/opt/app" } }
+
+    it "exports to the filesystem" do
+      inittab.export
+      File.read("/tmp/inittab").should == example_export_file("inittab/inittab.app_path")
+    end
+  end
 end
