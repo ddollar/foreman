@@ -46,8 +46,6 @@ class Foreman::Export::Base
   def export
     error("Must specify a location") unless location
     FileUtils.mkdir_p(location) rescue error("Could not create: #{location}")
-    FileUtils.mkdir_p(log) rescue error("Could not create: #{log}")
-    FileUtils.mkdir_p(run) rescue error("Could not create: #{run}")
     chown user, log
     chown user, run
   end
