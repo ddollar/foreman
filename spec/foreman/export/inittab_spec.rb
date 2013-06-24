@@ -38,7 +38,7 @@ describe Foreman::Export::Inittab, :fakefs do
   end
 
   context "with alternative application path" do
-    let(:options) { { app_path: "/tmp/opt/app" } }
+    let(:options) { { :app_path => "/tmp/opt/app" } }
 
     it "exports to the filesystem" do
       inittab.export
