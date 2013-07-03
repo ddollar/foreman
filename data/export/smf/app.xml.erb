@@ -21,6 +21,7 @@
         <%- engine.env.merge("PORT" => port).each_pair do |var,env| -%>
             <envvar name="<%= var.upcase %>" value="<%= env %>" />
         <%- end -%>
+        <envvar name="PATH" value="/opt/local/bin:/usr/bin:/bin" />
       </method_environment>
     </method_context>
 
