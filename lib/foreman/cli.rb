@@ -85,7 +85,7 @@ class Foreman::CLI < Thor
 
     pid = fork do
       begin
-        engine.env.each { |k,v| ENV[k] = v }
+        engine.env.each { |k,v| ENV[k] ||= v }
         if args.size == 1 && process = engine.process(args.first)
           process.exec(:env => engine.env)
         else
