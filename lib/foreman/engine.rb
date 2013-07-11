@@ -97,36 +97,12 @@ class Foreman::Engine
   #
   def handle_signal(sig)
     case sig
-    when :TERM
-      handle_term_signal
-    when :INT
-      handle_interrupt
-    when :HUP
-      handle_hangup
+    when *HANDLED_SIGNALS
+      puts "SIG#{sig} received"
+      terminate_gracefully
     else
       system "unhandled signal #{sig}"
     end
-  end
-
-  # Handle a TERM signal
-  #
-  def handle_term_signal
-    puts "SIGTERM received"
-    terminate_gracefully
-  end
-
-  # Handle an INT signal
-  #
-  def handle_interrupt
-    puts "SIGINT received"
-    terminate_gracefully
-  end
-
-  # Handle a HUP signal
-  #
-  def handle_hangup
-    puts "SIGHUP received"
-    terminate_gracefully
   end
 
   # Register a process to be run by this +Engine+

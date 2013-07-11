@@ -50,6 +50,15 @@ describe "Foreman::Engine", :fakefs do
       mock(subject).watch_for_termination
       subject.start
     end
+
+    Foreman::Engine::HANDLED_SIGNALS.each do |signal|
+      it "handles #{signal} signal" do
+        mock(subject).puts("SIG#{signal} received")
+        mock(subject).terminate_gracefully
+        subject.start
+        subject.handle_signal(signal)
+      end
+    end
   end
 
   describe "directories" do
