@@ -32,6 +32,7 @@ Manage Procfile-based applications
 * [shoreman](https://github.com/hecticjeff/shoreman) - shell
 * [honcho](https://github.com/nickstenning/honcho) - python
 * [norman](https://github.com/josh/norman) - node.js
+* [forego](https://github.com/ddollar/forego) - Go
 
 ## Authors
 
