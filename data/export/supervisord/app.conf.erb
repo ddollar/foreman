@@ -5,7 +5,7 @@ engine.each_process do |name, process|
     port = engine.port_for(process, num)
     full_name = "#{app}-#{name}-#{num}"
     environment = engine.env.merge("PORT" => port.to_s).map do |key, value|
-      "#{key}=#{shell_quote(value)}"
+      "#{key}=\"#{shell_quote(value)}\""
     end
     app_names << full_name
 %>
