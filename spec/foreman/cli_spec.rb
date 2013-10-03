@@ -15,6 +15,12 @@ describe "Foreman::CLI", :fakefs do
       subject = Foreman::CLI.new([], :formation => "alpha=3")
       subject.send(:options)["formation"].should == "alpha=3"
     end
+
+    it 'can be set in a different location' do
+      File.open("../.foreman", "w") { |f| f.puts "formation: alpha=4" }
+      subject = Foreman::CLI.new([], :defaults => '../')
+      subject.send(:options)["formation"].should == "alpha=4"
+    end
   end
 
   describe "start" do
