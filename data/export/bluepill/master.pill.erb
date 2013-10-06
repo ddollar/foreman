@@ -7,7 +7,7 @@ Bluepill.application("<%= app %>", :foreground => false, :log_file => "/var/log/
 <% 1.upto(engine.formation[name]) do |num| %>
   <% port = engine.port_for(process, num) %>
   app.process("<%= name %>-<%= num %>") do |process|
-    process.start_command = "<%= process.command %>"
+    process.start_command = %Q{<%= process.command %>}
 
     process.working_dir = "<%= engine.root %>"
     process.daemonize = true
