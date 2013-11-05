@@ -177,7 +177,7 @@ class Foreman::Engine
   # @param [String] signal  The signal to send to each process
   #
   def kill_children(signal="SIGTERM")
-    @running.each do |pid, (process, index)|
+    @running.keys.each do |pid|
       system "sending #{signal} to the children of #{name_for(pid)} at pid #{pid}"
       pids = !Foreman.windows? ? `ps h --ppid #{pid} -o pid`.split("\n").map(&:to_i) : [pid]
       pids.each do |pid|
@@ -381,11 +381,11 @@ private
   end
 
   def watch_for_termination
-    pid, status = Process.wait2
-    output_with_mutex name_for(pid), termination_message_for(status)
-    @running.delete(pid)
+    Process.waitall.each do |(pid, status)|
+      output_with_mutex name_for(pid), termination_message_for(status)
+      @running.delete(pid)
+    end
     yield if block_given?
-    pid
   rescue Errno::ECHILD
   end
 
