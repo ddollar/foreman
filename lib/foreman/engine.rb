@@ -176,19 +176,14 @@ class Foreman::Engine
   #
   # @param [String] signal  The signal to send to each process
   #
-  def kill_children(signal="SIGTERM")
-    if Foreman.windows?
-      @running.each do |pid, (process, index)|
-        system "sending #{signal} to #{name_for(pid)} at pid #{pid}"
-        begin
-          Process.kill(signal, pid)
-        rescue Errno::ESRCH, Errno::EPERM
-        end
-      end
-    else
+  def kill_children( signal="SIGTERM" )
+    @running.each do |pid, (process, index)|
+      system "sending #{signal} to #{name_for(pid)} at pid #{pid}"
       begin
-        Process.kill signal, *@running.keys unless @running.empty?
-      rescue Errno::ESRCH, Errno::EPERM
+        Process.kill( signal, pid )
+      rescue Errno::ESRCH, Errno::EPERM => err
+        system "  %p when sending signal %p to pid %d: %s" %
+          [ err.class, signal, pid, err.message ]
       end
     end
   end
@@ -198,14 +193,7 @@ class Foreman::Engine
   # @param [String] signal  The signal to send
   #
   def killall(signal="SIGTERM")
-    if Foreman.windows?
-      kill_children(signal)
-    else
-      begin
-        Process.kill "-#{signal}", Process.pid
-      rescue Errno::ESRCH, Errno::EPERM
-      end
-    end
+    kill_children(signal)
   end
 
   # Get the process formation
