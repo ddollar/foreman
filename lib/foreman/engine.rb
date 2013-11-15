@@ -381,10 +381,9 @@ private
   end
 
   def watch_for_termination
-    Process.waitall.each do |(pid, status)|
-      output_with_mutex name_for(pid), termination_message_for(status)
-      @running.delete(pid)
-    end
+    pid, status = Process.wait2
+    output_with_mutex name_for(pid), termination_message_for(status)
+    @running.delete(pid)    
     yield if block_given?
   rescue Errno::ECHILD
   end
