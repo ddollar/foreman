@@ -1,3 +1,11 @@
+## 0.63.101 (2013-12-18)
+
+* 9F: Stop shell quoting - it's unnecessary
+
+## 0.63.100 (2013-12-11)
+
+* 9F: Export environment variables outside of the running command
+
 ## 0.63.0 (2013-04-15)
 
 * Revert "Ensure foreman is the process group leader"  [John Griffin]
