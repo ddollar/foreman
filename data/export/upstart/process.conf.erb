@@ -4,7 +4,7 @@ respawn
 
 env PORT=<%= port %>
 <% engine.env.each_pair do |var,env| -%>
-env <%= var.upcase %>=<%= shell_quote(env) %>
+env <%= var.upcase %>=<%= env %>
 <% end -%>
 
 exec su <%= user %> -l -m -c 'cd <%= engine.root %>; <%= process.command %> >> <%= log %>/<%=name%>-<%=num%>.log 2>&1'
