@@ -48,8 +48,8 @@ class Foreman::Export::Base
     FileUtils.mkdir_p(location) rescue error("Could not create: #{location}")
     FileUtils.mkdir_p(log) rescue error("Could not create: #{log}")
     FileUtils.mkdir_p(run) rescue error("Could not create: #{run}")
-    FileUtils.chown(user, nil, log) rescue error("Could not chown #{log} to #{user}")
-    FileUtils.chown(user, nil, run) rescue error("Could not chown #{run} to #{user}")
+    chown user, log
+    chown user, run
   end
 
   def app
@@ -80,6 +80,12 @@ private ######################################################################
     puts "https://github.com/ddollar/foreman/blob/master/data/export/upstart/process.conf.erb"
     puts
     @@deprecation_warned = true
+  end
+
+  def chown user, dir
+    FileUtils.chown user, nil, dir
+  rescue
+    error("Could not chown #{dir} to #{user}") unless File.writable? dir
   end
 
   def error(message)
