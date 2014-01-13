@@ -31,6 +31,6 @@ describe Foreman::Export::Runit, :fakefs do
   end
 
   it "creates a full path to the export directory" do
-    expect { runit.export }.to_not raise_error(Errno::ENOENT)
+    expect { runit.export }.to_not raise_error
   end
 end
