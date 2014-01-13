@@ -3,8 +3,6 @@ script: bundle exec rake spec
 matrix:
   allow_failures:
     - rvm: jruby
-    - rvm: rbx
-    - rvm: ree
 
 notifications:
   email: false
@@ -19,4 +17,5 @@ rvm:
   - 1.9.2
   - 1.9.3
   - 2.0.0
+  - 2.1.0
   - jruby
