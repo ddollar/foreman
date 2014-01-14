@@ -24,7 +24,7 @@ GEM
     mustache (0.99.5)
     posix-spawn (0.3.8)
     rake (10.1.1)
-    rdiscount (2.0.7.3)
+    rdiscount (1.6.8)
     ronn (0.7.3)
       hpricot (>= 0.8.2)
       mustache (>= 0.7.0)
@@ -61,7 +61,7 @@ DEPENDENCIES
   mime-types (~> 1.25.1)
   posix-spawn (~> 0.3.6)
   rake
-  rdiscount (~> 2.0.7.3)
+  rdiscount (~> 1.6.8)
   ronn
   rr (~> 1.0.2)
   rspec (~> 2.0)

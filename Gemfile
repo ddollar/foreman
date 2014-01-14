@@ -21,5 +21,5 @@ group :development do
   gem 'timecop', '0.6.1'
   gem 'yard'
   gem 'mime-types', '~> 1.25.1'
-  gem 'rdiscount', '~> 2.0.7.3'
+  gem 'rdiscount', '~> 1.6.8'
 end
