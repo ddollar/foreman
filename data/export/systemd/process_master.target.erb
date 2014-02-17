@@ -1,5 +1,3 @@
 [Unit]
 StopWhenUnneeded=true
-
-[Install]
-WantedBy=<%= app %>.target
+Wants=<%= process_names.join(' ') %>
