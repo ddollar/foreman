@@ -40,6 +40,10 @@ The following options control how the application is run:
     Specify which port to use as the base for this application. Should be
     a multiple of 1000.
 
+  * `-s`, `--defaults`:
+    Specify the directory containing the .foreman file. Defaults to
+    the current dir.
+
 `foreman run` is used to run one-off commands using the same environment
 as your defined processes.
 

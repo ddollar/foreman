@@ -20,6 +20,7 @@ class Foreman::CLI < Thor
   desc "start [PROCESS]", "Start the application (or a specific PROCESS)"
 
   method_option :color,     :type => :boolean, :aliases => "-c", :desc => "Force color to be enabled"
+  method_option :defaults,  :type => :string,  :aliases => "-s",  :default => "."
   method_option :env,       :type => :string,  :aliases => "-e", :desc => "Specify an environment file to load, defaults to .env"
   method_option :formation, :type => :string,  :aliases => "-m", :banner => '"alpha=5,bar=3"'
   method_option :port,      :type => :numeric, :aliases => "-p"
@@ -157,8 +158,9 @@ private ######################################################################
 
   def options
     original_options = super
-    return original_options unless File.exists?(".foreman")
-    defaults = ::YAML::load_file(".foreman") || {}
+    defaults_file = File.join(original_options[:defaults], ".foreman")
+    return original_options unless File.exists?(defaults_file)
+    defaults = ::YAML::load_file(defaults_file) || {}
     Thor::CoreExt::HashWithIndifferentAccess.new(defaults.merge(original_options))
   end
 
