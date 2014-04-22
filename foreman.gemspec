@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.files << "man/foreman.1"
 
   gem.add_dependency 'thor', '>= 0.13.6'
-  gem.add_dependency 'dotenv', '>= 0.7'
+  gem.add_dependency 'dotenv', '~> 0.7.0'
 
   if ENV["PLATFORM"] == "java"
     gem.platform = Gem::Platform.new("java")
