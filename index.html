@@ -67,6 +67,7 @@
     <a href="#GLOBAL-OPTIONS">GLOBAL OPTIONS</a>
     <a href="#EXPORT-FORMATS">EXPORT FORMATS</a>
     <a href="#INITTAB-EXPORT">INITTAB EXPORT</a>
+    <a href="#SYSTEMD-EXPORT">SYSTEMD EXPORT</a>
     <a href="#UPSTART-EXPORT">UPSTART EXPORT</a>
     <a href="#PROCFILE">PROCFILE</a>
     <a href="#ENVIRONMENT">ENVIRONMENT</a>
@@ -171,7 +172,10 @@ application.</p></dd>
 <ul>
 <li><p>bluepill</p></li>
 <li><p>inittab</p></li>
+<li><p>launchd</p></li>
 <li><p>runit</p></li>
+<li><p>supervisord</p></li>
+<li><p>systemd</p></li>
 <li><p>upstart</p></li>
 </ul>
 
@@ -185,6 +189,17 @@ EX01:4:respawn:/bin/su - example -c 'PORT=5000 bundle exec thin start &gt;&gt; /
 EX02:4:respawn:/bin/su - example -c 'PORT=5100 bundle exec rake jobs:work &gt;&gt; /var/log/job-1.log 2&gt;&amp;1'
 # ----- end foreman example processes -----
 </code></pre>
+
+<h2 id="SYSTEMD-EXPORT">SYSTEMD EXPORT</h2>
+
+<p>Will create a series of systemd scripts in the location you specify. Scripts
+will be structured to make the following commands valid:</p>
+
+<p>  <code>systemctl start appname.target</code></p>
+
+<p>  <code>systemctl stop appname-processname.target</code></p>
+
+<p>  <code>systemctl restart appname-processname-3.service</code></p>
 
 <h2 id="UPSTART-EXPORT">UPSTART EXPORT</h2>
 
@@ -206,7 +221,7 @@ to run it.</p>
 job: bundle exec rake jobs:work
 </code></pre>
 
-<p>A process name may contain letters, numbers amd the underscore character.
+<p>A process name may contain letters, numbers and the underscore character.
 You can validate your Procfile format using the <code>check</code> command:</p>
 
 <pre><code>$ foreman check
@@ -246,7 +261,7 @@ port: 15000
 
 <p>Run one process type from the application defined in a specific Procfile:</p>
 
-<pre><code>$ foreman start alpha -p ~/myapp/Procfile
+<pre><code>$ foreman start alpha -f ~/myapp/Procfile
 </code></pre>
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
@@ -255,8 +270,8 @@ port: 15000
 
 
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>Foreman 0.63.0</li>
-    <li class='tc'>April 2013</li>
+    <li class='tl'>Foreman 0.63.1</li>
+    <li class='tc'>May 2013</li>
     <li class='tr'>foreman(1)</li>
   </ol>
 
