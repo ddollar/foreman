@@ -177,33 +177,11 @@ class Foreman::Engine
   # @param [String] signal  The signal to send to each process
   #
   def kill_children(signal="SIGTERM")
-    if Foreman.windows?
-      @running.each do |pid, (process, index)|
-        system "sending #{signal} to #{name_for(pid)} at pid #{pid}"
-        begin
-          Process.kill(signal, pid)
-        rescue Errno::ESRCH, Errno::EPERM
-        end
-      end
-    else
-      begin
-        Process.kill signal, *@running.keys unless @running.empty?
-      rescue Errno::ESRCH, Errno::EPERM
-      end
-    end
-  end
-
-  # Send a signal to the whole process group.
-  #
-  # @param [String] signal  The signal to send
-  #
-  def killall(signal="SIGTERM")
-    if Foreman.windows?
-      kill_children(signal)
-    else
-      begin
-        Process.kill "-#{signal}", Process.pid
-      rescue Errno::ESRCH, Errno::EPERM
+    @running.keys.each do |pid|
+      system "sending #{signal} to the children of #{name_for(pid)} at pid #{pid}"
+      pids = !Foreman.windows? ? `ps h --ppid #{pid} -o pid`.split("\n").map(&:to_i) : [pid]
+      pids.each do |pid|
+        Process.kill signal, pid rescue [Errno::ESRCH, Errno::EPERM]
       end
     end
   end
@@ -405,9 +383,8 @@ private
   def watch_for_termination
     pid, status = Process.wait2
     output_with_mutex name_for(pid), termination_message_for(status)
-    @running.delete(pid)
+    @running.delete(pid)    
     yield if block_given?
-    pid
   rescue Errno::ECHILD
   end
 
