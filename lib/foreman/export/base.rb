@@ -66,6 +66,10 @@ class Foreman::Export::Base
     options[:user] || app
   end
 
+  def app_path
+    options[:app_path] || engine.root
+  end
+
 private ######################################################################
 
   def self.warn_deprecation!

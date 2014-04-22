@@ -76,6 +76,12 @@ The following options control how the application is run:
     Specify the user the application should be run as. Defaults to the
     app name
 
+  * `-x`, `--app_path`:
+    Specify an alternative application path when running the application. Useful
+    for when the applications final install location is someplace other than the
+    current location of the Procfile. Defaults to the directory containing the
+    Procfile.
+
 ## GLOBAL OPTIONS
 
 These options control all modes of foreman's operation.
