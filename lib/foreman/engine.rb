@@ -403,12 +403,15 @@ private
   end
 
   def watch_for_termination
-    pid, status = Process.wait2
-    output_with_mutex name_for(pid), termination_message_for(status)
-    @running.delete(pid)
-    yield if block_given?
-    pid
-  rescue Errno::ECHILD
+    until @running.empty?
+      begin
+        pid, status = Process.wait2
+        output_with_mutex name_for(pid), termination_message_for(status)
+        @running.delete(pid)
+        yield if block_given?
+      rescue Errno::ECHILD
+      end
+    end
   end
 
   def terminate_gracefully
@@ -423,7 +426,7 @@ private
       kill_children "SIGTERM"
     end
     Timeout.timeout(options[:timeout]) do
-      watch_for_termination while @running.length > 0
+      watch_for_termination
     end
   rescue Timeout::Error
     system  "sending SIGKILL to all processes"
