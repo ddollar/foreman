@@ -1,9 +1,6 @@
 ## 0.64.0 (2014-04-22)
 
 * 0.64.0  [David Dollar]
-
-## 0.63.1 (2014-04-22)
-
 * 0.63.1  [David Dollar]
 * be more specific with dotenv dependency  [David Dollar]
 * Merge pull request #388 from brixen/patch-1  [David Dollar]
