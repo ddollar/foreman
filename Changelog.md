@@ -1,3 +1,33 @@
+## 0.65.0 (2014-04-23)
+
+* 0.65.0  [David Dollar]
+* bump and freeze thor  [David Dollar]
+* Merge pull request #438 from phemmer/native_upstart  [David Dollar]
+* Clean up upstart export to use native upstart features  [Patrick Hemmer]
+* Merge pull request #364 from shokai/replace_PORT_launchd_export  [David Dollar]
+* Merge pull request #368 from avtobiff/remove-taskman-script  [David Dollar]
+* Don't make log and run dirs on export  [Omar Khan]
+* Merge pull request #395 from brandonhilkert/supervisor-export-env  [David Dollar]
+* Merge pull request #396 from phemmer/systemd-dependencies  [David Dollar]
+* Merge pull request #400 from toooooooby/patch-1  [David Dollar]
+* Merge pull request #401 from ahawkins/patch-1  [David Dollar]
+* Merge pull request #421 from JonRowe/test_writable_if_no_chown  [David Dollar]
+* Merge pull request #428 from beeblebrox/fix-process-exec  [David Dollar]
+* Merge pull request #432 from comron/fix-runit-log-permissions  [David Dollar]
+* Merge pull request #433 from charliesome/fix-relative-path  [David Dollar]
+* fix changelog  [David Dollar]
+* update docs  [David Dollar]
+* add an extra ../ when dealing with relative paths  [Charlie Somerville]
+* Fix mkdir mode flag when creating runit log directories  [Comron Sattari]
+* export: fix systemd dependencies  [Patrick Hemmer]
+* Exec process, otherwise only the shell receives signal.  [James N. Hart]
+* Test to see if we can already write to chowned dir's if chown fails  [Jon Rowe]
+* Use %Q{} to allow commands with quotes  [Adam Hawkins]
+* Improve the runit exporter to log with the stderr  [TOBY]
+* Quotes the values of ENV in supervisor export to guard against non-numeric values. Fixes #394.  [Brandon Hilkert]
+* Remove taskman script  [Per Andersson]
+* replace $PORT in launchd export  [Sho Hashimoto]
+
 ## 0.64.0 (2014-04-22)
 
 * 0.64.0  [David Dollar]
