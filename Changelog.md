@@ -1,3 +1,9 @@
+## 0.67.0 (2014-04-24)
+
+* 0.67.0  [David Dollar]
+* use thor 0.17.0  [David Dollar]
+* update docs  [David Dollar]
+
 ## 0.66.0 (2014-04-23)
 
 * 0.66.0  [David Dollar]
