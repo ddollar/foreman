@@ -83,7 +83,7 @@ private ######################################################################
   def chown user, dir
     FileUtils.chown user, nil, dir
   rescue
-    error("Could not chown #{dir} to #{user}") unless File.writable? dir
+    error("Could not chown #{dir} to #{user}") unless File.writable?(dir) || ! File.exists?(dir)
   end
 
   def error(message)
