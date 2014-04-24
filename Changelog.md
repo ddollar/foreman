@@ -1,3 +1,11 @@
+## 0.66.0 (2014-04-23)
+
+* 0.66.0  [David Dollar]
+* Merge pull request #439 from ssendev/patch-1  [David Dollar]
+* don't fail if chown dir dosn't exist  [ssendev]
+* don't fail export if log/run dosn't exist  [ssendev]
+* update docs  [David Dollar]
+
 ## 0.65.0 (2014-04-23)
 
 * 0.65.0  [David Dollar]
