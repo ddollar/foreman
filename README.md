@@ -36,7 +36,7 @@ Manage Procfile-based applications
 
 ## Special note for Ruby users
 
-You should not put `foreman` into your `Gemfile` as the dependencies of a developer utility should not be able to interfere with the dependencies of your app. Having `foreman` be run inside the app using whatever random version of Ruby the user has installed is quite a pain point.
+Install `foreman` at the system level using `gem install foreman` rather than including it in the dependency tree of your production applications.
 
 ## Authors
 
