@@ -34,6 +34,10 @@ Manage Procfile-based applications
 * [norman](https://github.com/josh/norman) - node.js
 * [forego](https://github.com/ddollar/forego) - Go
 
+## Special note for Ruby users
+
+You should not put `foreman` into your `Gemfile` as the dependencies of a developer utility should not be able to interfere with the dependencies of your app. Having `foreman` be run inside the app using whatever random version of Ruby the user has installed is quite a pain point.
+
 ## Authors
 
 #### Created and maintained by
