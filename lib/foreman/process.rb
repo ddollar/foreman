@@ -56,10 +56,10 @@ class Foreman::Process
       end
     elsif Foreman.jruby_18? || Foreman.ruby_18?
       require "posix/spawn"
-      wrapped_command = "#{runner} -d '#{cwd.shellescape}' -p -- #{expanded_command(env)}"
+      wrapped_command = "#{runner} -d '#{cwd}' -p -- #{expanded_command(env)}"
       POSIX::Spawn.spawn(*spawn_args(env, wrapped_command.shellsplit, {:out => output, :err => output}))
     else
-      wrapped_command = "exec #{runner} -d '#{cwd.shellescape}' -p -- #{command}"
+      wrapped_command = "exec #{runner} -d '#{cwd}' -p -- #{command}"
       Process.spawn env, wrapped_command, :out => output, :err => output
     end
   end
