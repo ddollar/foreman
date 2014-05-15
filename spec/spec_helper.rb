@@ -20,7 +20,7 @@ rescue LoadError
 end
 
 def mock_export_error(message)
-  lambda { yield }.should raise_error(Foreman::Export::Exception, message)
+  expect { yield }.to raise_error(Foreman::Export::Exception, message)
 end
 
 def mock_error(subject, message)
@@ -84,7 +84,7 @@ def fork_and_get_exitstatus(args)
 end
 
 def mock_exit(&block)
-  block.should raise_error(SystemExit)
+  expect(block).to raise_error(SystemExit)
 end
 
 def write_foreman_config(app)

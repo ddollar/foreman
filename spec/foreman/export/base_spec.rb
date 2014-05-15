@@ -14,6 +14,6 @@ describe "Foreman::Export::Base", :fakefs do
   end
 
   it "raises errors as a Foreman::Export::Exception" do
-    lambda { subject.send(:error, "foo") }.should raise_error(Foreman::Export::Exception, "foo")
+    expect { subject.send(:error, "foo") }.to raise_error(Foreman::Export::Exception, "foo")
   end
 end

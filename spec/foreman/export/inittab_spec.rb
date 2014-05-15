@@ -16,7 +16,7 @@ describe Foreman::Export::Inittab, :fakefs do
 
   it "exports to the filesystem" do
     inittab.export
-    File.read("/tmp/inittab").should == example_export_file("inittab/inittab.default")
+    expect(File.read("/tmp/inittab")).to eq(example_export_file("inittab/inittab.default"))
   end
 
   context "to stdout" do
@@ -33,7 +33,7 @@ describe Foreman::Export::Inittab, :fakefs do
 
     it "exports to the filesystem with concurrency" do
       inittab.export
-      File.read("/tmp/inittab").should == example_export_file("inittab/inittab.concurrency")
+      expect(File.read("/tmp/inittab")).to eq(example_export_file("inittab/inittab.concurrency"))
     end
   end
 

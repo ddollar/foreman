@@ -9,35 +9,35 @@ describe Foreman::Procfile, :fakefs do
   it "can load from a file" do
     write_procfile
     subject.load "Procfile"
-    subject["alpha"].should == "./alpha"
-    subject["bravo"].should == "./bravo"
+    expect(subject["alpha"]).to eq("./alpha")
+    expect(subject["bravo"]).to eq("./bravo")
   end
 
   it "loads a passed-in Procfile" do
     write_procfile
     procfile = Foreman::Procfile.new("Procfile")
-    procfile["alpha"].should   == "./alpha"
-    procfile["bravo"].should   == "./bravo"
-    procfile["foo-bar"].should == "./foo-bar"
-    procfile["foo_bar"].should == "./foo_bar"
+    expect(procfile["alpha"]).to   eq("./alpha")
+    expect(procfile["bravo"]).to   eq("./bravo")
+    expect(procfile["foo-bar"]).to eq("./foo-bar")
+    expect(procfile["foo_bar"]).to eq("./foo_bar")
   end
 
   it "can have a process appended to it" do
     subject["charlie"] = "./charlie"
-    subject["charlie"].should == "./charlie"
+    expect(subject["charlie"]).to eq("./charlie")
   end
 
   it "can write to a string" do
     subject["foo"] = "./foo"
     subject["bar"] = "./bar"
-    subject.to_s.should == "foo: ./foo\nbar: ./bar"
+    expect(subject.to_s).to eq("foo: ./foo\nbar: ./bar")
   end
 
   it "can write to a file" do
     subject["foo"] = "./foo"
     subject["bar"] = "./bar"
     subject.save "/tmp/proc"
-    File.read("/tmp/proc").should == "foo: ./foo\nbar: ./bar\n"
+    expect(File.read("/tmp/proc")).to eq("foo: ./foo\nbar: ./bar\n")
   end
 
 end

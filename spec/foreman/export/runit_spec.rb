@@ -17,20 +17,20 @@ describe Foreman::Export::Runit, :fakefs do
     engine.env["BAR"] = "baz"
     runit.export
 
-    File.read("/tmp/init/app-alpha-1/run").should      == example_export_file('runit/app-alpha-1/run')
-    File.read("/tmp/init/app-alpha-1/log/run").should  == example_export_file('runit/app-alpha-1/log/run')
-    File.read("/tmp/init/app-alpha-1/env/PORT").should == "5000\n"
-    File.read("/tmp/init/app-alpha-1/env/BAR").should  == "baz\n"
-    File.read("/tmp/init/app-alpha-2/run").should      == example_export_file('runit/app-alpha-2/run')
-    File.read("/tmp/init/app-alpha-2/log/run").should  == example_export_file('runit/app-alpha-2/log/run')
-    File.read("/tmp/init/app-alpha-2/env/PORT").should == "5001\n"
-    File.read("/tmp/init/app-alpha-2/env/BAR").should  == "baz\n"
-    File.read("/tmp/init/app-bravo-1/run").should      == example_export_file('runit/app-bravo-1/run')
-    File.read("/tmp/init/app-bravo-1/log/run").should  == example_export_file('runit/app-bravo-1/log/run')
-    File.read("/tmp/init/app-bravo-1/env/PORT").should == "5100\n"
+    expect(File.read("/tmp/init/app-alpha-1/run")).to      eq(example_export_file('runit/app-alpha-1/run'))
+    expect(File.read("/tmp/init/app-alpha-1/log/run")).to  eq(example_export_file('runit/app-alpha-1/log/run'))
+    expect(File.read("/tmp/init/app-alpha-1/env/PORT")).to eq("5000\n")
+    expect(File.read("/tmp/init/app-alpha-1/env/BAR")).to  eq("baz\n")
+    expect(File.read("/tmp/init/app-alpha-2/run")).to      eq(example_export_file('runit/app-alpha-2/run'))
+    expect(File.read("/tmp/init/app-alpha-2/log/run")).to  eq(example_export_file('runit/app-alpha-2/log/run'))
+    expect(File.read("/tmp/init/app-alpha-2/env/PORT")).to eq("5001\n")
+    expect(File.read("/tmp/init/app-alpha-2/env/BAR")).to  eq("baz\n")
+    expect(File.read("/tmp/init/app-bravo-1/run")).to      eq(example_export_file('runit/app-bravo-1/run'))
+    expect(File.read("/tmp/init/app-bravo-1/log/run")).to  eq(example_export_file('runit/app-bravo-1/log/run'))
+    expect(File.read("/tmp/init/app-bravo-1/env/PORT")).to eq("5100\n")
   end
 
   it "creates a full path to the export directory" do
-    expect { runit.export }.to_not raise_error(Errno::ENOENT)
+    expect { runit.export }.to_not raise_error
   end
 end
