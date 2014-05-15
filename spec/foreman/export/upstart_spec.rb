@@ -16,11 +16,11 @@ describe Foreman::Export::Upstart, :fakefs do
   it "exports to the filesystem" do
     upstart.export
 
-    File.read("/tmp/init/app.conf").should         == example_export_file("upstart/app.conf")
-    File.read("/tmp/init/app-alpha.conf").should   == example_export_file("upstart/app-alpha.conf")
-    File.read("/tmp/init/app-alpha-1.conf").should == example_export_file("upstart/app-alpha-1.conf")
-    File.read("/tmp/init/app-bravo.conf").should   == example_export_file("upstart/app-bravo.conf")
-    File.read("/tmp/init/app-bravo-1.conf").should == example_export_file("upstart/app-bravo-1.conf")
+    expect(File.read("/tmp/init/app.conf")).to         eq(example_export_file("upstart/app.conf"))
+    expect(File.read("/tmp/init/app-alpha.conf")).to   eq(example_export_file("upstart/app-alpha.conf"))
+    expect(File.read("/tmp/init/app-alpha-1.conf")).to eq(example_export_file("upstart/app-alpha-1.conf"))
+    expect(File.read("/tmp/init/app-bravo.conf")).to   eq(example_export_file("upstart/app-bravo.conf"))
+    expect(File.read("/tmp/init/app-bravo-1.conf")).to eq(example_export_file("upstart/app-bravo-1.conf"))
   end
 
   it "cleans up if exporting into an existing dir" do
@@ -53,8 +53,8 @@ describe Foreman::Export::Upstart, :fakefs do
   it "quotes and escapes environment variables" do
     engine.env['KEY'] = 'd"\|d'
     upstart.export
-    "foobarfoo".should include "bar"
-    File.read("/tmp/init/app-alpha-1.conf").should =~ /KEY=d\\"\\\\\\\|d/
+    expect("foobarfoo").to include "bar"
+    expect(File.read("/tmp/init/app-alpha-1.conf")).to match(/KEY=d\\"\\\\\\\|d/)
   end
 
   context "with a formation" do
@@ -63,11 +63,11 @@ describe Foreman::Export::Upstart, :fakefs do
     it "exports to the filesystem with concurrency" do
       upstart.export
 
-      File.read("/tmp/init/app.conf").should            == example_export_file("upstart/app.conf")
-      File.read("/tmp/init/app-alpha.conf").should      == example_export_file("upstart/app-alpha.conf")
-      File.read("/tmp/init/app-alpha-1.conf").should    == example_export_file("upstart/app-alpha-1.conf")
-      File.read("/tmp/init/app-alpha-2.conf").should    == example_export_file("upstart/app-alpha-2.conf")
-      File.exists?("/tmp/init/app-bravo-1.conf").should == false
+      expect(File.read("/tmp/init/app.conf")).to            eq(example_export_file("upstart/app.conf"))
+      expect(File.read("/tmp/init/app-alpha.conf")).to      eq(example_export_file("upstart/app-alpha.conf"))
+      expect(File.read("/tmp/init/app-alpha-1.conf")).to    eq(example_export_file("upstart/app-alpha-1.conf"))
+      expect(File.read("/tmp/init/app-alpha-2.conf")).to    eq(example_export_file("upstart/app-alpha-2.conf"))
+      expect(File.exists?("/tmp/init/app-bravo-1.conf")).to eq(false)
     end
   end
 
@@ -82,7 +82,7 @@ describe Foreman::Export::Upstart, :fakefs do
 
     it "can export with alternate template files" do
       upstart.export
-      File.read("/tmp/init/app.conf").should == "alternate_template\n"
+      expect(File.read("/tmp/init/app.conf")).to eq("alternate_template\n")
     end
   end
 
@@ -97,7 +97,7 @@ describe Foreman::Export::Upstart, :fakefs do
 
     it "can export with alternate template files" do
       upstart.export
-      File.read("/tmp/init/app.conf").should == "default_alternate_template\n"
+      expect(File.read("/tmp/init/app.conf")).to eq("default_alternate_template\n")
     end
   end
 

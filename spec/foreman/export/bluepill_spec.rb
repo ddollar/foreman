@@ -15,7 +15,7 @@ describe Foreman::Export::Bluepill, :fakefs do
 
   it "exports to the filesystem" do
     bluepill.export
-    normalize_space(File.read("/tmp/init/app.pill")).should == normalize_space(example_export_file("bluepill/app.pill"))
+    expect(normalize_space(File.read("/tmp/init/app.pill"))).to eq(normalize_space(example_export_file("bluepill/app.pill")))
   end
 
   it "cleans up if exporting into an existing dir" do
@@ -30,7 +30,7 @@ describe Foreman::Export::Bluepill, :fakefs do
 
     it "exports to the filesystem with concurrency" do
       bluepill.export
-      normalize_space(File.read("/tmp/init/app.pill")).should == normalize_space(example_export_file("bluepill/app-concurrency.pill"))
+      expect(normalize_space(File.read("/tmp/init/app.pill"))).to eq(normalize_space(example_export_file("bluepill/app-concurrency.pill")))
     end
   end
 

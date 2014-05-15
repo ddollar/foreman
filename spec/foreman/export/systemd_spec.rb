@@ -16,11 +16,11 @@ describe Foreman::Export::Systemd, :fakefs do
   it "exports to the filesystem" do
     systemd.export
 
-    File.read("/tmp/init/app.target").should          == example_export_file("systemd/app.target")
-    File.read("/tmp/init/app-alpha.target").should    == example_export_file("systemd/app-alpha.target")
-    File.read("/tmp/init/app-alpha-1.service").should == example_export_file("systemd/app-alpha-1.service")
-    File.read("/tmp/init/app-bravo.target").should    == example_export_file("systemd/app-bravo.target")
-    File.read("/tmp/init/app-bravo-1.service").should == example_export_file("systemd/app-bravo-1.service")
+    expect(File.read("/tmp/init/app.target")).to          eq(example_export_file("systemd/app.target"))
+    expect(File.read("/tmp/init/app-alpha.target")).to    eq(example_export_file("systemd/app-alpha.target"))
+    expect(File.read("/tmp/init/app-alpha-1.service")).to eq(example_export_file("systemd/app-alpha-1.service"))
+    expect(File.read("/tmp/init/app-bravo.target")).to    eq(example_export_file("systemd/app-bravo.target"))
+    expect(File.read("/tmp/init/app-bravo-1.service")).to eq(example_export_file("systemd/app-bravo-1.service"))
   end
 
   it "cleans up if exporting into an existing dir" do
@@ -41,7 +41,7 @@ describe Foreman::Export::Systemd, :fakefs do
   it "includes environment variables" do
     engine.env['KEY'] = 'some "value"'
     systemd.export
-    File.read("/tmp/init/app-alpha-1.service").should =~ /KEY=some "value"$/
+    expect(File.read("/tmp/init/app-alpha-1.service")).to match(/KEY=some "value"$/)
   end
 
   context "with a formation" do
@@ -50,11 +50,11 @@ describe Foreman::Export::Systemd, :fakefs do
     it "exports to the filesystem with concurrency" do
       systemd.export
 
-      File.read("/tmp/init/app.target").should             == example_export_file("systemd/app.target")
-      File.read("/tmp/init/app-alpha.target").should       == example_export_file("systemd/app-alpha.target")
-      File.read("/tmp/init/app-alpha-1.service").should    == example_export_file("systemd/app-alpha-1.service")
-      File.read("/tmp/init/app-alpha-2.service").should    == example_export_file("systemd/app-alpha-2.service")
-      File.exists?("/tmp/init/app-bravo-1.service").should == false
+      expect(File.read("/tmp/init/app.target")).to             eq(example_export_file("systemd/app.target"))
+      expect(File.read("/tmp/init/app-alpha.target")).to       eq(example_export_file("systemd/app-alpha.target"))
+      expect(File.read("/tmp/init/app-alpha-1.service")).to    eq(example_export_file("systemd/app-alpha-1.service"))
+      expect(File.read("/tmp/init/app-alpha-2.service")).to    eq(example_export_file("systemd/app-alpha-2.service"))
+      expect(File.exists?("/tmp/init/app-bravo-1.service")).to eq(false)
     end
   end
 
@@ -69,7 +69,7 @@ describe Foreman::Export::Systemd, :fakefs do
 
     it "can export with alternate template files" do
       systemd.export
-      File.read("/tmp/init/app.target").should == "alternate_template\n"
+      expect(File.read("/tmp/init/app.target")).to eq("alternate_template\n")
     end
   end
 
@@ -84,7 +84,7 @@ describe Foreman::Export::Systemd, :fakefs do
 
     it "can export with alternate template files" do
       systemd.export
-      File.read("/tmp/init/app.target").should == "default_alternate_template\n"
+      expect(File.read("/tmp/init/app.target")).to eq("default_alternate_template\n")
     end
   end
 

@@ -15,7 +15,7 @@ describe Foreman::Export::Supervisord, :fakefs do
 
   it "exports to the filesystem" do
     supervisord.export
-    File.read("/tmp/init/app.conf").should == example_export_file("supervisord/app-alpha-1.conf")
+    expect(File.read("/tmp/init/app.conf")).to eq(example_export_file("supervisord/app-alpha-1.conf"))
   end
 
   it "cleans up if exporting into an existing dir" do
@@ -29,7 +29,7 @@ describe Foreman::Export::Supervisord, :fakefs do
 
     it "exports to the filesystem with concurrency" do
       supervisord.export
-      File.read("/tmp/init/app.conf").should == example_export_file("supervisord/app-alpha-2.conf")
+      expect(File.read("/tmp/init/app.conf")).to eq(example_export_file("supervisord/app-alpha-2.conf"))
     end
   end
 
