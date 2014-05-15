@@ -16,32 +16,32 @@ describe Foreman::Process do
 
     it "runs the process" do
       process = Foreman::Process.new(resource_path("bin/test"))
-      run(process).should == "testing\n"
+      expect(run(process)).to eq("testing\n")
     end
 
     it "can set environment" do
       process = Foreman::Process.new(resource_path("bin/env FOO"), :env => { "FOO" => "bar" })
-      run(process).should == "bar\n"
+      expect(run(process)).to eq("bar\n")
     end
 
     it "can set per-run environment" do
       process = Foreman::Process.new(resource_path("bin/env FOO"))
-      run(process, :env => { "FOO" => "bar "}).should == "bar\n"
+      expect(run(process, :env => { "FOO" => "bar "})).to eq("bar\n")
     end
 
     it "can handle env vars in the command" do
       process = Foreman::Process.new(resource_path("bin/echo $FOO"), :env => { "FOO" => "bar" })
-      run(process).should == "bar\n"
+      expect(run(process)).to eq("bar\n")
     end
 
     it "can handle per-run env vars in the command" do
       process = Foreman::Process.new(resource_path("bin/echo $FOO"))
-      run(process, :env => { "FOO" => "bar" }).should == "bar\n"
+      expect(run(process, :env => { "FOO" => "bar" })).to eq("bar\n")
     end
 
     it "should output utf8 properly" do
       process = Foreman::Process.new(resource_path("bin/utf8"))
-      run(process).should == (Foreman.ruby_18? ? "\xFF\x03\n" : "\xFF\x03\n".force_encoding('binary'))
+      expect(run(process)).to eq(Foreman.ruby_18? ? "\xFF\x03\n" : "\xFF\x03\n".force_encoding('binary'))
     end
   end
 

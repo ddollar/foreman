@@ -16,11 +16,11 @@ describe Foreman::Export::Daemon, :fakefs do
   it "exports to the filesystem" do
     daemon.export
 
-    File.read("/tmp/init/app.conf").should         == example_export_file("daemon/app.conf")
-    File.read("/tmp/init/app-alpha.conf").should   == example_export_file("daemon/app-alpha.conf")
-    File.read("/tmp/init/app-alpha-1.conf").should == example_export_file("daemon/app-alpha-1.conf")
-    File.read("/tmp/init/app-bravo.conf").should   == example_export_file("daemon/app-bravo.conf")
-    File.read("/tmp/init/app-bravo-1.conf").should == example_export_file("daemon/app-bravo-1.conf")
+    expect(File.read("/tmp/init/app.conf")).to         eq(example_export_file("daemon/app.conf"))
+    expect(File.read("/tmp/init/app-alpha.conf")).to   eq(example_export_file("daemon/app-alpha.conf"))
+    expect(File.read("/tmp/init/app-alpha-1.conf")).to eq(example_export_file("daemon/app-alpha-1.conf"))
+    expect(File.read("/tmp/init/app-bravo.conf")).to   eq(example_export_file("daemon/app-bravo.conf"))
+    expect(File.read("/tmp/init/app-bravo-1.conf")).to eq(example_export_file("daemon/app-bravo-1.conf"))
   end
 
   it "cleans up if exporting into an existing dir" do
@@ -56,11 +56,11 @@ describe Foreman::Export::Daemon, :fakefs do
     it "exports to the filesystem with concurrency" do
       daemon.export
 
-      File.read("/tmp/init/app.conf").should            == example_export_file("daemon/app.conf")
-      File.read("/tmp/init/app-alpha.conf").should      == example_export_file("daemon/app-alpha.conf")
-      File.read("/tmp/init/app-alpha-1.conf").should    == example_export_file("daemon/app-alpha-1.conf")
-      File.read("/tmp/init/app-alpha-2.conf").should    == example_export_file("daemon/app-alpha-2.conf")
-      File.exists?("/tmp/init/app-bravo-1.conf").should == false
+      expect(File.read("/tmp/init/app.conf")).to            eq(example_export_file("daemon/app.conf"))
+      expect(File.read("/tmp/init/app-alpha.conf")).to      eq(example_export_file("daemon/app-alpha.conf"))
+      expect(File.read("/tmp/init/app-alpha-1.conf")).to    eq(example_export_file("daemon/app-alpha-1.conf"))
+      expect(File.read("/tmp/init/app-alpha-2.conf")).to    eq(example_export_file("daemon/app-alpha-2.conf"))
+      expect(File.exists?("/tmp/init/app-bravo-1.conf")).to eq(false)
     end
   end
 
@@ -75,7 +75,7 @@ describe Foreman::Export::Daemon, :fakefs do
 
     it "can export with alternate template files" do
       daemon.export
-      File.read("/tmp/init/app.conf").should == "alternate_template\n"
+      expect(File.read("/tmp/init/app.conf")).to eq("alternate_template\n")
     end
   end
 
@@ -90,7 +90,7 @@ describe Foreman::Export::Daemon, :fakefs do
 
     it "can export with alternate template files" do
       daemon.export
-      File.read("/tmp/init/app.conf").should == "default_alternate_template\n"
+      expect(File.read("/tmp/init/app.conf")).to eq("default_alternate_template\n")
     end
   end
 

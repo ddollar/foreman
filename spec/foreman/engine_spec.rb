@@ -27,8 +27,8 @@ describe "Foreman::Engine", :fakefs do
       before { write_procfile }
 
       it "reads the processes" do
-        subject.process("alpha").command.should == "./alpha"
-        subject.process("bravo").command.should == "./bravo"
+        expect(subject.process("alpha").command).to eq("./alpha")
+        expect(subject.process("bravo").command).to eq("./bravo")
       end
     end
   end
@@ -56,7 +56,7 @@ describe "Foreman::Engine", :fakefs do
     it "has the directory default relative to the Procfile" do
       write_procfile "/some/app/Procfile"
       engine = Foreman::Engine.new.load_procfile("/some/app/Procfile")
-      engine.root.should == "/some/app"
+      expect(engine.root).to eq("/some/app")
     end
   end
 
@@ -64,7 +64,7 @@ describe "Foreman::Engine", :fakefs do
     it "should read env files" do
       File.open("/tmp/env", "w") { |f| f.puts("FOO=baz") }
       subject.load_env("/tmp/env")
-      subject.env["FOO"].should == "baz"
+      expect(subject.env["FOO"]).to eq("baz")
     end
 
     it "should read more than one if specified" do
@@ -72,8 +72,8 @@ describe "Foreman::Engine", :fakefs do
       File.open("/tmp/env2", "w") { |f| f.puts("BAZ=qux") }
       subject.load_env "/tmp/env1"
       subject.load_env "/tmp/env2"
-      subject.env["FOO"].should == "bar"
-      subject.env["BAZ"].should == "qux"
+      expect(subject.env["FOO"]).to eq("bar")
+      expect(subject.env["BAZ"]).to eq("qux")
     end
 
     it "should handle quoted values" do
@@ -84,10 +84,10 @@ describe "Foreman::Engine", :fakefs do
         f.puts 'OTHER="escaped\"quote"'
       end
       subject.load_env "/tmp/env"
-      subject.env["FOO"].should   == "bar"
-      subject.env["BAZ"].should   == "qux"
-      subject.env["FRED"].should  == "barney"
-      subject.env["OTHER"].should == 'escaped"quote'
+      expect(subject.env["FOO"]).to   eq("bar")
+      expect(subject.env["BAZ"]).to   eq("qux")
+      expect(subject.env["FRED"]).to  eq("barney")
+      expect(subject.env["OTHER"]).to eq('escaped"quote')
     end
 
     it "should handle multiline strings" do
@@ -95,17 +95,17 @@ describe "Foreman::Engine", :fakefs do
         f.puts 'FOO="bar\nbaz"'
       end
       subject.load_env "/tmp/env"
-      subject.env["FOO"].should == "bar\nbaz"
+      expect(subject.env["FOO"]).to eq("bar\nbaz")
     end
 
     it "should fail if specified and doesnt exist" do
-      lambda { subject.load_env "/tmp/env" }.should raise_error(Errno::ENOENT)
+      expect { subject.load_env "/tmp/env" }.to raise_error(Errno::ENOENT)
     end
 
     it "should set port from .env if specified" do
       File.open("/tmp/env", "w") { |f| f.puts("PORT=9000") }
       subject.load_env "/tmp/env"
-      subject.send(:base_port).should == 9000
+      expect(subject.send(:base_port)).to eq(9000)
     end
   end
 

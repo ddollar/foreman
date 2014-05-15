@@ -15,12 +15,12 @@ describe "Foreman::Helpers" do
   subject { o = Object.new; o.extend(Foreman::Helpers); o }
 
   it "should classify words" do
-    subject.classify("foo").should == "Foo"
-    subject.classify("foo-bar").should == "FooBar"
+    expect(subject.classify("foo")).to eq("Foo")
+    expect(subject.classify("foo-bar")).to eq("FooBar")
   end
 
   it "should constantize words" do
-    subject.constantize("Object").should == Object
-    subject.constantize("Foo::Bar").should == Foo::Bar
+    expect(subject.constantize("Object")).to eq(Object)
+    expect(subject.constantize("Foo::Bar")).to eq(Foo::Bar)
   end
 end

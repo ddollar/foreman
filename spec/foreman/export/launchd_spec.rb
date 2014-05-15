@@ -14,8 +14,8 @@ describe Foreman::Export::Launchd, :fakefs do
 
   it "exports to the filesystem" do
     launchd.export
-    File.read("/tmp/init/app-alpha-1.plist").should == example_export_file("launchd/launchd-a.default")
-    File.read("/tmp/init/app-bravo-1.plist").should == example_export_file("launchd/launchd-b.default")
+    expect(File.read("/tmp/init/app-alpha-1.plist")).to eq(example_export_file("launchd/launchd-a.default"))
+    expect(File.read("/tmp/init/app-bravo-1.plist")).to eq(example_export_file("launchd/launchd-b.default"))
   end
 
   context "with multiple command arguments" do
@@ -23,7 +23,7 @@ describe Foreman::Export::Launchd, :fakefs do
 
     it "splits each command argument" do
       launchd.export
-      File.read("/tmp/init/app-alpha-1.plist").should == example_export_file("launchd/launchd-c.default")
+      expect(File.read("/tmp/init/app-alpha-1.plist")).to eq(example_export_file("launchd/launchd-c.default"))
     end
 
   end
