@@ -16,11 +16,11 @@ describe Foreman::Export::Systemd, :fakefs do
   it "exports to the filesystem" do
     systemd.export
 
-    expect(File.read("/tmp/init/app.target")).to          eq(example_export_file("systemd/app.target"))
-    expect(File.read("/tmp/init/app-alpha.target")).to    eq(example_export_file("systemd/app-alpha.target"))
-    expect(File.read("/tmp/init/app-alpha-1.service")).to eq(example_export_file("systemd/app-alpha-1.service"))
-    expect(File.read("/tmp/init/app-bravo.target")).to    eq(example_export_file("systemd/app-bravo.target"))
-    expect(File.read("/tmp/init/app-bravo-1.service")).to eq(example_export_file("systemd/app-bravo-1.service"))
+    expect(File.read("/tmp/init/app.target")).to          eq(example_export_file("systemd/standard/app.target"))
+    expect(File.read("/tmp/init/app-alpha.target")).to    eq(example_export_file("systemd/standard/app-alpha.target"))
+    expect(File.read("/tmp/init/app-alpha-1.service")).to eq(example_export_file("systemd/standard/app-alpha-1.service"))
+    expect(File.read("/tmp/init/app-bravo.target")).to    eq(example_export_file("systemd/standard/app-bravo.target"))
+    expect(File.read("/tmp/init/app-bravo-1.service")).to eq(example_export_file("systemd/standard/app-bravo-1.service"))
   end
 
   it "cleans up if exporting into an existing dir" do
@@ -50,10 +50,10 @@ describe Foreman::Export::Systemd, :fakefs do
     it "exports to the filesystem with concurrency" do
       systemd.export
 
-      expect(File.read("/tmp/init/app.target")).to             eq(example_export_file("systemd/app.target"))
-      expect(File.read("/tmp/init/app-alpha.target")).to       eq(example_export_file("systemd/app-alpha.target"))
-      expect(File.read("/tmp/init/app-alpha-1.service")).to    eq(example_export_file("systemd/app-alpha-1.service"))
-      expect(File.read("/tmp/init/app-alpha-2.service")).to    eq(example_export_file("systemd/app-alpha-2.service"))
+      expect(File.read("/tmp/init/app.target")).to             eq(example_export_file("systemd/concurrency/app.target"))
+      expect(File.read("/tmp/init/app-alpha.target")).to       eq(example_export_file("systemd/concurrency/app-alpha.target"))
+      expect(File.read("/tmp/init/app-alpha-1.service")).to    eq(example_export_file("systemd/concurrency/app-alpha-1.service"))
+      expect(File.read("/tmp/init/app-alpha-2.service")).to    eq(example_export_file("systemd/concurrency/app-alpha-2.service"))
       expect(File.exists?("/tmp/init/app-bravo-1.service")).to eq(false)
     end
   end

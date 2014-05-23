@@ -1,0 +1,6 @@
+[Unit]
+StopWhenUnneeded=true
+Wants=app-alpha.target
+
+[Install]
+WantedBy=multi-user.target

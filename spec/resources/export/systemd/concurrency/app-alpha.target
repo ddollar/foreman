@@ -1,0 +1,3 @@
+[Unit]
+StopWhenUnneeded=true
+Wants=app-alpha-1.service app-alpha-2.service

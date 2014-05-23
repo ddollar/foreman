@@ -54,7 +54,7 @@ describe Foreman::Export::Upstart, :fakefs do
     engine.env['KEY'] = 'd"\|d'
     upstart.export
     expect("foobarfoo").to include "bar"
-    expect(File.read("/tmp/init/app-alpha-1.conf")).to match(/KEY=d\\"\\\\\\\|d/)
+    expect(File.read("/tmp/init/app-alpha-1.conf")).to match(/KEY='d"\\\|d'/)
   end
 
   context "with a formation" do

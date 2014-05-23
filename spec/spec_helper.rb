@@ -177,5 +177,4 @@ RSpec.configure do |config|
   config.order = 'rand'
   config.include FakeFS::SpecHelpers, :fakefs
   config.mock_with :rr
-  config.backtrace_clean_patterns = []
 end

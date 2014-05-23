@@ -1,5 +1,0 @@
-[Unit]
-StopWhenUnneeded=true
-
-[Install]
-WantedBy=app.target

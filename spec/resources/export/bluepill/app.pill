@@ -7,7 +7,7 @@ Bluepill.application("app", :foreground => false, :log_file => "/var/log/bluepil
 
 
   app.process("alpha-1") do |process|
-    process.start_command = "./alpha"
+    process.start_command = %Q{./alpha}
 
     process.working_dir = "/tmp/app"
     process.daemonize = true
@@ -25,7 +25,7 @@ Bluepill.application("app", :foreground => false, :log_file => "/var/log/bluepil
   end
 
   app.process("bravo-1") do |process|
-    process.start_command = "./bravo"
+    process.start_command = %Q{./bravo}
 
     process.working_dir = "/tmp/app"
     process.daemonize = true
@@ -43,7 +43,7 @@ Bluepill.application("app", :foreground => false, :log_file => "/var/log/bluepil
   end
 
   app.process("foo_bar-1") do |process|
-    process.start_command = "./foo_bar"
+    process.start_command = %Q{./foo_bar}
 
     process.working_dir = "/tmp/app"
     process.daemonize = true
@@ -61,7 +61,7 @@ Bluepill.application("app", :foreground => false, :log_file => "/var/log/bluepil
   end
 
   app.process("foo-bar-1") do |process|
-    process.start_command = "./foo-bar"
+    process.start_command = %Q{./foo-bar}
 
     process.working_dir = "/tmp/app"
     process.daemonize = true
