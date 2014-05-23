@@ -10,15 +10,6 @@ require "fakefs/spec_helpers"
 
 $:.unshift File.expand_path("../../lib", __FILE__)
 
-begin
-  def running_ruby_18?
-    defined?(RUBY_VERSION) and RUBY_VERSION =~ /^1\.8\.\d+/
-  end
-  require 'posix/spawn' if running_ruby_18?
-rescue LoadError
-  STDERR.puts "WARNING: foreman requires gem `posix-spawn` on Ruby #{RUBY_VERSION}. Please `gem install posix-spawn`."
-end
-
 def mock_export_error(message)
   expect { yield }.to raise_error(Foreman::Export::Exception, message)
 end
@@ -45,11 +36,7 @@ end
 
 def forked_foreman(args)
   rd, wr = make_pipe
-  if running_ruby_18?
-    POSIX::Spawn.spawn({}, "bundle exec bin/foreman #{args}", :out => wr, :err => wr)
-  else
-    Process.spawn("bundle exec bin/foreman #{args}", :out => wr, :err => wr)
-  end
+  Process.spawn("bundle exec bin/foreman #{args}", :out => wr, :err => wr)
   wr.close
   rd.read
 end
@@ -74,11 +61,7 @@ def fork_and_capture(&blk)
 end
 
 def fork_and_get_exitstatus(args)
-  pid = if running_ruby_18?
-    POSIX::Spawn.spawn({}, "bundle exec bin/foreman #{args}", :out => "/dev/null", :err => "/dev/null")
-  else
-    Process.spawn("bundle exec bin/foreman #{args}", :out => "/dev/null", :err => "/dev/null")
-  end
+  pid = Process.spawn("bundle exec bin/foreman #{args}", :out => "/dev/null", :err => "/dev/null")
   Process.wait(pid)
   $?.exitstatus
 end

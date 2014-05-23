@@ -6,10 +6,6 @@ platform :mingw do
   gem "win32console", "~> 1.3.0"
 end
 
-platform :jruby, :ruby_18 do
-  gem "posix-spawn", "~> 0.3.6"
-end
-
 group :development do
   gem 'aws-s3'
   gem 'rake'

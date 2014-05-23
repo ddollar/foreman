@@ -100,12 +100,4 @@ describe "Foreman::CLI", :fakefs do
     end
   end
 
-  describe "when posix-spawn is not present on ruby 1.8" do
-    it "should fail with an error" do
-      double(Kernel).require('posix/spawn') { raise LoadError }
-      output = foreman("start -f #{resource_path("Procfile")}")
-      expect(output).to eq("ERROR: foreman requires gem `posix-spawn` on Ruby #{RUBY_VERSION}. Please `gem install posix-spawn`.\n")
-    end
-  end if running_ruby_18?
-
 end
