@@ -1,5 +1,9 @@
 script: bundle exec rake spec
 
+language: ruby
+cache: bundler
+bundler_args: --without development
+
 matrix:
   allow_failures:
     - rvm: jruby
