@@ -4,11 +4,6 @@ language: ruby
 cache: bundler
 bundler_args: --without development
 
-matrix:
-  allow_failures:
-    - rvm: jruby
-
 rvm:
   - 1.9.3
   - 2.0.0
-  - jruby
