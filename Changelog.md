@@ -1,3 +1,22 @@
+## 0.68.0 (2014-05-22)
+
+* 0.68.0  [David Dollar]
+* tweak docs  [David Dollar]
+* remove jruby  [David Dollar]
+* separate development and test gems  [David Dollar]
+* tweak bundler args  [David Dollar]
+* excise ruby 1.8 and posix-spawn  [David Dollar]
+* update travis.yml for builds  [David Dollar]
+* fix up specs  [David Dollar]
+* updated rspec tests from old `should` syntax to newer `expect` syntax  [irmiller22]
+* updated RSpec to 2.14  [irmiller22]
+* Merge pull request #454 from kevin-cantwell/master  [David Dollar]
+* allows project path to contain spaces  [Kevin Cantwell]
+* tweak readme wording  [David Dollar]
+* Merge pull request #444 from seamusabshere/patch-3  [David Dollar]
+* hey Rubyists, don't put foreman in Gemfile  [Seamus Abshere]
+* update docs  [David Dollar]
+
 ## 0.67.0 (2014-04-24)
 
 * 0.67.0  [David Dollar]
