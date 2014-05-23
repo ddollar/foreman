@@ -17,9 +17,20 @@ Manage Procfile-based applications
   </tr>
 </table>
 
+## Installation
+
+    $ gem install foreman
+
+Ruby users should take care *not* to install foreman in their project's `Gemfile`.
+
 ## Getting Started
 
 * http://blog.daviddollar.org/2011/05/06/introducing-foreman.html
+
+## Supported Ruby versions
+
+* 1.9.3
+* 2.0.0
 
 ## Documentation
 
@@ -33,10 +44,6 @@ Manage Procfile-based applications
 * [honcho](https://github.com/nickstenning/honcho) - python
 * [norman](https://github.com/josh/norman) - node.js
 * [forego](https://github.com/ddollar/forego) - Go
-
-## Special note for Ruby users
-
-Install `foreman` at the system level using `gem install foreman` rather than including it in the dependency tree of your production applications.
 
 ## Authors
 
