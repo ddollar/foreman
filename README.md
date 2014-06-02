@@ -1,6 +1,7 @@
 # Foreman
 
 [![Build Status](https://travis-ci.org/ddollar/foreman.svg?branch=master)](https://travis-ci.org/ddollar/foreman)
+[![Code Climate](https://codeclimate.com/github/ddollar/foreman.png)](https://codeclimate.com/github/ddollar/foreman)
 
 Manage Procfile-based applications
 
