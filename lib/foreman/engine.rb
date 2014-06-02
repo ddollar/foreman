@@ -367,33 +367,39 @@ private
     end
   end
 
+  def read_self_pipe
+    @selfpipe[:reader].read_nonblock(11)
+  rescue Errno::EAGAIN, Errno::EINTR => err
+    # ignore
+  end
+
+  def handle_signals
+    while sig = Thread.main[:signal_queue].shift
+      self.handle_signal(sig)
+    end
+  end
+
+  def handle_io(readers)
+    readers.each do |reader|
+      next if reader == @selfpipe[:reader]
+
+      if reader.eof?
+        @readers.delete_if { |key, value| value == reader }
+      else
+        data = reader.gets
+        output_with_mutex name_for(@readers.invert[reader]), data
+      end
+    end
+  end
+
   def watch_for_output
     Thread.new do
       begin
         loop do
           io = IO.select([@selfpipe[:reader]] + @readers.values, nil, nil, 30)
-
-          begin
-            @selfpipe[:reader].read_nonblock(11)
-          rescue Errno::EAGAIN, Errno::EINTR => err
-            # ignore
-          end
-
-          # Look for any signals that arrived and handle them
-          while sig = Thread.main[:signal_queue].shift
-            self.handle_signal(sig)
-          end
-
-          (io.nil? ? [] : io.first).each do |reader|
-            next if reader == @selfpipe[:reader]
-
-            if reader.eof?
-              @readers.delete_if { |key, value| value == reader }
-            else
-              data = reader.gets
-              output_with_mutex name_for(@readers.invert[reader]), data
-            end
-          end
+          read_self_pipe
+          handle_signals
+          handle_io(io ? io.first : [])
         end
       rescue Exception => ex
         puts ex.message
