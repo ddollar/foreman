@@ -17,8 +17,8 @@ Gem::Specification.new do |gem|
   gem.files = Dir["**/*"].select { |d| d =~ %r{^(README|bin/|data/|ext/|lib/|spec/|test/)} }
   gem.files << "man/foreman.1"
 
-  gem.add_dependency 'thor', '~> 0.17.0'
-  gem.add_dependency 'dotenv', '~> 0.7.0'
+  gem.add_dependency 'thor', '~> 0.19.1'
+  gem.add_dependency 'dotenv', '~> 0.11.1'
 
   if ENV["PLATFORM"] == "mingw32"
     gem.add_dependency "win32console", "~> 1.3.0"
