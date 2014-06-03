@@ -5,8 +5,9 @@ describe "spec helpers" do
     after { ENV.delete "FOO" }
 
     it "should remove added environment vars" do
+      old = ENV["FOO"]
       preserving_env { ENV["FOO"] = "baz" }
-      expect(ENV["FOO"]).to eq(nil)
+      expect(ENV["FOO"]).to eq(old)
     end
 
     it "should reset modified environment vars" do
