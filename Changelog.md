@@ -1,3 +1,9 @@
+## 0.71.0 (2014-06-02)
+
+* 0.71.0  [David Dollar]
+* update release task to do everything  [David Dollar]
+* update docs  [David Dollar]
+
 ## 0.70.0 (2014-06-02)
 
 * 0.70.0  [David Dollar]
