@@ -43,6 +43,29 @@ describe Foreman::Process do
       process = Foreman::Process.new(resource_path("bin/utf8"))
       expect(run(process)).to eq(Foreman.ruby_18? ? "\xFF\x03\n" : "\xFF\x03\n".force_encoding('binary'))
     end
+
+    it "can expand env in the command" do
+      process = Foreman::Process.new("command $FOO $BAR", :env => { "FOO" => "bar" })
+      expect(process.expanded_command).to eq("command bar $BAR")
+    end
+
+    it "can expand extra env in the command" do
+      process = Foreman::Process.new("command $FOO $BAR", :env => { "FOO" => "bar" })
+      expect(process.expanded_command("BAR" => "qux")).to eq("command bar qux")
+    end
+
+    it "can execute" do
+      mock(Kernel).exec "bin/command"
+      process = Foreman::Process.new("bin/command")
+      process.exec
+    end
+
+    it "can execute with env" do
+      mock(Kernel).exec "bin/command bar"
+      process = Foreman::Process.new("bin/command $FOO")
+      process.exec(:env => { "FOO" => "bar" })
+    end
+
   end
 
 end
