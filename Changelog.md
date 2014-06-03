@@ -1,3 +1,27 @@
+## 0.70.0 (2014-06-02)
+
+* 0.70.0  [David Dollar]
+* handle interrupts during run  [David Dollar]
+* update thor and dotenv  [David Dollar]
+* excise jruby  [David Dollar]
+* update docs  [David Dollar]
+* 0.69.0  [David Dollar]
+* bring all versions into execution parity  [David Dollar]
+* remove unused code  [David Dollar]
+* expand test coverage  [David Dollar]
+* make test more reliable  [David Dollar]
+* upgrade rspec  [David Dollar]
+* not used  [David Dollar]
+* Merge pull request #461 from nearapogee/master  [David Dollar]
+* add logging back into upstart exports.  [Matt Smith]
+* fix typo  [David Dollar]
+* add code climate test coverage  [David Dollar]
+* refactor a bit  [David Dollar]
+* Merge pull request #460 from TiuTalk/add-badges  [David Dollar]
+* Add CodeClimate badge  [Thiago Belem]
+* Add Travis badge  [Thiago Belem]
+* update docs  [David Dollar]
+
 ## 0.68.0 (2014-05-22)
 
 * 0.68.0  [David Dollar]
