@@ -98,6 +98,7 @@ class Foreman::CLI < Thor
     end
     Process.wait(pid)
     exit $?.exitstatus
+  rescue Interrupt
   end
 
   desc "version", "Display Foreman gem version"
