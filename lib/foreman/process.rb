@@ -50,13 +50,8 @@ class Foreman::Process
     output = options[:output] || $stdout
     runner = "#{Foreman.runner}".shellescape
     
-    if Foreman.windows?
-      Dir.chdir(cwd) do
-        Process.spawn env, expanded_command(env), :out => output, :err => output
-      end
-    else
-      wrapped_command = "exec #{runner} -d '#{cwd}' -p -- #{command}"
-      Process.spawn env, wrapped_command, :out => output, :err => output
+    Dir.chdir(cwd) do
+      Process.spawn env, expanded_command(env), :out => output, :err => output
     end
   end
 
