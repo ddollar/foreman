@@ -20,10 +20,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'thor', '~> 0.17.0'
   gem.add_dependency 'dotenv', '~> 0.7.0'
 
-  if ENV["PLATFORM"] == "java"
-    gem.platform = Gem::Platform.new("java")
-  end
-
   if ENV["PLATFORM"] == "mingw32"
     gem.add_dependency "win32console", "~> 1.3.0"
     gem.platform = Gem::Platform.new("mingw32")
