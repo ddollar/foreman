@@ -11,6 +11,7 @@ desc "Commit the manual to git"
 task "man:commit" => :man do
   sh "git add README.md"
   sh "git commit -am 'update docs' || echo 'nothing to commit'"
+  sh "git push"
 end
 
 desc "Generate the Github docs"
@@ -62,4 +63,6 @@ desc "Cut a release"
 task :release do
   Rake::Task["changelog"].invoke
   Rake::Task["pages"].invoke
+  Rake::Task["gem:release"].invoke
+  Rake::Task["tgz:release"].invoke
 end
