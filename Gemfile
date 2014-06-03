@@ -10,7 +10,7 @@ group :test do
   gem 'rake'
   gem 'fakefs', '~> 0.3.2'
   gem 'rr',     '~> 1.0.2'
-  gem 'rspec',  '~> 2.14.0'
+  gem 'rspec',  '~> 2.99.0'
   gem "simplecov", :require => false
   gem 'timecop'
   gem "codeclimate-test-reporter", :require => false
