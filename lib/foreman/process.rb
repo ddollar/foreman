@@ -74,52 +74,12 @@ class Foreman::Process
     Kernel.exec expanded_command(env)
   end
 
-  # Send a signal to this +Process+
-  #
-  # @param [String] signal  The signal to send
-  #
-  def kill(signal)
-    if Foreman.windows?
-      pid && Process.kill(signal, pid)
-    else
-      pid && Process.kill("-#{signal}", pid)
-    end
-  rescue Errno::ESRCH
-    false
-  end
-
-  # Test whether or not this +Process+ is still running
-  #
-  # @returns [Boolean]
-  #
-  def alive?
-    kill(0)
-  end
-
-  # Test whether or not this +Process+ has terminated
-  #
-  # @returns [Boolean]
-  #
-  def dead?
-    !alive?
-  end
-
   # Returns the working directory for this +Process+
   #
   # @returns [String]
   #
   def cwd
     File.expand_path(@options[:cwd] || ".")
-  end
-
-private
-
-  def spawn_args(env, argv, options)
-    args = []
-    args << env
-    args += argv
-    args << options
-    args
   end
 
 end
