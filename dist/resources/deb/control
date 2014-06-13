@@ -3,7 +3,7 @@ Version: <%= version %>
 Section: main
 Priority: standard
 Architecture: all
-Depends: ruby1.9.1
+Depends: ruby2.1|ruby2.0|ruby1.9.1
 Maintainer: Heroku
 Description: Manage Procfile-based applications.
  Foreman is a manager for Procfile-based applications. Its aim is to
