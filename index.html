@@ -264,6 +264,11 @@ port: 15000
 <pre><code>$ foreman start alpha -f ~/myapp/Procfile
 </code></pre>
 
+<p>Start all processes except the one named worker:</p>
+
+<pre><code>$ foreman start -c all=1,worker=0
+</code></pre>
+
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
 <p>Foreman is Copyright (C) 2010 David Dollar <a href="http://daviddollar.org" data-bare-link="true">http://daviddollar.org</a></p>
