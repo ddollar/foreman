@@ -75,14 +75,14 @@ def s3_connect
 
   require "aws/s3"
 
-  unless ENV["DAVID_RELEASE_ACCESS"] && ENV["DAVID_RELEASE_SECRET"]
-    puts "please set DAVID_RELEASE_ACCESS and DAVID_RELEASE_SECRET in your environment"
+  unless ENV["FOREMAN_RELEASE_ACCESS"] && ENV["FOREMAN_RELEASE_SECRET"]
+    puts "please set FOREMAN_RELEASE_ACCESS and FOREMAN_RELEASE_SECRET in your environment"
     exit 1
   end
 
   AWS::S3::Base.establish_connection!(
-    :access_key_id => ENV["DAVID_RELEASE_ACCESS"],
-    :secret_access_key => ENV["DAVID_RELEASE_SECRET"]
+    :access_key_id => ENV["FOREMAN_RELEASE_ACCESS"],
+    :secret_access_key => ENV["FOREMAN_RELEASE_SECRET"]
   )
 
   @s3_connected = true
