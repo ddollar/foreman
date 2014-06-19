@@ -257,5 +257,18 @@ $ foreman start alpha \-f ~/myapp/Procfile
 .
 .IP "" 0
 .
+.P
+Start all processes except the one named worker:
+.
+.IP "" 4
+.
+.nf
+
+$ foreman start \-c all=1,worker=0
+.
+.fi
+.
+.IP "" 0
+.
 .SH "COPYRIGHT"
 Foreman is Copyright (C) 2010 David Dollar \fIhttp://daviddollar\.org\fR

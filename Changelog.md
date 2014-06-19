@@ -1,3 +1,8 @@
+## 0.72.0 (2014-06-19)
+
+* add concurrency example to docs  [David Dollar]
+* update docs  [David Dollar]
+
 ## 0.71.0 (2014-06-02)
 
 * 0.71.0  [David Dollar]
