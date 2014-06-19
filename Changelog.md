@@ -1,3 +1,11 @@
+## 0.74.0 (2014-06-19)
+
+* 0.74.0  [David Dollar]
+* fix gemfile.lock  [David Dollar]
+* Revert "Merge pull request #461 from nearapogee/master"  [David Dollar]
+* use FOREMAN_ for releases  [David Dollar]
+* update docs  [David Dollar]
+
 ## 0.73.0 (2014-06-19)
 
 * 0.73.0  [David Dollar]
