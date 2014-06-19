@@ -187,6 +187,10 @@ Run one process type from the application defined in a specific Procfile:
 
     $ foreman start alpha -f ~/myapp/Procfile
 
+Start all processes except the one named worker:
+
+    $ foreman start -c all=1,worker=0
+
 ## COPYRIGHT
 
 Foreman is Copyright (C) 2010 David Dollar <http://daviddollar.org>
