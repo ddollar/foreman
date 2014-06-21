@@ -1,4 +1,5 @@
 /.bundle
+/.env
 /coverage
 /man/*.html
 /man/*.markdown
