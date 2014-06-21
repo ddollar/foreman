@@ -1,10 +1,6 @@
 /.bundle
-/.rbenv-version
-/.yardoc
 /coverage
-/example/log/*
 /man/*.html
 /man/*.markdown
 /pkg
-/tags
 /vendor
