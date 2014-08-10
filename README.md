@@ -47,6 +47,7 @@ Ruby users should take care *not* to install foreman in their project's `Gemfile
 * [honcho](https://github.com/nickstenning/honcho) - python
 * [norman](https://github.com/josh/norman) - node.js
 * [forego](https://github.com/ddollar/forego) - Go
+* [gaffer](https://github.com/jingweno/gaffer) - Java/JVM
 
 ## Authors
 
