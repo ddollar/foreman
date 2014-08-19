@@ -369,7 +369,7 @@ private
 
   def read_self_pipe
     @selfpipe[:reader].read_nonblock(11)
-  rescue Errno::EAGAIN, Errno::EINTR => err
+  rescue Errno::EAGAIN, Errno::EINTR, Errno::EBADF
     # ignore
   end
 
