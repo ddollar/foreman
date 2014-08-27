@@ -1,3 +1,16 @@
+## 0.75.0 (2014-08-27)
+
+* 0.75.0  [David Dollar]
+* Merge pull request #478 from sergeyromanov/patch-1  [David Dollar]
+* add Perl port (proclet)  [Сергей Романов]
+* Merge pull request #477 from dickeyxxx/windows-compat  [David Dollar]
+* prevent windows from crashing on startup  [dickeyxxx]
+* Merge pull request #474 from jingweno/patch-1  [David Dollar]
+* Add `gaffer`  [Jingwen Owen Ou]
+* ignore .env  [David Dollar]
+* clean up gitignore  [David Dollar]
+* update docs  [David Dollar]
+
 ## 0.74.0 (2014-06-19)
 
 * 0.74.0  [David Dollar]
