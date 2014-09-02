@@ -34,6 +34,7 @@ Ruby users should take care *not* to install foreman in their project's `Gemfile
 
 * 1.9.3
 * 2.0.0
+* 2.1.x
 
 ## Documentation
 
