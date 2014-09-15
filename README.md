@@ -47,12 +47,11 @@ Ruby users should take care *not* to install foreman in their project's `Gemfile
 
 ## Ports
 
-* [shoreman](https://github.com/hecticjeff/shoreman) - shell
-* [honcho](https://github.com/nickstenning/honcho) - python
-* [norman](https://github.com/josh/norman) - node.js
 * [forego](https://github.com/ddollar/forego) - Go
 * [gaffer](https://github.com/jingweno/gaffer) - Java/JVM
+* [honcho](https://github.com/nickstenning/honcho) - python
 * [proclet](https://github.com/kazeburo/Proclet) - Perl
+* [shoreman](https://github.com/hecticjeff/shoreman) - shell
 
 ## Authors
 
