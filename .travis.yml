@@ -5,6 +5,9 @@ bundler_args: --without development
 rvm:
 - 1.9.3
 - 2.0.0
+- 2.1.0
+- 2.1.1
+- 2.1.2
 env:
   global:
     secure: IKoaAfTsrU1scmRO7LNJ+hVGzVeYrCB8qwr1KK/WiCm6JirAhiwvpf7osaMT6h+QRELSiAay2wPn89FqpZ9wzpL/zh5kpgfI04gnKrD7ZlPiKDPYddt6R4+Z4+LUZ0dkoM//MjRiIKz0wdvgbzn/E8FSpuhh3FeVYzYVTmAfgME=
