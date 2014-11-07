@@ -33,13 +33,7 @@ Ruby users should take care *not* to install foreman in their project's `Gemfile
 
 ## Supported Ruby versions
 
-* 1.9.3
-* 2.0.0
-* 2.1.0
-* 2.1.1
-* 2.1.2
-* 2.1.3
-* 2.1.4
+See [.travis.yml](.travis.yml) for a list of Ruby versions against which Foreman is tested.
 
 ## Documentation
 
