@@ -96,6 +96,9 @@ class Foreman::CLI < Thor
         error "command not found: #{args.first}"
       end
     end
+    trap("INT") do
+      Process.kill(:INT, pid)
+    end
     Process.wait(pid)
     exit $?.exitstatus
   rescue Interrupt
