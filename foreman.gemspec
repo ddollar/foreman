@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.files << "man/foreman.1"
 
   gem.add_dependency 'thor', '~> 0.19.1'
-  gem.add_dependency 'dotenv', '~> 0.11.1'
+  gem.add_dependency 'dotenv', '~> 1.0.2'
 
   if ENV["PLATFORM"] == "mingw32"
     gem.add_dependency "win32console", "~> 1.3.0"
