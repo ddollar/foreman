@@ -1,3 +1,24 @@
+## 0.76.0 (2014-11-25)
+
+* 0.76.0  [David Dollar]
+* Merge pull request #501 from dylanegan/tech/update_dotenv  [David Dollar]
+* Update dotenv. :v:  [Dylan Egan]
+* Merge pull request #498 from dgouldin/master  [David Dollar]
+* Preventing SIGINT from killing `foreman run` directly  [David Gouldin]
+* see travis.yml  [David Dollar]
+* Merge pull request #495 from formigarafa/patch-4  [David Dollar]
+* Updated Readme  [Rafael Santos]
+* testing under latest versions of ruby 2.1  [Rafael Santos]
+* remove noreman and alphabetize, closes #482  [David Dollar]
+* Merge pull request #481 from formigarafa/patch-1  [David Dollar]
+* Merge pull request #479 from rrrene/patch-1  [David Dollar]
+* Updated Readme to specify supported ruby 2.1 series  [Rafael Santos]
+* Update travis.yml to include ruby 2.1 series  [Rafael Santos]
+* added ruby 2.1 series to supported versions  [Rafael Santos]
+* Add docs badge to README  [René Föhring]
+* update docs  [David Dollar]
+* update docs  [David Dollar]
+
 ## 0.75.0 (2014-08-27)
 
 * 0.75.0  [David Dollar]
