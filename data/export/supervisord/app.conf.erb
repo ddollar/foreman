@@ -8,7 +8,7 @@ engine.each_process do |name, process|
       "#{key}=\"#{shell_quote(value)}\""
     end
     app_names << full_name
-%>
+-%>
 [program:<%= full_name %>]
 command=<%= process.command %>
 autostart=true
@@ -18,10 +18,11 @@ stdout_logfile=<%= log %>/<%= name %>-<%= num %>.log
 stderr_logfile=<%= log %>/<%= name %>-<%= num %>.error.log
 user=<%= user %>
 directory=<%= engine.root %>
-environment=<%= environment.join(',') %><%
+environment=<%= environment.join(',') %>
+
+<%
   end
 end
-%>
-
+-%>
 [group:<%= app %>]
 programs=<%= app_names.join(',') %>
