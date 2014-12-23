@@ -6,24 +6,33 @@ class Foreman::Export::Upstart < Foreman::Export::Base
   def export
     super
 
-    (Dir["#{location}/#{app}-*.conf"] << "#{location}/#{app}.conf").each do |file|
-      clean file
-    end
+    master_file = "#{app}.conf"
 
-    write_template master_template, "#{app}.conf", binding
+    clean master_file
+    write_template master_template, master_file, binding
 
     engine.each_process do |name, process|
+      process_master_file = "#{app}-#{name}.conf"
+      clean process_master_file
+
       next if engine.formation[name] < 1
-      write_template process_master_template, "#{app}-#{name}.conf", binding
+      write_template process_master_template, process_master_file, binding
 
       1.upto(engine.formation[name]) do |num|
         port = engine.port_for(process, num)
-        write_template process_template, "#{app}-#{name}-#{num}.conf", binding
+        process_file = "#{app}-#{name}-#{num}.conf"
+        clean process_file
+        write_template process_template, process_file, binding
       end
     end
   end
 
   private
+
+  def clean(file_name)
+    path = File.expand_path(File.join(location, file_name))
+    super path
+  end
 
   def master_template
     "upstart/master.conf.erb"
