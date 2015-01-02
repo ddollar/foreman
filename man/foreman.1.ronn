@@ -40,6 +40,10 @@ The following options control how the application is run:
     Specify which port to use as the base for this application. Should be
     a multiple of 1000.
 
+  * `-t`, `--timeout`:
+    Specify the amount of time (in seconds) processes have to shutdown
+    gracefully before receiving a SIGKILL, defaults to 5.
+
 `foreman run` is used to run one-off commands using the same environment
 as your defined processes.
 
