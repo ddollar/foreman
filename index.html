@@ -119,6 +119,8 @@ should be in the format <code>process=num,process=num</code></p></dd>
 <dt><code>-f</code>, <code>--procfile</code></dt><dd><p>Specify an alternate Procfile to load, implies <code>-d</code> at the Procfile root.</p></dd>
 <dt><code>-p</code>, <code>--port</code></dt><dd><p>Specify which port to use as the base for this application. Should be
 a multiple of 1000.</p></dd>
+<dt><code>-t</code>, <code>--timeout</code></dt><dd><p>Specify the amount of time (in seconds) processes have to shutdown
+gracefully before receiving a SIGKILL, defaults to 5.</p></dd>
 </dl>
 
 
