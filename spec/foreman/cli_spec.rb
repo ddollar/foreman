@@ -81,7 +81,7 @@ describe "Foreman::CLI", :fakefs do
     end
 
     it "includes the environment" do
-      expect(forked_foreman("run #{resource_path("bin/env FOO")} -e #{resource_path(".env")}")).to eq("bar\n")
+      expect(forked_foreman("run -e #{resource_path(".env")} #{resource_path("bin/env FOO")}")).to eq("bar\n")
     end
 
     it "can run a command from the Procfile" do
