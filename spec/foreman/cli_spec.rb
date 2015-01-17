@@ -76,6 +76,10 @@ describe "Foreman::CLI", :fakefs do
       expect(forked_foreman("run echo 1")).to eq("1\n")
     end
 
+    it "doesn't parse options for the command" do
+      expect(forked_foreman("run grep -e FOO #{resource_path(".env")}")).to eq("FOO=bar\n")
+    end
+
     it "includes the environment" do
       expect(forked_foreman("run #{resource_path("bin/env FOO")} -e #{resource_path(".env")}")).to eq("bar\n")
     end
