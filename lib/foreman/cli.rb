@@ -74,6 +74,7 @@ class Foreman::CLI < Thor
   desc "run COMMAND [ARGS...]", "Run a command using your application's environment"
 
   method_option :env, :type => :string, :aliases => "-e", :desc => "Specify an environment file to load, defaults to .env"
+  stop_on_unknown_option! :run
 
   def run(*args)
     load_environment!
