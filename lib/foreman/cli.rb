@@ -21,6 +21,7 @@ class Foreman::CLI < Thor
 
   method_option :color,          :type => :boolean, :aliases => "-c", :desc => "Force color to be enabled"
   method_option :colored_output, :type => :boolean, :aliases => "-C", :desc => "Force output to be colored"
+  method_option :bright_colors,  :type => :boolean, :aliases => "-B", :desc => "Enable bright colors"
   method_option :env,            :type => :string,  :aliases => "-e", :desc => "Specify an environment file to load, defaults to .env"
   method_option :formation,      :type => :string,  :aliases => "-m", :banner => '"alpha=5,bar=3"'
   method_option :port,           :type => :numeric, :aliases => "-p"
