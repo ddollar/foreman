@@ -58,8 +58,9 @@ class Foreman::Engine::CLI < Foreman::Engine
       output  = ""
       output += $stdout.color(@colors[name.split(".").first].to_sym)
       output += "#{Time.now.strftime("%H:%M:%S")} #{pad_process_name(name)} | "
-      output += $stdout.color(:reset)
+      output += $stdout.color(:reset) unless options[:colored_output]
       output += message
+      output += $stdout.color(:reset)
       $stdout.puts output
       $stdout.flush
     end
