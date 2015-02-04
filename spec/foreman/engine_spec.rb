@@ -62,14 +62,14 @@ describe "Foreman::Engine", :fakefs do
 
   describe "environment" do
     it "should read env files" do
-      File.open("/tmp/env", "w") { |f| f.puts("FOO=baz") }
+      write_file("/tmp/env") { |f| f.puts("FOO=baz") }
       subject.load_env("/tmp/env")
       expect(subject.env["FOO"]).to eq("baz")
     end
 
     it "should read more than one if specified" do
-      File.open("/tmp/env1", "w") { |f| f.puts("FOO=bar") }
-      File.open("/tmp/env2", "w") { |f| f.puts("BAZ=qux") }
+      write_file("/tmp/env1") { |f| f.puts("FOO=bar") }
+      write_file("/tmp/env2") { |f| f.puts("BAZ=qux") }
       subject.load_env "/tmp/env1"
       subject.load_env "/tmp/env2"
       expect(subject.env["FOO"]).to eq("bar")
@@ -77,7 +77,7 @@ describe "Foreman::Engine", :fakefs do
     end
 
     it "should handle quoted values" do
-      File.open("/tmp/env", "w") do |f|
+      write_file("/tmp/env") do |f|
         f.puts 'FOO=bar'
         f.puts 'BAZ="qux"'
         f.puts "FRED='barney'"
@@ -91,7 +91,7 @@ describe "Foreman::Engine", :fakefs do
     end
 
     it "should handle multiline strings" do
-      File.open("/tmp/env", "w") do |f|
+      write_file("/tmp/env") do |f|
         f.puts 'FOO="bar\nbaz"'
       end
       subject.load_env "/tmp/env"
@@ -103,7 +103,7 @@ describe "Foreman::Engine", :fakefs do
     end
 
     it "should set port from .env if specified" do
-      File.open("/tmp/env", "w") { |f| f.puts("PORT=9000") }
+      write_file("/tmp/env") { |f| f.puts("PORT=9000") }
       subject.load_env "/tmp/env"
       expect(subject.send(:base_port)).to eq(9000)
     end

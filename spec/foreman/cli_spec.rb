@@ -66,7 +66,6 @@ describe "Foreman::CLI", :fakefs do
     end
 
     it "without a Procfile displays an error" do
-      FileUtils.rm_f "Procfile"
       expect(foreman("check")).to eq("ERROR: Procfile does not exist.\n")
     end
   end
