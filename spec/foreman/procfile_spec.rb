@@ -42,6 +42,7 @@ describe Foreman::Procfile, :fakefs do
   it "can write to a file" do
     subject["foo"] = "./foo"
     subject["bar"] = "./bar"
+    Dir.mkdir('/tmp')
     subject.save "/tmp/proc"
     expect(File.read("/tmp/proc")).to eq("foo: ./foo\nbar: ./bar\n")
   end

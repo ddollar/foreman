@@ -82,6 +82,7 @@ def write_foreman_config(app)
 end
 
 def write_procfile(procfile="Procfile", alpha_env="")
+  FileUtils.mkdir_p(File.dirname(procfile))
   File.open(procfile, "w") do |file|
     file.puts "alpha: ./alpha" + " #{alpha_env}".rstrip
     file.puts "\n"
@@ -90,6 +91,13 @@ def write_procfile(procfile="Procfile", alpha_env="")
     file.puts "foo-bar:\t./foo-bar"
   end
   File.expand_path(procfile)
+end
+
+def write_file(file)
+  FileUtils.mkdir_p(File.dirname(file))
+  File.open(file, 'w') do |f|
+    yield(f)
+  end
 end
 
 def write_env(env=".env", options={"FOO"=>"bar"})
@@ -163,4 +171,10 @@ RSpec.configure do |config|
   config.order = 'rand'
   config.include FakeFS::SpecHelpers, :fakefs
   config.mock_with :rr
+  config.before(:each) do
+    FileUtils.mkdir_p('/tmp')
+  end
+  config.after(:each) do
+    FileUtils.rm_rf('/tmp')
+  end
 end
