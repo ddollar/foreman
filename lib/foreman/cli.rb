@@ -101,7 +101,7 @@ class Foreman::CLI < Thor
       Process.kill(:INT, pid)
     end
     Process.wait(pid)
-    exit $?.exitstatus
+    exit $?.exitstatus || 0
   rescue Interrupt
   end
 
