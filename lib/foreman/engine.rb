@@ -459,7 +459,11 @@ private
       check_for_termination
 
       # Sleep for a moment and do not blow up if more signals are coming our way
-      sleep(0.1) rescue nil
+      begin
+        sleep(0.1)
+      rescue Exception
+        # noop
+      end
     end
 
     # Ok, we have no other option than to kill all of our children
