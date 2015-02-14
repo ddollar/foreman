@@ -38,7 +38,7 @@ describe "Foreman::Engine", :fakefs do
       mock(subject.process("alpha")).run(anything)
       mock(subject.process("bravo")).run(anything)
       mock(subject).watch_for_output
-      mock(subject).watch_for_termination
+      mock(subject).wait_for_shutdown_or_child_termination
       subject.start
     end
 
@@ -47,7 +47,7 @@ describe "Foreman::Engine", :fakefs do
       mock(subject.process("alpha")).run(anything).twice
       mock(subject.process("bravo")).run(anything).never
       mock(subject).watch_for_output
-      mock(subject).watch_for_termination
+      mock(subject).wait_for_shutdown_or_child_termination
       subject.start
     end
   end
