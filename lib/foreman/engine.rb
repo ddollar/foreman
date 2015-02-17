@@ -415,6 +415,13 @@ private
 
       # Stop if any of the children died
       break if check_for_termination
+
+      # Sleep for a moment and do not blow up if any signals are coming our way
+      begin
+        sleep(1)
+      rescue Exception
+        # noop
+      end
     end
 
     # Ok, we have exited from the main loop, time to shut down gracefully
