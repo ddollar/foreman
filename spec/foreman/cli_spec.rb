@@ -28,6 +28,23 @@ describe "Foreman::CLI", :fakefs do
     end
 
     describe "with a valid Procfile" do
+      describe "Readline applications" do
+        it "outputs prompt" do
+          without_fakefs do
+            output = foreman("start irb -f #{resource_path("Procfile.IRB")}")
+            expect(output).to match(/irb\(main\):001:0>/)
+          end
+        end
+
+        it "outputs prompt and responds to input" do
+          without_fakefs do
+            output = foreman("start irbinput -f #{resource_path("Procfile.IRB")}")
+            expect(output).to match(/# leet foreman/)
+            expect(output).to match(/=> 74331/)
+          end
+        end
+      end
+
       it "can run a single command" do
         without_fakefs do
           output = foreman("start env -f #{resource_path("Procfile")}")

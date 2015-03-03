@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+require 'irb'
+Thread.new { IRB.start }
+sleep 1
+abort
