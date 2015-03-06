@@ -33,11 +33,12 @@ class Foreman::CLI < Thor
     end
   end
 
-  def start(process=nil)
+  def start(*processes)
     check_procfile!
     load_environment!
     engine.load_procfile(procfile)
-    engine.options[:formation] = "#{process}=1" if process
+    formation = processes.map { |process| "#{process}=1" }.join(',')
+    engine.options[:formation] = formation if processes.any?
     engine.start
   end
 
