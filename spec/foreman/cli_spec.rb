@@ -36,6 +36,15 @@ describe "Foreman::CLI", :fakefs do
         end
       end
 
+      it "can run multiple commands" do
+        without_fakefs do
+          output = foreman("start echo env -f #{resource_path("Procfile")}")
+          expect(output).to match(/echo.1/)
+          expect(output).to match(/env.1/)
+          expect(output).not_to match(/test.1/)
+        end
+      end
+
       it "can run all commands" do
         without_fakefs do
           output = foreman("start -f #{resource_path("Procfile")} -e #{resource_path(".env")}")
