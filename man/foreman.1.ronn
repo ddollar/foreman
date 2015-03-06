@@ -3,7 +3,7 @@ foreman(1) -- manage Procfile-based applications
 
 ## SYNOPSIS
 
-`foreman start [process]`<br>
+`foreman start [processes]`<br>
 `foreman run <command>`<br>
 `foreman export <format> [location]`
 
@@ -21,8 +21,8 @@ format.
 If no additional parameters are passed, foreman will run one instance of each
 type of process defined in your Procfile.
 
-If a parameter is passed, foreman will run one instance of the specified
-application type.
+If a parameter is passed, foreman will run each instance of the specified
+space separated application type.
 
 The following options control how the application is run:
 
@@ -182,6 +182,10 @@ name as keys. Example:
 Start one instance of each process type, interleave the output on stdout:
 
     $ foreman start
+
+Start selected subset of processes, one instance per process:
+
+    $ foreman start alpha bravo charlie
 
 Export the application in upstart format:
 

@@ -17,7 +17,7 @@ class Foreman::CLI < Thor
   class_option :procfile, :type => :string, :aliases => "-f", :desc => "Default: Procfile"
   class_option :root,     :type => :string, :aliases => "-d", :desc => "Default: Procfile directory"
 
-  desc "start [PROCESS]", "Start the application (or a specific PROCESS)"
+  desc "start [PROCESSES]", "Start the application (or a specific space separated PROCESSES)"
 
   method_option :color,     :type => :boolean, :aliases => "-c", :desc => "Force color to be enabled"
   method_option :env,       :type => :string,  :aliases => "-e", :desc => "Specify an environment file to load, defaults to .env"
@@ -33,11 +33,12 @@ class Foreman::CLI < Thor
     end
   end
 
-  def start(process=nil)
+  def start(*processes)
     check_procfile!
     load_environment!
     engine.load_procfile(procfile)
-    engine.options[:formation] = "#{process}=1" if process
+    formation = processes.map { |process| "#{process}=1" }.join(',')
+    engine.options[:formation] = formation if processes.any?
     engine.start
   end
 
