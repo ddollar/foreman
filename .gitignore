@@ -4,4 +4,4 @@
 /man/*.html
 /man/*.markdown
 /pkg
-/vendor
+/vendor/bundle
