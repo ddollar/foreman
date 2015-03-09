@@ -14,6 +14,7 @@ group :test do
   gem "simplecov", :require => false
   gem 'timecop'
   gem "codeclimate-test-reporter", :require => false
+  gem 'dotenv', '1.0.2', :path => 'vendor/dotenv-1.0.2'
 end
 
 group :development do
