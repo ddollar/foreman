@@ -1,16 +1,17 @@
+## 0.78.0 (2015-03-13)
+
+* remove dotenv as it's not worth the dependency hell  [David Dollar]
+* Do not parse options after "run" argument, to avoid conflicts.  [Giovanni Bajo]
+* Update docs with --timeout  [Stephen Bussey]
+
 ## 0.77.0 (2015-01-01)
 
 * 0.77.0  [David Dollar]
-* Merge pull request #509 from lukaszkorecki/bugfix-upstart-config-deletion  [David Dollar]
 * Do not change the output of clean  [Łukasz Korecki]
 * Only delete upstart files matching application name.  [Łukasz Korecki]
 * Add failling test for case where app.conf and app-worker.conf would be deleted  [Łukasz Korecki]
-* Merge pull request #504 from tricknotes/ruby-22  [David Dollar]
 * Test against Ruby 2.2 on Travis CI  [Ryunosuke SATO]
-* Merge pull request #503 from msabramo/export_supervisord_nicer_formatting  [David Dollar]
 * Nicer formatting for exported supervisord files  [Marc Abramowitz]
-* update docs  [David Dollar]
-* update docs  [David Dollar]
 
 ## 0.76.0 (2014-11-25)
 
