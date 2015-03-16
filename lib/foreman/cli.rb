@@ -24,6 +24,7 @@ class Foreman::CLI < Thor
   method_option :formation, :type => :string,  :aliases => "-m", :banner => '"alpha=5,bar=3"'
   method_option :port,      :type => :numeric, :aliases => "-p"
   method_option :timeout,   :type => :numeric, :aliases => "-t", :desc => "Specify the amount of time (in seconds) processes have to shutdown gracefully before receiving a SIGKILL, defaults to 5."
+  method_option :keep_file_descriptors, :type => :boolean, :default => false, :desc => "Inherit file descriptors"
 
   class << self
     # Hackery. Take the run method away from Thor so that we can redefine it.
@@ -38,6 +39,7 @@ class Foreman::CLI < Thor
     load_environment!
     engine.load_procfile(procfile)
     engine.options[:formation] = "#{process}=1" if process
+    engine.options[:keep_file_descriptors] = true if options[:keep_file_descriptors]
     engine.start
   end
 

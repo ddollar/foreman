@@ -11,8 +11,9 @@ class Foreman::Process
   # @param [String] command  The command to run
   # @param [Hash]   options
   #
-  # @option options [String] :cwd (./)  Change to this working directory before executing the process
-  # @option options [Hash]   :env ({})  Environment variables to set for this process
+  # @option options [String]  :cwd                   (./)     Change to this working directory before executing the process
+  # @option options [Hash]    :env                   ({})     Environment variables to set for this process
+  # @option options [Boolean] :keep_file_descriptors (false)  Inherit file descriptors
   #
   def initialize(command, options={})
     @command = command
@@ -40,18 +41,20 @@ class Foreman::Process
   #
   # @param [Hash] options
   #
-  # @option options :env    ({})       Environment variables to set for this execution
-  # @option options :output ($stdout)  The output stream
+  # @option options :env                      ({})       Environment variables to set for this execution
+  # @option options :output                   ($stdout)  The output stream
+  # @option options :keep_file_descriptors    (false)    Keep file descriptors
   #
   # @returns [Fixnum] pid  The +pid+ of the process
   #
   def run(options={})
-    env    = @options[:env].merge(options[:env] || {})
-    output = options[:output] || $stdout
-    runner = "#{Foreman.runner}".shellescape
+    env                   = @options[:env].merge(options[:env] || {})
+    output                = options[:output] || $stdout
+    keep_file_descriptors = @options[:keep_file_descriptors] || options[:keep_file_descriptors]
+    runner                = "#{Foreman.runner}".shellescape
     
     Dir.chdir(cwd) do
-      Process.spawn env, expanded_command(env), :out => output, :err => output
+      Process.spawn env, expanded_command(env), :out => output, :err => output, :close_others => !keep_file_descriptors
     end
   end
 
