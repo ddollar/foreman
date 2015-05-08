@@ -59,6 +59,7 @@ class Foreman::Engine
     sleep 0.1
     wait_for_shutdown_or_child_termination
     shutdown
+    exit(@exitstatus) if @exitstatus
   end
 
   # Set up deferred signal handlers

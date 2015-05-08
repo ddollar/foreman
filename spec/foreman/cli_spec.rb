@@ -51,6 +51,11 @@ describe "Foreman::CLI", :fakefs do
           expect(output).to match(/ps.1   \| PS env var is ps.1/)
         end
       end
+
+      it "fails if process fails" do
+        output = `bundle exec foreman start -f #{resource_path "Procfile.bad"} && echo success`
+        expect(output).not_to include 'success'
+      end
     end
   end
 
