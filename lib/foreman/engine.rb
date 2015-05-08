@@ -59,6 +59,7 @@ class Foreman::Engine
     sleep 0.1
     watch_for_termination { terminate_gracefully }
     shutdown
+    exit(@exitstatus) if @exitstatus
   end
 
   # Set up deferred signal handlers
@@ -412,6 +413,7 @@ private
 
   def watch_for_termination
     pid, status = Process.wait2
+    @exitstatus ||= status.exitstatus
     output_with_mutex name_for(pid), termination_message_for(status)
     @running.delete(pid)
     yield if block_given?
