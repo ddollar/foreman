@@ -2,10 +2,6 @@ source "http://rubygems.org"
 
 gemspec
 
-platform :mingw do
-  gem "win32console", "~> 1.3.0"
-end
-
 group :test do
   gem 'rake'
   gem 'fakefs', '~> 0.4.0'
