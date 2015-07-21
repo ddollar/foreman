@@ -22,6 +22,12 @@ describe Foreman::Procfile, :fakefs do
     expect(procfile["foo_bar"]).to eq("./foo_bar")
   end
 
+  it "returns nil when attempting to retrieve an non-existing entry" do
+    write_procfile
+    procfile = Foreman::Procfile.new("Procfile")
+    expect(procfile["unicorn"]).to eq(nil)
+  end
+
   it "can have a process appended to it" do
     subject["charlie"] = "./charlie"
     expect(subject["charlie"]).to eq("./charlie")

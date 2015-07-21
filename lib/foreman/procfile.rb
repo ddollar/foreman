@@ -32,7 +32,9 @@ class Foreman::Procfile
   # @param [String] name  The name of the Procfile entry to retrieve
   #
   def [](name)
-    @entries.detect { |n,c| name == n }.last
+    if entry = @entries.detect { |n,c| name == n }
+      entry.last
+    end
   end
 
   # Create a +Procfile+ entry
