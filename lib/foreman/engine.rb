@@ -112,21 +112,21 @@ class Foreman::Engine
   # Handle a TERM signal
   #
   def handle_term_signal
-    puts "SIGTERM received"
+    system "SIGTERM received"
     terminate_gracefully
   end
 
   # Handle an INT signal
   #
   def handle_interrupt
-    puts "SIGINT received"
+    system "SIGINT received"
     terminate_gracefully
   end
 
   # Handle a HUP signal
   #
   def handle_hangup
-    puts "SIGHUP received"
+    system "SIGHUP received"
     terminate_gracefully
   end
 
