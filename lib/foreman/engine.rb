@@ -86,7 +86,7 @@ class Foreman::Engine
     @selfpipe[:writer].write_nonblock( '.' )
   rescue Errno::EAGAIN
     # Ignore writes that would block
-  rescue Errno::EINT
+  rescue Errno::EINTR
     # Retry if another signal arrived while writing
     retry
   end
