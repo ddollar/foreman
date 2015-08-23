@@ -440,12 +440,6 @@ private
       system  "sending SIGTERM to all processes"
       kill_children "SIGTERM"
     end
-#    Timeout.timeout(options[:timeout]) do
-#      watch_for_termination while @running.length > 0
-#    end
-#  rescue Timeout::Error
-#    system  "sending SIGKILL to all processes"
-#    kill_children "SIGKILL"
   end
 
 end
