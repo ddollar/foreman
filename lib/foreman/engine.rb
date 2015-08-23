@@ -398,10 +398,10 @@ private
   def watch_for_output
     Thread.new do
       begin
-        while !@terminating do
+        loop do
           io = IO.select([@selfpipe[:reader]] + @readers.values, nil, nil, 30)
           read_self_pipe
-          handle_signals
+          handle_signals if !@terminating
           handle_io(io ? io.first : [])
         end
       rescue Exception => ex
