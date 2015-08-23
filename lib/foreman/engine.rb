@@ -58,6 +58,7 @@ class Foreman::Engine
     watch_for_output
     sleep 0.1
     watch_for_termination { terminate_gracefully }
+    wait_for_termination
     shutdown
   end
 
@@ -397,7 +398,7 @@ private
   def watch_for_output
     Thread.new do
       begin
-        loop do
+        while !@terminating do
           io = IO.select([@selfpipe[:reader]] + @readers.values, nil, nil, 30)
           read_self_pipe
           handle_signals
@@ -411,7 +412,9 @@ private
   end
 
   def watch_for_termination
+    puts "!!!watch_for_termination  thread=#{Thread.current}"
     pid, status = Process.wait2
+    puts "PID #{pid} exited with status #{status}. Remaining pids: #{@running.keys.inspect}  thread=#{Thread.current}"
     output_with_mutex name_for(pid), termination_message_for(status)
     @running.delete(pid)
     yield if block_given?
@@ -419,7 +422,17 @@ private
   rescue Errno::ECHILD
   end
 
+  def wait_for_termination
+    Timeout.timeout(options[:timeout]) do
+      watch_for_termination while @running.length > 0
+    end
+  rescue Timeout::Error
+    system  "sending SIGKILL to all processes"
+    kill_children "SIGKILL"
+  end
+
   def terminate_gracefully
+    puts "!!! terminate_gracefully @terminating=#{@terminating} thread=#{Thread.current}"
     return if @terminating
     restore_default_signal_handlers
     @terminating = true
@@ -430,12 +443,12 @@ private
       system  "sending SIGTERM to all processes"
       kill_children "SIGTERM"
     end
-    Timeout.timeout(options[:timeout]) do
-      watch_for_termination while @running.length > 0
-    end
-  rescue Timeout::Error
-    system  "sending SIGKILL to all processes"
-    kill_children "SIGKILL"
+#    Timeout.timeout(options[:timeout]) do
+#      watch_for_termination while @running.length > 0
+#    end
+#  rescue Timeout::Error
+#    system  "sending SIGKILL to all processes"
+#    kill_children "SIGKILL"
   end
 
 end
