@@ -412,9 +412,7 @@ private
   end
 
   def watch_for_termination
-    puts "!!!watch_for_termination  thread=#{Thread.current}"
     pid, status = Process.wait2
-    puts "PID #{pid} exited with status #{status}. Remaining pids: #{@running.keys.inspect}  thread=#{Thread.current}"
     output_with_mutex name_for(pid), termination_message_for(status)
     @running.delete(pid)
     yield if block_given?
@@ -432,7 +430,6 @@ private
   end
 
   def terminate_gracefully
-    puts "!!! terminate_gracefully @terminating=#{@terminating} thread=#{Thread.current}"
     return if @terminating
     restore_default_signal_handlers
     @terminating = true
