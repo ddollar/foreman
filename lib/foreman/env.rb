@@ -8,7 +8,7 @@ class Foreman::Env
     @entries = File.read(filename).gsub("\r\n","\n").split("\n").inject({}) do |ax, line|
       if line =~ /\A([A-Za-z_0-9]+)=(.*)\z/
         key = $1
-        case val = $2
+        case val = $2.rstrip
           # Remove single quotes
           when /\A'(.*)'\z/ then ax[key] = $1
           # Remove double quotes and unescape string preserving newline characters
