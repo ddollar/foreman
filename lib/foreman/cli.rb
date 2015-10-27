@@ -83,6 +83,11 @@ class Foreman::CLI < Thor
       engine.load_procfile(procfile)
     end
 
+    if args.empty?
+      error "Please specify a command"
+      return
+    end
+
     pid = fork do
       begin
         engine.env.each { |k,v| ENV[k] = v }

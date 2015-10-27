@@ -92,6 +92,10 @@ describe "Foreman::CLI", :fakefs do
       expect(fork_and_get_exitstatus("run echo 1")).to eq(0)
       expect(fork_and_get_exitstatus("run date 'invalid_date'")).to eq(1)
     end
+
+    it 'does not accept blank arguments' do
+      expect(forked_foreman("run ")).to eq "ERROR: Please specify a command\n"
+    end
   end
 
   describe "version" do
