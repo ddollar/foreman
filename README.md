@@ -25,6 +25,10 @@ Manage Procfile-based applications
 
     $ gem install foreman
 
+Or add `gem 'foreman'` to your Gemfile and run:
+
+    $ bundle install
+
 ## Getting Started
 
 * http://blog.daviddollar.org/2011/05/06/introducing-foreman.html
