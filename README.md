@@ -45,6 +45,7 @@ See [.travis.yml](.travis.yml) for a list of Ruby versions against which Foreman
 
 * [forego](https://github.com/ddollar/forego) - Go
 * [gaffer](https://github.com/jingweno/gaffer) - Java/JVM
+* [goreman](https://github.com/mattn/goreman) - Go
 * [honcho](https://github.com/nickstenning/honcho) - python
 * [proclet](https://github.com/kazeburo/Proclet) - Perl
 * [shoreman](https://github.com/hecticjeff/shoreman) - shell
