@@ -1,5 +1,5 @@
 [Unit]
-StopWhenUnneeded=true
+PartOf=app-bravo.target
 
 [Service]
 User=app

@@ -1,5 +1,4 @@
 [Unit]
-StopWhenUnneeded=true
 Wants=app-alpha.target
 
 [Install]
