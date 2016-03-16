@@ -48,6 +48,7 @@ See [.travis.yml](.travis.yml) for a list of Ruby versions against which Foreman
 * [honcho](https://github.com/nickstenning/honcho) - python
 * [proclet](https://github.com/kazeburo/Proclet) - Perl
 * [shoreman](https://github.com/hecticjeff/shoreman) - shell
+* [crank](https://github.com/arktisklada/crank) - Crystal
 
 ## Authors
 
