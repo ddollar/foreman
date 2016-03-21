@@ -37,8 +37,8 @@ See [.travis.yml](.travis.yml) for a list of Ruby versions against which Foreman
 
 ## Documentation
 
-* [man page](http://ddollar.github.com/foreman)
-* [wiki](http://github.com/ddollar/foreman/wiki)
+* [man page](http://ddollar.github.io/foreman/)
+* [wiki](https://github.com/ddollar/foreman/wiki)
 * [changelog](https://github.com/ddollar/foreman/blob/master/Changelog.md)
 
 ## Ports
@@ -47,7 +47,7 @@ See [.travis.yml](.travis.yml) for a list of Ruby versions against which Foreman
 * [gaffer](https://github.com/jingweno/gaffer) - Java/JVM
 * [honcho](https://github.com/nickstenning/honcho) - python
 * [proclet](https://github.com/kazeburo/Proclet) - Perl
-* [shoreman](https://github.com/hecticjeff/shoreman) - shell
+* [shoreman](https://github.com/chrismytton/shoreman) - shell
 * [crank](https://github.com/arktisklada/crank) - Crystal
 * [houseman](https://github.com/fujimura/houseman) - Haskell
 
