@@ -18,9 +18,4 @@ Gem::Specification.new do |gem|
   gem.files << "man/foreman.1"
 
   gem.add_dependency 'thor', '~> 0.19.1'
-
-  if ENV["PLATFORM"] == "mingw32"
-    gem.add_dependency "win32console", "~> 1.3.0"
-    gem.platform = Gem::Platform.new("mingw32")
-  end
 end
