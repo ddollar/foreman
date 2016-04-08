@@ -37,6 +37,7 @@ class Foreman::Engine
     @processes = []
     @running   = {}
     @readers   = {}
+    @buffers   = {}
 
     # Self-pipe for deferred signal-handling (ala djb: http://cr.yp.to/docs/selfpipe.html)
     reader, writer       = create_pipe
@@ -341,13 +342,6 @@ private
     end
   end
 
-  def flush_reader(reader)
-    until reader.eof?
-      data = reader.gets
-      output_with_mutex name_for(@readers.key(reader)), data
-    end
-  end
-
 ## Engine ###########################################################
 
   def spawn_processes
@@ -369,28 +363,28 @@ private
     end
   end
 
-  def read_self_pipe
-    @selfpipe[:reader].read_nonblock(11)
-  rescue Errno::EAGAIN, Errno::EINTR, Errno::EBADF
-    # ignore
-  end
-
   def handle_signals
     while sig = Thread.main[:signal_queue].shift
       self.handle_signal(sig)
     end
   end
 
-  def handle_io(readers)
-    readers.each do |reader|
-      next if reader == @selfpipe[:reader]
+  def handle_io(reader)
+    @buffers[reader] ||= ''
 
-      if reader.eof?
-        @readers.delete_if { |key, value| value == reader }
-      else
-        data = reader.gets
-        output_with_mutex name_for(@readers.invert[reader]), data
-      end
+    begin
+      @buffers[reader] += reader.read_nonblock(1024)
+    rescue EOFError
+      @readers.delete_if { |key, value| value == reader }
+    rescue IO::WaitReadable, Errno::EINTR, Errno::EBADF
+      # ignore
+    end
+
+    new_line_index = @buffers[reader].rindex("\n")
+
+    if new_line_index
+      output = @buffers[reader].slice!(0, new_line_index + 1)
+      output_with_mutex name_for(@readers.invert[reader]), output
     end
   end
 
@@ -398,10 +392,15 @@ private
     Thread.new do
       begin
         loop do
-          io = IO.select([@selfpipe[:reader]] + @readers.values, nil, nil, 30)
-          read_self_pipe
-          handle_signals
-          handle_io(io ? io.first : [])
+          selected_ios = IO.select([@selfpipe[:reader]] + @readers.values, nil, nil, 30) || [[]]
+
+          selected_ios.first.each do |reader|
+            if reader == @selfpipe[:reader]
+              handle_signals
+            else
+              handle_io reader
+            end
+          end
         end
       rescue Exception => ex
         puts ex.message
