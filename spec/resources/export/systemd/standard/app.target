@@ -1,5 +1,4 @@
 [Unit]
-StopWhenUnneeded=true
 Wants=app-alpha.target app-bravo.target app-foo_bar.target app-foo-bar.target
 
 [Install]
