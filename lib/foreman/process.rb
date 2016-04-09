@@ -51,7 +51,7 @@ class Foreman::Process
     runner = "#{Foreman.runner}".shellescape
     
     Dir.chdir(cwd) do
-      Process.spawn env, expanded_command(env), :out => output, :err => output
+      Process.spawn env, expanded_command(env), :out => output, :err => output, :pgroup => true
     end
   end
 

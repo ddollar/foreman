@@ -58,6 +58,7 @@ class Foreman::Engine
     watch_for_output
     sleep 0.1
     watch_for_termination { terminate_gracefully }
+    wait_for_termination
     shutdown
   end
 
@@ -85,7 +86,7 @@ class Foreman::Engine
     @selfpipe[:writer].write_nonblock( '.' )
   rescue Errno::EAGAIN
     # Ignore writes that would block
-  rescue Errno::EINT
+  rescue Errno::EINTR
     # Retry if another signal arrived while writing
     retry
   end
@@ -111,21 +112,21 @@ class Foreman::Engine
   # Handle a TERM signal
   #
   def handle_term_signal
-    puts "SIGTERM received"
+    system "SIGTERM received"
     terminate_gracefully
   end
 
   # Handle an INT signal
   #
   def handle_interrupt
-    puts "SIGINT received"
+    system "SIGINT received"
     terminate_gracefully
   end
 
   # Handle a HUP signal
   #
   def handle_hangup
-    puts "SIGHUP received"
+    system "SIGHUP received"
     terminate_gracefully
   end
 
@@ -400,7 +401,7 @@ private
         loop do
           io = IO.select([@selfpipe[:reader]] + @readers.values, nil, nil, 30)
           read_self_pipe
-          handle_signals
+          handle_signals if !@terminating
           handle_io(io ? io.first : [])
         end
       rescue Exception => ex
@@ -419,6 +420,15 @@ private
   rescue Errno::ECHILD
   end
 
+  def wait_for_termination
+    Timeout.timeout(options[:timeout]) do
+      watch_for_termination while @running.length > 0
+    end
+  rescue Timeout::Error
+    system  "sending SIGKILL to all processes"
+    kill_children "SIGKILL"
+  end
+
   def terminate_gracefully
     return if @terminating
     restore_default_signal_handlers
@@ -430,12 +440,6 @@ private
       system  "sending SIGTERM to all processes"
       kill_children "SIGTERM"
     end
-    Timeout.timeout(options[:timeout]) do
-      watch_for_termination while @running.length > 0
-    end
-  rescue Timeout::Error
-    system  "sending SIGKILL to all processes"
-    kill_children "SIGKILL"
   end
 
 end
