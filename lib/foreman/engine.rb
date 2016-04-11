@@ -21,9 +21,10 @@ class Foreman::Engine
   #
   # @param [Hash] options
   #
-  # @option options [String] :formation (all=1)    The process formation to use
-  # @option options [Fixnum] :port      (5000)     The base port to assign to processes
-  # @option options [String] :root      (Dir.pwd)  The root directory from which to run processes
+  # @option options [String]  :formation             (all=1)    The process formation to use
+  # @option options [Fixnum]  :port                  (5000)     The base port to assign to processes
+  # @option options [String]  :root                  (Dir.pwd)  The root directory from which to run processes
+  # @option options [Boolean] :keep_file_descriptors (false)    Inherit file descriptors
   #
   def initialize(options={})
     @options = options.dup
@@ -136,6 +137,7 @@ class Foreman::Engine
   # @param [Hash]   options
   #
   # @option options [Hash] :env  A custom environment for this process
+  # @option options [Boolean] :keep_file_descriptors  Inherit file descriptors
   #
   def register(name, command, options={})
     options[:env] ||= env
@@ -159,7 +161,7 @@ class Foreman::Engine
   def load_procfile(filename)
     options[:root] ||= File.dirname(filename)
     Foreman::Procfile.new(filename).entries do |name, command|
-      register name, command, :cwd => options[:root]
+      register name, command, :cwd => options[:root], :keep_file_descriptors => options[:keep_file_descriptors]
     end
     self
   end
