@@ -44,6 +44,7 @@ See [.travis.yml](.travis.yml) for a list of Ruby versions against which Foreman
 ## Ports
 
 * [forego](https://github.com/ddollar/forego) - Go
+* [node-foreman](https://github.com/strongloop/node-foreman) - Node.js
 * [gaffer](https://github.com/jingweno/gaffer) - Java/JVM
 * [goreman](https://github.com/mattn/goreman) - Go
 * [honcho](https://github.com/nickstenning/honcho) - python
