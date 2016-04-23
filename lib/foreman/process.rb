@@ -49,9 +49,9 @@ class Foreman::Process
     env    = @options[:env].merge(options[:env] || {})
     output = options[:output] || $stdout
     runner = "#{Foreman.runner}".shellescape
-    
+
     Dir.chdir(cwd) do
-      Process.spawn env, expanded_command(env), :out => output, :err => output
+      Process.spawn(env, expanded_command(env), :out => output, :err => output, :pgroup => true)
     end
   end
 
