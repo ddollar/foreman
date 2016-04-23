@@ -64,5 +64,4 @@ task :release do
   Rake::Task["changelog"].invoke
   Rake::Task["pages"].invoke
   Rake::Task["gem:release"].invoke
-  Rake::Task["tgz:release"].invoke
 end

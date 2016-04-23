@@ -1,3 +1,0 @@
-#!/bin/sh
-set -e
-ln -sf /usr/local/foreman/bin/foreman /usr/bin/foreman
