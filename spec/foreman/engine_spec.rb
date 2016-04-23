@@ -82,12 +82,14 @@ describe "Foreman::Engine", :fakefs do
         f.puts 'BAZ="qux"'
         f.puts "FRED='barney'"
         f.puts 'OTHER="escaped\"quote"'
+        f.puts 'URL="http://example.com/api?foo=bar&baz=1"'
       end
       subject.load_env "/tmp/env"
       expect(subject.env["FOO"]).to   eq("bar")
       expect(subject.env["BAZ"]).to   eq("qux")
       expect(subject.env["FRED"]).to  eq("barney")
       expect(subject.env["OTHER"]).to eq('escaped"quote')
+      expect(subject.env["URL"]).to   eq("http://example.com/api?foo=bar&baz=1")
     end
 
     it "should handle multiline strings" do

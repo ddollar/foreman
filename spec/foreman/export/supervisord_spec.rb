@@ -14,6 +14,8 @@ describe Foreman::Export::Supervisord, :fakefs do
   before(:each) { stub(supervisord).say }
 
   it "exports to the filesystem" do
+    write_env(".env", "FOO"=>"bar", "URL"=>"http://example.com/api?foo=bar&baz=1")
+    supervisord.engine.load_env('.env')
     supervisord.export
     expect(File.read("/tmp/init/app.conf")).to eq(example_export_file("supervisord/app-alpha-1.conf"))
   end
