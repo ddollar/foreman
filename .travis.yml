@@ -9,7 +9,13 @@ rvm:
 - 2.1.2
 - 2.1.3
 - 2.1.4
-- 2.2
+- 2.1.5
+- 2.2.0
+- 2.2.1
+- 2.2.2
+- 2.2.3
+- 2.2.4
+- 2.3.0
 env:
   global:
     secure: IKoaAfTsrU1scmRO7LNJ+hVGzVeYrCB8qwr1KK/WiCm6JirAhiwvpf7osaMT6h+QRELSiAay2wPn89FqpZ9wzpL/zh5kpgfI04gnKrD7ZlPiKDPYddt6R4+Z4+LUZ0dkoM//MjRiIKz0wdvgbzn/E8FSpuhh3FeVYzYVTmAfgME=
