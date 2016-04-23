@@ -26,7 +26,7 @@ application type.
 
 The following options control how the application is run:
 
-  * `-c`, `--concurrency`:
+  * `-m`, `--formation`:
     Specify the number of each process type to run. The value passed in
     should be in the format `process=num,process=num`
 
@@ -61,7 +61,7 @@ The following options control how the application is run:
     Use this name rather than the application's root directory name as the
     name of the application when exporting.
 
-  * `-c`, `--concurrency`:
+  * `-m`, `--formation`:
     Specify the number of each process type to run. The value passed in
     should be in the format `process=num,process=num`
 
@@ -174,7 +174,7 @@ If a `.foreman` file exists in the current directory, default options will
 be read from it. This file should be in YAML format with the long option
 name as keys. Example:
 
-    concurrency: alpha=0,bravo=1
+    formation: alpha=0,bravo=1
     port: 15000
 
 ## EXAMPLES
@@ -193,7 +193,7 @@ Run one process type from the application defined in a specific Procfile:
 
 Start all processes except the one named worker:
 
-    $ foreman start -c all=1,worker=0
+    $ foreman start -m all=1,worker=0
 
 ## COPYRIGHT
 
