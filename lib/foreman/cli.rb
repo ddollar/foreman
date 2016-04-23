@@ -79,7 +79,7 @@ class Foreman::CLI < Thor
   def run(*args)
     load_environment!
 
-    if File.exist?(procfile)
+    if File.file?(procfile)
       engine.load_procfile(procfile)
     end
 
@@ -129,7 +129,7 @@ private ######################################################################
   end
 
   def check_procfile!
-    error("#{procfile} does not exist.") unless File.exist?(procfile)
+    error("#{procfile} does not exist.") unless File.file?(procfile)
   end
 
   def load_environment!
@@ -139,7 +139,7 @@ private ######################################################################
       end
     else
       default_env = File.join(engine.root, ".env")
-      engine.load_env default_env if File.exists?(default_env)
+      engine.load_env default_env if File.file?(default_env)
     end
   end
 
@@ -153,9 +153,8 @@ private ######################################################################
 
   def options
     original_options = super
-    return original_options unless File.exists?(".foreman")
+    return original_options unless File.file?(".foreman")
     defaults = ::YAML::load_file(".foreman") || {}
     Thor::CoreExt::HashWithIndifferentAccess.new(defaults.merge(original_options))
   end
-
 end
