@@ -159,6 +159,14 @@ You can validate your Procfile format using the `check` command:
 
     $ foreman check
 
+The special environment variables `$PORT` and `$PS` are available within the
+Procfile. `$PORT` is the port selected for that process. `$PS` is the name of
+the process for the line.
+
+The `$PORT` value starts as the base port as specified by `-p`, then increments
+by 100 for each new process line. Multiple instances of the same process are
+assigned `$PORT` values that increment by 1.
+
 ## ENVIRONMENT
 
 If a `.env` file exists in the current directory, the default environment will
