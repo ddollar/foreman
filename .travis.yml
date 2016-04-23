@@ -1,6 +1,7 @@
 script: bundle exec rake spec
 language: ruby
 cache: bundler
+before_install: gem install bundler
 bundler_args: --without development
 rvm:
 - 2.0.0
