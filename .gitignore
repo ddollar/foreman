@@ -3,4 +3,5 @@
 /coverage
 /man/*.html
 /man/*.markdown
+/pkg/*.gem
 /vendor
