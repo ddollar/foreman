@@ -3,7 +3,6 @@ require "foreman/env"
 require "foreman/process"
 require "foreman/procfile"
 require "tempfile"
-require "timeout"
 require "fileutils"
 require "thread"
 
@@ -37,6 +36,7 @@ class Foreman::Engine
     @processes = []
     @running   = {}
     @readers   = {}
+    @shutdown  = false
 
     # Self-pipe for deferred signal-handling (ala djb: http://cr.yp.to/docs/selfpipe.html)
     reader, writer       = create_pipe
@@ -57,7 +57,7 @@ class Foreman::Engine
     spawn_processes
     watch_for_output
     sleep 0.1
-    watch_for_termination { terminate_gracefully }
+    wait_for_shutdown_or_child_termination
     shutdown
   end
 
@@ -111,22 +111,22 @@ class Foreman::Engine
   # Handle a TERM signal
   #
   def handle_term_signal
-    puts "SIGTERM received"
-    terminate_gracefully
+    system "SIGTERM received, starting shutdown"
+    @shutdown = true
   end
 
   # Handle an INT signal
   #
   def handle_interrupt
-    puts "SIGINT received"
-    terminate_gracefully
+    system "SIGINT received, starting shutdown"
+    @shutdown = true
   end
 
   # Handle a HUP signal
   #
   def handle_hangup
-    puts "SIGHUP received"
-    terminate_gracefully
+    system "SIGHUP received, starting shutdown"
+    @shutdown = true
   end
 
   # Register a process to be run by this +Engine+
@@ -410,19 +410,49 @@ private
     end
   end
 
-  def watch_for_termination
-    pid, status = Process.wait2
+  def wait_for_shutdown_or_child_termination
+    loop do
+      # Stop if it is time to shut down (asked via a signal)
+      break if @shutdown
+
+      # Stop if any of the children died
+      break if check_for_termination
+
+      # Sleep for a moment and do not blow up if any signals are coming our way
+      begin
+        sleep(1)
+      rescue Exception
+        # noop
+      end
+    end
+
+    # Ok, we have exited from the main loop, time to shut down gracefully
+    terminate_gracefully
+  end
+
+  def check_for_termination
+    # Check if any of the children have died off
+    pid, status = begin
+      Process.wait2(-1, Process::WNOHANG)
+    rescue Errno::ECHILD
+      return nil
+    end
+
+    # If no childred have died, nothing to do here
+    return nil unless pid
+
+    # Log the information about the process that exited
     output_with_mutex name_for(pid), termination_message_for(status)
+
+    # Delete it from the list of running processes and return its pid
     @running.delete(pid)
-    yield if block_given?
-    pid
-  rescue Errno::ECHILD
+    return pid
   end
 
   def terminate_gracefully
-    return if @terminating
     restore_default_signal_handlers
-    @terminating = true
+
+    # Tell all children to stop gracefully
     if Foreman.windows?
       system  "sending SIGKILL to all processes"
       kill_children "SIGKILL"
@@ -430,12 +460,23 @@ private
       system  "sending SIGTERM to all processes"
       kill_children "SIGTERM"
     end
-    Timeout.timeout(options[:timeout]) do
-      watch_for_termination while @running.length > 0
+
+    # Wait for all children to stop or until the time comes to kill them all
+    start_time = Time.now
+    while Time.now - start_time <= options[:timeout]
+      return if @running.empty?
+      check_for_termination
+
+      # Sleep for a moment and do not blow up if more signals are coming our way
+      begin
+        sleep(0.1)
+      rescue Exception
+        # noop
+      end
     end
-  rescue Timeout::Error
+
+    # Ok, we have no other option than to kill all of our children
     system  "sending SIGKILL to all processes"
     kill_children "SIGKILL"
   end
-
 end
