@@ -439,7 +439,7 @@ private
       return nil
     end
 
-    @exitstatus ||= status.exitstatus
+    @exitstatus ||= status.exitstatus if !status.nil?
 
     # If no childred have died, nothing to do here
     return nil unless pid
