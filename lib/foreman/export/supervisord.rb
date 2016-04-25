@@ -6,7 +6,7 @@ class Foreman::Export::Supervisord < Foreman::Export::Base
   def export
     super
 
-    Dir["#{location}/#{app}*.conf"].each do |file|
+    Dir["#{location}/#{app}.conf"].each do |file|
       clean file
     end
 
