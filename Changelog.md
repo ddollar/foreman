@@ -1,3 +1,56 @@
+## 0.81.0 (2016-04-26)
+
+* Revert "Create a new process group when spawning a new process. This should prevent from SIGINT propagating to spawned processes. (#528)"  [David Dollar]
+* Fix cleaning up unrelated configuration files (#617)  [Per-Henrik Lundblom]
+
+## 0.80.2 (2016-04-24)
+
+* fix nil status error  [David Dollar]
+
+## 0.80.1 (2016-04-23)
+
+* ignore gems  [David Dollar]
+* add package dir  [David Dollar]
+
+## 0.80.0 (2016-04-23)
+
+* Update README.md (#614)  [Hernan Y.Ke]
+* Fix Windows crash, caused by read_nonblock (#576)  [Igor Antonov]
+* update gems  [David Dollar]
+* Propagate process failure  [4r2r]
+* update gems  [David Dollar]
+* remove win32console dependency  [Takumi IINO]
+* Added possible fix for pkg install on El Capitan. (#585)  [Jeroen Visser]
+* use proper check to see if file exists (#577)  [Mateusz Byczkowski]
+* Allow supervisord environment vars to have "=" (#572)  [Stephen Yeargin]
+* Document $PORT and $PS (#562)  [Mike Burns]
+* An location -> A location (#543)  [Eliot Sykes]
+* Fix signal exception name (#530)  [Oleksiy Kovyrin]
+* Make a single thread responsible for handling graceful shutdown (#529)  [Oleksiy Kovyrin]
+* Create a new process group when spawning a new process. This should prevent from SIGINT propagating to spawned processes. (#528)  [Oleksiy Kovyrin]
+* use the latest bundler  [David Dollar]
+* check all the rubies  [David Dollar]
+* Revert "test on 2.x releases"  [David Dollar]
+* test on 2.x releases  [David Dollar]
+* remove dotenv as it's not worth the dependency hell. closes #505, #538  [David Dollar]
+* Port tests to fakefs 0.4  [Antonio Terceiro]
+* add documentation to cli (formation options describtion) (#523)  [Leonid Batizhevsky]
+* Replaces 'concurrency' with 'formation' in manpage (#524)  [Piers Mainwaring]
+* Work around potential nil $? (#526)  [David Zülke]
+* update gems  [David Dollar]
+* remove ruby 1.9 support  [David Dollar]
+* Update README URLs based on HTTP redirects  [ReadmeCritic]
+* Add port to Haskell to README  [Daisuke Fujimura]
+* Adds 'Crank' to README.md: a port of Foreman to Crystal  [arktisklada]
+* fix specs  [Pierpaolo Frasa]
+* Fixed erb tags in systemd process.service template.  [Tomasz Łoszko]
+* use PartOf  [Pierpaolo Frasa]
+* don't stop systemd master target immediately  [Pierpaolo Frasa]
+* Add goreman (go port)  [Francois]
+* Strip non-quoted whitespace  [pik]
+* Procfile#[] return nil for non-existing entries  [Simon Rozet]
+* update changeling  [David Dollar]
+
 ## 0.78.0 (2015-03-13)
 
 * remove dotenv as it's not worth the dependency hell  [David Dollar]

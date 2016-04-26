@@ -46,7 +46,7 @@ task :changelog do
     date = Time.parse(entry.chomp).strftime("%Y-%m-%d")
 
     message  = "## #{release[1..-1]} (#{date})\n\n"
-    message += %x{ git log --format="* %s  [%an]" v#{latest_release}..#{release} }
+    message += %x{ git log --format="* %s  [%an]" v#{latest_release}..#{release} | grep -v "Merge pull request" | grep -v "* #{release[1..-1]}" | grep -v "* update docs" }
 
     changelog = File.read("Changelog.md")
     changelog = message + "\n" + changelog
