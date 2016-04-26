@@ -39,6 +39,8 @@ class Foreman::CLI < Thor
     engine.load_procfile(procfile)
     engine.options[:formation] = "#{process}=1" if process
     engine.start
+  rescue Foreman::Engine::ProcessNotFound
+    error "process not found: #{args.first}"
   end
 
   desc "export FORMAT LOCATION", "Export the application to another process management format"

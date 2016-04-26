@@ -8,6 +8,8 @@ require "thread"
 
 class Foreman::Engine
 
+  class ProcessNotFound < ::Exception ; end
+
   # The signals that the engine cares about.
   #
   HANDLED_SIGNALS = [ :TERM, :INT, :HUP ]
@@ -54,6 +56,7 @@ class Foreman::Engine
   def start
     register_signal_handlers
     startup
+    check_processes
     spawn_processes
     watch_for_output
     sleep 0.1
@@ -350,6 +353,14 @@ private
   end
 
 ## Engine ###########################################################
+
+  def check_processes
+    return unless formation.length > 0
+
+    process_name = formation.keys.first
+    process_name_exists = @names.values.include?(process_name)
+    raise ProcessNotFound unless process_name_exists
+  end
 
   def spawn_processes
     @processes.each do |process|
