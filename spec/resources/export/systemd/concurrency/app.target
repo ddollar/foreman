@@ -1,5 +1,0 @@
-[Unit]
-Wants=app-alpha.target
-
-[Install]
-WantedBy=multi-user.target

@@ -4,7 +4,7 @@ PartOf=<%= app %>-<%= name %>.target
 [Service]
 User=<%= user %>
 WorkingDirectory=<%= engine.root %>
-Environment=PORT=<%= port %><% engine.env.each_pair do |var,env| %>
+Environment=PORT=%i<% engine.env.each_pair do |var,env| %>
 Environment=<%= var.upcase %>=<%= env %><% end %>
 ExecStart=/bin/bash -lc '<%= process.command %>'
 Restart=always

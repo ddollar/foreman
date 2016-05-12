@@ -1,3 +1,3 @@
 [Unit]
 PartOf=app.target
-Wants=app-alpha-1.service app-alpha-2.service
+Wants=app-alpha@5000.service app-alpha@5001.service

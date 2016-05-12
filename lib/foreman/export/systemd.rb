@@ -13,15 +13,11 @@ class Foreman::Export::Systemd < Foreman::Export::Base
     process_master_names = []
 
     engine.each_process do |name, process|
-      next if engine.formation[name] < 1
+      write_template "systemd/process.service.erb", "#{app}-#{name}@.service", binding
 
-      process_names = []
-
-      1.upto(engine.formation[name]) do |num|
-        port = engine.port_for(process, num)
-        write_template "systemd/process.service.erb", "#{app}-#{name}-#{num}.service", binding
-        process_names << "#{app}-#{name}-#{num}.service"
-      end
+      process_names = 1.upto(engine.formation[name])
+                        .collect { |num| engine.port_for(process, num) }
+                        .collect { |port| "#{app}-#{name}@#{port}.service" }
 
       write_template "systemd/process_master.target.erb", "#{app}-#{name}.target", binding
       process_master_names << "#{app}-#{name}.target"
