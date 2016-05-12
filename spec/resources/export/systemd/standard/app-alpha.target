@@ -1,3 +1,0 @@
-[Unit]
-PartOf=app.target
-Wants=app-alpha@5000.service

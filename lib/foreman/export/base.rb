@@ -100,6 +100,12 @@ private ######################################################################
     FileUtils.rm(filename)
   end
 
+  def clean_dir(dirname)
+    return unless File.exists?(dirname)
+    say "cleaning up directory: #{dirname}"
+    FileUtils.rm_r(dirname)
+  end
+
   def shell_quote(value)
     Shellwords.escape(value)
   end
@@ -141,6 +147,11 @@ private ######################################################################
   def create_directory(dir)
     say "creating: #{dir}"
     FileUtils.mkdir_p(File.join(location, dir))
+  end
+
+  def create_symlink(link, target)
+    say "symlinking: #{link} -> #{target}"
+    FileUtils.symlink(target, File.join(location, link))
   end
 
   def write_file(filename, contents)

@@ -16,23 +16,39 @@ describe Foreman::Export::Systemd, :fakefs do
   it "exports to the filesystem" do
     systemd.export
 
-    expect(File.read("/tmp/init/app.target")).to          eq(example_export_file("systemd/common/app.target"))
-    expect(File.read("/tmp/init/app-alpha.target")).to    eq(example_export_file("systemd/standard/app-alpha.target"))
-    expect(File.read("/tmp/init/app-alpha@.service")).to  eq(example_export_file("systemd/common/app-alpha@.service"))
-    expect(File.read("/tmp/init/app-bravo.target")).to    eq(example_export_file("systemd/standard/app-bravo.target"))
-    expect(File.read("/tmp/init/app-bravo@.service")).to  eq(example_export_file("systemd/common/app-bravo@.service"))
+    expect(File.read("/tmp/init/app.target")).to          eq(example_export_file("systemd/app.target"))
+    expect(File.read("/tmp/init/app-alpha.target")).to    eq(example_export_file("systemd/app-alpha.target"))
+    expect(File.read("/tmp/init/app-alpha@.service")).to  eq(example_export_file("systemd/app-alpha@.service"))
+    expect(File.read("/tmp/init/app-bravo.target")).to    eq(example_export_file("systemd/app-bravo.target"))
+    expect(File.read("/tmp/init/app-bravo@.service")).to  eq(example_export_file("systemd/app-bravo@.service"))
+
+    expect(File.directory?("/tmp/init/app-alpha.target.wants")).to                      be_truthy
+    expect(File.symlink?("/tmp/init/app-alpha.target.wants/app-alpha@5000.service")).to be_truthy
   end
 
   it "cleans up if exporting into an existing dir" do
     mock(FileUtils).rm("/tmp/init/app.target")
-    mock(FileUtils).rm("/tmp/init/app-alpha.target")
+
     mock(FileUtils).rm("/tmp/init/app-alpha@.service")
+    mock(FileUtils).rm("/tmp/init/app-alpha.target")
+    mock(FileUtils).rm("/tmp/init/app-alpha.target.wants/app-alpha@5000.service")
+    mock(FileUtils).rm_r("/tmp/init/app-alpha.target.wants")
+
     mock(FileUtils).rm("/tmp/init/app-bravo.target")
     mock(FileUtils).rm("/tmp/init/app-bravo@.service")
-    mock(FileUtils).rm("/tmp/init/app-foo-bar.target")
-    mock(FileUtils).rm("/tmp/init/app-foo-bar@.service")
+    mock(FileUtils).rm("/tmp/init/app-bravo.target.wants/app-bravo@5100.service")
+    mock(FileUtils).rm_r("/tmp/init/app-bravo.target.wants")
+
     mock(FileUtils).rm("/tmp/init/app-foo_bar.target")
     mock(FileUtils).rm("/tmp/init/app-foo_bar@.service")
+    mock(FileUtils).rm("/tmp/init/app-foo_bar.target.wants/app-foo_bar@5200.service")
+    mock(FileUtils).rm_r("/tmp/init/app-foo_bar.target.wants")
+
+    mock(FileUtils).rm("/tmp/init/app-foo-bar.target")
+    mock(FileUtils).rm("/tmp/init/app-foo-bar@.service")
+    mock(FileUtils).rm("/tmp/init/app-foo-bar.target.wants/app-foo-bar@5300.service")
+    mock(FileUtils).rm_r("/tmp/init/app-foo-bar.target.wants")
+
 
     systemd.export
     systemd.export
@@ -50,11 +66,11 @@ describe Foreman::Export::Systemd, :fakefs do
     it "exports to the filesystem with concurrency" do
       systemd.export
 
-      expect(File.read("/tmp/init/app.target")).to             eq(example_export_file("systemd/common/app.target"))
-      expect(File.read("/tmp/init/app-alpha.target")).to       eq(example_export_file("systemd/concurrency/app-alpha.target"))
-      expect(File.read("/tmp/init/app-alpha@.service")).to     eq(example_export_file("systemd/common/app-alpha@.service"))
-      expect(File.read("/tmp/init/app-bravo.target")).to       eq(example_export_file("systemd/concurrency/app-bravo.target"))
-      expect(File.read("/tmp/init/app-bravo@.service")).to     eq(example_export_file("systemd/common/app-bravo@.service"))
+      expect(File.read("/tmp/init/app.target")).to             eq(example_export_file("systemd/app.target"))
+      expect(File.read("/tmp/init/app-alpha.target")).to       eq(example_export_file("systemd/app-alpha.target"))
+      expect(File.read("/tmp/init/app-alpha@.service")).to     eq(example_export_file("systemd/app-alpha@.service"))
+      expect(File.read("/tmp/init/app-bravo.target")).to       eq(example_export_file("systemd/app-bravo.target"))
+      expect(File.read("/tmp/init/app-bravo@.service")).to     eq(example_export_file("systemd/app-bravo@.service"))
     end
   end
 

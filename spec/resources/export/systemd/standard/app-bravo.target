@@ -1,3 +1,0 @@
-[Unit]
-PartOf=app.target
-Wants=app-bravo@5100.service
