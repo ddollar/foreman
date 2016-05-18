@@ -50,7 +50,7 @@ class Foreman::CLI < Thor
   method_option :port,        :type => :numeric, :aliases => "-p"
   method_option :user,        :type => :string,  :aliases => "-u"
   method_option :template,    :type => :string,  :aliases => "-t"
-  method_option :concurrency, :type => :string,  :aliases => "-c", :banner => '"alpha=5,bar=3"', :desc => 'Specify what processes will run and how many. Default: "all=1"'
+  method_option :formation, :type => :string,  :aliases => "-m", :banner => '"alpha=5,bar=3"', :desc => 'Specify what processes will run and how many. Default: "all=1"'
   method_option :timeout,     :type => :numeric, :aliases => "-t", :desc => "Specify the amount of time (in seconds) processes have to shutdown gracefully before receiving a SIGKILL, defaults to 5."
 
   def export(format, location=nil)
