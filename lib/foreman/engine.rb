@@ -27,7 +27,7 @@ class Foreman::Engine
   def initialize(options={})
     @options = options.dup
 
-    @options[:formation] ||= (options[:concurrency] || "all=1")
+    @options[:formation] ||= "all=1"
     @options[:timeout] ||= 5
 
     @env       = {}
