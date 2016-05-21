@@ -1,3 +1,11 @@
+## 0.82.0 (2016-05-21)
+
+* Fixes #626. Use -m for concurrency when using the export command.  [Jori Hardman]
+* Add stop timeout to systemd services  [Christian Haase]
+* systemd exporter creates target dependencies via symlinks  [Christian Haase]
+* Update systemd exporter to generate instantiated services  [Christian Haase]
+* changelog  [David Dollar]
+
 ## 0.81.0 (2016-04-26)
 
 * Revert "Create a new process group when spawning a new process. This should prevent from SIGINT propagating to spawned processes. (#528)"  [David Dollar]
