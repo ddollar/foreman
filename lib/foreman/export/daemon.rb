@@ -17,7 +17,7 @@ class Foreman::Export::Daemon < Foreman::Export::Base
       write_template "daemon/process_master.conf.erb", "#{app}-#{name}.conf", binding
 
       1.upto(engine.formation[name]) do |num|
-        port = engine.port_for(process, num)
+        env = engine.env_for(process, num)
         arguments = process.command.split(" ")
         executable = arguments.slice!(0)
         arguments = arguments.size > 0 ? " -- #{arguments.join(' ')}" : ""

@@ -6,6 +6,10 @@
     <string>app-bravo-1</string>
     <key>EnvironmentVariables</key>
     <dict>
+        <key>INSTANCE_NAME</key>
+        <string>5100</string>
+        <key>PS</key>
+        <string>bravo.1</string>
         <key>PORT</key>
         <string>5100</string>
     </dict>

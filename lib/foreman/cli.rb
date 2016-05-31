@@ -14,14 +14,17 @@ class Foreman::CLI < Thor
 
   map ["-v", "--version"] => :version
 
-  class_option :procfile, :type => :string, :aliases => "-f", :desc => "Default: Procfile"
-  class_option :root,     :type => :string, :aliases => "-d", :desc => "Default: Procfile directory"
+  class_option :procfile,   :type => :string, :aliases => "-f", :desc => "Default: Procfile"
+  class_option :root,       :type => :string, :aliases => "-d", :desc => "Default: Procfile directory"
+  class_option :load_path,  :type => :string, :aliases => "-I", :desc => 'Default: Procfile directory + "lib/foreman"'
+  class_option :require,    :type => :array,  :aliases => "-r", :desc => 'Require additional libraries'
 
   desc "start [PROCESS]", "Start the application (or a specific PROCESS)"
 
   method_option :color,     :type => :boolean, :aliases => "-c", :desc => "Force color to be enabled"
   method_option :env,       :type => :string,  :aliases => "-e", :desc => "Specify an environment file to load, defaults to .env"
-  method_option :formation, :type => :string,  :aliases => "-m", :banner => '"alpha=5,bar=3"', :desc => 'Specify what processes will run and how many. Default: "all=1"'
+  method_option :formation,                 :type => :string,  :aliases => "-m", :banner => '"alpha=5,bar=3"', :desc => 'Specify what processes will run and how many. Default: "all=1"'
+  method_option :instance_name_generators,  :type => :string,  :aliases => "-n", :banner => '"alpha=TCPUDPPortGenerator,bar=SerialDeviceGenerator"', :desc => 'Specify custom instance name generators. Default: "all=TCPUDPPortGenerator"'
   method_option :port,      :type => :numeric, :aliases => "-p"
   method_option :timeout,   :type => :numeric, :aliases => "-t", :desc => "Specify the amount of time (in seconds) processes have to shutdown gracefully before receiving a SIGKILL, defaults to 5."
 
@@ -35,6 +38,7 @@ class Foreman::CLI < Thor
 
   def start(process=nil)
     check_procfile!
+    require_custom_libraries!
     load_environment!
     engine.load_procfile(procfile)
     engine.options[:formation] = "#{process}=1" if process
@@ -50,11 +54,13 @@ class Foreman::CLI < Thor
   method_option :port,        :type => :numeric, :aliases => "-p"
   method_option :user,        :type => :string,  :aliases => "-u"
   method_option :template,    :type => :string,  :aliases => "-t"
-  method_option :formation, :type => :string,  :aliases => "-m", :banner => '"alpha=5,bar=3"', :desc => 'Specify what processes will run and how many. Default: "all=1"'
+  method_option :formation,                 :type => :string,  :aliases => "-m", :banner => '"alpha=5,bar=3"', :desc => 'Specify what processes will run and how many. Default: "all=1"'
+  method_option :instance_name_generators,  :type => :string,  :aliases => "-n", :banner => '"alpha=TCPUDPPortGenerator,bar=SerialDeviceGenerator"', :desc => 'Specify custom instance name generators. Default: "all=TCPUDPPortGenerator"'
   method_option :timeout,     :type => :numeric, :aliases => "-t", :desc => "Specify the amount of time (in seconds) processes have to shutdown gracefully before receiving a SIGKILL, defaults to 5."
 
   def export(format, location=nil)
     check_procfile!
+    require_custom_libraries!
     load_environment!
     engine.load_procfile(procfile)
     formatter = Foreman::Export.formatter(format)
@@ -67,6 +73,7 @@ class Foreman::CLI < Thor
 
   def check
     check_procfile!
+    require_custom_libraries!
     engine.load_procfile(procfile)
     error "no processes defined" unless engine.processes.length > 0
     puts "valid procfile detected (#{engine.process_names.join(', ')})"
@@ -78,6 +85,7 @@ class Foreman::CLI < Thor
   stop_on_unknown_option! :run
 
   def run(*args)
+    require_custom_libraries!
     load_environment!
 
     if File.file?(procfile)
@@ -133,6 +141,14 @@ private ######################################################################
     error("#{procfile} does not exist.") unless File.file?(procfile)
   end
 
+  def require_custom_libraries!
+    $LOAD_PATH.unshift(*load_paths)
+
+    Array(options[:require]).each do |lib|
+      require String(lib)
+    end
+  end
+
   def load_environment!
     if options[:env]
       options[:env].split(",").each do |file|
@@ -141,6 +157,14 @@ private ######################################################################
     else
       default_env = File.join(engine.root, ".env")
       engine.load_env default_env if File.file?(default_env)
+    end
+  end
+
+  def load_paths
+    case
+      when options[:load_path] then options[:load_path].split(File::PATH_SEPARATOR)
+      when options[:root]      then [File.expand_path(File.join(options[:root], 'lib', 'foreman'))]
+      else []
     end
   end
 

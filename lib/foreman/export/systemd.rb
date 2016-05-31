@@ -25,7 +25,7 @@ class Foreman::Export::Systemd < Foreman::Export::Base
 
       create_directory("#{app}-#{name}.target.wants")
       1.upto(engine.formation[name])
-        .collect { |num| engine.port_for(process, num) }
+        .collect { |num| engine.instance_name_for(process, num) }
         .collect { |port| "#{app}-#{name}@#{port}.service" }
         .each do |process_name|
         create_symlink("#{app}-#{name}.target.wants/#{process_name}", "../#{service_fn}") rescue Errno::EEXIST # This is needed because rr-mocks do not call the origial cleanup
