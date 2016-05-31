@@ -19,7 +19,7 @@ class Foreman::Export::Upstart < Foreman::Export::Base
       write_template process_master_template, process_master_file, binding
 
       1.upto(engine.formation[name]) do |num|
-        port = engine.port_for(process, num)
+        env = engine.env_for(process, num)
         process_file = "#{app}-#{name}-#{num}.conf"
         clean File.join(location, process_file)
         write_template process_template, process_file, binding

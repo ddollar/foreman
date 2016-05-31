@@ -6,6 +6,10 @@
     <string>app-alpha-1</string>
     <key>EnvironmentVariables</key>
     <dict>
+        <key>INSTANCE_NAME</key>
+        <string>5000</string>
+        <key>PS</key>
+        <string>alpha.1</string>
         <key>PORT</key>
         <string>5000</string>
     </dict>

@@ -6,7 +6,7 @@
     <string><%= "#{app}-#{name}-#{num}" %></string>
     <key>EnvironmentVariables</key>
     <dict>
-    <%- engine.env.merge("PORT" => port).each_pair do |var,env| -%>
+    <%- env.each_pair do |var,env| -%>
         <key><%= var.upcase %></key>
         <string><%= env %></string>
     <%- end -%>

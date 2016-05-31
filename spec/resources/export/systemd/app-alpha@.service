@@ -4,6 +4,7 @@ PartOf=app-alpha.target
 [Service]
 User=app
 WorkingDirectory=/tmp/app
+Environment=INSTANCE_NAME=%i
 Environment=PORT=%i
 ExecStart=/bin/bash -lc './alpha'
 Restart=always

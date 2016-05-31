@@ -2,6 +2,7 @@ require "foreman"
 require "foreman/env"
 require "foreman/process"
 require "foreman/procfile"
+require "foreman/instance_name_generators/tcp_udp_port_generator"
 require "tempfile"
 require "fileutils"
 require "thread"
@@ -27,16 +28,18 @@ class Foreman::Engine
   def initialize(options={})
     @options = options.dup
 
-    @options[:formation] ||= "all=1"
-    @options[:timeout] ||= 5
+    @options[:formation]                ||= "all=1"
+    @options[:instance_name_generators] ||= ""
+    @options[:timeout]                  ||= 5
 
-    @env       = {}
-    @mutex     = Mutex.new
-    @names     = {}
-    @processes = []
-    @running   = {}
-    @readers   = {}
-    @shutdown  = false
+    @env                               = {}
+    @mutex                             = Mutex.new
+    @names                             = {}
+    @processes                         = []
+    @running                           = {}
+    @readers                           = {}
+    @shutdown                          = false
+    @instance_name_generator_instances = {}
 
     # Self-pipe for deferred signal-handling (ala djb: http://cr.yp.to/docs/selfpipe.html)
     reader, writer       = create_pipe
@@ -139,9 +142,9 @@ class Foreman::Engine
   # @option options [Hash] :env  A custom environment for this process
   #
   def register(name, command, options={})
-    options[:env] ||= env
-    options[:cwd] ||= File.dirname(command.split(" ").first)
-    process = Foreman::Process.new(command, options)
+    options[:env]   ||= env
+    options[:cwd]   ||= File.dirname(command.split(" ").first)
+    process         = Foreman::Process.new(command, options)
     @names[process] = name
     @processes << process
   end
@@ -219,6 +222,14 @@ class Foreman::Engine
     @formation ||= parse_formation(options[:formation])
   end
 
+  # Get the instance name generators
+  #
+  # @returns [{process_name => Class}]
+  #
+  def instance_name_generators
+    @instance_name_generators ||= parse_instance_name_generators(options[:instance_name_generators])
+  end
+
   # List the available process names
   #
   # @returns [Array]  A list of process names
@@ -260,12 +271,19 @@ class Foreman::Engine
   #
   # @returns [Fixnum] port  The port to use for this instance of this process
   #
-  def port_for(process, instance, base=nil)
-    if base
-      base + (@processes.index(process.process) * 100) + (instance - 1)
-    else
-      base_port + (@processes.index(process) * 100) + (instance - 1)
+  def instance_name_for(process, instance)
+    @instance_name_generator_instances[@names[process]] ||= begin
+      generator_class = instance_name_generators[@names[process]]
+      generator_idx = @instance_name_generator_instances.count { |_, ins| ins.is_a? generator_class }
+      generator_class.new(self, generator_idx)
     end
+
+    @instance_name_generator_instances[@names[process]][instance]
+  end
+
+  def port_for(process, instance, base=nil)
+    Foreman::Export::Base.warn_deprecation!
+    instance_name_for(process, instance).to_i
   end
 
   # Get the base port for this foreman instance
@@ -273,7 +291,28 @@ class Foreman::Engine
   # @returns [Fixnum] port  The base port
   #
   def base_port
+    Foreman::Export::Base.warn_deprecation!
+
     (options[:port] || env["PORT"] || ENV["PORT"] || 5000).to_i
+  end
+
+  # Get the environment for a given process and offset
+  #
+  # @param [Foreman::Process] process   A +Process+ associated with this engine
+  # @param [Fixnum]           instance  The instance of the process
+  #
+  # @returns [{String => String}] env  The environment
+  #
+  def env_for(process, instance)
+    instance_name = instance_name_for(process, instance)
+
+    cenv = {
+        "INSTANCE_NAME" => instance_name.to_s,
+        "PS"            => name_for_index(process, instance)
+    }
+    cenv["PORT"] = instance_name.to_s if instance_name.is_a? Fixnum
+
+    env.merge(cenv)
   end
 
   # deprecated
@@ -309,16 +348,27 @@ private
   end
 
   def name_for_index(process, index)
-    [ @names[process], index.to_s ].compact.join(".")
+    [@names[process], index.to_s].compact.join(".")
   end
 
   def parse_formation(formation)
-    pairs = formation.to_s.gsub(/\s/, "").split(",")
+    parse_process_specification(formation, 0, &:to_i)
+  end
 
-    pairs.inject(Hash.new(0)) do |ax, pair|
-      process, amount = pair.split("=")
-      process == "all" ? ax.default = amount.to_i : ax[process] = amount.to_i
-      ax
+  def parse_instance_name_generators(instance_name_generators)
+    parse_process_specification(instance_name_generators, Foreman::InstanceNameGenerators::TCPUDPPortGenerator) do |generator_name|
+      Foreman::InstanceNameGenerators.const_get(generator_name.to_sym)
+    end
+  end
+
+  def parse_process_specification(specification, default)
+    pairs = specification.to_s.gsub(/\s/, "").split(",")
+
+    pairs.each_with_object(Hash.new(default)) do |pair, ax|
+      process, plain_value = pair.split("=")
+
+      value = yield(plain_value)
+      process == "all" ? ax.default = value : ax[process] = value
     end
   end
 
@@ -356,10 +406,7 @@ private
       1.upto(formation[@names[process]]) do |n|
         reader, writer = create_pipe
         begin
-          pid = process.run(:output => writer, :env => {
-            "PORT" => port_for(process, n).to_s,
-            "PS" => name_for_index(process, n)
-          })
+          pid = process.run(:output => writer, :env => env_for(process, n))
           writer.puts "started with pid #{pid}"
         rescue Errno::ENOENT
           writer.puts "unknown command: #{process.command}"
