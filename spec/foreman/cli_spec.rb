@@ -45,6 +45,14 @@ describe "Foreman::CLI", :fakefs do
         end
       end
 
+      it "can run without the release process" do
+        without_fakefs do
+          output = foreman("start -f #{resource_path("Procfile.release")} -r")
+          expect(output).to match(/echo.1    | echoing/)
+          expect(output).to_not match(/release.1 \| releasing/)
+        end
+      end
+
       it "sets PS variable with the process name" do
         without_fakefs do
           output = foreman("start -f #{resource_path("Procfile")}")
