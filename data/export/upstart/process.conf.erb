@@ -4,6 +4,7 @@ respawn
 
 env PORT=<%= port %>
 <% engine.env.each do |name,value| -%>
+<% next if name.upcase == "PORT" -%>
 env <%= name.upcase %>='<%= value.gsub(/'/, "'\"'\"'") %>'
 <% end -%>
 
