@@ -52,7 +52,7 @@ as your defined processes.
 `foreman export` is used to export your application to another process
 management format.
 
-An location to export can be passed as an argument. This argument may be
+A location to export can be passed as an argument. This argument may be
 either required or optional depending on the export format.
 
 The following options control how the application is run:
