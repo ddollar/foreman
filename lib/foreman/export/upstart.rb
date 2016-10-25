@@ -13,7 +13,11 @@ class Foreman::Export::Upstart < Foreman::Export::Base
 
     engine.each_process do |name, process|
       process_master_file = "#{app}-#{name}.conf"
-      clean File.join(location, process_master_file)
+      
+      Dir[
+        File.join(location, process_master_file),
+        File.join(location, "#{app}-#{name}-*.conf")
+      ].each { |f| clean(f) }
 
       next if engine.formation[name] < 1
       write_template process_master_template, process_master_file, binding
@@ -21,7 +25,6 @@ class Foreman::Export::Upstart < Foreman::Export::Base
       1.upto(engine.formation[name]) do |num|
         port = engine.port_for(process, num)
         process_file = "#{app}-#{name}-#{num}.conf"
-        clean File.join(location, process_file)
         write_template process_template, process_file, binding
       end
     end
