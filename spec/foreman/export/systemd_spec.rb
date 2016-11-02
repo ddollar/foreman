@@ -11,7 +11,7 @@ describe Foreman::Export::Systemd, :fakefs do
   let(:systemd)   { Foreman::Export::Systemd.new("/tmp/init", engine, options) }
 
   before(:each) { load_export_templates_into_fakefs("systemd") }
-  before(:each) { stub(systemd).say }
+  before(:each) { allow(systemd).to receive(:say) }
 
   it "exports to the filesystem" do
     systemd.export
@@ -27,27 +27,27 @@ describe Foreman::Export::Systemd, :fakefs do
   end
 
   it "cleans up if exporting into an existing dir" do
-    mock(FileUtils).rm("/tmp/init/app.target")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app.target")
 
-    mock(FileUtils).rm("/tmp/init/app-alpha@.service")
-    mock(FileUtils).rm("/tmp/init/app-alpha.target")
-    mock(FileUtils).rm("/tmp/init/app-alpha.target.wants/app-alpha@5000.service")
-    mock(FileUtils).rm_r("/tmp/init/app-alpha.target.wants")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-alpha@.service")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-alpha.target")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-alpha.target.wants/app-alpha@5000.service")
+    expect(FileUtils).to receive(:rm_r).with("/tmp/init/app-alpha.target.wants")
 
-    mock(FileUtils).rm("/tmp/init/app-bravo.target")
-    mock(FileUtils).rm("/tmp/init/app-bravo@.service")
-    mock(FileUtils).rm("/tmp/init/app-bravo.target.wants/app-bravo@5100.service")
-    mock(FileUtils).rm_r("/tmp/init/app-bravo.target.wants")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-bravo.target")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-bravo@.service")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-bravo.target.wants/app-bravo@5100.service")
+    expect(FileUtils).to receive(:rm_r).with("/tmp/init/app-bravo.target.wants")
 
-    mock(FileUtils).rm("/tmp/init/app-foo_bar.target")
-    mock(FileUtils).rm("/tmp/init/app-foo_bar@.service")
-    mock(FileUtils).rm("/tmp/init/app-foo_bar.target.wants/app-foo_bar@5200.service")
-    mock(FileUtils).rm_r("/tmp/init/app-foo_bar.target.wants")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo_bar.target")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo_bar@.service")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo_bar.target.wants/app-foo_bar@5200.service")
+    expect(FileUtils).to receive(:rm_r).with("/tmp/init/app-foo_bar.target.wants")
 
-    mock(FileUtils).rm("/tmp/init/app-foo-bar.target")
-    mock(FileUtils).rm("/tmp/init/app-foo-bar@.service")
-    mock(FileUtils).rm("/tmp/init/app-foo-bar.target.wants/app-foo-bar@5300.service")
-    mock(FileUtils).rm_r("/tmp/init/app-foo-bar.target.wants")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo-bar.target")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo-bar@.service")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo-bar.target.wants/app-foo-bar@5300.service")
+    expect(FileUtils).to receive(:rm_r).with("/tmp/init/app-foo-bar.target.wants")
 
 
     systemd.export

@@ -55,13 +55,13 @@ describe Foreman::Process do
     end
 
     it "can execute" do
-      mock(Kernel).exec "bin/command"
+      expect(Kernel).to receive(:exec).with("bin/command")
       process = Foreman::Process.new("bin/command")
       process.exec
     end
 
     it "can execute with env" do
-      mock(Kernel).exec "bin/command bar"
+      expect(Kernel).to receive(:exec).with("bin/command bar")
       process = Foreman::Process.new("bin/command $FOO")
       process.exec(:env => { "FOO" => "bar" })
     end

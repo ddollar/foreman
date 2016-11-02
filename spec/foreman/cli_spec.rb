@@ -21,7 +21,7 @@ describe "Foreman::CLI", :fakefs do
     describe "when a Procfile doesnt exist", :fakefs do
       it "displays an error" do
         mock_error(subject, "Procfile does not exist.") do
-          dont_allow.instance_of(Foreman::Engine).start
+          expect_any_instance_of(Foreman::Engine).to_not receive(:start)
           subject.start
         end
       end

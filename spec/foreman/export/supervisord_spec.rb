@@ -11,7 +11,7 @@ describe Foreman::Export::Supervisord, :fakefs do
   let(:supervisord) { Foreman::Export::Supervisord.new("/tmp/init", engine, options) }
 
   before(:each) { load_export_templates_into_fakefs("supervisord") }
-  before(:each) { stub(supervisord).say }
+  before(:each) { allow(supervisord).to receive(:say) }
 
   it "exports to the filesystem" do
     write_env(".env", "FOO"=>"bar", "URL"=>"http://example.com/api?foo=bar&baz=1")
@@ -21,7 +21,7 @@ describe Foreman::Export::Supervisord, :fakefs do
   end
 
   it "cleans up if exporting into an existing dir" do
-    mock(FileUtils).rm("/tmp/init/app.conf")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app.conf")
     supervisord.export
     supervisord.export
   end
