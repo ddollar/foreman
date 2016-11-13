@@ -10,7 +10,7 @@ describe Foreman::Export::Launchd, :fakefs do
   let(:launchd)  { Foreman::Export::Launchd.new("/tmp/init", engine, options) }
 
   before(:each) { load_export_templates_into_fakefs("launchd") }
-  before(:each) { stub(launchd).say }
+  before(:each) { allow(launchd).to receive(:say) }
 
   it "exports to the filesystem" do
     launchd.export

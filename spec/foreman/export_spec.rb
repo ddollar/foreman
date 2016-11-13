@@ -6,7 +6,7 @@ describe "Foreman::Export" do
 
   describe "with a formatter that doesn't declare the appropriate class" do
     it "prints an error" do
-      mock(subject).require("foreman/export/invalidformatter")
+      expect(subject).to receive(:require).with("foreman/export/invalidformatter")
       mock_export_error("Unknown export format: invalidformatter (no class Foreman::Export::Invalidformatter).") do
         subject.formatter("invalidformatter") 
       end

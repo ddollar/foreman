@@ -35,19 +35,19 @@ describe "Foreman::Engine", :fakefs do
 
   describe "start" do
     it "forks the processes" do
-      mock(subject.process("alpha")).run(anything)
-      mock(subject.process("bravo")).run(anything)
-      mock(subject).watch_for_output
-      mock(subject).wait_for_shutdown_or_child_termination
+      expect(subject.process("alpha")).to receive(:run)
+      expect(subject.process("bravo")).to receive(:run)
+      expect(subject).to receive(:watch_for_output)
+      expect(subject).to receive(:wait_for_shutdown_or_child_termination)
       subject.start
     end
 
     it "handles concurrency" do
       subject.options[:formation] = "alpha=2"
-      mock(subject.process("alpha")).run(anything).twice
-      mock(subject.process("bravo")).run(anything).never
-      mock(subject).watch_for_output
-      mock(subject).wait_for_shutdown_or_child_termination
+      expect(subject.process("alpha")).to receive(:run).twice
+      expect(subject.process("bravo")).to_not receive(:run)
+      expect(subject).to receive(:watch_for_output)
+      expect(subject).to receive(:wait_for_shutdown_or_child_termination)
       subject.start
     end
   end

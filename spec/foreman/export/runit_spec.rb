@@ -10,8 +10,8 @@ describe Foreman::Export::Runit, :fakefs do
   let(:runit)    { Foreman::Export::Runit.new('/tmp/init', engine, options) }
 
   before(:each) { load_export_templates_into_fakefs("runit") }
-  before(:each) { stub(runit).say }
-  before(:each) { stub(FakeFS::FileUtils).chmod }
+  before(:each) { allow(runit).to receive(:say) }
+  before(:each) { allow(FakeFS::FileUtils).to receive(:chmod) }
 
   it "exports to the filesystem" do
     engine.env["BAR"] = "baz"

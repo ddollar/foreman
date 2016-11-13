@@ -12,7 +12,7 @@ describe Foreman::Export::Inittab, :fakefs do
   let(:inittab)   { Foreman::Export::Inittab.new(location, engine, options) }
 
   before(:each) { load_export_templates_into_fakefs("inittab") }
-  before(:each) { stub(inittab).say }
+  before(:each) { allow(inittab).to receive(:say) }
 
   it "exports to the filesystem" do
     inittab.export
@@ -23,7 +23,7 @@ describe Foreman::Export::Inittab, :fakefs do
     let(:location) { "-" }
 
     it "exports to stdout" do
-      mock(inittab).puts example_export_file("inittab/inittab.default")
+      expect(inittab).to receive(:puts).with(example_export_file("inittab/inittab.default"))
       inittab.export
     end
   end

@@ -11,7 +11,7 @@ describe Foreman::Export::Daemon, :fakefs do
   let(:daemon)   { Foreman::Export::Daemon.new("/tmp/init", engine, options) }
 
   before(:each) { load_export_templates_into_fakefs("daemon") }
-  before(:each) { stub(daemon).say }
+  before(:each) { allow(daemon).to receive(:say) }
 
   it "exports to the filesystem" do
     daemon.export
@@ -24,15 +24,15 @@ describe Foreman::Export::Daemon, :fakefs do
   end
 
   it "cleans up if exporting into an existing dir" do
-    mock(FileUtils).rm("/tmp/init/app.conf")
-    mock(FileUtils).rm("/tmp/init/app-alpha.conf")
-    mock(FileUtils).rm("/tmp/init/app-alpha-1.conf")
-    mock(FileUtils).rm("/tmp/init/app-bravo.conf")
-    mock(FileUtils).rm("/tmp/init/app-bravo-1.conf")
-    mock(FileUtils).rm("/tmp/init/app-foo-bar.conf")
-    mock(FileUtils).rm("/tmp/init/app-foo-bar-1.conf")
-    mock(FileUtils).rm("/tmp/init/app-foo_bar.conf")
-    mock(FileUtils).rm("/tmp/init/app-foo_bar-1.conf")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app.conf")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-alpha.conf")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-alpha-1.conf")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-bravo.conf")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-bravo-1.conf")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo-bar.conf")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo-bar-1.conf")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo_bar.conf")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo_bar-1.conf")
 
     daemon.export
     daemon.export
@@ -44,7 +44,7 @@ describe Foreman::Export::Daemon, :fakefs do
     ["app2", "app2-alpha", "app2-alpha-1"].each do |name|
       path = "/tmp/init/#{name}.conf"
       FileUtils.touch(path)
-      dont_allow(FileUtils).rm(path)
+      expect(FileUtils).to_not receive(:rm).with(path)
     end
 
     daemon.export
