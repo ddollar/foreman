@@ -27,7 +27,7 @@ class Foreman::CLI < Thor
 
   class << self
     # Hackery. Take the run method away from Thor so that we can redefine it.
-    def is_thor_reserved_word?(word, type)
+    def thor_reserved_word?(word, type)
       return false if word == "run"
       super
     end
