@@ -2,6 +2,7 @@ require "foreman"
 require "foreman/helpers"
 require "foreman/engine"
 require "foreman/engine/cli"
+require "foreman/engine/json_cli"
 require "foreman/export"
 require "foreman/version"
 require "shellwords"
@@ -19,12 +20,13 @@ class Foreman::CLI < Thor
 
   desc "start [PROCESS]", "Start the application (or a specific PROCESS)"
 
-  method_option :color,     :type => :boolean, :aliases => "-c", :desc => "Force color to be enabled"
-  method_option :env,       :type => :string,  :aliases => "-e", :desc => "Specify an environment file to load, defaults to .env"
-  method_option :formation, :type => :string,  :aliases => "-m", :banner => '"alpha=5,bar=3"', :desc => 'Specify what processes will run and how many. Default: "all=1"'
-  method_option :port,      :type => :numeric, :aliases => "-p"
-  method_option :timeout,   :type => :numeric, :aliases => "-t", :desc => "Specify the amount of time (in seconds) processes have to shutdown gracefully before receiving a SIGKILL, defaults to 5."
-  method_option :timestamp, :type => :boolean, :default => true, :desc => "Include timestamp in output"
+  method_option :color,       :type => :boolean, :aliases => "-c", :desc => "Force color to be enabled"
+  method_option :env,         :type => :string,  :aliases => "-e", :desc => "Specify an environment file to load, defaults to .env"
+  method_option :formation,   :type => :string,  :aliases => "-m", :banner => '"alpha=5,bar=3"', :desc => 'Specify what processes will run and how many. Default: "all=1"'
+  method_option :port,        :type => :numeric, :aliases => "-p"
+  method_option :timeout,     :type => :numeric, :aliases => "-t", :desc => "Specify the amount of time (in seconds) processes have to shutdown gracefully before receiving a SIGKILL, defaults to 5."
+  method_option :timestamp,   :type => :boolean, :default => true, :desc => "Include timestamp in output"
+  method_option :json_format, :type => :boolean, :aliases => "-j", :desc => "Output logs in JSON format."
 
   class << self
     # Hackery. Take the run method away from Thor so that we can redefine it.
@@ -51,7 +53,7 @@ class Foreman::CLI < Thor
   method_option :port,        :type => :numeric, :aliases => "-p"
   method_option :user,        :type => :string,  :aliases => "-u"
   method_option :template,    :type => :string,  :aliases => "-t"
-  method_option :formation, :type => :string,  :aliases => "-m", :banner => '"alpha=5,bar=3"', :desc => 'Specify what processes will run and how many. Default: "all=1"'
+  method_option :formation,   :type => :string,  :aliases => "-m", :banner => '"alpha=5,bar=3"', :desc => 'Specify what processes will run and how many. Default: "all=1"'
   method_option :timeout,     :type => :numeric, :aliases => "-t", :desc => "Specify the amount of time (in seconds) processes have to shutdown gracefully before receiving a SIGKILL, defaults to 5."
 
   def export(format, location=nil)
@@ -116,7 +118,6 @@ class Foreman::CLI < Thor
   no_tasks do
     def engine
       @engine ||= begin
-        engine_class = Foreman::Engine::CLI
         engine = engine_class.new(options)
         engine
       end
@@ -150,6 +151,15 @@ private ######################################################################
       when options[:procfile] then options[:procfile]
       when options[:root]     then File.expand_path(File.join(options[:root], "Procfile"))
       else "Procfile"
+    end
+  end
+
+  def engine_class
+    case
+      when options[:json_format] then
+        Foreman::Engine::JsonCLI
+      else
+        Foreman::Engine::CLI
     end
   end
 
