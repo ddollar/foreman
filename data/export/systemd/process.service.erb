@@ -5,7 +5,7 @@ PartOf=<%= app %>-<%= name %>.target
 User=<%= user %>
 WorkingDirectory=<%= engine.root %>
 Environment=PORT=%i
-<% if !engine.env.empty? %>Environment=<% engine.env.each_pair do |var,env| %>"<%= var.upcase %>=<%= env %>" <% end %><% end %>
+<% if !engine.env.empty? -%>Environment=<% engine.env.each_pair do |var,env| %>"<%= var.upcase %>=<%= env %>" <% end %><% end -%>
 ExecStart=/bin/bash -lc '<%= process.command %>'
 Restart=always
 StandardInput=null
