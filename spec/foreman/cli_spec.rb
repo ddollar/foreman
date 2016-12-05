@@ -56,6 +56,26 @@ describe "Foreman::CLI", :fakefs do
         output = `bundle exec foreman start -f #{resource_path "Procfile.bad"} && echo success`
         expect(output).not_to include 'success'
       end
+
+      it "logs with default timestamp format" do
+        Timecop.freeze do
+          without_fakefs do
+            output = foreman("start env -f #{resource_path("Procfile")}")
+            expected_timestamp = Time.now.strftime("%H:%M:%S")
+            expect(output).to include("#{expected_timestamp} env.1")
+          end
+        end
+      end
+
+      it "logs with specified timestamp format" do
+        Timecop.freeze do
+          without_fakefs do
+            output = foreman("start env -f #{resource_path("Procfile")} --timestamp_format %FT%T.%L%z")
+            expected_timestamp = Time.now.strftime("%FT%T.%L%z")
+            expect(output).to include("#{expected_timestamp} env.1")
+          end
+        end
+      end
     end
   end
 

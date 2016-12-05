@@ -44,8 +44,14 @@ class Foreman::Engine::CLI < Foreman::Engine
 
   end
 
+  DEFAULT_TIMESTAMP_FORMAT = "%H:%M:%S".freeze
   FOREMAN_COLORS = %w( cyan yellow green magenta red blue bright_cyan bright_yellow
                        bright_green bright_magenta bright_red bright_blue )
+
+  def initialize(options={})
+    super
+    @options[:timestamp_format] ||= DEFAULT_TIMESTAMP_FORMAT
+  end
 
   def startup
     @colors = map_colors
@@ -57,7 +63,8 @@ class Foreman::Engine::CLI < Foreman::Engine
     data.to_s.lines.map(&:chomp).each do |message|
       output  = ""
       output += $stdout.color(@colors[name.split(".").first].to_sym)
-      output += "#{Time.now.strftime("%H:%M:%S")} #{pad_process_name(name)} | "
+      timestamp = Time.now.strftime(options[:timestamp_format])
+      output += "#{timestamp} #{pad_process_name(name)} | "
       output += $stdout.color(:reset)
       output += message
       $stdout.puts output
