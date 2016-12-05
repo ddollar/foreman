@@ -4,11 +4,10 @@ gemspec
 
 group :test do
   gem 'rake'
-  gem 'fakefs', '~> 0.4.0'
-  gem 'rspec',  '~> 3.5'
+  gem 'fakefs', :require => "fakefs/safe"
+  gem 'rspec'
   gem "simplecov", :require => false
   gem 'timecop'
-  gem "codeclimate-test-reporter", :require => false
 end
 
 group :development do

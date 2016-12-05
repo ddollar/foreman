@@ -5,6 +5,7 @@ PartOf=app-bravo.target
 User=app
 WorkingDirectory=/tmp/app
 Environment=PORT=%i
+
 ExecStart=/bin/bash -lc './bravo'
 Restart=always
 StandardInput=null

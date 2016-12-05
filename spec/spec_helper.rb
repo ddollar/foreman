@@ -1,6 +1,3 @@
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
-
 require "simplecov"
 SimpleCov.start do
   add_filter "/spec/"
@@ -8,7 +5,6 @@ end
 
 require "rspec"
 require "timecop"
-require "fakefs/safe"
 require "fakefs/spec_helpers"
 
 $:.unshift File.expand_path("../../lib", __FILE__)
@@ -168,7 +164,7 @@ end
 RSpec.configure do |config|
   config.color = true
   config.order = 'rand'
-  config.include FakeFS::SpecHelpers, :fakefs
+  config.include FakeFS::SpecHelpers, :fakefs => true
   config.before(:each) do
     FileUtils.mkdir_p('/tmp')
   end
