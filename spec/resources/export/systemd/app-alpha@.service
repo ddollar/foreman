@@ -5,6 +5,7 @@ PartOf=app-alpha.target
 User=app
 WorkingDirectory=/tmp/app
 Environment=PORT=%i
+
 ExecStart=/bin/bash -lc './alpha'
 Restart=always
 StandardInput=null

@@ -12,21 +12,19 @@ GEM
       mime-types
       xml-simple
     builder (3.2.2)
-    codeclimate-test-reporter (0.5.0)
-      simplecov (>= 0.7.1, < 1.0.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
-    fakefs (0.4.3)
+    fakefs (0.10.0)
     hpricot (0.8.6)
     hpricot (0.8.6-java)
-    json (1.8.3)
-    json (1.8.3-java)
-    mime-types (3.0)
+    json (2.0.2)
+    json (2.0.2-java)
+    mime-types (3.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2016.0221)
+    mime-types-data (3.2016.0521)
     mustache (1.0.3)
-    rake (11.1.2)
-    rdiscount (2.1.8)
+    rake (11.3.0)
+    rdiscount (2.2.0.1)
     ronn (0.7.3)
       hpricot (>= 0.8.2)
       mustache (>= 0.7.0)
@@ -44,15 +42,15 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
-    simplecov (0.11.2)
+    simplecov (0.12.0)
       docile (~> 1.1.0)
-      json (~> 1.8)
+      json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
-    thor (0.19.1)
+    thor (0.19.4)
     timecop (0.8.1)
     xml-simple (1.1.5)
-    yard (0.8.7.6)
+    yard (0.9.5)
 
 PLATFORMS
   java
@@ -61,12 +59,11 @@ PLATFORMS
 
 DEPENDENCIES
   aws-s3
-  codeclimate-test-reporter
-  fakefs (~> 0.4.0)
+  fakefs
   foreman!
   rake
   ronn
-  rspec (~> 3.5)
+  rspec
   simplecov
   timecop
   yard
