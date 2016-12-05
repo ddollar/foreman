@@ -57,7 +57,7 @@ describe Foreman::Export::Systemd, :fakefs do
   it "includes environment variables" do
     engine.env['KEY'] = 'some "value"'
     systemd.export
-    expect(File.read("/tmp/init/app-alpha@.service")).to match(/KEY=some "value"$/)
+    expect(File.read("/tmp/init/app-alpha@.service")).to match(/KEY=some "value"/)
   end
 
   context "with a formation" do
