@@ -139,6 +139,7 @@ class Foreman::Engine
   # @option options [Hash] :env  A custom environment for this process
   #
   def register(name, command, options={})
+    return if name == 'release' && @options[:no_release] == true
     options[:env] ||= env
     options[:cwd] ||= File.dirname(command.split(" ").first)
     process = Foreman::Process.new(command, options)
@@ -314,7 +315,6 @@ private
 
   def parse_formation(formation)
     pairs = formation.to_s.gsub(/\s/, "").split(",")
-
     pairs.inject(Hash.new(0)) do |ax, pair|
       process, amount = pair.split("=")
       process == "all" ? ax.default = amount.to_i : ax[process] = amount.to_i

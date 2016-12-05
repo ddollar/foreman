@@ -1,0 +1,2 @@
+release: bin/echo releasing
+echo:    bin/echo echoing
