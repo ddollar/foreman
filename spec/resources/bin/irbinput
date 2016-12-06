@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+require 'pty'
+require 'irb'
+
+PTY.spawn('irb') do |reader, writer|
+  Thread.new do
+    sleep 1
+    writer.puts '0xf013 + 0x3248 # leet foreman'
+  end
+
+  loop do
+    sleep 2
+    print reader.sysread(256)
+    abort
+  end
+end

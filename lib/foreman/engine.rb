@@ -389,8 +389,16 @@ private
       if reader.eof?
         @readers.delete_if { |key, value| value == reader }
       else
-        data = reader.gets
-        output_with_mutex name_for(@readers.invert[reader]), data
+        $stdout.print marker(name_for(@readers.invert[reader]))
+
+        loop do
+          ch = reader.getc
+
+          $stdout.print ch
+          $stdout.flush
+
+          break if ch == "\n"
+        end
       end
     end
   end
