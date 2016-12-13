@@ -24,6 +24,7 @@ class Foreman::CLI < Thor
   method_option :formation, :type => :string,  :aliases => "-m", :banner => '"alpha=5,bar=3"', :desc => 'Specify what processes will run and how many. Default: "all=1"'
   method_option :port,      :type => :numeric, :aliases => "-p"
   method_option :timeout,   :type => :numeric, :aliases => "-t", :desc => "Specify the amount of time (in seconds) processes have to shutdown gracefully before receiving a SIGKILL, defaults to 5."
+  method_option :timestamp, :type => :boolean, :default => true, :desc => "Include timestamp in output"
 
   class << self
     # Hackery. Take the run method away from Thor so that we can redefine it.
