@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     foreman (0.82.0)
-      thor (~> 0.19.1)
+      thor (~> 0.19.3)
 
 GEM
   remote: http://rubygems.org/
@@ -49,7 +49,7 @@ GEM
       json (~> 1.8)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
-    thor (0.19.1)
+    thor (0.19.3)
     timecop (0.8.1)
     xml-simple (1.1.5)
     yard (0.8.7.6)
@@ -72,4 +72,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   1.11.2
+   1.13.2
