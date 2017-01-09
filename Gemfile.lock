@@ -16,7 +16,7 @@ GEM
       simplecov (>= 0.7.1, < 1.0.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
-    fakefs (0.4.3)
+    fakefs (0.10.1)
     hpricot (0.8.6)
     hpricot (0.8.6-java)
     json (1.8.3)
@@ -62,7 +62,7 @@ PLATFORMS
 DEPENDENCIES
   aws-s3
   codeclimate-test-reporter
-  fakefs (~> 0.4.0)
+  fakefs (~> 0.10.0)
   foreman!
   rake
   ronn
@@ -72,4 +72,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   1.11.2
+   1.13.7
