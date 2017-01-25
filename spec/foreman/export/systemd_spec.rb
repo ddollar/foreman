@@ -60,6 +60,12 @@ describe Foreman::Export::Systemd, :fakefs do
     expect(File.read("/tmp/init/app-alpha@.service")).to match(/KEY=some "value"/)
   end
 
+  it "includes ExecStart line" do
+    engine.env['KEY'] = 'some "value"'
+    systemd.export
+    expect(File.read("/tmp/init/app-alpha@.service")).to match(/^ExecStart=/)
+  end
+
   context "with a formation" do
     let(:formation) { "alpha=2" }
 
