@@ -141,6 +141,7 @@ private ######################################################################
       end
     else
       default_env = File.join(engine.root, ".env")
+      error(".env file does not exist.") unless File.file?(default_env)
       engine.load_env default_env if File.file?(default_env)
     end
   end
