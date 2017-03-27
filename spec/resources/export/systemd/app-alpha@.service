@@ -5,7 +5,7 @@ PartOf=app-alpha.target
 User=app
 WorkingDirectory=/tmp/app
 Environment=PORT=%i
-ExecStart=/bin/bash -lc './alpha'
+ExecStart=/bin/bash -lc 'exec ./alpha'
 Restart=always
 StandardInput=null
 StandardOutput=syslog
