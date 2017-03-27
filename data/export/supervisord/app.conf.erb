@@ -17,7 +17,6 @@ engine.each_process do |name, process|
 command=<%= process.command %>
 autostart=true
 autorestart=true
-stopsignal=QUIT
 stdout_logfile=<%= log %>/<%= name %>-<%= num %>.log
 stderr_logfile=<%= log %>/<%= name %>-<%= num %>.error.log
 user=<%= user %>

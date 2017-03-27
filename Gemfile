@@ -4,7 +4,7 @@ gemspec
 
 group :test do
   gem 'rake'
-  gem 'fakefs', '~> 0.4.0'
+  gem 'fakefs', '~> 0.10.0'
   gem 'rspec',  '~> 3.5'
   gem "simplecov", :require => false
   gem 'timecop'
