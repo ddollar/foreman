@@ -10,7 +10,7 @@ class Foreman::Engine
 
   # The signals that the engine cares about.
   #
-  HANDLED_SIGNALS = [ :TERM, :INT, :HUP ]
+  HANDLED_SIGNALS = [ :TERM, :INT, :HUP, :USR1, :USR2 ]
 
   attr_reader :env
   attr_reader :options
@@ -104,6 +104,8 @@ class Foreman::Engine
       handle_interrupt
     when :HUP
       handle_hangup
+    when *HANDLED_SIGNALS
+      handle_signal_forward(sig)
     else
       system "unhandled signal #{sig}"
     end
@@ -128,6 +130,11 @@ class Foreman::Engine
   def handle_hangup
     system "SIGHUP received, starting shutdown"
     @shutdown = true
+  end
+
+  def handle_signal_forward(signal)
+    system "#{signal} received, forwarding it to children"
+    kill_children signal
   end
 
   # Register a process to be run by this +Engine+
