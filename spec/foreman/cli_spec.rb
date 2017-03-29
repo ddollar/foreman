@@ -52,6 +52,15 @@ describe "Foreman::CLI", :fakefs do
         end
       end
 
+      it "selects the JSON CLI engine Class if requested" do
+        without_fakefs do
+          output = foreman("start -j -f #{resource_path("Procfile")}")
+          expect(output).to match(/{"application_server_timestamp":/)
+          expect(output).to match(/"process_name":"echo.1"/)
+          expect(JSON.parse(output.lines[0])).not_to be_empty
+        end
+      end
+
       it "fails if process fails" do
         output = `bundle exec foreman start -f #{resource_path "Procfile.bad"} && echo success`
         expect(output).not_to include 'success'
