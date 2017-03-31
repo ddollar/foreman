@@ -1,0 +1,39 @@
+---
+app: app
+log: /var/log/app
+user: app
+environment:
+processes:
+  - name: alpha
+    command: ./alpha
+    count: 1
+  - name: bravo
+    command: ./bravo
+    count: 1
+  - name: foo_bar
+    command: ./foo_bar
+    count: 1
+  - name: foo-bar
+    command: ./foo-bar
+    count: 1
+instances:
+  - name: app-alpha-1
+    process: alpha
+    port: 5000
+    command: "./alpha"
+    expanded_command: "./alpha"
+  - name: app-bravo-1
+    process: bravo
+    port: 5100
+    command: "./bravo"
+    expanded_command: "./bravo"
+  - name: app-foo_bar-1
+    process: foo_bar
+    port: 5200
+    command: "./foo_bar"
+    expanded_command: "./foo_bar"
+  - name: app-foo-bar-1
+    process: foo-bar
+    port: 5300
+    command: "./foo-bar"
+    expanded_command: "./foo-bar"
