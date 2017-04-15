@@ -1,0 +1,116 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          <%= app %>
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Generated initscript for <%= app %>
+# Description:       This file starts <%= app %>. It should be placed in /etc/init.d
+### END INIT INFO
+
+# Do NOT "set -e"
+
+# PATH should only include /usr/* if it runs after the mountnfs.sh script
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+DESC="Runs <%= app %>"
+NAME=<%= app %>
+PIDDIR=/var/run/$NAME
+SCRIPTNAME=/etc/init.d/$NAME
+USERNAME=<%= user %>
+
+# Read configuration variable file if it is present
+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+
+# Load the VERBOSE setting and other rcS variables
+[ -r /lib/init/vars.sh ] && . /lib/init/vars.sh
+
+# Define LSB log_* functions.
+# Depend on lsb-base (>= 3.2-14) to ensure that this file is present
+# and status_of_proc is working.
+[ -r /lib/lsb/init-functions ] &&. /lib/lsb/init-functions
+
+#
+# Function that starts the daemon/service
+#
+do_start()
+{
+	mkdir -p $PIDDIR
+	mkdir -p <%= log %>
+	chown $USERNAME: <%= log %>
+	# START APPLICATION: <%= app %>
+	<% engine.each_process do |name, process| %>
+		# START PROCESS: <%= name %>
+		<% 1.upto(engine.formation[name]) do |num| %>
+			# START CONCURRENT: <%= num %>
+				# Start: <%= app %>.<%= name %>.<%= num %>
+				# Create $PIDDIR/<%= name %>.<%= num %>.pid
+				su - $USERNAME -c 'cd <%= engine.root %>; export PORT=<%= engine.port_for(process, num) %>;<% engine.environment.each_pair do |var,env| %> export <%= var.upcase %>=<%= env %>; <% end %> <%= process.command %> >> <%= log %>/<%=name%>-<%=num%>.log 2>&1 & echo $!' > $PIDDIR/<%= name %>.<%= num %>.pid
+		<% end %>
+	<% end %>
+
+}
+
+#
+# Function that stops the daemon/service
+#
+do_stop()
+{
+	# STOP APPLICATION: <%= app %>
+	<% engine.each_process do |name, process| %>
+		# STOP PROCESS: <%= name %>
+		<% 1.upto(engine.formation[name]) do |num| %>
+			# STOP CONCURRENT: <%= num %>
+				# Stop: <%= app %>.<%= name %>.<%= num %>
+				kill `cat $PIDDIR/<%= name %>.<%= num %>.pid`
+				rm $PIDDIR/<%= name %>.<%= num %>.pid
+		<% end %>
+	<% end %>
+	rmdir $PIDDIR
+}
+
+case "$1" in
+  start)
+	[ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
+	do_start
+	case "$?" in
+		0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+		2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+	esac
+	;;
+  stop)
+	[ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
+	do_stop
+	case "$?" in
+		0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+		2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+	esac
+	;;
+  status)
+       status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
+       ;;
+  restart|force-reload)
+	log_daemon_msg "Restarting $DESC" "$NAME"
+	do_stop
+	case "$?" in
+	  0|1)
+		do_start
+		case "$?" in
+			0) log_end_msg 0 ;;
+			1) log_end_msg 1 ;; # Old process is still running
+			*) log_end_msg 1 ;; # Failed to start
+		esac
+		;;
+	  *)
+	  	# Failed to stop
+		log_end_msg 1
+		;;
+	esac
+	;;
+  *)
+	echo "Usage: $SCRIPTNAME {start|stop|status|restart|force-reload}" >&2
+	exit 3
+	;;
+esac
+
+:

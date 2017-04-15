@@ -125,8 +125,8 @@ private ######################################################################
     if file && template_root
       old_export_template name, file, template_root
     else
-      name_without_first = name.split("/")[1..-1].join("/")
       matchers = []
+      name_without_first = name.split("/")[1..-1].join("/")
       matchers << File.join(options[:template], name_without_first) if options[:template]
       matchers << File.expand_path("~/.foreman/templates/#{name}")
       matchers << File.expand_path("../../../../data/export/#{name}", __FILE__)
