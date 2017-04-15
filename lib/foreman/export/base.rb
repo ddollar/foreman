@@ -140,7 +140,7 @@ private ######################################################################
   end
 
   def chmod(mode, file)
-    say "setting #{file} to mode #{mode}"
+    say "setting #{file} to mode #{mode.is_a?(Fixnum) ? sprintf('%#o', mode) : mode}"
     FileUtils.chmod mode, File.join(location, file)
   end
 
