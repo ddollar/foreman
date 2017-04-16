@@ -109,6 +109,16 @@ describe "Foreman::Engine", :fakefs do
       subject.load_env "/tmp/env"
       expect(subject.send(:base_port)).to eq(9000)
     end
+
+    it "should handle lines beginning with export" do
+      File.open("/tmp/env", "w") do |f|
+        f.puts 'export FOO=bar'
+        f.puts 'export BAZ="qux"'
+      end
+      subject.load_env "/tmp/env"
+      expect(subject.env["FOO"]).to   eq("bar")
+      expect(subject.env["BAZ"]).to   eq("qux")
+    end
   end
 
 end
