@@ -4,7 +4,7 @@
 [![Code Climate](https://codeclimate.com/github/ddollar/foreman.svg)](https://codeclimate.com/github/ddollar/foreman)
 [![Inline docs](http://inch-ci.org/github/ddollar/foreman.svg?branch=master)](http://inch-ci.org/github/ddollar/foreman)
 
-Manage Procfile-based applications
+Manage [Procfile](https://devcenter.heroku.com/articles/procfile)-based applications
 
 ## Installation
 
