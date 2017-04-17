@@ -10,7 +10,17 @@ Manage Procfile-based applications
 
     $ gem install foreman
 
-Ruby users should take care *not* to install foreman in their project's `Gemfile`.
+Or add foreman to your Gemfile:
+
+```
+group :development do
+  gem 'foreman', require: false
+end
+```
+
+and then run:
+
+    $ bundle install
 
 ## Getting Started
 
