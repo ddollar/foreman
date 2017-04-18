@@ -4,7 +4,7 @@ require "foreman"
 #
 # A valid Procfile entry is captured by this regex:
 #
-#   /^([A-Za-z0-9_]+):\s*(.+)$/
+#   /^([A-Za-z0-9_-]+):\s*(.+)$/
 #
 # All other lines are ignored.
 #
