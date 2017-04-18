@@ -56,6 +56,11 @@ describe "Foreman::CLI", :fakefs do
         output = `bundle exec foreman start -f #{resource_path "Procfile.bad"} && echo success`
         expect(output).not_to include 'success'
       end
+
+      it "fails if process doesnt exist" do
+        output = `bundle exec foreman start doesntexist && echo success`
+        expect(output).not_to include 'success'
+      end
     end
   end
 
