@@ -21,7 +21,7 @@ class Foreman::Procfile
 
   # Yield each +Procfile+ entry in order
   #
-  def entries(&blk)
+  def entries
     @entries.each do |(name, command)|
       yield name, command
     end
