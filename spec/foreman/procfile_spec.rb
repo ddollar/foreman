@@ -22,6 +22,13 @@ describe Foreman::Procfile, :fakefs do
     expect(procfile["foo_bar"]).to eq("./foo_bar")
   end
 
+  it 'only creates Procfile entries for lines matching regex' do
+    write_procfile
+    procfile = Foreman::Procfile.new("Procfile")
+    keys = procfile.instance_variable_get(:@entries).map(&:first)
+    expect(keys).to match_array(%w[alpha bravo foo-bar foo_bar])
+  end
+
   it "returns nil when attempting to retrieve an non-existing entry" do
     write_procfile
     procfile = Foreman::Procfile.new("Procfile")
