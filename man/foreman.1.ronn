@@ -33,6 +33,9 @@ The following options control how the application is run:
   * `-e`, `--env`:
     Specify one or more .env files to load
 
+  * `--pidfile`:
+    Specify a PID file to store the PID of the foreman process in.
+
   * `-f`, `--procfile`:
     Specify an alternate Procfile to load, implies `-d` at the Procfile root.
 

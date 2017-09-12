@@ -23,6 +23,7 @@ class Foreman::Engine
   # @option options [String] :formation (all=1)    The process formation to use
   # @option options [Fixnum] :port      (5000)     The base port to assign to processes
   # @option options [String] :root      (Dir.pwd)  The root directory from which to run processes
+  # @option options [String] :pidfile   (nil)      The PID file for this process
   #
   def initialize(options={})
     @options = options.dup
@@ -55,9 +56,11 @@ class Foreman::Engine
     register_signal_handlers
     startup
     spawn_processes
+    write_pidfile
     watch_for_output
     sleep 0.1
     wait_for_shutdown_or_child_termination
+    remove_pidfile
     shutdown
     exit(@exitstatus) if @exitstatus
   end
@@ -375,6 +378,16 @@ private
         @readers[pid] = reader
       end
     end
+  end
+
+  def write_pidfile
+    pidfile = @options[:pidfile]
+    File.write(pidfile, Process.pid.to_s) if pidfile
+  end
+
+  def remove_pidfile
+    pidfile = @options[:pidfile]
+    FileUtils.rm_f(pidfile) if pidfile
   end
 
   def read_self_pipe

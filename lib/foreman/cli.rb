@@ -22,6 +22,7 @@ class Foreman::CLI < Thor
   method_option :color,     :type => :boolean, :aliases => "-c", :desc => "Force color to be enabled"
   method_option :env,       :type => :string,  :aliases => "-e", :desc => "Specify an environment file to load, defaults to .env"
   method_option :formation, :type => :string,  :aliases => "-m", :banner => '"alpha=5,bar=3"', :desc => 'Specify what processes will run and how many. Default: "all=1"'
+  method_option :pidfile,   :type => :string,                    :desc => "PID file for foreman process"
   method_option :port,      :type => :numeric, :aliases => "-p"
   method_option :timeout,   :type => :numeric, :aliases => "-t", :desc => "Specify the amount of time (in seconds) processes have to shutdown gracefully before receiving a SIGKILL, defaults to 5."
   method_option :timestamp, :type => :boolean, :default => true, :desc => "Include timestamp in output"
