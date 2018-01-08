@@ -1,5 +1,12 @@
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
+# it throws following message:
+# W, [2018-02-06T18:16:06.360071 #72025]  WARN -- :       This usage of the Code Climate Test Reporter is now deprecated. Since version
+#       1.0, we now require you to run `SimpleCov` in your test/spec helper, and then
+#       run the provided `codeclimate-test-reporter` binary separately to report your
+#       results to Code Climate.
+#
+#       More information here: https://github.com/codeclimate/ruby-test-reporter/blob/master/README.md
+# require "codeclimate-test-reporter"
+# CodeClimate::TestReporter.start
 
 require "simplecov"
 SimpleCov.start do
