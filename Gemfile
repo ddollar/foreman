@@ -14,5 +14,5 @@ end
 group :development do
   gem 'aws-s3'
   gem 'ronn'
-  gem 'yard'
+  gem 'yard', '~> 0.9.11'
 end

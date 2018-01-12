@@ -52,7 +52,7 @@ GEM
     thor (0.19.4)
     timecop (0.8.1)
     xml-simple (1.1.5)
-    yard (0.8.7.6)
+    yard (0.9.12)
 
 PLATFORMS
   java
@@ -69,7 +69,4 @@ DEPENDENCIES
   rspec (~> 3.5)
   simplecov
   timecop
-  yard
-
-BUNDLED WITH
-   1.13.7
+  yard (~> 0.9.11)
