@@ -3,9 +3,27 @@ require "foreman"
 # Reads and exposes environment variables
 # from a .env file.
 class Foreman::Env
+  LINE = /
+    \A
+    \s*
+    (?:export\s+)?    # optional export
+    ([\w\.]+)         # key
+    (?:\s*=\s*|:\s+?) # separator
+    (                 # optional value begin
+      '(?:\'|[^'])*'  #   single quoted value
+      |               #   or
+      "(?:\"|[^"])*"  #   double quoted value
+      |               #   or
+      [^#\n]+         #   unquoted value
+    )?                # value end
+    \s*
+    (?:\#.*)?         # optional comment
+    \z
+  /x
+
   def initialize(filename)
     @entries = File.read(filename).gsub("\r\n", "\n").split("\n").each_with_object({}) do |line, ax|
-      next unless line =~ /\A([A-Za-z_0-9]+)=(.*)\z/
+      next unless line =~ LINE
       key = Regexp.last_match(1)
       ax[key] =
         case val = Regexp.last_match(2)

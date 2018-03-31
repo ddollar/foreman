@@ -109,6 +109,12 @@ describe "Foreman::Engine", :fakefs do
       subject.load_env "/tmp/env"
       expect(subject.send(:base_port)).to eq(9000)
     end
+
+    it "should handle an export prefix if specified" do
+      write_file("/tmp/env") { |f| f.puts("export FOO=bar") }
+      subject.load_env "/tmp/env"
+      expect(subject.env["FOO"]).to eq("bar")
+    end
   end
 
 end
