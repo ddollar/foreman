@@ -8,6 +8,7 @@ end
 
 require "rspec"
 require "timecop"
+require "pp"
 require "fakefs/safe"
 require "fakefs/spec_helpers"
 
@@ -19,7 +20,7 @@ end
 
 def mock_error(subject, message)
   mock_exit do
-    mock(subject).puts("ERROR: #{message}")
+    expect(subject).to receive(:puts).with("ERROR: #{message}")
     yield
   end
 end
@@ -166,11 +167,9 @@ ensure
 end
 
 RSpec.configure do |config|
-  config.treat_symbols_as_metadata_keys_with_true_values = true
   config.color = true
   config.order = 'rand'
   config.include FakeFS::SpecHelpers, :fakefs
-  config.mock_with :rr
   config.before(:each) do
     FileUtils.mkdir_p('/tmp')
   end

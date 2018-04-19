@@ -1,7 +1,7 @@
 # Foreman
 
 [![Build Status](https://travis-ci.org/ddollar/foreman.svg?branch=master)](https://travis-ci.org/ddollar/foreman)
-[![Code Climate](https://codeclimate.com/github/ddollar/foreman.png)](https://codeclimate.com/github/ddollar/foreman)
+[![Code Climate](https://codeclimate.com/github/ddollar/foreman.svg)](https://codeclimate.com/github/ddollar/foreman)
 [![Inline docs](http://inch-ci.org/github/ddollar/foreman.svg?branch=master)](http://inch-ci.org/github/ddollar/foreman)
 
 Manage Procfile-based applications
@@ -37,6 +37,7 @@ See [.travis.yml](.travis.yml) for a list of Ruby versions against which Foreman
 * [shoreman](https://github.com/chrismytton/shoreman) - shell
 * [crank](https://github.com/arktisklada/crank) - Crystal
 * [houseman](https://github.com/fujimura/houseman) - Haskell
+* [spm](https://github.com/bytegust/spm) - Go
 
 ## Authors
 

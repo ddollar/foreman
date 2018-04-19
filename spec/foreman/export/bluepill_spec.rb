@@ -11,7 +11,7 @@ describe Foreman::Export::Bluepill, :fakefs do
   let(:bluepill)  { Foreman::Export::Bluepill.new("/tmp/init", engine, options) }
 
   before(:each) { load_export_templates_into_fakefs("bluepill") }
-  before(:each) { stub(bluepill).say }
+  before(:each) { allow(bluepill).to receive(:say) }
 
   it "exports to the filesystem" do
     bluepill.export
@@ -19,7 +19,7 @@ describe Foreman::Export::Bluepill, :fakefs do
   end
 
   it "cleans up if exporting into an existing dir" do
-    mock(FileUtils).rm("/tmp/init/app.pill")
+    expect(FileUtils).to receive(:rm).with("/tmp/init/app.pill")
 
     bluepill.export
     bluepill.export

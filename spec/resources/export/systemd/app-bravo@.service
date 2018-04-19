@@ -5,11 +5,11 @@ PartOf=app-bravo.target
 User=app
 WorkingDirectory=/tmp/app
 Environment=PORT=%i
-ExecStart=/bin/bash -lc './bravo'
+ExecStart=/bin/bash -lc 'exec ./bravo'
 Restart=always
 StandardInput=null
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=%n
-KillMode=process
+KillMode=mixed
 TimeoutStopSec=5

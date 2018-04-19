@@ -9,7 +9,7 @@ describe "Foreman::Export::Base", :fakefs do
   let(:subject)  { Foreman::Export::Base.new(location, engine) }
 
   it "has a say method for displaying info" do
-    mock(subject).puts("[foreman export] foo")
+    expect(subject).to receive(:puts).with("[foreman export] foo")
     subject.send(:say, "foo")
   end
 

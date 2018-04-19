@@ -1,3 +1,31 @@
+## 0.84.0 (2017-03-28)
+
+* add test for systemd template (closes: #664)  [Timur Batyrshin]
+* quote env vars as was suggested in https://github.com/ddollar/foreman/pull/652  [Timur Batyrshin]
+* update specs  [Koen Punt]
+* update specs  [Koen Punt]
+* forward user signals (SIGUSR1, SIGUSR2)  [Tilo Prütz]
+* make systemctl stop/restart/reload work  [Koen Punt]
+* 0.83.0  [David Dollar]
+* use default stop signal for supervisord  [Chris Blättermann]
+* updated fakefs to silence warnings during tests  [Chris Blättermann]
+* Add option to suppress timestamps  [Glenn Oppegard]
+* Add ruby 2.3.3 to travis  [Tejas Bubane]
+* Change systemd KillMode to "mixed"  [Reto Kaiser]
+* Relax systemd template spec matcher for env var  [Reto Kaiser]
+* Don't print newline in systemd template if no ENV vars given  [Reto Kaiser]
+* pp must be required before fakefs  [Reto Kaiser]
+* Typo  [Lin]
+* Fixed empty Environment line for Travis  [Lin]
+* More compact and escaped environment variable names  [Lin]
+* Add spm (go port)  [Ömer Ufuk Efendioğlu]
+* Port to rspec 3  [Antonio Terceiro]
+* README: Use fancy SVG badges [ci skip]  [Olle Jonsson]
+* defined process filename format only once  [Koen Punt]
+* clean all upstart process files  [Koen Punt]
+* Fix small typo in man page  [Dov Murik]
+* Foreman Export Upstart should not duplicate ports  [Steven Daniels]
+
 ## 0.82.0 (2016-05-21)
 
 * Fixes #626. Use -m for concurrency when using the export command.  [Jori Hardman]

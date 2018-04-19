@@ -5,7 +5,7 @@ describe Foreman do
 
   describe "VERSION" do
     subject { Foreman::VERSION }
-    it { should be_a String }
+    it { is_expected.to be_a String }
   end
 
   describe "runner" do
