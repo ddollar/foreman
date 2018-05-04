@@ -135,7 +135,11 @@ private ######################################################################
   end
 
   def write_template(name, target, binding)
-    compiled = ERB.new(export_template(name), nil, '-').result(binding)
+    compiled = if ERB.instance_method(:initialize).parameters.assoc(:key) # Ruby 2.6+
+                 ERB.new(export_template(name), trim_mode: '-').result(binding)
+               else
+                 ERB.new(export_template(name), nil, '-').result(binding)
+               end
     write_file target, compiled
   end
 
