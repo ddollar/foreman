@@ -76,6 +76,14 @@ describe "Foreman::Engine", :fakefs do
       expect(subject.env["BAZ"]).to eq("qux")
     end
 
+    it "should prefer later versions of values" do
+      write_file("/tmp/env1") { |f| f.puts("FOO=bar") }
+      write_file("/tmp/env2") { |f| f.puts("FOO=qux") }
+      subject.load_env "/tmp/env1"
+      subject.load_env "/tmp/env2"
+      expect(subject.env["FOO"]).to eq("qux")
+    end
+
     it "should handle quoted values" do
       write_file("/tmp/env") do |f|
         f.puts 'FOO=bar'
