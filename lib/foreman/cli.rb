@@ -37,6 +37,7 @@ class Foreman::CLI < Foreman::Thor
   def start(process=nil)
     check_procfile!
     load_environment!
+    inherit_environment!
     engine.load_procfile(procfile)
     engine.options[:formation] = "#{process}=1" if process
     engine.start
@@ -80,6 +81,7 @@ class Foreman::CLI < Foreman::Thor
 
   def run(*args)
     load_environment!
+    inherit_environment!
 
     if File.file?(procfile)
       engine.load_procfile(procfile)
@@ -132,6 +134,10 @@ private ######################################################################
 
   def check_procfile!
     error("#{procfile} does not exist.") unless File.file?(procfile)
+  end
+
+  def inherit_environment!
+    engine.inherit_env
   end
 
   def load_environment!

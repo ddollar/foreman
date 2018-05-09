@@ -61,6 +61,13 @@ describe "Foreman::Engine", :fakefs do
   end
 
   describe "environment" do
+    it "should read ENV" do
+      ClimateControl.modify FOO: 'baz' do
+        subject.inherit_env
+        expect(subject.env["FOO"]).to eq("baz")
+      end
+    end
+
     it "should read env files" do
       write_file("/tmp/env") { |f| f.puts("FOO=baz") }
       subject.load_env("/tmp/env")
