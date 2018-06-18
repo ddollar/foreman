@@ -1,22 +1,38 @@
 require "foreman"
 
+# Reads and exposes environment variables
+# from a .env file.
 class Foreman::Env
-
-  attr_reader :entries
+  LINE = /
+    \A
+    \s*
+    (?:export\s+)?    # optional export
+    ([\w\.]+)         # key
+    (?:\s*=\s*|:\s+?) # separator
+    (                 # optional value begin
+      '(?:\'|[^'])*'  #   single quoted value
+      |               #   or
+      "(?:\"|[^"])*"  #   double quoted value
+      |               #   or
+      [^#\n]+         #   unquoted value
+    )?                # value end
+    \s*
+    (?:\#.*)?         # optional comment
+    \z
+  /x
 
   def initialize(filename)
-    @entries = File.read(filename).gsub("\r\n","\n").split("\n").inject({}) do |ax, line|
-      if line =~ /\A([A-Za-z_0-9]+)=(.*)\z/
-        key = $1
-        case val = $2
+    @entries = File.read(filename).gsub("\r\n", "\n").split("\n").each_with_object({}) do |line, ax|
+      next unless line =~ LINE
+      key = Regexp.last_match(1)
+      ax[key] =
+        case val = Regexp.last_match(2)
           # Remove single quotes
-          when /\A'(.*)'\z/ then ax[key] = $1
+        when /\A'(.*)'\z/ then Regexp.last_match(1)
           # Remove double quotes and unescape string preserving newline characters
-          when /\A"(.*)"\z/ then ax[key] = $1.gsub('\n', "\n").gsub(/\\(.)/, '\1')
-         else ax[key] = val
+        when /\A"(.*)"\z/ then Regexp.last_match(1).gsub('\n', "\n").gsub(/\\(.)/, '\1')
+        else val
         end
-      end
-      ax
     end
   end
 
@@ -25,5 +41,4 @@ class Foreman::Env
       yield key, value
     end
   end
-
 end
