@@ -6,7 +6,7 @@ User=<%= user %>
 WorkingDirectory=<%= engine.root %>
 Environment=PORT=%i
 <% engine.env.each_pair do |var,env| -%>
-Environment="<%= var.upcase %>=<%= env %>"
+Environment="<%= var %>=<%= env %>"
 <% end -%>
 ExecStart=/bin/bash -lc 'exec <%= process.command %>'
 Restart=always
