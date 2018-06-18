@@ -1,3 +1,16 @@
+## 0.85.0 (2018-06-18)
+
+* updates rubies in travis - ensures only running with PID would be killed - updates dependencies; runs `codeclimate-test-reporter` after successful build - updates rubies for travis - squashes commits  [LeFnord]
+* Deprecate safe_level of ERB.new in Ruby 2.6  [Koichi ITO]
+* gitignore  [David Dollar]
+* update yard  [David Dollar]
+* Don't upcase env names for daemon processes  [Matthew Savage]
+* Don't upcase env names in Launchd  [Matthew Savage]
+* No upcase for env name in Systemd  [Matthew Savage]
+* Don't force env var names to be upcased  [Matthew Savage]
+* Test that invalid Procfile entries are ignored  [Kevin Litchfield]
+* Remove unused block parameter  [Kevin Litchfield]
+
 ## 0.84.0 (2017-03-28)
 
 * add test for systemd template (closes: #664)  [Timur Batyrshin]
