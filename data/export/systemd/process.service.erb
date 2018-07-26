@@ -11,8 +11,8 @@ Environment="<%= var %>=<%= env %>"
 ExecStart=/bin/bash -lc 'exec <%= process.command %>'
 Restart=always
 StandardInput=null
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=<%= log %>
+StandardError=<%= error_log %>
 SyslogIdentifier=%n
 KillMode=mixed
 TimeoutStopSec=<%= engine.options[:timeout] %>

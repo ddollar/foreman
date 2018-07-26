@@ -37,4 +37,12 @@ class Foreman::Export::Systemd < Foreman::Export::Base
 
     write_template "systemd/master.target.erb", "#{app}.target", binding
   end
+
+  def log
+    options[:log] || "syslog"
+  end
+
+  def error_log
+    options[:error_log] || "syslog"
+  end
 end
