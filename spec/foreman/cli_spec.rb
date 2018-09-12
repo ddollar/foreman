@@ -108,4 +108,17 @@ describe "Foreman::CLI", :fakefs do
     end
   end
 
+  describe "export" do
+    describe "with a valid Procfile" do
+      it "logs to specified file" do
+        without_fakefs do
+          output = foreman("export systemd -f #{resource_path("Procfile")} -l /var/log/foreman.log -x /var/log/foreman.error.log /tmp/foreman-systemd-export")
+          Dir.glob("/tmp/foreman-systemd-export/*.service").each do |file|
+            expect(File.read(file)).to match("StandardOutput=file:/var/log/foreman.log")
+            expect(File.read(file)).to match("StandardError=file:/var/log/foreman.error.log")
+          end 
+        end
+      end
+    end
+  end
 end

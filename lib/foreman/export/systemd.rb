@@ -39,10 +39,10 @@ class Foreman::Export::Systemd < Foreman::Export::Base
   end
 
   def log
-    options[:log] || "syslog"
+    options[:log].nil? ? "syslog" : "file:#{options[:log]}"
   end
 
   def error_log
-    options[:error_log] || "syslog"
+    options[:error_log].nil? ? "syslog" : "file:#{options[:error_log]}"
   end
 end
