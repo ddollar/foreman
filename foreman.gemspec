@@ -18,4 +18,5 @@ Gem::Specification.new do |gem|
   gem.files << "man/foreman.1"
 
   gem.add_dependency 'thor', '~> 0.19.1'
+  gem.add_dependency 'psych'
 end
