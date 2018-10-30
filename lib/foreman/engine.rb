@@ -191,14 +191,14 @@ class Foreman::Engine
       @running.each do |pid, (process, index)|
         system "sending #{signal} to #{name_for(pid)} at pid #{pid}"
         begin
-          Process.kill(signal, pid)
+          Process.kill("-#{signal}", pid)
         rescue Errno::ESRCH, Errno::EPERM
         end
       end
     else
       begin
         pids = @running.keys.compact
-        Process.kill signal, *pids unless pids.empty?
+        Process.kill("-#{signal}", *pids) unless pids.empty?
       rescue Errno::ESRCH, Errno::EPERM
       end
     end
