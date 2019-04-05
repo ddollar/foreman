@@ -10,7 +10,7 @@ Manage Procfile-based applications
 
     $ gem install foreman
 
-Ruby users may *not* want to install foreman in their project's `Gemfile` if they are concenrd about dependecy version conflicts.
+Ruby users may *not* want to install foreman in their project's `Gemfile` if they are concerned about dependency version conflicts.
 
 ## Getting Started
 
