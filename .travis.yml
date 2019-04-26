@@ -1,7 +1,5 @@
 language: ruby
 
-sudo: false
-
 before_install:
   - gem update --system
   - gem install bundler
@@ -14,10 +12,10 @@ cache: bundler
 bundler_args: --without development
 
 rvm:
-- 2.2.10
-- 2.3.7
-- 2.4.4
-- 2.5.1
+- 2.3.8
+- 2.4.6
+- 2.5.5
+- 2.6.3
 env:
   global:
     secure: IKoaAfTsrU1scmRO7LNJ+hVGzVeYrCB8qwr1KK/WiCm6JirAhiwvpf7osaMT6h+QRELSiAay2wPn89FqpZ9wzpL/zh5kpgfI04gnKrD7ZlPiKDPYddt6R4+Z4+LUZ0dkoM//MjRiIKz0wdvgbzn/E8FSpuhh3FeVYzYVTmAfgME=
