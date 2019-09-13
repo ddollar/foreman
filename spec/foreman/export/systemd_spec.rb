@@ -66,6 +66,24 @@ describe Foreman::Export::Systemd, :fakefs do
     expect(File.read("/tmp/init/app-alpha@.service")).to match(/^ExecStart=/)
   end
 
+  context "with a log setting" do
+    it "includes StandardOutput line with default value" do
+      systemd.export
+      expect(File.read("/tmp/init/app-alpha@.service")).to match("StandardOutput=syslog")
+      expect(File.read("/tmp/init/app-alpha@.service")).to match("StandardError=syslog")
+    end
+
+    context "with custom options" do
+      let(:options) { { :log => "/var/log/foreman.log", :error_log => "/var/log/foreman.error.log" } }
+
+      it "includes StandardOutput line with given value" do
+        systemd.export
+        expect(File.read("/tmp/init/app-alpha@.service")).to match("StandardOutput=file:/var/log/foreman.log")
+        expect(File.read("/tmp/init/app-alpha@.service")).to match("StandardError=file:/var/log/foreman.error.log")
+      end
+    end
+  end
+
   context "with a formation" do
     let(:formation) { "alpha=2" }
 

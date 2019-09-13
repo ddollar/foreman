@@ -1,3 +1,7 @@
+## 0.86.0 (2018-08-13)
+
+* Add options for systemd logging [Lichtamberg]
+
 ## 0.85.0 (2018-06-18)
 
 * updates rubies in travis - ensures only running with PID would be killed - updates dependencies; runs `codeclimate-test-reporter` after successful build - updates rubies for travis - squashes commits  [LeFnord]
