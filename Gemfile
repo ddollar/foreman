@@ -2,6 +2,8 @@ source "http://rubygems.org"
 
 gemspec
 
+gem 'thor', path: 'lib/foreman/vendor/thor'
+
 group :test do
   gem 'rake'
   gem 'fakefs', '~> 0.10.0'
@@ -15,4 +17,5 @@ group :development do
   gem 'aws-s3'
   gem 'ronn'
   gem 'yard', '~> 0.9.11'
+  gem 'automatiek'
 end
