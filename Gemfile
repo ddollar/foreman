@@ -2,7 +2,7 @@ source "http://rubygems.org"
 
 gemspec
 
-gem 'thor', path: 'lib/foreman/vendor/thor'
+gem 'thor', '0.19.4', :require => false
 
 group :test do
   gem 'rake'
