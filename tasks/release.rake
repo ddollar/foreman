@@ -43,6 +43,7 @@ desc "Generate a Changelog"
 task :changelog do
   while release = newer_release
     entry = %x{ git show --format="%cd" #{release} | head -n 1 }
+    puts entry
     date = Time.parse(entry.chomp).strftime("%Y-%m-%d")
 
     message  = "## #{release[1..-1]} (#{date})\n\n"

@@ -1,3 +1,13 @@
+## 0.86.0 (2019-10-09)
+
+* bundle (but don't use) real thor to ensure we still get vulnerability notifications from github.  [Micah Geisel]
+* we don't need automatiek loaded to boot.  [Micah Geisel]
+* inline thor dependency.  [Micah Geisel]
+* CI: Use ruby 2.5.6, 2.6.4 in the matrix  [Olle Jonsson]
+* add wiki page with reason for not bundling to readme  [David Dollar]
+* CI: Use 2.4.6, 2.5.5, 2.6.3  [Olle Jonsson]
+* update yard for GHSA-xfhh-rx56-rxcr  [David Dollar]
+
 ## 0.85.0 (2018-06-18)
 
 * updates rubies in travis - ensures only running with PID would be killed - updates dependencies; runs `codeclimate-test-reporter` after successful build - updates rubies for travis - squashes commits  [LeFnord]
