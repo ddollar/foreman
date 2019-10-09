@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    foreman (0.85.0)
+    foreman (0.86.0)
 
 GEM
   remote: http://rubygems.org/
