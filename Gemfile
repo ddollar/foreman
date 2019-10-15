@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gemspec
 
-gem 'thor', '~> 0.20', :require => false
+gem 'thor', '0.19.4', :require => false
 
 group :test do
   gem 'rake'

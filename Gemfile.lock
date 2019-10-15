@@ -47,7 +47,7 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    thor (0.20.3)
+    thor (0.19.4)
     timecop (0.9.1)
     xml-simple (1.1.5)
     yard (0.9.20)
@@ -65,7 +65,7 @@ DEPENDENCIES
   ronn
   rspec (~> 3.5)
   simplecov
-  thor (~> 0.20)
+  thor (= 0.19.4)
   timecop
   yard (~> 0.9.11)
 
