@@ -1,12 +1,15 @@
 [Unit]
-PartOf=app-alpha.target
+PartOf=app.target
+StopWhenUnneeded=yes
 
 [Service]
 User=app
 WorkingDirectory=/tmp/app
-Environment=PORT=%i
-ExecStart=/bin/bash -lc 'exec ./alpha'
+Environment=PORT=5000
+Environment=PS=alpha.1
+ExecStart=/bin/bash -lc 'exec -a "app-alpha.1" ./alpha'
 Restart=always
+RestartSec=14s
 StandardInput=null
 StandardOutput=syslog
 StandardError=syslog

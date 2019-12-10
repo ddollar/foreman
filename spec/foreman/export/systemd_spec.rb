@@ -3,7 +3,7 @@ require "foreman/engine"
 require "foreman/export/systemd"
 require "tmpdir"
 
-describe Foreman::Export::Systemd, :fakefs do
+describe Foreman::Export::Systemd, :fakefs, :aggregate_failures do
   let(:procfile)  { write_procfile("/tmp/app/Procfile") }
   let(:formation) { nil }
   let(:engine)    { Foreman::Engine.new(:formation => formation).load_procfile(procfile) }
@@ -16,71 +16,101 @@ describe Foreman::Export::Systemd, :fakefs do
   it "exports to the filesystem" do
     systemd.export
 
-    expect(File.read("/tmp/init/app.target")).to          eq(example_export_file("systemd/app.target"))
-    expect(File.read("/tmp/init/app-alpha.target")).to    eq(example_export_file("systemd/app-alpha.target"))
-    expect(File.read("/tmp/init/app-alpha@.service")).to  eq(example_export_file("systemd/app-alpha@.service"))
-    expect(File.read("/tmp/init/app-bravo.target")).to    eq(example_export_file("systemd/app-bravo.target"))
-    expect(File.read("/tmp/init/app-bravo@.service")).to  eq(example_export_file("systemd/app-bravo@.service"))
-
-    expect(File.directory?("/tmp/init/app-alpha.target.wants")).to                      be_truthy
-    expect(File.symlink?("/tmp/init/app-alpha.target.wants/app-alpha@5000.service")).to be_truthy
+    expect(File.read("/tmp/init/app.target")).to eq(example_export_file("systemd/app.target"))
+    expect(File.read("/tmp/init/app-alpha.1.service")).to eq(example_export_file("systemd/app-alpha.1.service"))
+    expect(File.read("/tmp/init/app-bravo.1.service")).to eq(example_export_file("systemd/app-bravo.1.service"))
   end
 
-  it "cleans up if exporting into an existing dir" do
-    expect(FileUtils).to receive(:rm).with("/tmp/init/app.target")
+  context "when systemd export was run using the previous version of systemd export" do
+    before do
+     write_file("/tmp/init/app.target")
 
-    expect(FileUtils).to receive(:rm).with("/tmp/init/app-alpha@.service")
-    expect(FileUtils).to receive(:rm).with("/tmp/init/app-alpha.target")
-    expect(FileUtils).to receive(:rm).with("/tmp/init/app-alpha.target.wants/app-alpha@5000.service")
-    expect(FileUtils).to receive(:rm_r).with("/tmp/init/app-alpha.target.wants")
+     write_file("/tmp/init/app-alpha@.service")
+     write_file("/tmp/init/app-alpha.target")
+     write_file("/tmp/init/app-alpha.target.wants/app-alpha@5000.service")
 
-    expect(FileUtils).to receive(:rm).with("/tmp/init/app-bravo.target")
-    expect(FileUtils).to receive(:rm).with("/tmp/init/app-bravo@.service")
-    expect(FileUtils).to receive(:rm).with("/tmp/init/app-bravo.target.wants/app-bravo@5100.service")
-    expect(FileUtils).to receive(:rm_r).with("/tmp/init/app-bravo.target.wants")
+     write_file("/tmp/init/app-bravo.target")
+     write_file("/tmp/init/app-bravo@.service")
+     write_file("/tmp/init/app-bravo.target.wants/app-bravo@5100.service")
 
-    expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo_bar.target")
-    expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo_bar@.service")
-    expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo_bar.target.wants/app-foo_bar@5200.service")
-    expect(FileUtils).to receive(:rm_r).with("/tmp/init/app-foo_bar.target.wants")
+     write_file("/tmp/init/app-foo_bar.target")
+     write_file("/tmp/init/app-foo_bar@.service")
+     write_file("/tmp/init/app-foo_bar.target.wants/app-foo_bar@5200.service")
 
-    expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo-bar.target")
-    expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo-bar@.service")
-    expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo-bar.target.wants/app-foo-bar@5300.service")
-    expect(FileUtils).to receive(:rm_r).with("/tmp/init/app-foo-bar.target.wants")
+     write_file("/tmp/init/app-foo-bar.target")
+     write_file("/tmp/init/app-foo-bar@.service")
+     write_file("/tmp/init/app-foo-bar.target.wants/app-foo-bar@5300.service")
+    end
 
+    it "cleans up service files created by systemd export" do
+      expect(FileUtils).to receive(:rm).with("/tmp/init/app.target")
 
-    systemd.export
-    systemd.export
+      expect(FileUtils).to receive(:rm).with("/tmp/init/app-alpha@.service")
+      expect(FileUtils).to receive(:rm).with("/tmp/init/app-alpha.target")
+      expect(FileUtils).to receive(:rm).with("/tmp/init/app-alpha.target.wants/app-alpha@5000.service")
+      expect(FileUtils).to receive(:rm_r).with("/tmp/init/app-alpha.target.wants")
+
+      expect(FileUtils).to receive(:rm).with("/tmp/init/app-bravo.target")
+      expect(FileUtils).to receive(:rm).with("/tmp/init/app-bravo@.service")
+      expect(FileUtils).to receive(:rm).with("/tmp/init/app-bravo.target.wants/app-bravo@5100.service")
+      expect(FileUtils).to receive(:rm_r).with("/tmp/init/app-bravo.target.wants")
+
+      expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo_bar.target")
+      expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo_bar@.service")
+      expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo_bar.target.wants/app-foo_bar@5200.service")
+      expect(FileUtils).to receive(:rm_r).with("/tmp/init/app-foo_bar.target.wants")
+
+      expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo-bar.target")
+      expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo-bar@.service")
+      expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo-bar.target.wants/app-foo-bar@5300.service")
+      expect(FileUtils).to receive(:rm_r).with("/tmp/init/app-foo-bar.target.wants")
+
+      systemd.export
+    end
+  end
+
+  context "when systemd export was run using the current version of systemd export" do
+    before do
+      systemd.export
+    end
+
+    it "cleans up service files created by systemd export" do
+      expect(FileUtils).to receive(:rm).with("/tmp/init/app.target")
+      expect(FileUtils).to receive(:rm).with("/tmp/init/app-alpha.1.service")
+      expect(FileUtils).to receive(:rm).with("/tmp/init/app-bravo.1.service")
+      expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo_bar.1.service")
+      expect(FileUtils).to receive(:rm).with("/tmp/init/app-foo-bar.1.service")
+
+      systemd.export
+    end
   end
 
   it "includes environment variables" do
     engine.env['KEY'] = 'some "value"'
     systemd.export
-    expect(File.read("/tmp/init/app-alpha@.service")).to match(/KEY=some "value"/)
+    expect(File.read("/tmp/init/app-alpha.1.service")).to match(/KEY=some "value"/)
   end
 
   it "includes ExecStart line" do
     engine.env['KEY'] = 'some "value"'
     systemd.export
-    expect(File.read("/tmp/init/app-alpha@.service")).to match(/^ExecStart=/)
+    expect(File.read("/tmp/init/app-alpha.1.service")).to match(/^ExecStart=/)
   end
 
-  context "with a formation" do
+  context "with a custom formation specified" do
     let(:formation) { "alpha=2" }
 
-    it "exports to the filesystem with concurrency" do
+    it "exports only those services that are specified in the formation" do
       systemd.export
 
-      expect(File.read("/tmp/init/app.target")).to             eq(example_export_file("systemd/app.target"))
-      expect(File.read("/tmp/init/app-alpha.target")).to       eq(example_export_file("systemd/app-alpha.target"))
-      expect(File.read("/tmp/init/app-alpha@.service")).to     eq(example_export_file("systemd/app-alpha@.service"))
-      expect(File.read("/tmp/init/app-bravo.target")).to       eq(example_export_file("systemd/app-bravo.target"))
-      expect(File.read("/tmp/init/app-bravo@.service")).to     eq(example_export_file("systemd/app-bravo@.service"))
+      expect(File.read("/tmp/init/app.target")).to include("Wants=app-alpha.1.service app-alpha.2.service\n")
+      expect(File.read("/tmp/init/app-alpha.1.service")).to eq(example_export_file("systemd/app-alpha.1.service"))
+      expect(File.read("/tmp/init/app-alpha.2.service")).to eq(example_export_file("systemd/app-alpha.2.service"))
+      expect(File.exist?("/tmp/init/app-bravo.1.service")).to be_falsey
     end
   end
 
-  context "with alternate templates" do
+  context "with alternate template directory specified" do
     let(:template) { "/tmp/alternate" }
     let(:options)  { { :app => "app", :template => template } }
 
@@ -89,25 +119,37 @@ describe Foreman::Export::Systemd, :fakefs do
       File.open("#{template}/master.target.erb", "w") { |f| f.puts "alternate_template" }
     end
 
-    it "can export with alternate template files" do
+    it "uses template files found in the alternate directory" do
       systemd.export
       expect(File.read("/tmp/init/app.target")).to eq("alternate_template\n")
     end
+
+    context "with alternate templates in the user home directory" do
+      before do
+        FileUtils.mkdir_p File.expand_path("~/.foreman/templates/systemd")
+        File.open(File.expand_path("~/.foreman/templates/systemd/master.target.erb"), "w") do |file|
+          file.puts "home_dir_template"
+        end
+      end
+
+      it "uses template files found in the alternate directory" do
+        systemd.export
+        expect(File.read("/tmp/init/app.target")).to eq("alternate_template\n")
+      end
+    end
   end
 
-  context "with alternate templates from home dir" do
-
+  context "with alternate templates in the user home directory" do
     before do
       FileUtils.mkdir_p File.expand_path("~/.foreman/templates/systemd")
       File.open(File.expand_path("~/.foreman/templates/systemd/master.target.erb"), "w") do |file|
-        file.puts "default_alternate_template"
+        file.puts "home_dir_template"
       end
     end
 
-    it "can export with alternate template files" do
+    it "uses template files found in the user home directory" do
       systemd.export
-      expect(File.read("/tmp/init/app.target")).to eq("default_alternate_template\n")
+      expect(File.read("/tmp/init/app.target")).to eq("home_dir_template\n")
     end
   end
-
 end
