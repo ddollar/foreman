@@ -105,7 +105,7 @@ end
 def write_file(file)
   FileUtils.mkdir_p(File.dirname(file))
   File.open(file, 'w') do |f|
-    yield(f)
+    yield(f) if block_given?
   end
 end
 

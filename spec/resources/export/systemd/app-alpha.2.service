@@ -1,12 +1,15 @@
 [Unit]
-PartOf=app-bravo.target
+PartOf=app.target
+StopWhenUnneeded=yes
 
 [Service]
 User=app
 WorkingDirectory=/tmp/app
-Environment=PORT=%i
-ExecStart=/bin/bash -lc 'exec ./bravo'
+Environment=PORT=5001
+Environment=PS=alpha.2
+ExecStart=/bin/bash -lc 'exec -a "app-alpha.2" ./alpha'
 Restart=always
+RestartSec=14s
 StandardInput=null
 StandardOutput=syslog
 StandardError=syslog
