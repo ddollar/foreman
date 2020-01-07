@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    foreman (0.86.0)
+    foreman (0.87.0)
 
 GEM
   remote: http://rubygems.org/
@@ -74,4 +74,4 @@ DEPENDENCIES
   yard (~> 0.9.11)
 
 BUNDLED WITH
-   2.0.2
+   2.1.4
