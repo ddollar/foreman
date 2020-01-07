@@ -30,7 +30,7 @@ class Foreman::Engine::CLI < Foreman::Engine
     end
 
     def color?
-      return true if @@color_force
+      return @@color_force unless @@color_force.nil?
       return false if Foreman.windows?
       return false unless self.respond_to?(:isatty)
       self.isatty && ENV["TERM"]
