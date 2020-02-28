@@ -25,7 +25,7 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
     mustache (1.0.5)
-    rake (12.3.0)
+    rake (13.0.1)
     rdiscount (2.2.0.1)
     ronn (0.7.3)
       hpricot (>= 0.8.2)
