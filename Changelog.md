@@ -1,3 +1,7 @@
+## 0.87.1 (2020-04-02)
+
+* update rake for CVE-2020-8130  [David Dollar]
+
 ## 0.87.0 (2020-01-07)
 
 * Update specs for systemd export  [Robin Daugherty]
