@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
 
   gem.author   = "David Dollar"
   gem.email    = "ddollar@gmail.com"
-  gem.homepage = "http://github.com/ddollar/foreman"
+  gem.homepage = "https://github.com/ddollar/foreman"
   gem.summary  = "Process manager for applications with multiple components"
 
   gem.description = gem.summary
