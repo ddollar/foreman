@@ -16,7 +16,7 @@ Gem::Specification.new do |gem|
   gem.metadata = {
     "bug_tracker_uri" => "#{gem.homepage}/issues",
     "changelog_uri" => "#{gem.homepage}/blob/master/Changelog.md",
-    "documentation_uri" => "https://rubydoc.info/gems/#{gem.name}/#{gem.version}",
+    "documentation_uri" => "https://ddollar.github.io/foreman/",
     "homepage_uri" => gem.homepage,
     "source_code_uri" => "#{gem.homepage}/tree/v#{gem.version}",
     "wiki_uri" => "#{gem.homepage}/wiki"
