@@ -1,3 +1,14 @@
+## 0.87.1 (2020-04-02)
+
+* update rake for CVE-2020-8130  [David Dollar]
+
+## 0.87.0 (2020-01-07)
+
+* Update specs for systemd export  [Robin Daugherty]
+* Allow processes to be stopped using the app target  [Robin Daugherty]
+* Wait to restart  [Robin Daugherty]
+* systemd sets process name  [Robin Daugherty]
+
 ## 0.86.0 (2019-10-09)
 
 * bundle (but don't use) real thor to ensure we still get vulnerability notifications from github.  [Micah Geisel]
