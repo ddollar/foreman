@@ -70,7 +70,6 @@ class Foreman::Engine::CLI < Foreman::Engine
         json_data = {foreman_process: name}
         begin
           result = JSON.parse(message)
-          puts result
           if result.is_a?(Hash)
             json_data.merge!(result)
           else
