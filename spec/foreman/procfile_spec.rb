@@ -22,6 +22,14 @@ describe Foreman::Procfile, :fakefs do
     expect(procfile["foo_bar"]).to eq("./foo_bar")
   end
 
+  it "raises an error if Procfile is empty" do
+    write_file "Procfile" do |procfile|
+      procfile.puts
+    end
+
+    expect { Foreman::Procfile.new("Procfile") }.to raise_error described_class::EmptyFileError
+  end
+
   it 'only creates Procfile entries for lines matching regex' do
     write_procfile
     procfile = Foreman::Procfile.new("Procfile")
