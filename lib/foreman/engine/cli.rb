@@ -77,7 +77,7 @@ private
     @name_padding ||= begin
       index_padding = @names.values.map { |n| formation[n] }.max.to_s.length + 1
       name_padding  = @names.values.map { |n| n.length + index_padding }.sort.last
-      [ 6, name_padding ].max
+      [ 6, name_padding.to_i ].max
     end
   end
 
