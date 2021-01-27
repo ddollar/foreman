@@ -24,13 +24,15 @@ class Foreman::Engine::CLI < Foreman::Engine
       :bright_white   => 37,
     }
 
-    def self.enable(io, force=false)
+    def self.enable(io, force=false, no_color=false)
       io.extend(self)
       @@color_force = force
+      @@no_color = no_color
     end
 
     def color?
       return true if @@color_force
+      return false if @@no_color
       return false if Foreman.windows?
       return false unless self.respond_to?(:isatty)
       self.isatty && ENV["TERM"]
@@ -50,7 +52,7 @@ class Foreman::Engine::CLI < Foreman::Engine
   def startup
     @colors = map_colors
     proctitle "foreman: master" unless Foreman.windows?
-    Color.enable($stdout, options[:color])
+    Color.enable($stdout, options[:color], options[:"no-color"])
   end
 
   def output(name, data)
