@@ -8,6 +8,12 @@
 # require "codeclimate-test-reporter"
 # CodeClimate::TestReporter.start
 
+raise <<-ERROR if File.exist?(File.expand_path("../../Procfile", __FILE__))
+Procfile detected in home directory for foreman repo.  Please delete/move the
+file before attempting to run the specs as there are specs that depend on that
+file not existing.
+ERROR
+
 require "simplecov"
 SimpleCov.start do
   add_filter "/spec/"
