@@ -18,6 +18,7 @@ require "timecop"
 require "pp"
 require "fakefs/safe"
 require "fakefs/spec_helpers"
+require 'climate_control'
 
 $:.unshift File.expand_path("../../lib", __FILE__)
 

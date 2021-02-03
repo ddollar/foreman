@@ -11,6 +11,7 @@ group :test do
   gem "simplecov", :require => false
   gem 'timecop'
   gem "codeclimate-test-reporter", :require => false
+  gem 'climate_control'
 end
 
 group :development do
