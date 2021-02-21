@@ -25,6 +25,8 @@ class Foreman::CLI < Foreman::Thor
   method_option :port,      :type => :numeric, :aliases => "-p"
   method_option :timeout,   :type => :numeric, :aliases => "-t", :desc => "Specify the amount of time (in seconds) processes have to shutdown gracefully before receiving a SIGKILL, defaults to 5."
   method_option :timestamp, :type => :boolean, :default => true, :desc => "Include timestamp in output"
+  method_option :output_format, :type => :string, :default => "text", :desc => "Specify the output format you wish, text or json.  Default: text"
+  method_option :json_message_key, :type => :string, :default => "message", :desc => "The key used to put a text based output from your process.  Default: message"
 
   class << self
     # Hackery. Take the run method away from Thor so that we can redefine it.
