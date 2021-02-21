@@ -38,6 +38,7 @@ See [.travis.yml](.travis.yml) for a list of Ruby versions against which Foreman
 * [crank](https://github.com/arktisklada/crank) - Crystal
 * [houseman](https://github.com/fujimura/houseman) - Haskell
 * [spm](https://github.com/bytegust/spm) - Go
+* [Hivemind / Overmind](https://evilmartians.com/chronicles/introducing-overmind-and-hivemind) - Go
 
 ## Authors
 
