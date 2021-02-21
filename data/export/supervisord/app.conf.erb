@@ -9,6 +9,7 @@ engine.each_process do |name, process|
     	value = value.gsub('\=', '=')
     	value = value.gsub('\&', '&')
     	value = value.gsub('\?', '?')
+    	value = value.gsub('\+', '+')
       "#{key}=\"#{value}\""
     end
     app_names << full_name
