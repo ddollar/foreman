@@ -10,6 +10,8 @@ require "foreman"
 #
 class Foreman::Procfile
 
+  EmptyFileError = Class.new(StandardError)
+
   # Initialize a Procfile
   #
   # @param [String] filename (nil)  An optional filename to read from
@@ -60,7 +62,11 @@ class Foreman::Procfile
   # @param [String] filename  The filename of the +Procfile+ to load
   #
   def load(filename)
-    @entries.replace parse(filename)
+    parse_data = parse(filename)
+
+    raise EmptyFileError if parse_data.empty?
+
+    @entries.replace parse_data
   end
 
   # Save a Procfile to a file
