@@ -171,7 +171,4 @@ RSpec.configure do |config|
   config.before(:each) do
     FileUtils.mkdir_p('/tmp')
   end
-  config.after(:each) do
-    FileUtils.rm_rf('/tmp')
-  end
 end
