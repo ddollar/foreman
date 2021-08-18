@@ -1,0 +1,3 @@
+#!/bin/sh
+echo -n partial_line
+sleep 10 # give time to linecount to finish

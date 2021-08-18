@@ -45,6 +45,13 @@ describe "Foreman::CLI", :fakefs do
         end
       end
 
+      it "handles commands that generate partial lines" do
+        without_fakefs do
+          output = foreman("start -f #{resource_path("Procfile.partial-lines")} -e #{resource_path(".env")}")
+          expect(output).to match(/linecount.1   \| 7/)
+        end
+      end
+
       it "sets PS variable with the process name" do
         without_fakefs do
           output = foreman("start -f #{resource_path("Procfile")}")

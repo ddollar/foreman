@@ -12,6 +12,9 @@ class Foreman::Engine
   #
   HANDLED_SIGNALS = [ :TERM, :INT, :HUP, :USR1, :USR2 ]
 
+  # Maximu amount of data we read from the pipes each time
+  READ_CHUNK_SIZE = 1024
+
   attr_reader :env
   attr_reader :options
   attr_reader :processes
@@ -37,6 +40,8 @@ class Foreman::Engine
     @running   = {}
     @readers   = {}
     @shutdown  = false
+    @buffers   = {}
+
     # Set up a global signal queue
     # http://blog.rubybestpractices.com/posts/ewong/016-Implementing-Signal-Handlers.html
     Thread.main[:signal_queue] = []
@@ -356,10 +361,28 @@ private
   end
 
   def flush_reader(reader)
-    until reader.eof?
-      data = reader.gets
-      output_with_mutex name_for(@readers.key(reader)), data
+    pull_data_from_reader(reader)
+    extract_lines_from_buffer(reader) do |line|
+      output_with_mutex name_for(@readers.key(reader)), line.chomp
     end
+    output_with_mutex name_for(@readers.key(reader)), clear_buffer(reader)
+  end
+
+  def extract_lines_from_buffer(reader)
+    stream = StringIO.new(@buffers[reader])
+    remaining = nil
+    stream.each_line do |l|
+      if l.end_with?($/)
+        yield(l)
+      else
+        remaining = l
+      end
+    end
+    @buffers[reader] = (remaining || "".dup)
+  end
+
+  def clear_buffer(reader)
+    @buffers.delete(reader)
   end
 
 ## Engine ###########################################################
@@ -379,14 +402,19 @@ private
         end
         @running[pid] = [process, n]
         @readers[pid] = reader
+        @buffers[reader] = "".dup
       end
     end
   end
 
   def read_self_pipe
     @selfpipe[:reader].read_nonblock(11)
+    true
+  rescue EOFError
+    false
   rescue Errno::EAGAIN, Errno::EINTR, Errno::EBADF, Errno::EWOULDBLOCK
     # ignore
+    true
   end
 
   def handle_signals
@@ -399,23 +427,37 @@ private
     readers.each do |reader|
       next if reader == @selfpipe[:reader]
 
-      if reader.eof?
+      unless pull_data_from_reader(reader)
         @readers.delete_if { |key, value| value == reader }
-      else
-        data = reader.gets
-        output_with_mutex name_for(@readers.invert[reader]), data
+        next
+      end
+
+      extract_lines_from_buffer(reader) do |line|
+          output_with_mutex name_for(@readers.invert[reader]), line
       end
     end
+  end
+
+  def pull_data_from_reader(reader)
+    loop do
+      data = reader.read_nonblock(READ_CHUNK_SIZE)
+      @buffers[reader].concat(data)
+    end
+  rescue IO::WaitReadable
+    true
+  rescue EOFError
+    false
   end
 
   def watch_for_output
     Thread.new do
       begin
-        until @readers.empty? && @selfpipe[:reader].eof?
+        until @readers.empty?
           io = IO.select([@selfpipe[:reader]] + @readers.values, nil, nil, 30)
-          read_self_pipe
+          quit = !read_self_pipe
           handle_signals
           handle_io(io ? io.first : [])
+          break if quit && @readers.empty?
         end
       rescue Exception => ex
         puts ex.message
