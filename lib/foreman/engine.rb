@@ -37,28 +37,33 @@ class Foreman::Engine
     @running   = {}
     @readers   = {}
     @shutdown  = false
+    # Set up a global signal queue
+    # http://blog.rubybestpractices.com/posts/ewong/016-Implementing-Signal-Handlers.html
+    Thread.main[:signal_queue] = []
+  end
 
+  def create_self_pipe
     # Self-pipe for deferred signal-handling (ala djb: http://cr.yp.to/docs/selfpipe.html)
     reader, writer       = create_pipe
     reader.close_on_exec = true if reader.respond_to?(:close_on_exec)
     writer.close_on_exec = true if writer.respond_to?(:close_on_exec)
     @selfpipe            = { :reader => reader, :writer => writer }
-
-    # Set up a global signal queue
-    # http://blog.rubybestpractices.com/posts/ewong/016-Implementing-Signal-Handlers.html
-    Thread.main[:signal_queue] = []
   end
 
   # Start the processes registered to this +Engine+
   #
   def start
     register_signal_handlers
+    create_self_pipe
     startup
     spawn_processes
-    watch_for_output
+    watch_thread = watch_for_output
     sleep 0.1
     wait_for_shutdown_or_child_termination
     shutdown
+    @selfpipe[:writer].close
+    watch_thread.join
+    @selfpipe[:reader].close
     exit(@exitstatus) if @exitstatus
   end
 
@@ -406,7 +411,7 @@ private
   def watch_for_output
     Thread.new do
       begin
-        loop do
+        until @readers.empty? && @selfpipe[:reader].eof?
           io = IO.select([@selfpipe[:reader]] + @readers.values, nil, nil, 30)
           read_self_pipe
           handle_signals

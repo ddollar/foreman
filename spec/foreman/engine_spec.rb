@@ -37,7 +37,7 @@ describe "Foreman::Engine", :fakefs do
     it "forks the processes" do
       expect(subject.process("alpha")).to receive(:run)
       expect(subject.process("bravo")).to receive(:run)
-      expect(subject).to receive(:watch_for_output)
+      expect(subject).to receive(:watch_for_output).and_return(Thread.new {})
       expect(subject).to receive(:wait_for_shutdown_or_child_termination)
       subject.start
     end
@@ -46,7 +46,7 @@ describe "Foreman::Engine", :fakefs do
       subject.options[:formation] = "alpha=2"
       expect(subject.process("alpha")).to receive(:run).twice
       expect(subject.process("bravo")).to_not receive(:run)
-      expect(subject).to receive(:watch_for_output)
+      expect(subject).to receive(:watch_for_output).and_return(Thread.new {})
       expect(subject).to receive(:wait_for_shutdown_or_child_termination)
       subject.start
     end
