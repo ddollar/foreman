@@ -1,6 +1,6 @@
 # Foreman
 
-[![Build Status](https://travis-ci.org/ddollar/foreman.svg?branch=master)](https://travis-ci.org/ddollar/foreman)
+[![CI](https://github.com/ddollar/foreman/actions/workflows/ci.yml/badge.svg)](https://github.com/ddollar/foreman/actions/workflows/ci.yml)
 [![Code Climate](https://codeclimate.com/github/ddollar/foreman.svg)](https://codeclimate.com/github/ddollar/foreman)
 [![Inline docs](http://inch-ci.org/github/ddollar/foreman.svg?branch=master)](http://inch-ci.org/github/ddollar/foreman)
 
@@ -18,7 +18,7 @@ Ruby users should take care *not* to install foreman in their project's `Gemfile
 
 ## Supported Ruby versions
 
-See [.travis.yml](.travis.yml) for a list of Ruby versions against which Foreman is tested.
+See [ci.yml](.github/workflows/ci.yml) for a list of Ruby versions against which Foreman is tested.
 
 ## Documentation
 
