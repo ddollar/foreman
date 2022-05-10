@@ -5,3 +5,4 @@
 /man/*.markdown
 /pkg/
 /vendor
+Gemfile.lock
