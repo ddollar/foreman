@@ -78,7 +78,7 @@ def fork_and_get_exitstatus(args)
 end
 
 def mock_exit(&block)
-  expect(block).to raise_error(SystemExit)
+  expect { block.call }.to raise_error(SystemExit)
 end
 
 def write_foreman_config(app)
