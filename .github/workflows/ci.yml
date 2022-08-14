@@ -1,12 +1,9 @@
-name: CI
-
+name: ci
 on:
   - push
   - pull_request
-
 permissions:
   contents: read
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -14,14 +11,14 @@ jobs:
       fail-fast: false
       matrix:
         ruby:
-          - '2.3'
-          - '2.4'
-          - '2.5'
-          - '2.6'
-          - '2.7'
-          - '3.0'
-          - '3.1'
-          - 'head'
+          - "2.3"
+          - "2.4"
+          - "2.5"
+          - "2.6"
+          - "2.7"
+          - "3.0"
+          - "3.1"
+          - "head"
     env:
       BUNDLE_WITHOUT: development
     steps:
