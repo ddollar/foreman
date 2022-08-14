@@ -10,7 +10,6 @@ group :test do
   gem 'rspec',  '~> 3.5'
   gem "simplecov", :require => false
   gem 'timecop'
-  gem "codeclimate-test-reporter", :require => false
 end
 
 group :development do

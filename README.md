@@ -1,8 +1,6 @@
 # Foreman
 
 [![CI](https://github.com/ddollar/foreman/actions/workflows/ci.yml/badge.svg)](https://github.com/ddollar/foreman/actions/workflows/ci.yml)
-[![Code Climate](https://codeclimate.com/github/ddollar/foreman.svg)](https://codeclimate.com/github/ddollar/foreman)
-[![Inline docs](http://inch-ci.org/github/ddollar/foreman.svg?branch=master)](http://inch-ci.org/github/ddollar/foreman)
 
 Manage Procfile-based applications
 

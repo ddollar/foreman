@@ -32,5 +32,3 @@ jobs:
           rubygems: latest # runs 'gem update --system'
       - name: Run test
         run: bundle exec rake spec
-      - name: Upload test coverage
-        run: bundle exec codeclimate-test-reporter
