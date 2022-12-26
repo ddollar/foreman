@@ -40,7 +40,7 @@ def beta?
 end
 
 def clean(file)
-  rm file if File.exists?(file)
+  rm file if File.exist?(file)
 end
 
 def distribution_files(type=nil)

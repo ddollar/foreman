@@ -81,7 +81,7 @@ describe Foreman::Export::Upstart, :fakefs do
       expect(File.read("/tmp/init/app-alpha.conf")).to      eq(example_export_file("upstart/app-alpha.conf"))
       expect(File.read("/tmp/init/app-alpha-1.conf")).to    eq(example_export_file("upstart/app-alpha-1.conf"))
       expect(File.read("/tmp/init/app-alpha-2.conf")).to    eq(example_export_file("upstart/app-alpha-2.conf"))
-      expect(File.exists?("/tmp/init/app-bravo-1.conf")).to eq(false)
+      expect(File.exist?("/tmp/init/app-bravo-1.conf")).to eq(false)
     end
   end
 

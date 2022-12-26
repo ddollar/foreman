@@ -60,7 +60,7 @@ describe Foreman::Export::Daemon, :fakefs do
       expect(File.read("/tmp/init/app-alpha.conf")).to      eq(example_export_file("daemon/app-alpha.conf"))
       expect(File.read("/tmp/init/app-alpha-1.conf")).to    eq(example_export_file("daemon/app-alpha-1.conf"))
       expect(File.read("/tmp/init/app-alpha-2.conf")).to    eq(example_export_file("daemon/app-alpha-2.conf"))
-      expect(File.exists?("/tmp/init/app-bravo-1.conf")).to eq(false)
+      expect(File.exist?("/tmp/init/app-bravo-1.conf")).to eq(false)
     end
   end
 
