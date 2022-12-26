@@ -83,7 +83,7 @@ private ######################################################################
   def chown user, dir
     FileUtils.chown user, nil, dir
   rescue
-    error("Could not chown #{dir} to #{user}") unless File.writable?(dir) || ! File.exists?(dir)
+    error("Could not chown #{dir} to #{user}") unless File.writable?(dir) || ! File.exist?(dir)
   end
 
   def error(message)
@@ -95,13 +95,13 @@ private ######################################################################
   end
   
   def clean(filename)
-    return unless File.exists?(filename)
+    return unless File.exist?(filename)
     say "cleaning up: #{filename}"
     FileUtils.rm(filename)
   end
 
   def clean_dir(dirname)
-    return unless File.exists?(dirname)
+    return unless File.exist?(dirname)
     say "cleaning up directory: #{dirname}"
     FileUtils.rm_r(dirname)
   end
@@ -130,7 +130,7 @@ private ######################################################################
       matchers << File.join(options[:template], name_without_first) if options[:template]
       matchers << File.expand_path("~/.foreman/templates/#{name}")
       matchers << File.expand_path("../../../../data/export/#{name}", __FILE__)
-      File.read(matchers.detect { |m| File.exists?(m) })
+      File.read(matchers.detect { |m| File.exist?(m) })
     end
   end
 
