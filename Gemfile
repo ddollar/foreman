@@ -5,6 +5,7 @@ gemspec
 gem 'thor', '0.19.4', :require => false
 
 group :test do
+  gem 'climate_control'
   gem 'rake'
   gem 'fakefs'
   gem 'rspec',  '~> 3.5'
