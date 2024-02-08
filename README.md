@@ -4,6 +4,8 @@
 
 Manage Procfile-based applications
 
+**This project is no longer maintained, consider using its fork [overman](https://github.com/spinels/overman) instead.**
+
 ## Installation
 
     $ gem install foreman
