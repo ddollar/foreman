@@ -1,0 +1,79 @@
+PATH
+  remote: .
+  specs:
+    foreman (0.87.2)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    automatiek (0.3.0)
+    aws-s3 (0.6.3)
+      builder
+      mime-types
+      xml-simple
+    builder (3.2.4)
+    diff-lcs (1.5.1)
+    docile (1.4.0)
+    fakefs (2.5.0)
+    kramdown (2.4.0)
+      rexml
+    kramdown-parser-gfm (1.1.0)
+      kramdown (~> 2.0)
+    mime-types (3.5.2)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2024.0305)
+    mustache (1.1.1)
+    nokogiri (1.16.4-arm64-darwin)
+      racc (~> 1.4)
+    racc (1.7.3)
+    rake (13.2.1)
+    rexml (3.2.6)
+    ronn-ng (0.10.1)
+      kramdown (~> 2, >= 2.1)
+      kramdown-parser-gfm (~> 1, >= 1.0.1)
+      mustache (~> 1)
+      nokogiri (~> 1, >= 1.14.3)
+    rspec (3.13.0)
+      rspec-core (~> 3.13.0)
+      rspec-expectations (~> 3.13.0)
+      rspec-mocks (~> 3.13.0)
+    rspec-core (3.13.0)
+      rspec-support (~> 3.13.0)
+    rspec-expectations (3.13.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-mocks (3.13.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-support (3.13.1)
+    simplecov (0.22.0)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-html (0.12.3)
+    simplecov_json_formatter (0.1.4)
+    thor (0.19.4)
+    timecop (0.9.8)
+    xml-simple (1.1.9)
+      rexml
+    yard (0.9.36)
+
+PLATFORMS
+  arm64-darwin-21
+  arm64-darwin-23
+
+DEPENDENCIES
+  automatiek
+  aws-s3
+  fakefs
+  foreman!
+  rake
+  ronn-ng
+  rspec (~> 3.5)
+  simplecov
+  thor (= 0.19.4)
+  timecop
+  yard (~> 0.9.11)
+
+BUNDLED WITH
+   2.4.19
