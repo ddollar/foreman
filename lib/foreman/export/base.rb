@@ -74,8 +74,8 @@ private ######################################################################
     puts "WARNING: Using deprecated exporter interface. Please update your exporter"
     puts "the interface shown in the upstart exporter:"
     puts
-    puts "https://github.com/ddollar/foreman/blob/master/lib/foreman/export/upstart.rb"
-    puts "https://github.com/ddollar/foreman/blob/master/data/export/upstart/process.conf.erb"
+    puts "https://github.com/ddollar/foreman/blob/main/lib/foreman/export/upstart.rb"
+    puts "https://github.com/ddollar/foreman/blob/main/data/export/upstart/process.conf.erb"
     puts
     @@deprecation_warned = true
   end

@@ -49,7 +49,7 @@ class Foreman::Engine::CLI < Foreman::Engine
 
   def startup
     @colors = map_colors
-    proctitle "foreman: master" unless Foreman.windows?
+    proctitle "foreman: main" unless Foreman.windows?
     Color.enable($stdout, options[:color])
   end
 
