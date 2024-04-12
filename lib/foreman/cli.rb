@@ -40,6 +40,8 @@ class Foreman::CLI < Foreman::Thor
     engine.load_procfile(procfile)
     engine.options[:formation] = "#{process}=1" if process
     engine.start
+  rescue Foreman::Procfile::EmptyFileError
+    error "no processes defined"
   end
 
   desc "export FORMAT LOCATION", "Export the application to another process management format"
@@ -60,7 +62,7 @@ class Foreman::CLI < Foreman::Thor
     engine.load_procfile(procfile)
     formatter = Foreman::Export.formatter(format)
     formatter.new(location, engine, options).export
-  rescue Foreman::Export::Exception => ex
+  rescue Foreman::Export::Exception, Foreman::Procfile::EmptyFileError => ex
     error ex.message
   end
 
@@ -106,6 +108,8 @@ class Foreman::CLI < Foreman::Thor
     Process.wait(pid)
     exit $?.exitstatus || 0
   rescue Interrupt
+  rescue Foreman::Procfile::EmptyFileError
+    error "no processes defined"
   end
 
   desc "version", "Display Foreman gem version"
