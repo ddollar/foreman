@@ -88,6 +88,12 @@ describe "Foreman::CLI", :fakefs do
       expect(forked_foreman("run -f #{resource_path("Procfile")} -e #{resource_path(".env")} #{resource_path("bin/env FOO")}")).to eq("bar\n")
     end
 
+    it "prefers ENV to .env" do
+      ClimateControl.modify FOO: 'qux' do
+        expect(forked_foreman("run -e #{resource_path(".env")} #{resource_path("bin/env FOO")}")).to eq("qux\n")
+      end
+    end
+
     it "can run a command from the Procfile" do
       expect(forked_foreman("run -f #{resource_path("Procfile")} test")).to eq("testing\n")
     end

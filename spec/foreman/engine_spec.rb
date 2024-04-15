@@ -61,6 +61,13 @@ describe "Foreman::Engine", :fakefs do
   end
 
   describe "environment" do
+    it "should read ENV" do
+      ClimateControl.modify FOO: 'baz' do
+        subject.inherit_env
+        expect(subject.env["FOO"]).to eq("baz")
+      end
+    end
+
     it "should read env files" do
       write_file("/tmp/env") { |f| f.puts("FOO=baz") }
       subject.load_env("/tmp/env")
@@ -74,6 +81,14 @@ describe "Foreman::Engine", :fakefs do
       subject.load_env "/tmp/env2"
       expect(subject.env["FOO"]).to eq("bar")
       expect(subject.env["BAZ"]).to eq("qux")
+    end
+
+    it "should prefer later versions of values" do
+      write_file("/tmp/env1") { |f| f.puts("FOO=bar") }
+      write_file("/tmp/env2") { |f| f.puts("FOO=qux") }
+      subject.load_env "/tmp/env1"
+      subject.load_env "/tmp/env2"
+      expect(subject.env["FOO"]).to eq("qux")
     end
 
     it "should handle quoted values" do
