@@ -1,5 +1,9 @@
 start on starting <%= app %>-<%= name %>
 stop on stopping <%= app %>-<%= name %>
+
+<% if engine.env['custom_upstart_reload_signal'] %>
+reload signal <%= engine.env['custom_upstart_reload_signal'] %>
+<% end %>
 respawn
 
 env PORT=<%= port %>
