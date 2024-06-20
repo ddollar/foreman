@@ -36,7 +36,7 @@ See [ci.yml](.github/workflows/ci.yml) for a list of Ruby versions against which
 - [crank](https://github.com/arktisklada/crank) - Crystal
 - [houseman](https://github.com/fujimura/houseman) - Haskell
 - [spm](https://github.com/bytegust/spm) - Go
-- [doorman](https://github.com/metacritical/doorman) - Bash
+- [doorman](https://github.com/metacritical/doorman) - shell
 
 ## Authors
 
