@@ -47,11 +47,12 @@ class Foreman::Process
   #
   def run(options={})
     env    = @options[:env].merge(options[:env] || {})
+    input = options[:input] || $stdin
     output = options[:output] || $stdout
     runner = "#{Foreman.runner}".shellescape
-    
+
     Dir.chdir(cwd) do
-      Process.spawn env, expanded_command(env), :out => output, :err => output
+      Process.spawn env, expanded_command(env), :in => input, :out => output, :err => output
     end
   end
 
