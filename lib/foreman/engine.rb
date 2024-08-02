@@ -3,6 +3,7 @@ require "foreman/buffer"
 require "foreman/env"
 require "foreman/process"
 require "foreman/procfile"
+require "pty"
 require "tempfile"
 require "fileutils"
 require "thread"
@@ -362,7 +363,7 @@ private
   def spawn_processes
     @processes.each do |process|
       1.upto(formation[@names[process]]) do |n|
-        reader, writer = create_pipe
+        reader, writer = process.interactive? ? PTY.open : create_pipe
         begin
           pid = process.run(
             input: process.interactive? ? $stdin : :close,
