@@ -77,4 +77,7 @@ class Foreman::Process
     File.expand_path(@options[:cwd] || ".")
   end
 
+  def interactive?
+    @options[:interactive]
+  end
 end
