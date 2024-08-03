@@ -36,6 +36,7 @@ class Foreman::Engine
     @env       = {}
     @mutex     = Mutex.new
     @names     = {}
+    @prefixed  = {}
     @processes = []
     @running   = {}
     @readers   = {}
@@ -378,6 +379,7 @@ private
           writer.puts "unknown command: #{process.command}"
         end
         @buffers[reader] = Buffer.new
+        @prefixed[reader] = false
         @running[pid] = [process, n]
         @readers[pid] = reader
       end
@@ -414,8 +416,7 @@ private
   def handle_io_interactive(reader)
     done = false
     name = name_for(@readers.invert[reader])
-
-    output_partial prefix(name)
+    indent = prefix(name).gsub(ANSI_TOKEN, "").length
 
     loop do
       @buffers[reader].write(reader.read_nonblock(10))
@@ -423,13 +424,18 @@ private
       @buffers[reader].each_token do |token|
         case token
         when /^\e\[(\d+)G$/
-          output_partial "\e[#{::Regexp.last_match(1).to_i + prefix(name).gsub(ANSI_TOKEN, "").length}G"
+          output_partial "\e[#{Regexp.last_match(1).to_i + indent}G"
         when ANSI_TOKEN
           output_partial token
         when "\n"
           output_partial token
-          output_partial prefix(name)
+          @prefixed[reader] = false
         else
+          unless @prefixed[reader]
+            output_partial "\e[1G"
+            output_partial prefix(name)
+            @prefixed[reader] = true
+          end
           output_partial token
         end
         done = (token == "\n")
@@ -448,6 +454,11 @@ private
     while line = @buffers[reader].gets
       output_with_mutex name_for(@readers.invert[reader]), line
     end
+  end
+
+  def output_prefix(reader)
+    output_partial prefix(name_for(@readers.invert[reader]))
+    @prefixed[reader] = true
   end
 
   def watch_for_output
