@@ -365,9 +365,10 @@ private
     @processes.each do |process|
       1.upto(formation[@names[process]]) do |n|
         reader, writer = process.interactive? ? PTY.open : create_pipe
+        use_stdin = process.interactive? || !@options[:interactive]
         begin
           pid = process.run(
-            input: process.interactive? ? $stdin : :close,
+            input: use_stdin ? $stdin : :close,
             output: writer,
             env: {
               'PORT' => port_for(process, n).to_s,
