@@ -419,7 +419,7 @@ private
     indent = prefix(name).gsub(ANSI_TOKEN, "").length
 
     loop do
-      @buffers[reader].write(reader.read_nonblock(10))
+      @buffers[reader].write(reader.read_nonblock(4096))
 
       @buffers[reader].each_token do |token|
         case token
@@ -450,7 +450,7 @@ private
   end
 
   def handle_io_noninteractive(reader)
-    @buffers[reader].write(reader.read_nonblock(10))
+    @buffers[reader].write(reader.read_nonblock(4096))
     while line = @buffers[reader].gets
       output_with_mutex name_for(@readers.invert[reader]), line
     end
