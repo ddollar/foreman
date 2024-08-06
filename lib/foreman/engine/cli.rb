@@ -1,4 +1,5 @@
 require "foreman/engine"
+require "io/console"
 
 class Foreman::Engine::CLI < Foreman::Engine
 
@@ -56,7 +57,7 @@ class Foreman::Engine::CLI < Foreman::Engine
   def output(name, data)
     data.to_s.lines.map(&:chomp).each do |message|
       $stdout.write prefix(name)
-      $stdout.puts message
+      $stdout.puts message + "\r"
       $stdout.flush
     end
   rescue Errno::EPIPE
@@ -78,6 +79,7 @@ class Foreman::Engine::CLI < Foreman::Engine
   end
 
   def shutdown
+    $stdin.cooked!
   end
 
 private

@@ -1,10 +1,18 @@
 require "foreman"
+require "io/console"
 require "shellwords"
 
 class Foreman::Process
 
+  @noninteractive_stdin = $stdin
+
+  class << self
+    attr_accessor :noninteractive_stdin
+  end
+
   attr_reader :command
   attr_reader :env
+  attr_reader :reader
 
   # Create a Process
   #
@@ -19,6 +27,8 @@ class Foreman::Process
     @options = options.dup
 
     @options[:env] ||= {}
+
+    self.class.noninteractive_stdin = :close if options[:interactive]
   end
 
   # Get environment-expanded command for a +Process+
@@ -40,19 +50,31 @@ class Foreman::Process
   #
   # @param [Hash] options
   #
-  # @option options :env    ({})       Environment variables to set for this execution
-  # @option options :output ($stdout)  The output stream
+  # @option options :env ({}) Environment variables to set for this execution
   #
   # @returns [Fixnum] pid  The +pid+ of the process
   #
   def run(options={})
     env    = @options[:env].merge(options[:env] || {})
-    input = options[:input] || $stdin
-    output = options[:output] || $stdout
     runner = "#{Foreman.runner}".shellescape
 
-    Dir.chdir(cwd) do
-      Process.spawn env, expanded_command(env), :in => input, :out => output, :err => output
+    if interactive?
+      $stdin.raw!
+      @reader, tty = PTY.open
+      Thread.new do
+        loop do
+          data = $stdin.readpartial(4096)
+          if data.include?("\03")
+            Process.kill("INT", Process.pid)
+            data.gsub!("\03", "")
+          end
+          @reader.write(data)
+        end
+      end
+      Process.spawn env, expanded_command(env), chdir: cwd, in: tty, out: tty, err: tty
+    else
+      @reader, writer = Foreman::Engine::create_pipe
+      Process.spawn env, expanded_command(env), chdir: cwd, in: self.class.noninteractive_stdin, out: writer, err: writer
     end
   end
 

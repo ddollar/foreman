@@ -43,7 +43,7 @@ class Foreman::Engine
     @shutdown  = false
 
     # Self-pipe for deferred signal-handling (ala djb: http://cr.yp.to/docs/selfpipe.html)
-    reader, writer       = create_pipe
+    reader, writer       = self.class.create_pipe
     reader.close_on_exec = true if reader.respond_to?(:close_on_exec)
     writer.close_on_exec = true if writer.respond_to?(:close_on_exec)
     @selfpipe            = { :reader => reader, :writer => writer }
@@ -312,7 +312,7 @@ private
 
 ## Helpers ##########################################################
 
-  def create_pipe
+  def self.create_pipe
     IO.method(:pipe).arity.zero? ? IO.pipe : IO.pipe("BINARY")
   end
 
@@ -364,24 +364,21 @@ private
   def spawn_processes
     @processes.each do |process|
       1.upto(formation[@names[process]]) do |n|
-        reader, writer = process.interactive? ? PTY.open : create_pipe
         begin
           pid = process.run(
-            input: process.interactive? ? $stdin : :close,
-            output: writer,
             env: {
               'PORT' => port_for(process, n).to_s,
               'PS' => name_for_index(process, n)
             }
           )
-          writer.puts "started with pid #{pid}"
+          # writer.puts "started with pid #{pid}"
         rescue Errno::ENOENT
-          writer.puts "unknown command: #{process.command}"
+          # writer.puts "unknown command: #{process.command}"
         end
-        @buffers[reader] = Buffer.new
-        @prefixed[reader] = false
+        @buffers[process.reader] = Buffer.new(@names[process])
+        @prefixed[process.reader] = false
         @running[pid] = [process, n]
-        @readers[pid] = reader
+        @readers[pid] = process.reader
       end
     end
   end
@@ -419,7 +416,7 @@ private
     indent = prefix(name).gsub(ANSI_TOKEN, "").length
 
     loop do
-      @buffers[reader].write(reader.read_nonblock(4096))
+      @buffers[reader].write(reader.read_nonblock(10))
 
       @buffers[reader].each_token do |token|
         case token
@@ -427,8 +424,10 @@ private
           output_partial "\e[#{Regexp.last_match(1).to_i + indent}G"
         when ANSI_TOKEN
           output_partial token
+        when "\r"
+          output_partial "\e[#{indent+1}G"
         when "\n"
-          output_partial token
+          output_partial "\r\n"
           @prefixed[reader] = false
         else
           unless @prefixed[reader]
@@ -445,8 +444,6 @@ private
       return if done
     rescue EOFError
     end
-  ensure
-    output_partial "\n"
   end
 
   def handle_io_noninteractive(reader)
