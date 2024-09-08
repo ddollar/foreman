@@ -6,7 +6,7 @@ require "foreman/export"
 require "foreman/version"
 require "shellwords"
 require "yaml"
-require "foreman/vendor/thor/lib/thor"
+require "thor"
 
 class Foreman::CLI < Foreman::Thor
   include Foreman::Helpers
