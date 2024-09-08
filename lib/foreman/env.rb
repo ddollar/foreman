@@ -1,22 +1,20 @@
 require "foreman"
 
 class Foreman::Env
-
   attr_reader :entries
 
   def initialize(filename)
-    @entries = File.read(filename).gsub("\r\n","\n").split("\n").inject({}) do |ax, line|
+    @entries = File.read(filename).gsub("\r\n", "\n").split("\n").each_with_object({}) do |line, ax|
       if line =~ /\A([A-Za-z_0-9]+)=(.*)\z/
         key = $1
-        case val = $2
+        ax[key] = case val = $2
           # Remove single quotes
-          when /\A'(.*)'\z/ then ax[key] = $1
+        when /\A'(.*)'\z/ then $1
           # Remove double quotes and unescape string preserving newline characters
-          when /\A"(.*)"\z/ then ax[key] = $1.gsub('\n', "\n").gsub(/\\(.)/, '\1')
-         else ax[key] = val
+        when /\A"(.*)"\z/ then $1.gsub('\n', "\n").gsub(/\\(.)/, '\1')
+        else val
         end
       end
-      ax
     end
   end
 
@@ -25,5 +23,4 @@ class Foreman::Env
       yield key, value
     end
   end
-
 end

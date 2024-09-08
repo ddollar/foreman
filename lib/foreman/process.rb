@@ -2,7 +2,6 @@ require "foreman"
 require "shellwords"
 
 class Foreman::Process
-
   attr_reader :command
   attr_reader :env
 
@@ -14,7 +13,7 @@ class Foreman::Process
   # @option options [String] :cwd (./)  Change to this working directory before executing the process
   # @option options [Hash]   :env ({})  Environment variables to set for this process
   #
-  def initialize(command, options={})
+  def initialize(command, options = {})
     @command = command
     @options = options.dup
 
@@ -27,7 +26,7 @@ class Foreman::Process
   #
   # @return [String]  The expanded command
   #
-  def expanded_command(custom_env={})
+  def expanded_command(custom_env = {})
     env = @options[:env].merge(custom_env)
     expanded_command = command.dup
     env.each do |key, val|
@@ -45,13 +44,13 @@ class Foreman::Process
   #
   # @returns [Fixnum] pid  The +pid+ of the process
   #
-  def run(options={})
-    env    = @options[:env].merge(options[:env] || {})
+  def run(options = {})
+    env = @options[:env].merge(options[:env] || {})
     output = options[:output] || $stdout
     runner = "#{Foreman.runner}".shellescape
-    
+
     Dir.chdir(cwd) do
-      Process.spawn env, expanded_command(env), :out => output, :err => output
+      Process.spawn env, expanded_command(env), out: output, err: output
     end
   end
 
@@ -62,7 +61,7 @@ class Foreman::Process
   # @option options :env ({}) Environment variables to set for this execution
   #
   # @return Does not return
-  def exec(options={})
+  def exec(options = {})
     env = @options[:env].merge(options[:env] || {})
     env.each { |k, v| ENV[k] = v }
     Dir.chdir(cwd)
@@ -76,5 +75,4 @@ class Foreman::Process
   def cwd
     File.expand_path(@options[:cwd] || ".")
   end
-
 end

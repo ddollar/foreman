@@ -1,15 +1,13 @@
-$:.unshift File.expand_path("../lib", __FILE__)
+$:.unshift File.expand_path("lib", __dir__)
 require "foreman/version"
 
 Gem::Specification.new do |gem|
-  gem.name     = "foreman"
-  gem.license  = "MIT"
-  gem.version  = Foreman::VERSION
+  gem.name = "foreman"
+  gem.license = "MIT"
+  gem.version = Foreman::VERSION
 
-  gem.author   = "David Dollar"
-  gem.email    = "ddollar@gmail.com"
-  gem.homepage = "https://github.com/ddollar/foreman"
-  gem.summary  = "Process manager for applications with multiple components"
+  gem.author = "Jane Davis"
+  gem.summary = "Process manager for applications with multiple components"
 
   gem.description = gem.summary
 

@@ -2,8 +2,8 @@ require "time"
 
 desc "Build the manual"
 task :man do
-  ENV['RONN_MANUAL']  = "Foreman Manual"
-  ENV['RONN_ORGANIZATION'] = "Foreman #{Foreman::VERSION}"
+  ENV["RONN_MANUAL"] = "Foreman Manual"
+  ENV["RONN_ORGANIZATION"] = "Foreman #{Foreman::VERSION}"
   sh "ronn -w -s toc -r5 --markdown man/*.ronn"
 end
 
@@ -15,8 +15,8 @@ task "man:commit" => :man do
 end
 
 desc "Generate the Github docs"
-task :pages => "man:commit" do
-  sh %{
+task pages: "man:commit" do
+  sh %(
     cp man/foreman.1.html /tmp/foreman.1.html
     git checkout gh-pages
     rm ./index.html
@@ -25,7 +25,7 @@ task :pages => "man:commit" do
     git commit -m "saving man page to github docs"
     git push origin -f gh-pages
     git checkout main
-  }
+  )
 end
 
 def latest_release
@@ -33,7 +33,7 @@ def latest_release
 end
 
 def newer_release
-  tags = %x{ git tag --contains v#{latest_release} | grep -v pre }.split("\n").sort_by do |tag|
+  tags = `git tag --contains v#{latest_release} | grep -v pre`.split("\n").sort_by do |tag|
     Gem::Version.new(tag[1..-1])
   end
   tags[1]
@@ -42,12 +42,12 @@ end
 desc "Generate a Changelog"
 task :changelog do
   while release = newer_release
-    entry = %x{ git show --format="%cd" #{release} | head -n 1 }
+    entry = `git show --format="%cd" #{release} | head -n 1`
     puts entry
     date = Time.parse(entry.chomp).strftime("%Y-%m-%d")
 
-    message  = "## #{release[1..-1]} (#{date})\n\n"
-    message += %x{ git log --format="* %s  [%an]" v#{latest_release}..#{release} | grep -v "Merge pull request" | grep -v "* #{release[1..-1]}" | grep -v "* update docs" }
+    message = "## #{release[1..-1]} (#{date})\n\n"
+    message += `git log --format="* %s  [%an]" v#{latest_release}..#{release} | grep -v "Merge pull request" | grep -v "* #{release[1..-1]}" | grep -v "* update docs"`
 
     changelog = File.read("Changelog.md")
     changelog = message + "\n" + changelog

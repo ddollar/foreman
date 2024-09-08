@@ -4,7 +4,6 @@ require "pathname"
 require "shellwords"
 
 class Foreman::Export::Base
-
   attr_reader :location
   attr_reader :engine
   attr_reader :options
@@ -13,10 +12,10 @@ class Foreman::Export::Base
   # deprecated
   attr_reader :port
 
-  def initialize(location, engine, options={})
-    @location  = location
-    @engine    = engine
-    @options   = options.dup
+  def initialize(location, engine, options = {})
+    @location = location
+    @engine = engine
+    @options = options.dup
     @formation = engine.formation
 
     # deprecated
@@ -36,8 +35,8 @@ class Foreman::Export::Base
       Foreman::Export::Base.warn_deprecation!
       @processes.map do |process|
         OpenStruct.new(
-          :name => @names[process],
-          :process => process
+          name: @names[process],
+          process: process
         )
       end
     end
@@ -45,7 +44,11 @@ class Foreman::Export::Base
 
   def export
     error("Must specify a location") unless location
-    FileUtils.mkdir_p(location) rescue error("Could not create: #{location}")
+    begin
+      FileUtils.mkdir_p(location)
+    rescue
+      error("Could not create: #{location}")
+    end
     chown user, log
     chown user, run
   end
@@ -66,7 +69,7 @@ class Foreman::Export::Base
     options[:user] || app
   end
 
-private ######################################################################
+  private ######################################################################
 
   def self.warn_deprecation!
     @@deprecation_warned ||= false
@@ -83,7 +86,7 @@ private ######################################################################
   def chown user, dir
     FileUtils.chown user, nil, dir
   rescue
-    error("Could not chown #{dir} to #{user}") unless File.writable?(dir) || ! File.exist?(dir)
+    error("Could not chown #{dir} to #{user}") unless File.writable?(dir) || !File.exist?(dir)
   end
 
   def error(message)
@@ -93,7 +96,7 @@ private ######################################################################
   def say(message)
     puts "[foreman export] %s" % message
   end
-  
+
   def clean(filename)
     return unless File.exist?(filename)
     say "cleaning up: #{filename}"
@@ -121,7 +124,7 @@ private ######################################################################
     end
   end
 
-  def export_template(name, file=nil, template_root=nil)
+  def export_template(name, file = nil, template_root = nil)
     if file && template_root
       old_export_template name, file, template_root
     else
@@ -136,10 +139,10 @@ private ######################################################################
 
   def write_template(name, target, binding)
     compiled = if ERB.instance_method(:initialize).parameters.assoc(:key) # Ruby 2.6+
-                 ERB.new(export_template(name), trim_mode: '-').result(binding)
-               else
-                 ERB.new(export_template(name), nil, '-').result(binding)
-               end
+      ERB.new(export_template(name), trim_mode: "-").result(binding)
+    else
+      ERB.new(export_template(name), trim_mode: "-").result(binding)
+    end
     write_file target, compiled
   end
 
@@ -167,5 +170,4 @@ private ######################################################################
       file.puts contents
     end
   end
-
 end

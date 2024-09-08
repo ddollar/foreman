@@ -1,7 +1,6 @@
 require "foreman/export"
 
 class Foreman::Export::Inittab < Foreman::Export::Base
-
   def export
     error("Must specify a location") unless location
 
@@ -38,5 +37,4 @@ class Foreman::Export::Inittab < Foreman::Export::Base
       File.open(location, "w") { |file| file.puts inittab }
     end
   end
-
 end

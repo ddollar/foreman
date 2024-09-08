@@ -2,7 +2,6 @@ require "erb"
 require "foreman/export"
 
 class Foreman::Export::Upstart < Foreman::Export::Base
-
   def export
     super
 

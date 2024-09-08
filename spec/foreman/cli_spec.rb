@@ -12,7 +12,7 @@ describe "Foreman::CLI", :fakefs do
     end
 
     it "is overridden by options at the cli" do
-      subject = Foreman::CLI.new([], :formation => "alpha=3")
+      subject = Foreman::CLI.new([], formation: "alpha=3")
       expect(subject.send(:options)["formation"]).to eq("alpha=3")
     end
   end
@@ -21,7 +21,7 @@ describe "Foreman::CLI", :fakefs do
     describe "when a Procfile doesnt exist", :fakefs do
       it "displays an error" do
         mock_error(subject, "Procfile does not exist.") do
-          expect_any_instance_of(Foreman::Engine).to_not receive(:start)
+          expect_any_instance_of(Foreman::Engine).not_to receive(:start)
           subject.start
         end
       end
@@ -31,7 +31,7 @@ describe "Foreman::CLI", :fakefs do
       it "can run a single command" do
         without_fakefs do
           output = foreman("start env -f #{resource_path("Procfile")}")
-          expect(output).to     match(/env.1/)
+          expect(output).to match(/env.1/)
           expect(output).not_to match(/test.1/)
         end
       end
@@ -54,7 +54,7 @@ describe "Foreman::CLI", :fakefs do
 
       it "fails if process fails" do
         output = `bundle exec foreman start -f #{resource_path "Procfile.bad"} && echo success`
-        expect(output).not_to include 'success'
+        expect(output).not_to include "success"
       end
     end
   end
@@ -107,5 +107,4 @@ describe "Foreman::CLI", :fakefs do
       expect(foreman("-v").chomp).to eq(Foreman::VERSION)
     end
   end
-
 end

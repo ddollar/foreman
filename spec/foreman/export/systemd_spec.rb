@@ -3,15 +3,17 @@ require "foreman/engine"
 require "foreman/export/systemd"
 require "tmpdir"
 
-describe Foreman::Export::Systemd, :fakefs, :aggregate_failures do
-  let(:procfile)  { write_procfile("/tmp/app/Procfile") }
+describe Foreman::Export::Systemd, :aggregate_failures, :fakefs do
+  let(:procfile) { write_procfile("/tmp/app/Procfile") }
   let(:formation) { nil }
-  let(:engine)    { Foreman::Engine.new(:formation => formation).load_procfile(procfile) }
-  let(:options)   { Hash.new }
-  let(:systemd)   { Foreman::Export::Systemd.new("/tmp/init", engine, options) }
+  let(:engine) { Foreman::Engine.new(formation: formation).load_procfile(procfile) }
+  let(:options) { {} }
+  let(:systemd) { Foreman::Export::Systemd.new("/tmp/init", engine, options) }
 
-  before(:each) { load_export_templates_into_fakefs("systemd") }
-  before(:each) { allow(systemd).to receive(:say) }
+  before {
+    load_export_templates_into_fakefs("systemd")
+    allow(systemd).to receive(:say)
+  }
 
   it "exports to the filesystem" do
     systemd.export
@@ -23,23 +25,23 @@ describe Foreman::Export::Systemd, :fakefs, :aggregate_failures do
 
   context "when systemd export was run using the previous version of systemd export" do
     before do
-     write_file("/tmp/init/app.target")
+      write_file("/tmp/init/app.target")
 
-     write_file("/tmp/init/app-alpha@.service")
-     write_file("/tmp/init/app-alpha.target")
-     write_file("/tmp/init/app-alpha.target.wants/app-alpha@5000.service")
+      write_file("/tmp/init/app-alpha@.service")
+      write_file("/tmp/init/app-alpha.target")
+      write_file("/tmp/init/app-alpha.target.wants/app-alpha@5000.service")
 
-     write_file("/tmp/init/app-bravo.target")
-     write_file("/tmp/init/app-bravo@.service")
-     write_file("/tmp/init/app-bravo.target.wants/app-bravo@5100.service")
+      write_file("/tmp/init/app-bravo.target")
+      write_file("/tmp/init/app-bravo@.service")
+      write_file("/tmp/init/app-bravo.target.wants/app-bravo@5100.service")
 
-     write_file("/tmp/init/app-foo_bar.target")
-     write_file("/tmp/init/app-foo_bar@.service")
-     write_file("/tmp/init/app-foo_bar.target.wants/app-foo_bar@5200.service")
+      write_file("/tmp/init/app-foo_bar.target")
+      write_file("/tmp/init/app-foo_bar@.service")
+      write_file("/tmp/init/app-foo_bar.target.wants/app-foo_bar@5200.service")
 
-     write_file("/tmp/init/app-foo-bar.target")
-     write_file("/tmp/init/app-foo-bar@.service")
-     write_file("/tmp/init/app-foo-bar.target.wants/app-foo-bar@5300.service")
+      write_file("/tmp/init/app-foo-bar.target")
+      write_file("/tmp/init/app-foo-bar@.service")
+      write_file("/tmp/init/app-foo-bar.target.wants/app-foo-bar@5300.service")
     end
 
     it "cleans up service files created by systemd export" do
@@ -86,13 +88,13 @@ describe Foreman::Export::Systemd, :fakefs, :aggregate_failures do
   end
 
   it "includes environment variables" do
-    engine.env['KEY'] = 'some "value"'
+    engine.env["KEY"] = 'some "value"'
     systemd.export
     expect(File.read("/tmp/init/app-alpha.1.service")).to match(/KEY=some "value"/)
   end
 
   it "includes ExecStart line" do
-    engine.env['KEY'] = 'some "value"'
+    engine.env["KEY"] = 'some "value"'
     systemd.export
     expect(File.read("/tmp/init/app-alpha.1.service")).to match(/^ExecStart=/)
   end
@@ -112,7 +114,7 @@ describe Foreman::Export::Systemd, :fakefs, :aggregate_failures do
 
   context "with alternate template directory specified" do
     let(:template) { "/tmp/alternate" }
-    let(:options)  { { :app => "app", :template => template } }
+    let(:options) { {app: "app", template: template} }
 
     before do
       FileUtils.mkdir_p template
