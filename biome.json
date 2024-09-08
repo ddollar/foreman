@@ -1,0 +1,17 @@
+{
+  "css": {
+    "formatter": {
+      "indentStyle": "space"
+    }
+  },
+  "json": {
+    "formatter": {
+      "indentStyle": "space"
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "indentStyle": "space"
+    }
+  }
+}

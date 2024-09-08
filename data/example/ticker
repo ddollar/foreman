@@ -2,7 +2,7 @@
 
 $stdout.sync = true
 
-%w( SIGINT SIGTERM ).each do |signal|
+%w[SIGINT SIGTERM].each do |signal|
   trap(signal) do
     puts "received #{signal} but i'm ignoring it!"
   end

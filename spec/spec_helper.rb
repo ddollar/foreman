@@ -28,16 +28,14 @@ end
 
 def foreman(args)
   capture_stdout do
-    begin
-      Foreman::CLI.start(args.split(" "))
-    rescue SystemExit
-    end
+    Foreman::CLI.start(args.split(" "))
+  rescue SystemExit
   end
 end
 
 def forked_foreman(args)
   rd, wr = make_pipe
-  Process.spawn("bundle exec bin/foreman #{args}", :out => wr, :err => wr)
+  Process.spawn("bundle exec bin/foreman #{args}", out: wr, err: wr)
   wr.close
   rd.read
 end
@@ -62,7 +60,7 @@ def fork_and_capture(&blk)
 end
 
 def fork_and_get_exitstatus(args)
-  pid = Process.spawn("bundle exec bin/foreman #{args}", :out => "/dev/null", :err => "/dev/null")
+  pid = Process.spawn("bundle exec bin/foreman #{args}", out: "/dev/null", err: "/dev/null")
   Process.wait(pid)
   $?.exitstatus
 end
@@ -73,13 +71,13 @@ end
 
 def write_foreman_config(app)
   File.open("/etc/foreman/#{app}.conf", "w") do |file|
-    file.puts %{#{app}_processes="alpha bravo"}
-    file.puts %{#{app}_alpha="1"}
-    file.puts %{#{app}_bravo="2"}
+    file.puts %(#{app}_processes="alpha bravo")
+    file.puts %(#{app}_alpha="1")
+    file.puts %(#{app}_bravo="2")
   end
 end
 
-def write_procfile(procfile="Procfile", alpha_env="")
+def write_procfile(procfile = "Procfile", alpha_env = "")
   FileUtils.mkdir_p(File.dirname(procfile))
   File.open(procfile, "w") do |file|
     file.puts "alpha: ./alpha" + " #{alpha_env}".rstrip
@@ -94,12 +92,12 @@ end
 
 def write_file(file)
   FileUtils.mkdir_p(File.dirname(file))
-  File.open(file, 'w') do |f|
+  File.open(file, "w") do |f|
     yield(f) if block_given?
   end
 end
 
-def write_env(env=".env", options={"FOO"=>"bar"})
+def write_env(env = ".env", options = {"FOO" => "bar"})
   File.open(env, "w") do |file|
     options.each do |key, val|
       file.puts "#{key}=#{val}"
@@ -166,9 +164,9 @@ end
 
 RSpec.configure do |config|
   config.color = true
-  config.order = 'rand'
+  config.order = "rand"
   config.include FakeFS::SpecHelpers, :fakefs
-  config.before(:each) do
-    FileUtils.mkdir_p('/tmp')
+  config.before do
+    FileUtils.mkdir_p("/tmp")
   end
 end

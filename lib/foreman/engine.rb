@@ -7,10 +7,9 @@ require "fileutils"
 require "thread"
 
 class Foreman::Engine
-
   # The signals that the engine cares about.
   #
-  HANDLED_SIGNALS = [ :TERM, :INT, :HUP, :USR1, :USR2 ]
+  HANDLED_SIGNALS = [:TERM, :INT, :HUP, :USR1, :USR2]
 
   attr_reader :env
   attr_reader :options
@@ -24,25 +23,25 @@ class Foreman::Engine
   # @option options [Fixnum] :port      (5000)     The base port to assign to processes
   # @option options [String] :root      (Dir.pwd)  The root directory from which to run processes
   #
-  def initialize(options={})
+  def initialize(options = {})
     @options = options.dup
 
     @options[:formation] ||= "all=1"
     @options[:timeout] ||= 5
 
-    @env       = {}
-    @mutex     = Mutex.new
-    @names     = {}
+    @env = {}
+    @mutex = Mutex.new
+    @names = {}
     @processes = []
-    @running   = {}
-    @readers   = {}
-    @shutdown  = false
+    @running = {}
+    @readers = {}
+    @shutdown = false
 
     # Self-pipe for deferred signal-handling (ala djb: http://cr.yp.to/docs/selfpipe.html)
-    reader, writer       = create_pipe
+    reader, writer = create_pipe
     reader.close_on_exec = true if reader.respond_to?(:close_on_exec)
     writer.close_on_exec = true if writer.respond_to?(:close_on_exec)
-    @selfpipe            = { :reader => reader, :writer => writer }
+    @selfpipe = {reader: reader, writer: writer}
 
     # Set up a global signal queue
     # http://blog.rubybestpractices.com/posts/ewong/016-Implementing-Signal-Handlers.html
@@ -67,7 +66,10 @@ class Foreman::Engine
   def register_signal_handlers
     HANDLED_SIGNALS.each do |sig|
       if ::Signal.list.include? sig.to_s
-        trap(sig) { Thread.main[:signal_queue] << sig ; notice_signal }
+        trap(sig) {
+          Thread.main[:signal_queue] << sig
+          notice_signal
+        }
       end
     end
   end
@@ -83,7 +85,7 @@ class Foreman::Engine
   # Wake the main thread up via the selfpipe when there's a signal
   #
   def notice_signal
-    @selfpipe[:writer].write_nonblock( '.' )
+    @selfpipe[:writer].write_nonblock(".")
   rescue Errno::EAGAIN
     # Ignore writes that would block
   rescue Errno::EINTR
@@ -145,7 +147,7 @@ class Foreman::Engine
   #
   # @option options [Hash] :env  A custom environment for this process
   #
-  def register(name, command, options={})
+  def register(name, command, options = {})
     options[:env] ||= env
     options[:cwd] ||= File.dirname(command.split(" ").first)
     process = Foreman::Process.new(command, options)
@@ -156,7 +158,7 @@ class Foreman::Engine
   # Clear the processes registered to this +Engine+
   #
   def clear
-    @names     = {}
+    @names = {}
     @processes = []
   end
 
@@ -167,7 +169,7 @@ class Foreman::Engine
   def load_procfile(filename)
     options[:root] ||= File.dirname(filename)
     Foreman::Procfile.new(filename).entries do |name, command|
-      register name, command, :cwd => options[:root]
+      register name, command, cwd: options[:root]
     end
     self
   end
@@ -186,7 +188,7 @@ class Foreman::Engine
   #
   # @param [String] signal  The signal to send to each process
   #
-  def kill_children(signal="SIGTERM")
+  def kill_children(signal = "SIGTERM")
     if Foreman.windows?
       @running.each do |pid, (process, index)|
         system "sending #{signal} to #{name_for(pid)} at pid #{pid}"
@@ -208,7 +210,7 @@ class Foreman::Engine
   #
   # @param [String] signal  The signal to send
   #
-  def killall(signal="SIGTERM")
+  def killall(signal = "SIGTERM")
     if Foreman.windows?
       kill_children(signal)
     else
@@ -268,7 +270,7 @@ class Foreman::Engine
   #
   # @returns [Fixnum] port  The port to use for this instance of this process
   #
-  def port_for(process, instance, base=nil)
+  def port_for(process, instance, base = nil)
     if base
       base + (@processes.index(process.process) * 100) + (instance - 1)
     else
@@ -289,9 +291,9 @@ class Foreman::Engine
     env
   end
 
-private
+  private
 
-### Engine API ######################################################
+  ### Engine API ######################################################
 
   def startup
     raise TypeError, "must use a subclass of Foreman::Engine"
@@ -305,7 +307,7 @@ private
     raise TypeError, "must use a subclass of Foreman::Engine"
   end
 
-## Helpers ##########################################################
+  ## Helpers ##########################################################
 
   def create_pipe
     IO.method(:pipe).arity.zero? ? IO.pipe : IO.pipe("BINARY")
@@ -317,16 +319,15 @@ private
   end
 
   def name_for_index(process, index)
-    [ @names[process], index.to_s ].compact.join(".")
+    [@names[process], index.to_s].compact.join(".")
   end
 
   def parse_formation(formation)
     pairs = formation.to_s.gsub(/\s/, "").split(",")
 
-    pairs.inject(Hash.new(0)) do |ax, pair|
+    pairs.each_with_object(Hash.new(0)) do |pair, ax|
       process, amount = pair.split("=")
-      process == "all" ? ax.default = amount.to_i : ax[process] = amount.to_i
-      ax
+      (process == "all") ? ax.default = amount.to_i : ax[process] = amount.to_i
     end
   end
 
@@ -357,14 +358,14 @@ private
     end
   end
 
-## Engine ###########################################################
+  ## Engine ###########################################################
 
   def spawn_processes
     @processes.each do |process|
       1.upto(formation[@names[process]]) do |n|
         reader, writer = create_pipe
         begin
-          pid = process.run(:output => writer, :env => {
+          pid = process.run(output: writer, env: {
             "PORT" => port_for(process, n).to_s,
             "PS" => name_for_index(process, n)
           })
@@ -386,7 +387,7 @@ private
 
   def handle_signals
     while sig = Thread.main[:signal_queue].shift
-      self.handle_signal(sig)
+      handle_signal(sig)
     end
   end
 
@@ -405,17 +406,15 @@ private
 
   def watch_for_output
     Thread.new do
-      begin
-        loop do
-          io = IO.select([@selfpipe[:reader]] + @readers.values, nil, nil, 30)
-          read_self_pipe
-          handle_signals
-          handle_io(io ? io.first : [])
-        end
-      rescue Exception => ex
-        puts ex.message
-        puts ex.backtrace
+      loop do
+        io = IO.select([@selfpipe[:reader]] + @readers.values, nil, nil, 30)
+        read_self_pipe
+        handle_signals
+        handle_io(io ? io.first : [])
       end
+    rescue Exception => ex
+      puts ex.message
+      puts ex.backtrace
     end
   end
 
@@ -458,7 +457,7 @@ private
 
     # Delete it from the list of running processes and return its pid
     @running.delete(pid)
-    return pid
+    pid
   end
 
   def terminate_gracefully
@@ -466,10 +465,10 @@ private
 
     # Tell all children to stop gracefully
     if Foreman.windows?
-      system  "sending SIGKILL to all processes"
+      system "sending SIGKILL to all processes"
       kill_children "SIGKILL"
     else
-      system  "sending SIGTERM to all processes"
+      system "sending SIGTERM to all processes"
       kill_children "SIGTERM"
     end
 
@@ -488,7 +487,7 @@ private
     end
 
     # Ok, we have no other option than to kill all of our children
-    system  "sending SIGKILL to all processes"
+    system "sending SIGKILL to all processes"
     kill_children "SIGKILL"
   end
 end

@@ -1,7 +1,6 @@
 require "foreman/version"
 
 module Foreman
-
   def self.runner
     File.expand_path("../../bin/foreman-runner", __FILE__)
   end
@@ -13,5 +12,4 @@ module Foreman
   def self.windows?
     defined?(RUBY_PLATFORM) and RUBY_PLATFORM =~ /(win|w)32$/
   end
-
 end

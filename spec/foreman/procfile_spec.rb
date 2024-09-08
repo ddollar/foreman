@@ -1,7 +1,7 @@
-require 'spec_helper'
-require 'foreman/procfile'
-require 'pathname'
-require 'tmpdir'
+require "spec_helper"
+require "foreman/procfile"
+require "pathname"
+require "tmpdir"
 
 describe Foreman::Procfile, :fakefs do
   subject { Foreman::Procfile.new }
@@ -16,8 +16,8 @@ describe Foreman::Procfile, :fakefs do
   it "loads a passed-in Procfile" do
     write_procfile
     procfile = Foreman::Procfile.new("Procfile")
-    expect(procfile["alpha"]).to   eq("./alpha")
-    expect(procfile["bravo"]).to   eq("./bravo")
+    expect(procfile["alpha"]).to eq("./alpha")
+    expect(procfile["bravo"]).to eq("./bravo")
     expect(procfile["foo-bar"]).to eq("./foo-bar")
     expect(procfile["foo_bar"]).to eq("./foo_bar")
   end
@@ -30,7 +30,7 @@ describe Foreman::Procfile, :fakefs do
     expect { Foreman::Procfile.new("Procfile") }.to raise_error described_class::EmptyFileError
   end
 
-  it 'only creates Procfile entries for lines matching regex' do
+  it "only creates Procfile entries for lines matching regex" do
     write_procfile
     procfile = Foreman::Procfile.new("Procfile")
     keys = procfile.instance_variable_get(:@entries).map(&:first)
@@ -57,9 +57,8 @@ describe Foreman::Procfile, :fakefs do
   it "can write to a file" do
     subject["foo"] = "./foo"
     subject["bar"] = "./bar"
-    Dir.mkdir('/tmp')
+    Dir.mkdir("/tmp")
     subject.save "/tmp/proc"
     expect(File.read("/tmp/proc")).to eq("foo: ./foo\nbar: ./bar\n")
   end
-
 end
