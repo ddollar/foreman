@@ -216,6 +216,7 @@ DEPENDENCIES
   fakefs
   foreman!
   peppermint (~> 0.1.14)
+  rake (~> 13.2)
   ronn-ng
   rspec (~> 3.5)
   simplecov
