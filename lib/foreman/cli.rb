@@ -8,7 +8,7 @@ require "shellwords"
 require "yaml"
 require "thor"
 
-class Foreman::CLI < Foreman::Thor
+class Foreman::CLI < Thor
   include Foreman::Helpers
 
   map ["-v", "--version"] => :version

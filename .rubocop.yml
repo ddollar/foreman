@@ -5,19 +5,15 @@ inherit_mode:
 
 require:
   - standard
-  - standard-rails
   - standard-custom
   - standard-performance
   - rubocop-performance
   - rubocop-rake
   - rubocop-rspec
-  - rubocop-rails
-  - rubocop-rspec_rails
   - rubocop-capybara
 
 inherit_gem:
   standard: config/base.yml
-  standard-rails: config/base.yml
   standard-performance: config/base.yml
   standard-custom: config/base.yml
 
