@@ -1,3 +1,5 @@
+require "peppermint/rake"
+
 $:.unshift File.expand_path("../lib", __FILE__)
 require "foreman"
 
