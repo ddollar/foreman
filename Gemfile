@@ -16,8 +16,8 @@ group :development do
   gem "automatiek"
 end
 
-gem "peppermint", "~> 0.1.14", group: :development
 
 gem "thor", "~> 1.3"
 
-gem "rake", "~> 13.2", groups: [:development, :test]
+gem "rake", "~> 13.2", :groups => [:development, :test]
+gem "peppermint", "~> 0.1.14", :groups => [:development, :test]
