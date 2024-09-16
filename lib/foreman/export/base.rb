@@ -1,5 +1,4 @@
 require "foreman/export"
-require "ostruct"
 require "pathname"
 require "shellwords"
 
@@ -12,6 +11,9 @@ class Foreman::Export::Base
 
   # deprecated
   attr_reader :port
+
+  # deprecated
+  ProcessStruct = Struct.new(:name, :process)
 
   def initialize(location, engine, options={})
     @location  = location
@@ -35,10 +37,7 @@ class Foreman::Export::Base
     def @engine.procfile
       Foreman::Export::Base.warn_deprecation!
       @processes.map do |process|
-        OpenStruct.new(
-          :name => @names[process],
-          :process => process
-        )
+        ProcessStruct.new(@names[process], process)
       end
     end
   end
