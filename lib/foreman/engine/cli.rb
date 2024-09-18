@@ -55,14 +55,34 @@ class Foreman::Engine::CLI < Foreman::Engine
 
   def output(name, data)
     data.to_s.lines.map(&:chomp).each do |message|
-      output  = ""
-      output += $stdout.color(@colors[name.split(".").first].to_sym)
-      output += "#{Time.now.strftime("%H:%M:%S")} " if options[:timestamp]
-      output += "#{pad_process_name(name)} | "
-      output += $stdout.color(:reset)
-      output += message
-      $stdout.puts output
-      $stdout.flush
+      case options[:output_format]
+      when "text"
+          output  = ""
+          output += $stdout.color(@colors[name.split(".").first].to_sym)
+          output += "#{Time.now.strftime("%H:%M:%S")} " if options[:timestamp]
+          output += "#{pad_process_name(name)} | "
+          output += $stdout.color(:reset)
+          output += message
+          $stdout.puts output
+          $stdout.flush
+      when "json"
+        require 'json'
+        json_data = {foreman_process: name}
+        begin
+          result = JSON.parse(message)
+          if result.is_a?(Hash)
+            json_data.merge!(result)
+          else
+            json_data[options[:json_message_key]] = message
+          end
+        rescue JSON::ParserError, TypeError
+            json_data[options[:json_message_key]] = message
+        end
+        $stdout.puts json_data.to_json
+        $stdout.flush
+      else
+        raise "Invalid output format: #{options[:output_format]}"
+      end
     end
   rescue Errno::EPIPE
     terminate_gracefully
