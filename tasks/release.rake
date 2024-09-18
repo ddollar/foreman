@@ -24,7 +24,7 @@ task :pages => "man:commit" do
     git add -u index.html
     git commit -m "saving man page to github docs"
     git push origin -f gh-pages
-    git checkout master
+    git checkout main
   }
 end
 

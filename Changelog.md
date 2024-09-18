@@ -1,3 +1,34 @@
+## 0.88.1 (2024-04-12)
+
+* update master to main  [David Dollar]
+
+## 0.88.0 (2024-04-12)
+
+* use actions/checkout@v4  [David Dollar]
+* remove Gemfile.lock from repo because it's too strict  [David Dollar]
+* update for ci  [David Dollar]
+* handle empty procfile exception in cli  [David Dollar]
+* Update man page to reflect recent changes in systemd export  [Lukáš Konarovský]
+* [engine/cli.rb] Handle nil name_padding  [Nick LaMuro]
+* [Foreman::Procfile#load] Fail when empty  [Nick LaMuro]
+* spec_helper: don't try to remove /tmp  [Antonio Terceiro]
+* Fix misleading comment at the top of procfile.rb that indicates that hyphens "-" are not allowed in process names.  [Ben Wilber]
+* Rename usage of Dir/File.exists to exist  [Qiu Chaofan]
+* remove codeclimate  [David Dollar]
+* clean up and autoformat  [David Dollar]
+* Add GitHub token permissions for workflow  [mishina]
+* Migrate from Travis CI to GitHub Actions  [mishina]
+* Pass a block rather than an argument to `expect`  [mishina]
+* Replace `File.exists?` with `File.exist?`  [mishina]
+* Use the latest fakefs  [mishina]
+* Remove and ignore Gemfile.lock  [mishina]
+* Add GitHub Actions workflow  [mishina]
+* GitHub is HTTPS by default  [Akira Matsuda]
+
+## 0.87.2 (2020-08-07)
+
+* update json for CVE-2020-10663  [David Dollar]
+
 ## 0.87.1 (2020-04-02)
 
 * update rake for CVE-2020-8130  [David Dollar]
