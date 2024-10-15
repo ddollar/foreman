@@ -25,6 +25,7 @@ class Foreman::CLI < Foreman::Thor
   method_option :port,      :type => :numeric, :aliases => "-p"
   method_option :timeout,   :type => :numeric, :aliases => "-t", :desc => "Specify the amount of time (in seconds) processes have to shutdown gracefully before receiving a SIGKILL, defaults to 5."
   method_option :timestamp, :type => :boolean, :default => true, :desc => "Include timestamp in output"
+  method_option :prefix,    :type => :boolean, :default => true, :desc => "Include process name prefix in output"
 
   class << self
     # Hackery. Take the run method away from Thor so that we can redefine it.
