@@ -58,7 +58,7 @@ class Foreman::Engine::CLI < Foreman::Engine
       output  = ""
       output += $stdout.color(@colors[name.split(".").first].to_sym)
       output += "#{Time.now.strftime("%H:%M:%S")} " if options[:timestamp]
-      output += "#{pad_process_name(name)} | "
+      output += "#{pad_process_name(name)} | " if options[:prefix]
       output += $stdout.color(:reset)
       output += message
       $stdout.puts output
