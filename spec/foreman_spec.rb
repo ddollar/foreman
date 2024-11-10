@@ -10,7 +10,7 @@ describe Foreman do
 
   describe "runner" do
     it "should exist" do
-      expect(File.exists?(Foreman.runner)).to eq(true)
+      expect(File.exist?(Foreman.runner)).to eq(true)
     end
   end
 end

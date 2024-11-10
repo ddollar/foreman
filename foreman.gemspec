@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
 
   gem.author   = "David Dollar"
   gem.email    = "ddollar@gmail.com"
-  gem.homepage = "http://github.com/ddollar/foreman"
+  gem.homepage = "https://github.com/ddollar/foreman"
   gem.summary  = "Process manager for applications with multiple components"
 
   gem.description = gem.summary
@@ -16,6 +16,4 @@ Gem::Specification.new do |gem|
   gem.executables = "foreman"
   gem.files = Dir["**/*"].select { |d| d =~ %r{^(README|bin/|data/|ext/|lib/|spec/|test/)} }
   gem.files << "man/foreman.1"
-
-  gem.add_dependency 'thor', '~> 0.19.1'
 end

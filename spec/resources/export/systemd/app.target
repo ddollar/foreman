@@ -1,5 +1,5 @@
 [Unit]
-Wants=app-alpha.target app-bravo.target app-foo_bar.target app-foo-bar.target
+Wants=app-alpha.1.service app-bravo.1.service app-foo_bar.1.service app-foo-bar.1.service
 
 [Install]
 WantedBy=multi-user.target

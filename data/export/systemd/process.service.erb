@@ -1,15 +1,18 @@
 [Unit]
-PartOf=<%= app %>-<%= name %>.target
+PartOf=<%= app %>.target
+StopWhenUnneeded=yes
 
 [Service]
 User=<%= user %>
 WorkingDirectory=<%= engine.root %>
-Environment=PORT=%i
+Environment=PORT=<%= port %>
+Environment=PS=<%= process_name %>
 <% engine.env.each_pair do |var,env| -%>
 Environment="<%= var %>=<%= env %>"
 <% end -%>
-ExecStart=/bin/bash -lc 'exec <%= process.command %>'
+ExecStart=/bin/bash -lc 'exec -a "<%= app %>-<%= process_name %>" <%= process.command %>'
 Restart=always
+RestartSec=14s
 StandardInput=null
 StandardOutput=syslog
 StandardError=syslog

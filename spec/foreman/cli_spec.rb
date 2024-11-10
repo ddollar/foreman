@@ -77,15 +77,15 @@ describe "Foreman::CLI", :fakefs do
 
   describe "run" do
     it "can run a command" do
-      expect(forked_foreman("run echo 1")).to eq("1\n")
+      expect(forked_foreman("run -f #{resource_path("Procfile")} echo 1")).to eq("1\n")
     end
 
     it "doesn't parse options for the command" do
-      expect(forked_foreman("run grep -e FOO #{resource_path(".env")}")).to eq("FOO=bar\n")
+      expect(forked_foreman("run -f #{resource_path("Procfile")} grep -e FOO #{resource_path(".env")}")).to eq("FOO=bar\n")
     end
 
     it "includes the environment" do
-      expect(forked_foreman("run -e #{resource_path(".env")} #{resource_path("bin/env FOO")}")).to eq("bar\n")
+      expect(forked_foreman("run -f #{resource_path("Procfile")} -e #{resource_path(".env")} #{resource_path("bin/env FOO")}")).to eq("bar\n")
     end
 
     it "can run a command from the Procfile" do
@@ -93,8 +93,8 @@ describe "Foreman::CLI", :fakefs do
     end
 
     it "exits with the same exit code as the command" do
-      expect(fork_and_get_exitstatus("run echo 1")).to eq(0)
-      expect(fork_and_get_exitstatus("run date 'invalid_date'")).to eq(1)
+      expect(fork_and_get_exitstatus("run -f #{resource_path("Procfile")} echo 1")).to eq(0)
+      expect(fork_and_get_exitstatus("run -f #{resource_path("Procfile")} date 'invalid_date'")).to eq(1)
     end
   end
 

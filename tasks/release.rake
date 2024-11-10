@@ -24,7 +24,7 @@ task :pages => "man:commit" do
     git add -u index.html
     git commit -m "saving man page to github docs"
     git push origin -f gh-pages
-    git checkout master
+    git checkout main
   }
 end
 
@@ -43,6 +43,7 @@ desc "Generate a Changelog"
 task :changelog do
   while release = newer_release
     entry = %x{ git show --format="%cd" #{release} | head -n 1 }
+    puts entry
     date = Time.parse(entry.chomp).strftime("%Y-%m-%d")
 
     message  = "## #{release[1..-1]} (#{date})\n\n"

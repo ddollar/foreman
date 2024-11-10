@@ -1,3 +1,55 @@
+## 0.88.1 (2024-04-12)
+
+* update master to main  [David Dollar]
+
+## 0.88.0 (2024-04-12)
+
+* use actions/checkout@v4  [David Dollar]
+* remove Gemfile.lock from repo because it's too strict  [David Dollar]
+* update for ci  [David Dollar]
+* handle empty procfile exception in cli  [David Dollar]
+* Update man page to reflect recent changes in systemd export  [Lukáš Konarovský]
+* [engine/cli.rb] Handle nil name_padding  [Nick LaMuro]
+* [Foreman::Procfile#load] Fail when empty  [Nick LaMuro]
+* spec_helper: don't try to remove /tmp  [Antonio Terceiro]
+* Fix misleading comment at the top of procfile.rb that indicates that hyphens "-" are not allowed in process names.  [Ben Wilber]
+* Rename usage of Dir/File.exists to exist  [Qiu Chaofan]
+* remove codeclimate  [David Dollar]
+* clean up and autoformat  [David Dollar]
+* Add GitHub token permissions for workflow  [mishina]
+* Migrate from Travis CI to GitHub Actions  [mishina]
+* Pass a block rather than an argument to `expect`  [mishina]
+* Replace `File.exists?` with `File.exist?`  [mishina]
+* Use the latest fakefs  [mishina]
+* Remove and ignore Gemfile.lock  [mishina]
+* Add GitHub Actions workflow  [mishina]
+* GitHub is HTTPS by default  [Akira Matsuda]
+
+## 0.87.2 (2020-08-07)
+
+* update json for CVE-2020-10663  [David Dollar]
+
+## 0.87.1 (2020-04-02)
+
+* update rake for CVE-2020-8130  [David Dollar]
+
+## 0.87.0 (2020-01-07)
+
+* Update specs for systemd export  [Robin Daugherty]
+* Allow processes to be stopped using the app target  [Robin Daugherty]
+* Wait to restart  [Robin Daugherty]
+* systemd sets process name  [Robin Daugherty]
+
+## 0.86.0 (2019-10-09)
+
+* bundle (but don't use) real thor to ensure we still get vulnerability notifications from github.  [Micah Geisel]
+* we don't need automatiek loaded to boot.  [Micah Geisel]
+* inline thor dependency.  [Micah Geisel]
+* CI: Use ruby 2.5.6, 2.6.4 in the matrix  [Olle Jonsson]
+* add wiki page with reason for not bundling to readme  [David Dollar]
+* CI: Use 2.4.6, 2.5.5, 2.6.3  [Olle Jonsson]
+* update yard for GHSA-xfhh-rx56-rxcr  [David Dollar]
+
 ## 0.85.0 (2018-06-18)
 
 * updates rubies in travis - ensures only running with PID would be killed - updates dependencies; runs `codeclimate-test-reporter` after successful build - updates rubies for travis - squashes commits  [LeFnord]

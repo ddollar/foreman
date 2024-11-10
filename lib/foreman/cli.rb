@@ -6,9 +6,9 @@ require "foreman/export"
 require "foreman/version"
 require "shellwords"
 require "yaml"
-require "thor"
+require "foreman/vendor/thor/lib/thor"
 
-class Foreman::CLI < Thor
+class Foreman::CLI < Foreman::Thor
 
   include Foreman::Helpers
 
@@ -40,6 +40,8 @@ class Foreman::CLI < Thor
     engine.load_procfile(procfile)
     engine.options[:formation] = "#{process}=1" if process
     engine.start
+  rescue Foreman::Procfile::EmptyFileError
+    error "no processes defined"
   end
 
   desc "export FORMAT LOCATION", "Export the application to another process management format"
@@ -60,7 +62,7 @@ class Foreman::CLI < Thor
     engine.load_procfile(procfile)
     formatter = Foreman::Export.formatter(format)
     formatter.new(location, engine, options).export
-  rescue Foreman::Export::Exception => ex
+  rescue Foreman::Export::Exception, Foreman::Procfile::EmptyFileError => ex
     error ex.message
   end
 
@@ -69,8 +71,9 @@ class Foreman::CLI < Thor
   def check
     check_procfile!
     engine.load_procfile(procfile)
-    error "no processes defined" unless engine.processes.length > 0
     puts "valid procfile detected (#{engine.process_names.join(', ')})"
+  rescue Foreman::Procfile::EmptyFileError
+    error "no processes defined"
   end
 
   desc "run COMMAND [ARGS...]", "Run a command using your application's environment"
@@ -105,6 +108,8 @@ class Foreman::CLI < Thor
     Process.wait(pid)
     exit $?.exitstatus || 0
   rescue Interrupt
+  rescue Foreman::Procfile::EmptyFileError
+    error "no processes defined"
   end
 
   desc "version", "Display Foreman gem version"
@@ -157,6 +162,6 @@ private ######################################################################
     original_options = super
     return original_options unless File.file?(".foreman")
     defaults = ::YAML::load_file(".foreman") || {}
-    Thor::CoreExt::HashWithIndifferentAccess.new(defaults.merge(original_options))
+    Foreman::Thor::CoreExt::HashWithIndifferentAccess.new(defaults.merge(original_options))
   end
 end
