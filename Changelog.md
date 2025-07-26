@@ -1,3 +1,16 @@
+## 0.89.1 (2025-07-26)
+
+* handle ruby 3.4 changes  [David Dollar]
+* thor doesnt work on older ruby  [David Dollar]
+* test more ruby versions  [David Dollar]
+
+## 0.89.0 (2025-07-26)
+
+* handle new thor exit on failure  [David Dollar]
+* move options out of private for new thor  [David Dollar]
+* unbundle thor, upgrade to 1.4.0  [David Dollar]
+* dont fail tests when Procfile is present in foreman dir (closes #771)  [David Dollar]
+
 ## 0.88.1 (2024-04-12)
 
 * update master to main  [David Dollar]
