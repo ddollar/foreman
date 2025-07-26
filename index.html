@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv='content-type' value='text/html;charset=utf8'>
-  <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
+  <meta http-equiv='content-type' content='text/html;charset=utf-8'>
+  <meta name='generator' content='Ronn-NG/v0.10.1 (http://github.com/apjanke/ronn-ng/tree/0.10.1)'>
   <title>foreman(1) - manage Procfile-based applications</title>
   <style type='text/css' media='all'>
   /* style: man */
@@ -82,16 +82,17 @@
     <li class='tr'>foreman(1)</li>
   </ol>
 
-  <h2 id="NAME">NAME</h2>
+  
+
+<h2 id="NAME">NAME</h2>
 <p class="man-name">
   <code>foreman</code> - <span class="man-whatis">manage Procfile-based applications</span>
 </p>
-
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>foreman start [process]</code><br />
-<code>foreman run &lt;command></code><br />
-<code>foreman export &lt;format> [location]</code></p>
+<p><code>foreman start [process]</code><br>
+<code>foreman run &lt;command&gt;</code><br>
+<code>foreman export &lt;format&gt; [location]</code></p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
@@ -113,16 +114,31 @@ application type.</p>
 <p>The following options control how the application is run:</p>
 
 <dl>
-<dt><code>-m</code>, <code>--formation</code></dt><dd><p>Specify the number of each process type to run. The value passed in
-should be in the format <code>process=num,process=num</code></p></dd>
-<dt><code>-e</code>, <code>--env</code></dt><dd><p>Specify one or more .env files to load</p></dd>
-<dt><code>-f</code>, <code>--procfile</code></dt><dd><p>Specify an alternate Procfile to load, implies <code>-d</code> at the Procfile root.</p></dd>
-<dt><code>-p</code>, <code>--port</code></dt><dd><p>Specify which port to use as the base for this application. Should be
-a multiple of 1000.</p></dd>
-<dt><code>-t</code>, <code>--timeout</code></dt><dd><p>Specify the amount of time (in seconds) processes have to shutdown
-gracefully before receiving a SIGKILL, defaults to 5.</p></dd>
+<dt>
+<code>-m</code>, <code>--formation</code>
+</dt>
+<dd>Specify the number of each process type to run. The value passed in
+should be in the format <code>process=num,process=num</code>
+</dd>
+<dt>
+<code>-e</code>, <code>--env</code>
+</dt>
+<dd>Specify one or more .env files to load</dd>
+<dt>
+<code>-f</code>, <code>--procfile</code>
+</dt>
+<dd>Specify an alternate Procfile to load, implies <code>-d</code> at the Procfile root.</dd>
+<dt>
+<code>-p</code>, <code>--port</code>
+</dt>
+<dd>Specify which port to use as the base for this application. Should be
+a multiple of 1000.</dd>
+<dt>
+<code>-t</code>, <code>--timeout</code>
+</dt>
+<dd>Specify the amount of time (in seconds) processes have to shutdown
+gracefully before receiving a SIGKILL, defaults to 5.</dd>
 </dl>
-
 
 <p><code>foreman run</code> is used to run one-off commands using the same environment
 as your defined processes.</p>
@@ -138,49 +154,88 @@ either required or optional depending on the export format.</p>
 <p>The following options control how the application is run:</p>
 
 <dl>
-<dt><code>-a</code>, <code>--app</code></dt><dd><p>Use this name rather than the application's root directory name as the
-name of the application when exporting.</p></dd>
-<dt><code>-m</code>, <code>--formation</code></dt><dd><p>Specify the number of each process type to run. The value passed in
-should be in the format <code>process=num,process=num</code></p></dd>
-<dt><code>-l</code>, <code>--log</code></dt><dd><p>Specify the directory to place process logs in.</p></dd>
-<dt><code>-p</code>, <code>--port</code></dt><dd><p>Specify which port to use as the base for this application. Should be
-a multiple of 1000.</p></dd>
-<dt><code>-t</code>, <code>--template</code></dt><dd><p>Specify an alternate template to use for creating export files.
-See <a href="https://github.com/ddollar/foreman/tree/master/data/export" data-bare-link="true">https://github.com/ddollar/foreman/tree/master/data/export</a> for examples.</p></dd>
-<dt><code>-u</code>, <code>--user</code></dt><dd><p>Specify the user the application should be run as. Defaults to the
-app name</p></dd>
+<dt>
+<code>-a</code>, <code>--app</code>
+</dt>
+<dd>Use this name rather than the application's root directory name as the
+name of the application when exporting.</dd>
+<dt>
+<code>-m</code>, <code>--formation</code>
+</dt>
+<dd>Specify the number of each process type to run. The value passed in
+should be in the format <code>process=num,process=num</code>
+</dd>
+<dt>
+<code>-l</code>, <code>--log</code>
+</dt>
+<dd>Specify the directory to place process logs in.</dd>
+<dt>
+<code>-p</code>, <code>--port</code>
+</dt>
+<dd>Specify which port to use as the base for this application. Should be
+a multiple of 1000.</dd>
+<dt>
+<code>-t</code>, <code>--template</code>
+</dt>
+<dd>Specify an alternate template to use for creating export files.
+See <a href="https://github.com/ddollar/foreman/tree/master/data/export" data-bare-link="true">https://github.com/ddollar/foreman/tree/master/data/export</a> for examples.</dd>
+<dt>
+<code>-u</code>, <code>--user</code>
+</dt>
+<dd>Specify the user the application should be run as. Defaults to the
+app name</dd>
 </dl>
-
 
 <h2 id="GLOBAL-OPTIONS">GLOBAL OPTIONS</h2>
 
 <p>These options control all modes of foreman's operation.</p>
 
 <dl>
-<dt><code>-d</code>, <code>--root</code></dt><dd><p>Specify an alternate application root. This defaults to the directory
-containing the Procfile.</p></dd>
-<dt><code>-e</code>, <code>--env</code></dt><dd><p>Specify an alternate environment file. You can specify more than one
-file by using: <code>--env file1,file2</code>.</p></dd>
-<dt><code>-f</code>, <code>--procfile</code></dt><dd><p>Specify an alternate location for the application's Procfile. This file's
+<dt>
+<code>-d</code>, <code>--root</code>
+</dt>
+<dd>Specify an alternate application root. This defaults to the directory
+containing the Procfile.</dd>
+<dt>
+<code>-e</code>, <code>--env</code>
+</dt>
+<dd>Specify an alternate environment file. You can specify more than one
+file by using: <code>--env file1,file2</code>.</dd>
+<dt>
+<code>-f</code>, <code>--procfile</code>
+</dt>
+<dd>Specify an alternate location for the application's Procfile. This file's
 containing directory will be assumed to be the root directory of the
-application.</p></dd>
+application.</dd>
 </dl>
-
 
 <h2 id="EXPORT-FORMATS">EXPORT FORMATS</h2>
 
 <p>foreman currently supports the following output formats:</p>
 
 <ul>
-<li><p>bluepill</p></li>
-<li><p>inittab</p></li>
-<li><p>launchd</p></li>
-<li><p>runit</p></li>
-<li><p>supervisord</p></li>
-<li><p>systemd</p></li>
-<li><p>upstart</p></li>
+  <li>
+    <p>bluepill</p>
+  </li>
+  <li>
+    <p>inittab</p>
+  </li>
+  <li>
+    <p>launchd</p>
+  </li>
+  <li>
+    <p>runit</p>
+  </li>
+  <li>
+    <p>supervisord</p>
+  </li>
+  <li>
+    <p>systemd</p>
+  </li>
+  <li>
+    <p>upstart</p>
+  </li>
 </ul>
-
 
 <h2 id="INITTAB-EXPORT">INITTAB EXPORT</h2>
 
@@ -197,22 +252,22 @@ EX02:4:respawn:/bin/su - example -c 'PORT=5100 bundle exec rake jobs:work &gt;&g
 <p>Will create a series of systemd scripts in the location you specify. Scripts
 will be structured to make the following commands valid:</p>
 
-<p>  <code>systemctl start appname.target</code></p>
+<p><code>systemctl start appname.target</code></p>
 
-<p>  <code>systemctl stop appname-processname.target</code></p>
+<p><code>systemctl stop appname-processname.target</code></p>
 
-<p>  <code>systemctl restart appname-processname-3.service</code></p>
+<p><code>systemctl restart appname-processname-3.service</code></p>
 
 <h2 id="UPSTART-EXPORT">UPSTART EXPORT</h2>
 
 <p>Will create a series of upstart scripts in the location you specify. Scripts
 will be structured to make the following commands valid:</p>
 
-<p>  <code>start appname</code></p>
+<p><code>start appname</code></p>
 
-<p>  <code>stop appname-processname</code></p>
+<p><code>stop appname-processname</code></p>
 
-<p>  <code>restart appname-processname-3</code></p>
+<p><code>restart appname-processname-3</code></p>
 
 <h2 id="PROCFILE">PROCFILE</h2>
 
@@ -283,10 +338,9 @@ port: 15000
 
 <p>Foreman is Copyright (C) 2010 David Dollar <a href="http://daviddollar.org" data-bare-link="true">http://daviddollar.org</a></p>
 
-
   <ol class='man-decor man-foot man foot'>
-    <li class='tl'>Foreman 0.87.2</li>
-    <li class='tc'>April 2020</li>
+    <li class='tl'>Foreman 0.89.1</li>
+    <li class='tc'>August 2020</li>
     <li class='tr'>foreman(1)</li>
   </ol>
 
