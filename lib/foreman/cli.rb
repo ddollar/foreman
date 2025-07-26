@@ -126,6 +126,13 @@ class Foreman::CLI < Thor
         engine
       end
     end
+
+    def options
+      original_options = super
+      return original_options unless File.file?(".foreman")
+      defaults = ::YAML::load_file(".foreman") || {}
+      Thor::CoreExt::HashWithIndifferentAccess.new(defaults.merge(original_options))
+    end
   end
 
 private ######################################################################
@@ -156,12 +163,5 @@ private ######################################################################
       when options[:root]     then File.expand_path(File.join(options[:root], "Procfile"))
       else "Procfile"
     end
-  end
-
-  def options
-    original_options = super
-    return original_options unless File.file?(".foreman")
-    defaults = ::YAML::load_file(".foreman") || {}
-    Thor::CoreExt::HashWithIndifferentAccess.new(defaults.merge(original_options))
   end
 end
