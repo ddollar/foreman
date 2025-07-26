@@ -27,6 +27,10 @@ class Foreman::CLI < Thor
   method_option :timestamp, :type => :boolean, :default => true, :desc => "Include timestamp in output"
 
   class << self
+    def exit_on_failure?
+      true
+    end
+
     # Hackery. Take the run method away from Thor so that we can redefine it.
     def is_thor_reserved_word?(word, type)
       return false if word == "run"
