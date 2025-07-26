@@ -11,7 +11,7 @@ Bluepill.application("<%= app %>", :foreground => false, :log_file => "/var/log/
 
     process.working_dir = "<%= engine.root %>"
     process.daemonize = true
-    process.environment = <%= engine.env.merge("PORT" => port.to_s).inspect %>
+    process.environment = {<%= engine.env.merge("PORT" => port.to_s).map { |k,v| "#{k.inspect}=>#{v.inspect}" }.join(",") %>}
     process.stop_signals = [:quit, 30.seconds, :term, 5.seconds, :kill]
     process.stop_grace_time = 45.seconds
 
