@@ -16,4 +16,6 @@ Gem::Specification.new do |gem|
   gem.executables = "foreman"
   gem.files = Dir["**/*"].select { |d| d =~ %r{^(README|bin/|data/|ext/|lib/|spec/|test/)} }
   gem.files << "man/foreman.1"
+
+  gem.add_runtime_dependency "thor", "~> 1.4"
 end
