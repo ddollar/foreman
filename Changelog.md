@@ -1,3 +1,8 @@
+## 0.90.0 (2025-07-27)
+
+* remove ostruct along with deprecated exporter methods  [David Dollar]
+* fix(gemspec): declare thor as a runtime dependency  [Rui Chen]
+
 ## 0.89.1 (2025-07-26)
 
 * handle ruby 3.4 changes  [David Dollar]
