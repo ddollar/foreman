@@ -1,5 +1,4 @@
 require "foreman/export"
-require "ostruct"
 require "pathname"
 require "shellwords"
 
@@ -18,29 +17,6 @@ class Foreman::Export::Base
     @engine    = engine
     @options   = options.dup
     @formation = engine.formation
-
-    # deprecated
-    def port
-      Foreman::Export::Base.warn_deprecation!
-      engine.base_port
-    end
-
-    # deprecated
-    def template
-      Foreman::Export::Base.warn_deprecation!
-      options[:template]
-    end
-
-    # deprecated
-    def @engine.procfile
-      Foreman::Export::Base.warn_deprecation!
-      @processes.map do |process|
-        OpenStruct.new(
-          :name => @names[process],
-          :process => process
-        )
-      end
-    end
   end
 
   def export
@@ -67,18 +43,6 @@ class Foreman::Export::Base
   end
 
 private ######################################################################
-
-  def self.warn_deprecation!
-    @@deprecation_warned ||= false
-    return if @@deprecation_warned
-    puts "WARNING: Using deprecated exporter interface. Please update your exporter"
-    puts "the interface shown in the upstart exporter:"
-    puts
-    puts "https://github.com/ddollar/foreman/blob/main/lib/foreman/export/upstart.rb"
-    puts "https://github.com/ddollar/foreman/blob/main/data/export/upstart/process.conf.erb"
-    puts
-    @@deprecation_warned = true
-  end
 
   def chown user, dir
     FileUtils.chown user, nil, dir

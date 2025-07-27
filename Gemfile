@@ -2,9 +2,6 @@ source "http://rubygems.org"
 
 gemspec
 
-gem 'ostruct'
-gem 'thor', '~> 1.4.0'
-
 group :test do
   gem 'rake'
   gem 'fakefs'
