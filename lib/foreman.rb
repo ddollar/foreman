@@ -11,7 +11,7 @@ module Foreman
   end
 
   def self.windows?
-    defined?(RUBY_PLATFORM) and RUBY_PLATFORM =~ /(win|w)32$/
+    Gem.win_platform?
   end
 
 end
