@@ -3,6 +3,7 @@ source "http://rubygems.org"
 gemspec
 
 group :test do
+  gem 'climate_control'
   gem 'rake'
   gem 'fakefs'
   gem 'rspec',  '~> 3.5'

@@ -172,12 +172,26 @@ class Foreman::Engine
     self
   end
 
+  # Load ENV into the +env+ for this +Engine+
+  #
+  def inherit_env
+    merge_env(ENV)
+  end
+
   # Load a .env file into the +env+ for this +Engine+
   #
   # @param [String] filename  A .env file to load into the environment
   #
   def load_env(filename)
-    Foreman::Env.new(filename).entries do |name, value|
+    merge_env(Foreman::Env.new(filename).entries)
+  end
+
+  # Load a hash or entries list into the +env+ for this +Engine+
+  #
+  # @param [Hash] entries  A Hash or an entries list to load into the environment
+  #
+  def merge_env(entries)
+    entries.each do |name, value|
       @env[name] = value
     end
   end

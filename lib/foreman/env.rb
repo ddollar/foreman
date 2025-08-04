@@ -19,11 +19,4 @@ class Foreman::Env
       ax
     end
   end
-
-  def entries
-    @entries.each do |key, value|
-      yield key, value
-    end
-  end
-
 end
