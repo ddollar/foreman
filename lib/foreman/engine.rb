@@ -1,7 +1,9 @@
 require "foreman"
+require "foreman/buffer"
 require "foreman/env"
 require "foreman/process"
 require "foreman/procfile"
+require "pty"
 require "tempfile"
 require "fileutils"
 require "thread"
@@ -30,16 +32,18 @@ class Foreman::Engine
     @options[:formation] ||= "all=1"
     @options[:timeout] ||= 5
 
+    @buffers   = {}
     @env       = {}
     @mutex     = Mutex.new
     @names     = {}
+    @prefixed  = {}
     @processes = []
     @running   = {}
     @readers   = {}
     @shutdown  = false
 
     # Self-pipe for deferred signal-handling (ala djb: http://cr.yp.to/docs/selfpipe.html)
-    reader, writer       = create_pipe
+    reader, writer       = self.class.create_pipe
     reader.close_on_exec = true if reader.respond_to?(:close_on_exec)
     writer.close_on_exec = true if writer.respond_to?(:close_on_exec)
     @selfpipe            = { :reader => reader, :writer => writer }
@@ -148,6 +152,7 @@ class Foreman::Engine
   def register(name, command, options={})
     options[:env] ||= env
     options[:cwd] ||= File.dirname(command.split(" ").first)
+    options[:interactive] ||= @options[:interactive] == name
     process = Foreman::Process.new(command, options)
     @names[process] = name
     @processes << process
@@ -307,7 +312,7 @@ private
 
 ## Helpers ##########################################################
 
-  def create_pipe
+  def self.create_pipe
     IO.method(:pipe).arity.zero? ? IO.pipe : IO.pipe("BINARY")
   end
 
@@ -318,6 +323,10 @@ private
 
   def name_for_index(process, index)
     [ @names[process], index.to_s ].compact.join(".")
+  end
+
+  def process_for(reader)
+    @running[@readers.invert[reader]].first
   end
 
   def parse_formation(formation)
@@ -350,30 +359,26 @@ private
     end
   end
 
-  def flush_reader(reader)
-    until reader.eof?
-      data = reader.gets
-      output_with_mutex name_for(@readers.key(reader)), data
-    end
-  end
-
 ## Engine ###########################################################
 
   def spawn_processes
     @processes.each do |process|
       1.upto(formation[@names[process]]) do |n|
-        reader, writer = create_pipe
         begin
-          pid = process.run(:output => writer, :env => {
-            "PORT" => port_for(process, n).to_s,
-            "PS" => name_for_index(process, n)
-          })
-          writer.puts "started with pid #{pid}"
+          pid = process.run(
+            env: {
+              'PORT' => port_for(process, n).to_s,
+              'PS' => name_for_index(process, n)
+            }
+          )
+          # writer.puts "started with pid #{pid}"
         rescue Errno::ENOENT
-          writer.puts "unknown command: #{process.command}"
+          # writer.puts "unknown command: #{process.command}"
         end
+        @buffers[process.reader] = Buffer.new(@names[process])
+        @prefixed[process.reader] = false
         @running[pid] = [process, n]
-        @readers[pid] = reader
+        @readers[pid] = process.reader
       end
     end
   end
@@ -395,12 +400,62 @@ private
       next if reader == @selfpipe[:reader]
 
       if reader.eof?
-        @readers.delete_if { |key, value| value == reader }
+        @buffers.delete(reader)
+        @readers.delete_if { |_key, value| value == reader }
+      elsif process_for(reader).interactive?
+        handle_io_interactive reader
       else
-        data = reader.gets
-        output_with_mutex name_for(@readers.invert[reader]), data
+        handle_io_noninteractive reader
       end
     end
+  end
+
+  def handle_io_interactive(reader)
+    done = false
+    name = name_for(@readers.invert[reader])
+    indent = prefix(name).gsub(ANSI_TOKEN, "").length
+
+    loop do
+      @buffers[reader].write(reader.read_nonblock(10))
+
+      @buffers[reader].each_token do |token|
+        case token
+        when /^\e\[(\d+)G$/
+          output_partial "\e[#{Regexp.last_match(1).to_i + indent}G"
+        when ANSI_TOKEN
+          output_partial token
+        when "\r"
+          output_partial "\e[#{indent+1}G"
+        when "\n"
+          output_partial "\r\n"
+          @prefixed[reader] = false
+        else
+          unless @prefixed[reader]
+            output_partial "\e[1G"
+            output_partial prefix(name)
+            @prefixed[reader] = true
+          end
+          output_partial token
+        end
+        done = (token == "\n")
+      end
+    rescue IO::WaitReadable
+      retry if IO.select([reader], [], [], 1)
+      return if done
+    rescue EOFError
+    end
+  end
+
+  def handle_io_noninteractive(reader)
+    @buffers[reader].write(reader.read_nonblock(4096))
+    while line = @buffers[reader].gets
+      output_with_mutex name_for(@readers.invert[reader]), line
+    end
+  end
+
+  def output_prefix(reader)
+    output_partial prefix(name_for(@readers.invert[reader]))
+    @prefixed[reader] = true
   end
 
   def watch_for_output

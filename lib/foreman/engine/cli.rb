@@ -1,4 +1,5 @@
 require "foreman/engine"
+require "io/console"
 
 class Foreman::Engine::CLI < Foreman::Engine
 
@@ -55,20 +56,30 @@ class Foreman::Engine::CLI < Foreman::Engine
 
   def output(name, data)
     data.to_s.lines.map(&:chomp).each do |message|
-      output  = ""
-      output += $stdout.color(@colors[name.split(".").first].to_sym)
-      output += "#{Time.now.strftime("%H:%M:%S")} " if options[:timestamp]
-      output += "#{pad_process_name(name)} | "
-      output += $stdout.color(:reset)
-      output += message
-      $stdout.puts output
+      $stdout.write prefix(name)
+      $stdout.puts message + "\r"
       $stdout.flush
     end
   rescue Errno::EPIPE
     terminate_gracefully
   end
 
+  def output_partial(data)
+    $stdout.write data
+    $stdout.flush
+  end
+
+  def prefix(name)
+    output  = ''
+    output += $stdout.color(@colors[name.split('.').first].to_sym)
+    output += "#{Time.now.strftime('%H:%M:%S')} " if options[:timestamp]
+    output += "#{pad_process_name(name)} | "
+    output += $stdout.color(:reset)
+    output
+  end
+
   def shutdown
+    $stdin.cooked!
   end
 
 private
